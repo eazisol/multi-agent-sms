@@ -21,7 +21,7 @@
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | MOD-000 | Phase 0 - Governance and Foundation | 41 | 25 | 11 | 4 | 1 | 0 | In progress (human approval blocked) |
 | MOD-010 | Phase 0 - Governance and Foundation | 47 | 16 | 0 | 30 | 1 | 0 | Blocked |
-| MOD-020 | Phase 0 - Governance and Foundation | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
+| MOD-020 | Phase 0 - Governance and Foundation | 49 | 10 | 5 | 4 | 1 | 29 | Blocked |
 | MOD-030 | Phase 0 - Governance and Foundation | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 41, partial 11, n/a 34, blocked 2, open 1661
+**Totals:** 1749 tasks — done 51, partial 16, n/a 38, blocked 3, open 1641
 
 ## Module index (plan order)
 
@@ -373,10 +373,14 @@
 
 #### Main points
 
-- [ ] **MOD-020-MP-001:** Implement and verify typed identifiers.
-- [ ] **MOD-020-MP-002:** Implement and verify actor context.
-- [ ] **MOD-020-MP-003:** Implement and verify tenant context.
-- [ ] **MOD-020-MP-004:** Implement and verify domain errors.
+- [x] **MOD-020-MP-001:** Implement and verify typed identifiers.  
+  - Evidence/note: kernel/ids.py NewType brands
+- [x] **MOD-020-MP-002:** Implement and verify actor context.  
+  - Evidence/note: kernel/actor.py ActorContext
+- [x] **MOD-020-MP-003:** Implement and verify tenant context.  
+  - Evidence/note: kernel/tenant.py TenantContext
+- [x] **MOD-020-MP-004:** Implement and verify domain errors.  
+  - Evidence/note: kernel/errors.py AppError hierarchy
 - [ ] **MOD-020-MP-005:** Implement and verify unit of work.
 - [ ] **MOD-020-MP-006:** Implement and verify outbox.
 - [ ] **MOD-020-MP-007:** Implement and verify API problem details.
@@ -385,10 +389,14 @@
 
 #### Database / data design
 
-- [ ] **MOD-020-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **typed identifiers**.
-- [ ] **MOD-020-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **actor context**.
-- [ ] **MOD-020-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **tenant context**.
-- [ ] **MOD-020-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **domain errors**.
+- [x] **MOD-020-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **typed identifiers**.  
+  - Evidence/note: DATA_CONVENTIONS.md — typed IDs are brands, not tables
+- [x] **MOD-020-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **actor context**.  
+  - Evidence/note: DATA_CONVENTIONS.md actor kind conventions
+- [x] **MOD-020-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **tenant context**.  
+  - Evidence/note: DATA_CONVENTIONS.md tenant scope conventions
+- [x] **MOD-020-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **domain errors**.  
+  - Evidence/note: DATA_CONVENTIONS.md errors are ephemeral API contracts
 - [ ] **MOD-020-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **unit of work**.
 - [ ] **MOD-020-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **outbox**.
 - [ ] **MOD-020-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **API problem details**.
@@ -397,10 +405,12 @@
 
 #### Backend
 
-- [ ] **MOD-020-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
+- [~] **MOD-020-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: kernel context+errors; UoW/outbox not yet
 - [ ] **MOD-020-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
 - [ ] **MOD-020-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-020-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-020-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: structured errors via kernel + FastAPI handler
 
 #### API
 
@@ -410,10 +420,14 @@
 
 #### Frontend
 
-- [ ] **MOD-020-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-020-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-020-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-020-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-020-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: kernel library — no entity UI
+- [-] **MOD-020-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: kernel library — no entity UI
+- [-] **MOD-020-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: kernel library — no entity UI
+- [-] **MOD-020-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: kernel library — no entity UI
 
 #### Workflow / agent / events / notifications
 
@@ -431,24 +445,30 @@
 
 #### Testing / verification
 
-- [ ] **MOD-020-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
+- [x] **MOD-020-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/kernel
 - [ ] **MOD-020-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
 - [ ] **MOD-020-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
 - [ ] **MOD-020-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-020-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [~] **MOD-020-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest for kernel slice
 
 #### Documentation
 
-- [ ] **MOD-020-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-020-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [~] **MOD-020-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-020/README.md
+- [~] **MOD-020-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: DATA_CONVENTIONS + VERIFICATION
 
 #### Acceptance gate
 
-- [ ] **MOD-020-AC-001:** All modules use the same actor and tenant context.
+- [~] **MOD-020-AC-001:** All modules use the same actor and tenant context.  
+  - Evidence/note: RequestContext in kernel; not all modules migrated yet
 - [ ] **MOD-020-AC-002:** Agents and workflows cannot bypass application services.
 - [ ] **MOD-020-AC-003:** API contracts are consistent and documented.
 - [ ] **MOD-020-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-020-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [!] **MOD-020-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

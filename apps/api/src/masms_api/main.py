@@ -40,11 +40,12 @@ def create_app() -> FastAPI:
         return {"status": "ok", "env": settings.env}
 
     @app.get("/api/v1/meta")
-    def meta() -> dict[str, str]:
+    def meta() -> dict[str, object]:
         return {
             "name": settings.api_title,
             "version": settings.api_version,
-            "module": "MOD-000",
+            "modules": ["MOD-000", "MOD-020"],
+            "kernel": "masms_api.kernel",
             "default_organization_id": settings.default_organization_id,
         }
 
