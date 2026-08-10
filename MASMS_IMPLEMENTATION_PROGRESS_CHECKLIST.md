@@ -25,7 +25,7 @@
 | MOD-030 | Phase 0 - Governance and Foundation | 43 | 14 | 2 | 26 | 1 | 0 | Blocked |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 25 | 9 | 10 | 1 | 0 | Blocked |
 | MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 31 | 9 | 8 | 1 | 0 | Blocked |
-| MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 26 | 8 | 10 | 1 | 0 | Blocked |
 | MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 134, partial 44, n/a 82, blocked 6, open 1483
+**Totals:** 1749 tasks — done 160, partial 52, n/a 92, blocked 7, open 1438
 
 ## Module index (plan order)
 
@@ -903,78 +903,123 @@
 
 #### Main points
 
-- [ ] **MOD-110-MP-001:** Implement and verify identity provider.
-- [ ] **MOD-110-MP-002:** Implement and verify token validation.
-- [ ] **MOD-110-MP-003:** Implement and verify sessions.
-- [ ] **MOD-110-MP-004:** Implement and verify MFA.
-- [ ] **MOD-110-MP-005:** Implement and verify step-up authentication.
-- [ ] **MOD-110-MP-006:** Implement and verify client invitations.
-- [ ] **MOD-110-MP-007:** Implement and verify service identities.
+- [x] **MOD-110-MP-001:** Implement and verify identity provider.  
+  - Evidence/note: IdentityProvider + Auth0 fail-closed + local sessions
+- [x] **MOD-110-MP-002:** Implement and verify token validation.  
+  - Evidence/note: opaque SHA-256 token hash validation
+- [x] **MOD-110-MP-003:** Implement and verify sessions.  
+  - Evidence/note: auth_sessions create/me/revoke
+- [x] **MOD-110-MP-004:** Implement and verify MFA.  
+  - Evidence/note: auth_mfa_challenges + verify
+- [x] **MOD-110-MP-005:** Implement and verify step-up authentication.  
+  - Evidence/note: step-up assert + assurance gate
+- [x] **MOD-110-MP-006:** Implement and verify client invitations.  
+  - Evidence/note: client invitations + pending uniqueness
+- [x] **MOD-110-MP-007:** Implement and verify service identities.  
+  - Evidence/note: service identities + client_secret once
 
 #### Database / data design
 
-- [ ] **MOD-110-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **identity provider**.
-- [ ] **MOD-110-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **token validation**.
-- [ ] **MOD-110-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **sessions**.
-- [ ] **MOD-110-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **MFA**.
-- [ ] **MOD-110-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **step-up authentication**.
-- [ ] **MOD-110-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **client invitations**.
-- [ ] **MOD-110-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **service identities**.
+- [~] **MOD-110-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **identity provider**.  
+  - Evidence/note: IdP config via settings; no IdP table
+- [x] **MOD-110-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **token validation**.  
+  - Evidence/note: token_hash on sessions/invites/svc
+- [x] **MOD-110-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **sessions**.  
+  - Evidence/note: migration 20260810_0005 auth_sessions + RLS
+- [x] **MOD-110-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **MFA**.  
+  - Evidence/note: auth_mfa_challenges
+- [~] **MOD-110-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **step-up authentication**.  
+  - Evidence/note: assurance_level on session; no separate step-up table
+- [x] **MOD-110-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **client invitations**.  
+  - Evidence/note: auth_client_invitations + pending unique (PG)
+- [x] **MOD-110-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **service identities**.  
+  - Evidence/note: auth_service_identities
 
 #### Backend
 
-- [ ] **MOD-110-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-110-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-110-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-110-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-110-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: AuthService
+- [~] **MOD-110-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: org scope + assurance gates; full RBAC deferred MOD-120
+- [-] **MOD-110-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: no auth outbox publisher events in M1
+- [x] **MOD-110-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-110-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-110-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-110-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-110-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/auth endpoints
+- [~] **MOD-110-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite; paging not needed for M1 auth actions
+- [~] **MOD-110-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-110-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-110-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-110-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-110-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-110-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred — TEMPLATE_TASK_RATIONALE
+- [-] **MOD-110-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-110-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-110-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-110-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-110-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-110-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-110-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [-] **MOD-110-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: no Temporal WF in M1
+- [-] **MOD-110-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: no Temporal/LangGraph in M1
+- [-] **MOD-110-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: no auth domain events in M1
+- [-] **MOD-110-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: invitation email delivery deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-110-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-110-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-110-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-110-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-110-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: bearer session + header stub; RBAC MOD-120
+- [x] **MOD-110-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on auth_* tables
+- [x] **MOD-110-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: secrets hashed; debug MFA only local/test
+- [x] **MOD-110-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on session/invite/svc/mfa
 
 #### Testing / verification
 
-- [ ] **MOD-110-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-110-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-110-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-110-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-110-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-110-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/auth
+- [x] **MOD-110-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/auth
+- [~] **MOD-110-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: revoke without MFA + cross-org session denied
+- [-] **MOD-110-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-110-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest + alembic
 
 #### Documentation
 
-- [ ] **MOD-110-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-110-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-110-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-110/README.md
+- [x] **MOD-110-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-110-AC-001:** All human and machine actions use authenticated actor identities.
-- [ ] **MOD-110-AC-002:** Privileged actions require appropriate assurance.
-- [ ] **MOD-110-AC-003:** Sessions can be revoked immediately.
-- [ ] **MOD-110-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-110-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [~] **MOD-110-AC-001:** All human and machine actions use authenticated actor identities.  
+  - Evidence/note: local bearer sessions; Auth0 JWKS pending
+- [x] **MOD-110-AC-002:** Privileged actions require appropriate assurance.  
+  - Evidence/note: assurance gate for privileged revoke/step-up
+- [x] **MOD-110-AC-003:** Sessions can be revoked immediately.  
+  - Evidence/note: immediate session revoke
+- [x] **MOD-110-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-110 defects filed
+- [!] **MOD-110-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

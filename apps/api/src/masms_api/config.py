@@ -26,11 +26,22 @@ class Settings(BaseSettings):
     aws_region: str | None = None
     secrets_prefix: str = "masms"
     redis_url: str | None = None
+    auth_provider: str = "local"
+    auth0_domain: str | None = None
+    auth0_audience: str | None = None
 
     @field_validator("env")
     @classmethod
     def _validate_env(cls, value: str) -> str:
         return parse_environment(value).value
+
+    @field_validator("auth_provider")
+    @classmethod
+    def _validate_auth_provider(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {"local", "auth0"}:
+            raise ValueError("MASMS_AUTH_PROVIDER must be 'local' or 'auth0'")
+        return normalized
 
     @property
     def environment(self) -> Environment:

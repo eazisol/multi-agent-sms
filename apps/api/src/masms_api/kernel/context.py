@@ -12,11 +12,13 @@ from masms_api.kernel.tenant import TenantContext
 
 @dataclass(frozen=True, slots=True)
 class RequestContext:
-    """Authoritative request identity for FastAPI services (until Auth0 / MOD-110)."""
+    """Authoritative request identity for FastAPI services (MOD-110 sessions + header stub)."""
 
     tenant: TenantContext
     actor: ActorContext
     correlation_id: CorrelationId
+    session_id: UUID | None = None
+    assurance_level: int = 1
 
     @property
     def organization_id(self) -> OrganizationId:
@@ -45,6 +47,8 @@ class RequestContext:
         display_name: str,
         client_id: UUID | None = None,
         project_id: UUID | None = None,
+        session_id: UUID | None = None,
+        assurance_level: int = 1,
     ) -> RequestContext:
         from masms_api.kernel.ids import (
             as_actor_id,
@@ -66,4 +70,6 @@ class RequestContext:
                 display_name=display_name,
             ),
             correlation_id=as_correlation_id(correlation_id),
+            session_id=session_id,
+            assurance_level=assurance_level,
         )

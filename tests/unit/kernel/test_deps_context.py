@@ -17,7 +17,9 @@ def test_meta_lists_mod_020() -> None:
     assert "MOD-030" in body["modules"]
     assert "MOD-040" in body["modules"]
     assert "MOD-100" in body["modules"]
+    assert "MOD-110" in body["modules"]
     assert "environment" in body
+    assert "auth_provider" in body
 
 
 def test_get_request_context_parses_optional_project() -> None:

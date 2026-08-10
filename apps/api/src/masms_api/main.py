@@ -11,6 +11,7 @@ from masms_api.config import get_settings
 from masms_api.db import get_db
 from masms_api.errors import AppError
 from masms_api.kernel.problem import PROBLEM_JSON_MEDIA_TYPE, problem_body
+from masms_api.modules.auth.router import router as auth_router
 from masms_api.modules.governance.router import router as governance_router
 from masms_api.modules.identity.router import router as identity_router
 from masms_api.observability.health import build_readiness
@@ -54,16 +55,25 @@ def create_app() -> FastAPI:
         return {
             "name": settings.api_title,
             "version": settings.api_version,
-            "modules": ["MOD-000", "MOD-020", "MOD-030", "MOD-040", "MOD-100"],
+            "modules": [
+                "MOD-000",
+                "MOD-020",
+                "MOD-030",
+                "MOD-040",
+                "MOD-100",
+                "MOD-110",
+            ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
             "secret_backend": settings.secret_backend,
+            "auth_provider": settings.auth_provider,
             "default_organization_id": settings.default_organization_id,
         }
 
     app.include_router(governance_router, prefix="/api/v1")
     app.include_router(observability_router, prefix="/api/v1")
     app.include_router(identity_router, prefix="/api/v1")
+    app.include_router(auth_router, prefix="/api/v1")
     return app
 
 
