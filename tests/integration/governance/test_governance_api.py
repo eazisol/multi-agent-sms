@@ -8,6 +8,7 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 from masms_api.db import Base, get_db
+from masms_api.kernel import outbox as _outbox  # noqa: F401
 from masms_api.main import create_app
 from masms_api.modules.governance import models as _models  # noqa: F401
 from sqlalchemy import create_engine
@@ -90,6 +91,10 @@ def test_baseline_lifecycle_and_agent_blocked_approval(client: TestClient) -> No
         json={"target_status": "approved", "expected_version": version},
     )
     assert agent_approve.status_code == 403
+    assert "problem+json" in agent_approve.headers.get("content-type", "")
+    assert agent_approve.json()["code"] == "forbidden"
+    assert agent_approve.json()["message"]
+    assert agent_approve.json()["detail"]
 
     human_approve = client.post(
         f"/api/v1/governance/baselines/{baseline_id}/transitions",

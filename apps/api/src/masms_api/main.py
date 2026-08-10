@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from masms_api.config import get_settings
 from masms_api.errors import AppError
+from masms_api.kernel.problem import PROBLEM_JSON_MEDIA_TYPE, problem_body
 from masms_api.modules.governance.router import router as governance_router
 
 
@@ -27,13 +26,11 @@ def create_app() -> FastAPI:
 
     @app.exception_handler(AppError)
     async def app_error_handler(_request: Request, exc: AppError) -> JSONResponse:
-        body: dict[str, Any] = {
-            "code": exc.code,
-            "message": exc.message,
-            "correlation_id": str(exc.correlation_id) if exc.correlation_id else None,
-            "details": exc.details,
-        }
-        return JSONResponse(status_code=exc.status_code, content=body)
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=problem_body(exc),
+            media_type=PROBLEM_JSON_MEDIA_TYPE,
+        )
 
     @app.get("/health")
     def health() -> dict[str, str]:

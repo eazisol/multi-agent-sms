@@ -30,7 +30,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 |---:|---|---|---:|---:|---:|
 | 1 | MOD-000 | In progress (human approval blocked) | 25 | 11 | 0 |
 | 2 | MOD-010 | Blocked | 16 | 0 | 0 |
-| 3 | MOD-020 | Blocked | 10 | 5 | 29 |
+| 3 | MOD-020 | Blocked | 23 | 13 | 8 |
 | 4 | MOD-030 | Not started | 0 | 0 | 43 |
 | 5 | MOD-040 | Not started | 0 | 0 | 45 |
 | 6 | MOD-100 | Not started | 0 | 0 | 49 |
@@ -68,7 +68,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 51 · partial 16 · n/a 38 · blocked 3 · open 1641
+**All tasks:** 1749 · done 64 · partial 24 · n/a 38 · blocked 3 · open 1620
 
 ## Phase 0 - Governance and Foundation
 
@@ -206,38 +206,38 @@ M10: [!] Acceptance / Done gate
 
 ### Module 3: [!] MOD-020 — Shared Architecture, Domain Kernel, and API Standards
 
-M1: [~] Main goals
+M1: [x] Main goals
      M1-1: [x] Build and verify: typed identifiers  (MOD-020-MP-001)
      M1-2: [x] Build and verify: actor context  (MOD-020-MP-002)
      M1-3: [x] Build and verify: tenant context  (MOD-020-MP-003)
      M1-4: [x] Build and verify: domain errors  (MOD-020-MP-004)
-     M1-5: [ ] Build and verify: unit of work  (MOD-020-MP-005)
-     M1-6: [ ] Build and verify: outbox  (MOD-020-MP-006)
-     M1-7: [ ] Build and verify: API problem details  (MOD-020-MP-007)
-     M1-8: [ ] Build and verify: pagination  (MOD-020-MP-008)
-     M1-9: [ ] Build and verify: optimistic concurrency  (MOD-020-MP-009)
+     M1-5: [x] Build and verify: unit of work  (MOD-020-MP-005)
+     M1-6: [x] Build and verify: outbox  (MOD-020-MP-006)
+     M1-7: [x] Build and verify: API problem details  (MOD-020-MP-007)
+     M1-8: [x] Build and verify: pagination  (MOD-020-MP-008)
+     M1-9: [x] Build and verify: optimistic concurrency  (MOD-020-MP-009)
 
-M2: [~] Database
+M2: [x] Database
      M2-1: [x] Design and migrate data for: typed identifiers  (MOD-020-DB-001)
      M2-2: [x] Design and migrate data for: actor context  (MOD-020-DB-002)
      M2-3: [x] Design and migrate data for: tenant context  (MOD-020-DB-003)
      M2-4: [x] Design and migrate data for: domain errors  (MOD-020-DB-004)
-     M2-5: [ ] Design and migrate data for: unit of work  (MOD-020-DB-005)
-     M2-6: [ ] Design and migrate data for: outbox  (MOD-020-DB-006)
-     M2-7: [ ] Design and migrate data for: API problem details  (MOD-020-DB-007)
-     M2-8: [ ] Design and migrate data for: pagination  (MOD-020-DB-008)
-     M2-9: [ ] Design and migrate data for: optimistic concurrency  (MOD-020-DB-009)
+     M2-5: [x] Design and migrate data for: unit of work  (MOD-020-DB-005)
+     M2-6: [x] Design and migrate data for: outbox  (MOD-020-DB-006)
+     M2-7: [x] Design and migrate data for: API problem details  (MOD-020-DB-007)
+     M2-8: [x] Design and migrate data for: pagination  (MOD-020-DB-008)
+     M2-9: [x] Design and migrate data for: optimistic concurrency  (MOD-020-DB-009)
 
 M3: [~] Backend
      M3-1: [~] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-020-BE-001)
-     M3-2: [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-020-BE-002)
-     M3-3: [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-020-BE-003)
+     M3-2: [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-020-BE-002)
+     M3-3: [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-020-BE-003)
      M3-4: [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-020-BE-004)
 
-M4: [ ] API
+M4: [~] API
      M4-1: [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-020-API-001)
-     M4-2: [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-020-API-002)
-     M4-3: [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-020-API-003)
+     M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-020-API-002)
+     M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-020-API-003)
 
 M5: [~] Frontend
      M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-020-FE-001)
@@ -245,34 +245,34 @@ M5: [~] Frontend
      M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-020-FE-003)
      M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-020-FE-004)
 
-M6: [ ] Workflow / agents / events
+M6: [~] Workflow / agents / events
      M6-1: [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-020-WF-001)
-     M6-2: [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-020-WF-002)
-     M6-3: [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-020-WF-003)
+     M6-2: [~] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-020-WF-002)
+     M6-3: [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-020-WF-003)
      M6-4: [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-020-WF-004)
 
-M7: [ ] Security / audit
+M7: [~] Security / audit
      M7-1: [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-020-SEC-001)
-     M7-2: [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-020-SEC-002)
+     M7-2: [~] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-020-SEC-002)
      M7-3: [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-020-SEC-003)
      M7-4: [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-020-SEC-004)
 
 M8: [~] Testing
      M8-1: [x] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-020-QA-001)
-     M8-2: [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-020-QA-002)
+     M8-2: [~] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-020-QA-002)
      M8-3: [ ] Add role-permission negative tests and tenant/project isolation tests.  (MOD-020-QA-003)
      M8-4: [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-020-QA-004)
-     M8-5: [~] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-020-QA-005)
+     M8-5: [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-020-QA-005)
 
 M9: [~] Docs
      M9-1: [~] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-020-DOC-001)
-     M9-2: [~] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-020-DOC-002)
+     M9-2: [x] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-020-DOC-002)
 
 M10: [!] Acceptance / Done gate
      M10-1: [~] All modules use the same actor and tenant context.  (MOD-020-AC-001)
-     M10-2: [ ] Agents and workflows cannot bypass application services.  (MOD-020-AC-002)
-     M10-3: [ ] API contracts are consistent and documented.  (MOD-020-AC-003)
-     M10-4: [ ] All Critical and High defects for this module are resolved.  (MOD-020-AC-900)
+     M10-2: [~] Agents and workflows cannot bypass application services.  (MOD-020-AC-002)
+     M10-3: [~] API contracts are consistent and documented.  (MOD-020-AC-003)
+     M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-020-AC-900)
      M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-020-AC-901)
 
 ### Module 4: [ ] MOD-030 — Environment Configuration, Secrets, CI/CD, and Deployment Skeleton

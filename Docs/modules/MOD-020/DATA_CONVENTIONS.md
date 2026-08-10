@@ -7,6 +7,9 @@ Typed identifiers, actor context, tenant context, and domain errors are **applic
 | OrganizationId / ClientId / ProjectId / ActorId / CorrelationId | UUID columns on business tables | Branded in Python via `NewType`; DB remains `uuid` |
 | ActorKind | string / enum column or header | Values: human, agent, system, integration |
 | TenantContext | derived from row `organization_id` (+ optional client/project) | Never trust client-supplied org alone once Auth0 lands |
-| Domain errors | ephemeral API responses | Not persisted; audit evidence uses `gov_audit_events` / future outbox |
+| Domain errors | ephemeral API responses | Not persisted; audit evidence uses `gov_audit_events` / outbox |
+| Unit of work | Session contract | `SqlAlchemyUnitOfWork` — no dedicated table |
+| Outbox | `sys_outbox_messages` | Migration `20260810_0002`; publisher runtime deferred |
+| Problem details / pagination | HTTP response contracts | Not tables |
 
-Migrations for outbox (`MOD-020-MP-006` / `DB-006`) are deferred to the next M1 slice.
+Migrations for outbox publisher / broker workers are out of MOD-020 M1 scope.

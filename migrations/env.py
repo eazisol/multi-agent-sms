@@ -9,6 +9,7 @@ from sqlalchemy import engine_from_config, pool
 
 from masms_api.config import get_settings
 from masms_api.db import Base
+from masms_api.kernel import outbox as _outbox_models  # noqa: F401
 from masms_api.modules.governance import models as _governance_models  # noqa: F401
 
 config = context.config

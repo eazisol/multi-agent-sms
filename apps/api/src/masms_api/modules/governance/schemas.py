@@ -8,6 +8,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from masms_api.kernel.pagination import PageMeta
+
 
 class BaselineCreate(BaseModel):
     baseline_key: str = Field(min_length=3, max_length=64)
@@ -207,13 +209,6 @@ class AuditEventRead(BaseModel):
     created_at: datetime
 
 
-class PageMeta(BaseModel):
-    limit: int
-    offset: int
-    total: int
-    has_more: bool
-
-
 class BaselinePage(BaseModel):
     items: list[BaselineRead]
     page: PageMeta
@@ -249,32 +244,22 @@ class ProblemDetails(BaseModel):
         json_schema_extra={
             "examples": [
                 {
+                    "type": "https://masms.local/problems/forbidden",
+                    "title": "forbidden",
+                    "status": 403,
+                    "detail": "Only human actors may approve or reject governance records",
                     "code": "forbidden",
                     "message": "Only human actors may approve or reject governance records",
                     "correlation_id": "00000000-0000-4000-8000-000000000999",
                     "details": None,
                 },
                 {
+                    "type": "https://masms.local/problems/conflict",
+                    "title": "conflict",
+                    "status": 409,
+                    "detail": "Stale version; refresh and retry",
                     "code": "conflict",
                     "message": "Stale version; refresh and retry",
-                    "correlation_id": "00000000-0000-4000-8000-000000000999",
-                    "details": None,
-                },
-                {
-                    "code": "invalid_transition",
-                    "message": "Transition from 'draft' to 'approved' is not allowed",
-                    "correlation_id": "00000000-0000-4000-8000-000000000999",
-                    "details": None,
-                },
-                {
-                    "code": "not_found",
-                    "message": "Source baseline not found",
-                    "correlation_id": "00000000-0000-4000-8000-000000000999",
-                    "details": None,
-                },
-                {
-                    "code": "approval_required",
-                    "message": "Cannot update a record in immutable status 'approved'",
                     "correlation_id": "00000000-0000-4000-8000-000000000999",
                     "details": None,
                 },
@@ -282,6 +267,10 @@ class ProblemDetails(BaseModel):
         }
     )
 
+    type: str
+    title: str
+    status: int
+    detail: str
     code: str
     message: str
     correlation_id: UUID | None = None

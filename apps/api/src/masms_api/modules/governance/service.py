@@ -10,7 +10,11 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.deps import RequestContext
-from masms_api.errors import ConflictError, NotFoundError, ValidationAppError
+from masms_api.errors import NotFoundError, ValidationAppError
+from masms_api.kernel.concurrency import assert_expected_version
+from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
+from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.governance import domain
 from masms_api.modules.governance.models import (
     ArchitectureDecision,
@@ -29,11 +33,9 @@ from masms_api.modules.governance.schemas import (
     BaselineUpdate,
     ChangeRequestCreate,
     ChangeRequestTransition,
-    PageMeta,
     RequirementMappingCreate,
 )
 
-MAX_PAGE_LIMIT = 100
 BASELINE_SORT_FIELDS = {
     "baseline_key": SourceBaseline.baseline_key,
     "updated_at": SourceBaseline.updated_at,
@@ -42,27 +44,11 @@ BASELINE_SORT_FIELDS = {
 }
 
 
-def _page_meta(*, limit: int, offset: int, total: int) -> PageMeta:
-    return PageMeta(
-        limit=limit,
-        offset=offset,
-        total=total,
-        has_more=offset + limit < total,
-    )
-
-
-def _normalize_paging(limit: int, offset: int) -> tuple[int, int]:
-    if limit < 1 or limit > MAX_PAGE_LIMIT:
-        raise ValidationAppError(f"limit must be between 1 and {MAX_PAGE_LIMIT}")
-    if offset < 0:
-        raise ValidationAppError("offset must be >= 0")
-    return limit, offset
-
-
 class GovernanceService:
     def __init__(self, db: Session, ctx: RequestContext) -> None:
         self.db = db
         self.ctx = ctx
+        self.uow = SqlAlchemyUnitOfWork(db)
 
     def _audit(
         self,
@@ -107,8 +93,8 @@ class GovernanceService:
             updated_by_actor_id=self.ctx.actor_id,
             metadata_json=data.metadata,
         )
-        self.db.add(row)
-        self.db.flush()
+        self.uow.add(row)
+        self.uow.flush()
         self._audit(
             action="create",
             entity_type="source_baseline",
@@ -116,8 +102,18 @@ class GovernanceService:
             entity_version=row.version,
             payload={"baseline_key": row.baseline_key},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        enqueue_outbox(
+            self.db,
+            organization_id=self.ctx.organization_id,
+            aggregate_type="source_baseline",
+            aggregate_id=row.id,
+            event_type="governance.baseline.created",
+            payload={"baseline_key": row.baseline_key, "version": row.version},
+            correlation_id=self.ctx.correlation_id,
+            project_id=row.project_id,
+        )
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def get_baseline(self, baseline_id: UUID) -> SourceBaseline:
@@ -141,7 +137,7 @@ class GovernanceService:
         q: str | None = None,
         sort: str = "baseline_key",
     ) -> tuple[list[SourceBaseline], PageMeta]:
-        limit, offset = _normalize_paging(limit, offset)
+        limit, offset = normalize_paging(limit, offset)
         if sort not in BASELINE_SORT_FIELDS:
             raise ValidationAppError(
                 f"Unsupported sort field '{sort}'. Allowed: {sorted(BASELINE_SORT_FIELDS)}"
@@ -170,7 +166,7 @@ class GovernanceService:
             .offset(offset)
             .limit(limit)
         )
-        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def list_baseline_history(
         self,
@@ -180,7 +176,7 @@ class GovernanceService:
         offset: int = 0,
     ) -> tuple[list[GovernanceAuditEvent], PageMeta]:
         self.get_baseline(baseline_id)
-        limit, offset = _normalize_paging(limit, offset)
+        limit, offset = normalize_paging(limit, offset)
         filters = [
             GovernanceAuditEvent.organization_id == self.ctx.organization_id,
             GovernanceAuditEvent.entity_type == "source_baseline",
@@ -197,13 +193,12 @@ class GovernanceService:
             .offset(offset)
             .limit(limit)
         )
-        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def update_baseline(self, baseline_id: UUID, data: BaselineUpdate) -> SourceBaseline:
         row = self.get_baseline(baseline_id)
         domain.assert_mutable(row.approval_status)
-        if row.version != data.expected_version:
-            raise ConflictError("Stale version; refresh and retry")
+        assert_expected_version(row, data.expected_version, correlation_id=self.ctx.correlation_id)
         if data.title is not None:
             row.title = data.title
         if data.artifact_path is not None:
@@ -222,14 +217,13 @@ class GovernanceService:
             entity_id=row.id,
             entity_version=row.version,
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def transition_baseline(self, baseline_id: UUID, data: BaselineTransition) -> SourceBaseline:
         row = self.get_baseline(baseline_id)
-        if row.version != data.expected_version:
-            raise ConflictError("Stale version; refresh and retry")
+        assert_expected_version(row, data.expected_version, correlation_id=self.ctx.correlation_id)
         if data.target_status in domain.APPROVED_STATUSES:
             domain.assert_human_approver(self.ctx.actor_kind)
         domain.assert_transition(
@@ -250,8 +244,8 @@ class GovernanceService:
             reason=data.reason,
             payload={"status": data.target_status},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def create_requirement_mapping(self, data: RequirementMappingCreate) -> RequirementMapping:
@@ -270,7 +264,7 @@ class GovernanceService:
             updated_by_actor_id=self.ctx.actor_id,
         )
         self.db.add(row)
-        self.db.flush()
+        self.uow.flush()
         self._audit(
             action="create",
             entity_type="requirement_mapping",
@@ -278,8 +272,8 @@ class GovernanceService:
             entity_version=row.version,
             payload={"requirement_id": row.requirement_id, "module_id": row.module_id},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def list_requirement_mappings(
@@ -289,7 +283,7 @@ class GovernanceService:
         offset: int = 0,
         q: str | None = None,
     ) -> tuple[list[RequirementMapping], PageMeta]:
-        limit, offset = _normalize_paging(limit, offset)
+        limit, offset = normalize_paging(limit, offset)
         filters = [
             RequirementMapping.organization_id == self.ctx.organization_id,
             RequirementMapping.deleted_at.is_(None),
@@ -314,7 +308,7 @@ class GovernanceService:
             .offset(offset)
             .limit(limit)
         )
-        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def create_adr(self, data: AdrCreate) -> ArchitectureDecision:
         row = ArchitectureDecision(
@@ -334,7 +328,7 @@ class GovernanceService:
             updated_by_actor_id=self.ctx.actor_id,
         )
         self.db.add(row)
-        self.db.flush()
+        self.uow.flush()
         self._audit(
             action="create",
             entity_type="architecture_decision",
@@ -342,8 +336,8 @@ class GovernanceService:
             entity_version=row.version,
             payload={"adr_key": row.adr_key},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def list_adrs(
@@ -353,7 +347,7 @@ class GovernanceService:
         offset: int = 0,
         status: str | None = None,
     ) -> tuple[list[ArchitectureDecision], PageMeta]:
-        limit, offset = _normalize_paging(limit, offset)
+        limit, offset = normalize_paging(limit, offset)
         filters = [
             ArchitectureDecision.organization_id == self.ctx.organization_id,
             ArchitectureDecision.deleted_at.is_(None),
@@ -371,7 +365,7 @@ class GovernanceService:
             .offset(offset)
             .limit(limit)
         )
-        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_adr(self, adr_id: UUID) -> ArchitectureDecision:
         row = self.db.scalar(
@@ -387,8 +381,7 @@ class GovernanceService:
 
     def transition_adr(self, adr_id: UUID, data: AdrTransition) -> ArchitectureDecision:
         row = self.get_adr(adr_id)
-        if row.version != data.expected_version:
-            raise ConflictError("Stale version; refresh and retry")
+        assert_expected_version(row, data.expected_version, correlation_id=self.ctx.correlation_id)
         if data.target_status == "accepted":
             domain.assert_human_approver(self.ctx.actor_kind)
         domain.assert_transition(row.status, data.target_status, domain.ADR_TRANSITIONS)
@@ -403,8 +396,8 @@ class GovernanceService:
             reason=data.reason,
             payload={"status": data.target_status},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def create_change_request(self, data: ChangeRequestCreate) -> GovernanceChangeRequest:
@@ -440,7 +433,7 @@ class GovernanceService:
             updated_by_actor_id=self.ctx.actor_id,
         )
         self.db.add(row)
-        self.db.flush()
+        self.uow.flush()
         self._audit(
             action="create",
             entity_type="governance_change_request",
@@ -448,8 +441,8 @@ class GovernanceService:
             entity_version=row.version,
             payload={"change_request_key": row.change_request_key},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def list_change_requests(
@@ -459,7 +452,7 @@ class GovernanceService:
         offset: int = 0,
         status: str | None = None,
     ) -> tuple[list[GovernanceChangeRequest], PageMeta]:
-        limit, offset = _normalize_paging(limit, offset)
+        limit, offset = normalize_paging(limit, offset)
         filters = [
             GovernanceChangeRequest.organization_id == self.ctx.organization_id,
             GovernanceChangeRequest.deleted_at.is_(None),
@@ -479,7 +472,7 @@ class GovernanceService:
             .offset(offset)
             .limit(limit)
         )
-        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_change_request(self, change_request_id: UUID) -> GovernanceChangeRequest:
         row = self.db.scalar(
@@ -497,8 +490,7 @@ class GovernanceService:
         self, change_request_id: UUID, data: ChangeRequestTransition
     ) -> GovernanceChangeRequest:
         row = self.get_change_request(change_request_id)
-        if row.version != data.expected_version:
-            raise ConflictError("Stale version; refresh and retry")
+        assert_expected_version(row, data.expected_version, correlation_id=self.ctx.correlation_id)
         if data.target_status == "approved":
             domain.assert_human_approver(self.ctx.actor_kind)
         domain.assert_transition(row.status, data.target_status, domain.CR_TRANSITIONS)
@@ -515,8 +507,8 @@ class GovernanceService:
             reason=data.reason,
             payload={"status": data.target_status},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def create_approval(self, data: ApprovalCreate) -> GovernanceApprovalRecord:
@@ -541,7 +533,7 @@ class GovernanceService:
             updated_by_actor_id=self.ctx.actor_id,
         )
         self.db.add(row)
-        self.db.flush()
+        self.uow.flush()
         self._audit(
             action="approval_decision",
             entity_type=data.target_entity_type,
@@ -550,8 +542,8 @@ class GovernanceService:
             reason=data.reason,
             payload={"decision": data.decision, "authority_level": data.authority_level},
         )
-        self.db.commit()
-        self.db.refresh(row)
+        self.uow.commit()
+        self.uow.refresh(row)
         return row
 
     def list_approvals(
@@ -560,7 +552,7 @@ class GovernanceService:
         limit: int = 20,
         offset: int = 0,
     ) -> tuple[list[GovernanceApprovalRecord], PageMeta]:
-        limit, offset = _normalize_paging(limit, offset)
+        limit, offset = normalize_paging(limit, offset)
         filters = [
             GovernanceApprovalRecord.organization_id == self.ctx.organization_id,
             GovernanceApprovalRecord.deleted_at.is_(None),
@@ -578,7 +570,7 @@ class GovernanceService:
             .offset(offset)
             .limit(limit)
         )
-        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def list_audit_events(self) -> list[GovernanceAuditEvent]:
         rows = self.db.scalars(

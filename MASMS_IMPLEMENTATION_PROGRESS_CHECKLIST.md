@@ -21,7 +21,7 @@
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | MOD-000 | Phase 0 - Governance and Foundation | 41 | 25 | 11 | 4 | 1 | 0 | In progress (human approval blocked) |
 | MOD-010 | Phase 0 - Governance and Foundation | 47 | 16 | 0 | 30 | 1 | 0 | Blocked |
-| MOD-020 | Phase 0 - Governance and Foundation | 49 | 10 | 5 | 4 | 1 | 29 | Blocked |
+| MOD-020 | Phase 0 - Governance and Foundation | 49 | 23 | 13 | 4 | 1 | 8 | Blocked |
 | MOD-030 | Phase 0 - Governance and Foundation | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 51, partial 16, n/a 38, blocked 3, open 1641
+**Totals:** 1749 tasks — done 64, partial 24, n/a 38, blocked 3, open 1620
 
 ## Module index (plan order)
 
@@ -381,11 +381,16 @@
   - Evidence/note: kernel/tenant.py TenantContext
 - [x] **MOD-020-MP-004:** Implement and verify domain errors.  
   - Evidence/note: kernel/errors.py AppError hierarchy
-- [ ] **MOD-020-MP-005:** Implement and verify unit of work.
-- [ ] **MOD-020-MP-006:** Implement and verify outbox.
-- [ ] **MOD-020-MP-007:** Implement and verify API problem details.
-- [ ] **MOD-020-MP-008:** Implement and verify pagination.
-- [ ] **MOD-020-MP-009:** Implement and verify optimistic concurrency.
+- [x] **MOD-020-MP-005:** Implement and verify unit of work.  
+  - Evidence/note: kernel/uow.py SqlAlchemyUnitOfWork
+- [x] **MOD-020-MP-006:** Implement and verify outbox.  
+  - Evidence/note: sys_outbox_messages + enqueue_outbox
+- [x] **MOD-020-MP-007:** Implement and verify API problem details.  
+  - Evidence/note: application/problem+json via kernel/problem.py
+- [x] **MOD-020-MP-008:** Implement and verify pagination.  
+  - Evidence/note: kernel/pagination.py PageMeta helpers
+- [x] **MOD-020-MP-009:** Implement and verify optimistic concurrency.  
+  - Evidence/note: kernel/concurrency.py assert_expected_version
 
 #### Database / data design
 
@@ -397,26 +402,35 @@
   - Evidence/note: DATA_CONVENTIONS.md tenant scope conventions
 - [x] **MOD-020-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **domain errors**.  
   - Evidence/note: DATA_CONVENTIONS.md errors are ephemeral API contracts
-- [ ] **MOD-020-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **unit of work**.
-- [ ] **MOD-020-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **outbox**.
-- [ ] **MOD-020-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **API problem details**.
-- [ ] **MOD-020-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **pagination**.
-- [ ] **MOD-020-DB-009:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **optimistic concurrency**.
+- [x] **MOD-020-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **unit of work**.  
+  - Evidence/note: UoW is session contract — no dedicated table
+- [x] **MOD-020-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **outbox**.  
+  - Evidence/note: migration 20260810_0002 sys_outbox_messages + RLS
+- [x] **MOD-020-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **API problem details**.  
+  - Evidence/note: problem details are response contract, not a table
+- [x] **MOD-020-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **pagination**.  
+  - Evidence/note: pagination meta is response contract, not a table
+- [x] **MOD-020-DB-009:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **optimistic concurrency**.  
+  - Evidence/note: version columns already on entities; helper shared
 
 #### Backend
 
 - [~] **MOD-020-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
-  - Evidence/note: kernel context+errors; UoW/outbox not yet
-- [ ] **MOD-020-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-020-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
+  - Evidence/note: kernel + governance uses UoW/outbox/helpers
+- [~] **MOD-020-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: concurrency+approval rules via helpers; full authz later
+- [~] **MOD-020-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue on baseline create; publisher runtime pending
 - [x] **MOD-020-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: structured errors via kernel + FastAPI handler
 
 #### API
 
 - [ ] **MOD-020-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-020-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-020-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [~] **MOD-020-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json + paging/concurrency shared; full OpenAPI polish pending
+- [~] **MOD-020-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: ProblemDetails schema examples updated
 
 #### Frontend
 
@@ -432,14 +446,17 @@
 #### Workflow / agent / events / notifications
 
 - [ ] **MOD-020-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-020-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-020-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
+- [~] **MOD-020-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: boundary documented; Temporal/LangGraph not wired yet
+- [~] **MOD-020-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox table+enqueue; consumer/publisher runtime pending
 - [ ] **MOD-020-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
 
 #### Security / privacy / audit
 
 - [ ] **MOD-020-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-020-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
+- [~] **MOD-020-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: outbox RLS + tenant context shape
 - [ ] **MOD-020-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
 - [ ] **MOD-020-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
 
@@ -447,26 +464,30 @@
 
 - [x] **MOD-020-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
   - Evidence/note: tests/unit/kernel
-- [ ] **MOD-020-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
+- [~] **MOD-020-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: governance API still green with outbox/problem+json
 - [ ] **MOD-020-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
 - [ ] **MOD-020-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [~] **MOD-020-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
-  - Evidence/note: ruff/mypy/pytest for kernel slice
+- [x] **MOD-020-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest + alembic upgrade head
 
 #### Documentation
 
 - [~] **MOD-020-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
   - Evidence/note: docs/modules/MOD-020/README.md
-- [~] **MOD-020-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+- [x] **MOD-020-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
   - Evidence/note: DATA_CONVENTIONS + VERIFICATION
 
 #### Acceptance gate
 
 - [~] **MOD-020-AC-001:** All modules use the same actor and tenant context.  
-  - Evidence/note: RequestContext in kernel; not all modules migrated yet
-- [ ] **MOD-020-AC-002:** Agents and workflows cannot bypass application services.
-- [ ] **MOD-020-AC-003:** API contracts are consistent and documented.
-- [ ] **MOD-020-AC-900:** All Critical and High defects for this module are resolved.
+  - Evidence/note: RequestContext in kernel; governance wired
+- [~] **MOD-020-AC-002:** Agents and workflows cannot bypass application services.  
+  - Evidence/note: UoW/API boundary documented; not yet enforced platform-wide
+- [~] **MOD-020-AC-003:** API contracts are consistent and documented.  
+  - Evidence/note: problem+json + shared PageMeta
+- [x] **MOD-020-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High kernel defects filed
 - [!] **MOD-020-AC-901:** The responsible human owner reviews and approves the completion evidence.  
   - Evidence/note: Human owner approval required
 
