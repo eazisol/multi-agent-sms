@@ -19,10 +19,10 @@
 | `npm --prefix apps/web run lint` | passed (prior session) |
 | `npm --prefix apps/web run build` | passed (prior session) |
 | `scripts/dev-check.ps1` | passed quality section (prior session) |
+| GitHub Actions CI #1 | **passed** — run [31386826793](https://github.com/eazisol/multi-agent-sms/actions/runs/31386826793), commit `b9038a9`, conclusion `success`, 1m2s |
 
 ## Limitations
 
-- GitHub Actions workflow exists but was not cloud-executed here (needs git remotes).  
 - pnpm still blocked on this host; web uses npm.  
 - Live Postgres RLS / CMP suites beyond alembic apply are not claimed as full QA Done.  
 - MOD-010 AC-901 and MOD-000 AC-901 still require human owners.

@@ -108,7 +108,7 @@ STATUS: dict[str, tuple[str, str]] = {
     "MOD-010-DOC-001": ("done", "docs/modules/MOD-010/README.md"),
     "MOD-010-DOC-002": ("done", "VERIFICATION.md + TEMPLATE_TASK_RATIONALE.md"),
     "MOD-010-AC-001": ("done", "Start commands documented in MOD-010 README"),
-    "MOD-010-AC-002": ("partial", "CI workflow present; cloud run needs git remote/GitHub"),
+    "MOD-010-AC-002": ("done", "CI run 31386826793 success on b9038a9 (main)"),
     "MOD-010-AC-003": ("done", "No real secrets in examples"),
     "MOD-010-AC-900": ("done", "No Critical/High tooling defects filed"),
     "MOD-010-AC-901": ("blocked", "Human owner approval required"),

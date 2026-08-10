@@ -20,7 +20,7 @@
 | Module | Phase | Tasks | Done | Partial | N/A | Blocked | Open | Module status |
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | MOD-000 | Phase 0 - Governance and Foundation | 41 | 25 | 11 | 4 | 1 | 0 | In progress (human approval blocked) |
-| MOD-010 | Phase 0 - Governance and Foundation | 47 | 15 | 1 | 30 | 1 | 0 | Blocked |
+| MOD-010 | Phase 0 - Governance and Foundation | 47 | 16 | 0 | 30 | 1 | 0 | Blocked |
 | MOD-020 | Phase 0 - Governance and Foundation | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
 | MOD-030 | Phase 0 - Governance and Foundation | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 40, partial 12, n/a 34, blocked 2, open 1661
+**Totals:** 1749 tasks — done 41, partial 11, n/a 34, blocked 2, open 1661
 
 ## Module index (plan order)
 
@@ -351,8 +351,8 @@
 
 - [x] **MOD-010-AC-001:** A new developer can start the stack from documented commands.  
   - Evidence/note: Start commands documented in MOD-010 README
-- [~] **MOD-010-AC-002:** CI blocks formatting, type, test, or build failures.  
-  - Evidence/note: CI workflow present; cloud run needs git remote/GitHub
+- [x] **MOD-010-AC-002:** CI blocks formatting, type, test, or build failures.  
+  - Evidence/note: CI run 31386826793 success on b9038a9 (main)
 - [x] **MOD-010-AC-003:** No real secret exists in source control.  
   - Evidence/note: No real secrets in examples
 - [x] **MOD-010-AC-900:** All Critical and High defects for this module are resolved.  

@@ -96,7 +96,7 @@ STATUS: dict[str, tuple[str, str]] = {
     "MOD-010-DOC-001": ("done", ""),
     "MOD-010-DOC-002": ("done", ""),
     "MOD-010-AC-001": ("done", ""),
-    "MOD-010-AC-002": ("partial", ""),
+    "MOD-010-AC-002": ("done", ""),
     "MOD-010-AC-003": ("done", ""),
     "MOD-010-AC-900": ("done", ""),
     "MOD-010-AC-901": ("blocked", ""),

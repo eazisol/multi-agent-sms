@@ -29,7 +29,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | # | Module | Status | Done | Partial | Open |
 |---:|---|---|---:|---:|---:|
 | 1 | MOD-000 | In progress (human approval blocked) | 25 | 11 | 0 |
-| 2 | MOD-010 | Blocked | 15 | 1 | 0 |
+| 2 | MOD-010 | Blocked | 16 | 0 | 0 |
 | 3 | MOD-020 | Not started | 0 | 0 | 49 |
 | 4 | MOD-030 | Not started | 0 | 0 | 43 |
 | 5 | MOD-040 | Not started | 0 | 0 | 45 |
@@ -68,7 +68,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 40 · partial 12 · n/a 34 · blocked 2 · open 1661
+**All tasks:** 1749 · done 41 · partial 11 · n/a 34 · blocked 2 · open 1661
 
 ## Phase 0 - Governance and Foundation
 
@@ -199,7 +199,7 @@ M9: [x] Docs
 
 M10: [!] Acceptance / Done gate
      M10-1: [x] A new developer can start the stack from documented commands.  (MOD-010-AC-001)
-     M10-2: [~] CI blocks formatting, type, test, or build failures.  (MOD-010-AC-002)
+     M10-2: [x] CI blocks formatting, type, test, or build failures.  (MOD-010-AC-002)
      M10-3: [x] No real secret exists in source control.  (MOD-010-AC-003)
      M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-010-AC-900)
      M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-010-AC-901)
