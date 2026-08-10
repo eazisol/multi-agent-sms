@@ -16865,7 +16865,7 @@ Key ID Provider Purpose Environment Owner Allowed Service Allowed Scopes Creatio
 
 ### **Requirements**
 
-* Prefer IAM roles / IRSA or IAM roles instead of static API keys.
+* Prefer IAM roles / IRSA / ECS task roles instead of static API keys.
 
 * Store runtime secrets in a dedicated secrets manager.
 
@@ -16953,11 +16953,11 @@ AWS Secrets Manager → Runtime API credentials, database connections, certifica
 
 Applications should retrieve secrets using:
 
-* Managed identity
+* IAM roles / IRSA / ECS task roles
 
-* Workload identity
+* IAM roles / IRSA
 
-* Service principal with minimum access
+* IAM principal with least-privilege access
 
 * Short-lived credentials
 

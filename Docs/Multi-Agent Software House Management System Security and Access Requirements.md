@@ -492,7 +492,7 @@ Status
 
 ## **Requirements**
 
-* Prefer IAM roles / IRSA or IAM roles instead of static API keys.  
+* Prefer IAM roles / IRSA / ECS task roles instead of static API keys.  
 * Store runtime secrets in a dedicated secrets manager.  
 * Store separate credentials for development, staging, and production.  
 * Use minimum API scopes.  
@@ -550,9 +550,9 @@ AWS Secrets Manager
 
 Applications should retrieve secrets using:
 
-* Managed identity  
-* Workload identity  
-* Service principal with minimum access  
+* IAM roles / IRSA / ECS task roles
+* IAM roles / IRSA  
+* IAM principal with least-privilege access  
 * Short-lived credentials
 
 The application should normally receive a secret value at runtime without exposing it to users or AI agents.
