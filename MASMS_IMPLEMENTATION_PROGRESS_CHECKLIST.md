@@ -22,7 +22,7 @@
 | MOD-000 | Phase 0 - Governance and Foundation | 41 | 25 | 11 | 4 | 1 | 0 | In progress (human approval blocked) |
 | MOD-010 | Phase 0 - Governance and Foundation | 47 | 16 | 0 | 30 | 1 | 0 | Blocked |
 | MOD-020 | Phase 0 - Governance and Foundation | 49 | 23 | 13 | 4 | 1 | 8 | Blocked |
-| MOD-030 | Phase 0 - Governance and Foundation | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-030 | Phase 0 - Governance and Foundation | 43 | 14 | 2 | 26 | 1 | 0 | Blocked |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
 | MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 64, partial 24, n/a 38, blocked 3, open 1620
+**Totals:** 1749 tasks — done 78, partial 26, n/a 64, blocked 4, open 1577
 
 ## Module index (plan order)
 
@@ -504,76 +504,119 @@
 
 #### Main points
 
-- [ ] **MOD-030-MP-001:** Implement and verify environment matrix.
-- [ ] **MOD-030-MP-002:** Implement and verify secret manager.
-- [ ] **MOD-030-MP-003:** Implement and verify CI pipelines.
-- [ ] **MOD-030-MP-004:** Implement and verify staging deployment.
-- [ ] **MOD-030-MP-005:** Implement and verify production approval placeholder.
-- [ ] **MOD-030-MP-006:** Implement and verify infrastructure as code.
+- [x] **MOD-030-MP-001:** Implement and verify environment matrix.  
+  - Evidence/note: Environment enum + config/environments examples
+- [x] **MOD-030-MP-002:** Implement and verify secret manager.  
+  - Evidence/note: SecretBackend local + Key Vault fail-closed stub
+- [x] **MOD-030-MP-003:** Implement and verify CI pipelines.  
+  - Evidence/note: CI concurrency + junit/build-identity artifacts
+- [x] **MOD-030-MP-004:** Implement and verify staging deployment.  
+  - Evidence/note: deploy-staging.yml dry-run skeleton
+- [x] **MOD-030-MP-005:** Implement and verify production approval placeholder.  
+  - Evidence/note: deploy-production.yml + check_production_gate.py
+- [x] **MOD-030-MP-006:** Implement and verify infrastructure as code.  
+  - Evidence/note: infra/bicep Key Vault skeleton
 
 #### Database / data design
 
-- [ ] **MOD-030-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **environment matrix**.
-- [ ] **MOD-030-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **secret manager**.
-- [ ] **MOD-030-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **CI pipelines**.
-- [ ] **MOD-030-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **staging deployment**.
-- [ ] **MOD-030-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **production approval placeholder**.
-- [ ] **MOD-030-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **infrastructure as code**.
+- [-] **MOD-030-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **environment matrix**.  
+  - Evidence/note: No env matrix table — config files
+- [-] **MOD-030-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **secret manager**.  
+  - Evidence/note: Secrets in Key Vault / GH Environments — not DB
+- [-] **MOD-030-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **CI pipelines**.  
+  - Evidence/note: CI is GitHub Actions — not DB
+- [-] **MOD-030-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **staging deployment**.  
+  - Evidence/note: Staging deploy is workflow — not DB
+- [-] **MOD-030-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **production approval placeholder**.  
+  - Evidence/note: Prod gate is workflow/script — not DB
+- [-] **MOD-030-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **infrastructure as code**.  
+  - Evidence/note: IaC is Bicep files — not DB
 
 #### Backend
 
-- [ ] **MOD-030-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-030-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-030-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-030-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [-] **MOD-030-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: Platform helpers only; see TEMPLATE_TASK_RATIONALE
+- [-] **MOD-030-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: No MOD-030 entity mutations
+- [-] **MOD-030-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: No MOD-030 outbox entity
+- [-] **MOD-030-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: No MOD-030 entity API errors
 
 #### API
 
-- [ ] **MOD-030-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-030-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-030-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [-] **MOD-030-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: No MOD-030 CRUD API
+- [-] **MOD-030-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: No MOD-030 CRUD API
+- [-] **MOD-030-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: No MOD-030 CRUD API
 
 #### Frontend
 
-- [ ] **MOD-030-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-030-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-030-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-030-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-030-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: No MOD-030 UI
+- [-] **MOD-030-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: No MOD-030 UI
+- [-] **MOD-030-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: No MOD-030 UI
+- [-] **MOD-030-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: No MOD-030 UI
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-030-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-030-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-030-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-030-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [-] **MOD-030-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: Deploy via GitHub Actions — not Temporal WF
+- [-] **MOD-030-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: No Temporal/LangGraph in MOD-030
+- [-] **MOD-030-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: No MOD-030 domain events
+- [-] **MOD-030-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: No MOD-030 notifications
 
 #### Security / privacy / audit
 
-- [ ] **MOD-030-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-030-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-030-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-030-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-030-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: GitHub Environment + prod gate; Auth0 later
+- [-] **MOD-030-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: No MOD-030 tenant tables
+- [x] **MOD-030-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: Examples only; prod forbids local_env backend
+- [-] **MOD-030-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: No MOD-030 audit entity
 
 #### Testing / verification
 
-- [ ] **MOD-030-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-030-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-030-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-030-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-030-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-030-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/platform
+- [-] **MOD-030-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: No MOD-030 API module
+- [-] **MOD-030-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: No MOD-030 tenant surface
+- [-] **MOD-030-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: No MOD-030 Temporal/agent tests
+- [x] **MOD-030-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest + gate script smoke
 
 #### Documentation
 
-- [ ] **MOD-030-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-030-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-030-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-030/README.md
+- [x] **MOD-030-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-030-AC-001:** Environment credentials are isolated.
-- [ ] **MOD-030-AC-002:** Production release requires human authorization.
-- [ ] **MOD-030-AC-003:** Artifacts are reproducible and traceable.
-- [ ] **MOD-030-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-030-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [~] **MOD-030-AC-001:** Environment credentials are isolated.  
+  - Evidence/note: Matrix + secret backend rules; live KV not wired
+- [x] **MOD-030-AC-002:** Production release requires human authorization.  
+  - Evidence/note: Production workflow requires confirm+approver+reason+sha
+- [x] **MOD-030-AC-003:** Artifacts are reproducible and traceable.  
+  - Evidence/note: CI build-identity artifact keyed by git sha
+- [x] **MOD-030-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-030 defects filed
+- [!] **MOD-030-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

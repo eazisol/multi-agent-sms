@@ -41,8 +41,10 @@ def create_app() -> FastAPI:
         return {
             "name": settings.api_title,
             "version": settings.api_version,
-            "modules": ["MOD-000", "MOD-020"],
+            "modules": ["MOD-000", "MOD-020", "MOD-030"],
             "kernel": "masms_api.kernel",
+            "environment": settings.env,
+            "secret_backend": settings.secret_backend,
             "default_organization_id": settings.default_organization_id,
         }
 

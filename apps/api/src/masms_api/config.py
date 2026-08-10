@@ -2,7 +2,15 @@
 
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from masms_api.platform.environment import Environment, parse_environment
+from masms_api.platform.secrets import (
+    LOCAL_BACKEND,
+    SecretBackend,
+    create_secret_backend,
+)
 
 
 class Settings(BaseSettings):
@@ -14,10 +22,32 @@ class Settings(BaseSettings):
     database_url: str = "sqlite+pysqlite:///:memory:"
     cors_origins: str = "http://localhost:3000"
     default_organization_id: str = "00000000-0000-4000-8000-000000000001"
+    secret_backend: str = LOCAL_BACKEND
+    key_vault_uri: str | None = None
+
+    @field_validator("env")
+    @classmethod
+    def _validate_env(cls, value: str) -> str:
+        return parse_environment(value).value
+
+    @property
+    def environment(self) -> Environment:
+        return Environment(self.env)
 
     @property
     def cors_origin_list(self) -> list[str]:
         return [part.strip() for part in self.cors_origins.split(",") if part.strip()]
+
+    def secret_provider(self) -> SecretBackend:
+        local_values = {
+            "database_url": self.database_url,
+        }
+        return create_secret_backend(
+            backend=self.secret_backend,
+            environment=self.environment,
+            key_vault_uri=self.key_vault_uri,
+            local_values=local_values,
+        )
 
 
 @lru_cache

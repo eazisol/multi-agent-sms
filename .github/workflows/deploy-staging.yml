@@ -1,0 +1,50 @@
+name: Deploy staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run only (do not apply)"
+        type: boolean
+        default: true
+      git_sha:
+        description: "Git SHA to deploy (defaults to workflow SHA)"
+        required: false
+        type: string
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Staging skeleton
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha || github.sha }}
+      - name: Resolve target
+        id: target
+        run: |
+          SHA="${{ inputs.git_sha }}"
+          if [ -z "$SHA" ]; then SHA="${GITHUB_SHA}"; fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Deploying SHA=$SHA dry_run=${{ inputs.dry_run }}"
+      - name: Staging deploy placeholder
+        env:
+          MASMS_ENV: staging
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          echo "Environment=$MASMS_ENV"
+          echo "Target SHA=${{ steps.target.outputs.sha }}"
+          echo "Would run: alembic upgrade head"
+          echo "Would run: azure container/app restart or slot swap (PENDING infra)"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Dry run complete — no mutations applied."
+          else
+            echo "Non-dry staging apply is scaffolded only; wire Azure credentials before enabling."
+            exit 1
+          fi

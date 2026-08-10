@@ -14,7 +14,9 @@ def test_meta_lists_mod_020() -> None:
     assert resp.status_code == 200
     body = resp.json()
     assert "MOD-020" in body["modules"]
+    assert "MOD-030" in body["modules"]
     assert body["kernel"] == "masms_api.kernel"
+    assert "environment" in body
 
 
 def test_get_request_context_parses_optional_project() -> None:

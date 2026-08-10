@@ -1,0 +1,69 @@
+name: Deploy production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_production:
+        description: "Must be true after human approval (CONFIRM_PRODUCTION)"
+        type: boolean
+        default: false
+      production_approver:
+        description: "Human approver identity (email or GitHub login)"
+        required: true
+        type: string
+      production_approval_reason:
+        description: "Why this production release is authorized"
+        required: true
+        type: string
+      git_sha:
+        description: "Exact approved commit SHA"
+        required: true
+        type: string
+      dry_run:
+        description: "Dry run after gate validation"
+        type: boolean
+        default: true
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    name: Human approval gate
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv sync
+      - name: Evaluate production gate
+        env:
+          CONFIRM_PRODUCTION: ${{ inputs.confirm_production }}
+          PRODUCTION_APPROVER: ${{ inputs.production_approver }}
+          PRODUCTION_APPROVAL_REASON: ${{ inputs.production_approval_reason }}
+          GIT_SHA: ${{ inputs.git_sha }}
+        run: |
+          uv run python scripts/check_production_gate.py
+      - name: Production deploy placeholder
+        env:
+          MASMS_ENV: production
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          echo "Production release authorized for SHA=${{ inputs.git_sha }}"
+          echo "Approver=${{ inputs.production_approver }}"
+          echo "Would run: blue/green or slot swap with rollback plan"
+          if [ "$DRY_RUN" != "true" ]; then
+            echo "Live production apply is blocked until Azure deploy targets are wired."
+            exit 1
+          fi
+          echo "Dry run complete."
