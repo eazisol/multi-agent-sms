@@ -10,7 +10,9 @@ Authoritative product inputs live under `Docs/`. Engineering rules live under `.
 | MOD-000 Governance | Draft implementation (docs + API). Human Done approval pending |
 | MOD-010+ | Not started (minimal folder placeholders only) |
 
-See `docs/modules/MOD-000/README.md` and `docs/governance/`.
+Detailed plan task IDs and checkmarks: `MASMS_IMPLEMENTATION_PROGRESS_CHECKLIST.md`  
+Regen: `uv run python scripts/generate_implementation_progress_checklist.py`  
+Module notes: `docs/modules/MOD-000/README.md` and `docs/governance/`.
 
 ## Quick start (API)
 

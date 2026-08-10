@@ -1,0 +1,24 @@
+---
+description: Use the MASMS professional code-review checklist whenever reviewing or preparing a pull request.
+globs: 
+alwaysApply: false
+---
+# Code Review Standard
+
+Review in this order:
+
+1. **Requirement correctness** — matches approved scope and acceptance criteria
+2. **Domain integrity** — ownership, status, history, approval, follow-up, and traceability rules are preserved
+3. **Security** — tenant isolation, authorization, secrets, PII, prompt injection, file and integration risks
+4. **Architecture** — logic is in the correct FastAPI, Temporal, LangGraph, frontend, or integration layer
+5. **Data safety** — constraints, transactions, migrations, concurrency, idempotency, and rollback
+6. **API compatibility** — schemas, errors, pagination, versioning, and clients
+7. **Reliability** — retries, timeouts, compensation, event handling, and failure states
+8. **Performance** — query count, payload size, pagination, cache scope, worker load
+9. **Quality** — typing, readability, duplication, naming, complexity, and dead code
+10. **Testing** — positive, negative, boundary, permission, tenant, concurrency, and recovery coverage
+11. **Observability** — logs, metrics, traces, audit events, and alerts
+12. **Operations** — configuration, rollout, monitoring, migration, and rollback
+13. **Documentation** — SRS/ticket references, API docs, ADRs, and runbooks
+
+Do not approve a change with unresolved critical security, data-loss, cross-tenant, approval-bypass, or audit-integrity risks.

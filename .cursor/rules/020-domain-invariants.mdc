@@ -1,0 +1,24 @@
+---
+description: Preserve MASMS domain invariants whenever implementing business entities, workflows, services, APIs, agents, dashboards, or tests.
+globs: 
+alwaysApply: true
+---
+# MASMS Domain Invariants
+
+- Use a common Actor abstraction for human, agent, system, and integration identities.
+- Every major business record must include organization ownership, status, responsible owner, creator, updater, UTC timestamps, and history.
+- `project_id` may be null only for valid pre-project records such as an initial query or opportunity.
+- Approved requirements and documents are immutable; changes create a new version.
+- Statuses and transitions are configuration-driven; do not hard-code database enums for configurable business workflows.
+- Every transition records previous status, next status, actor, reason, rule, evidence, and timestamp.
+- Every reassignment closes the previous assignment and creates a new history record.
+- Waiting, blocked, on-hold, and overdue states require a reason, responsible party, next action, and due or review date.
+- A follow-up must have a source, recipient, responsible owner, due date, required response, status, reminder rule, escalation rule, and closure condition.
+- Parent follow-ups remain open while mandatory child follow-ups are unresolved.
+- Every approval references the exact target entity and target version.
+- Every Must-Have requirement must be traceable to implementation and test evidence before release.
+- A failed approved requirement is a bug; new functionality outside the baseline is a change request.
+- QA rejection returns work to the controlled development loop and preserves all prior evidence.
+- Critical unresolved defects block release unless an authorized exception is recorded.
+- Completed and cancelled records are terminal unless an authorized reopening process is used.
+- No project is closed without required QA, deployment, client, support, documentation, and commercial disposition evidence.

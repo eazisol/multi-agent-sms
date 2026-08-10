@@ -1,0 +1,42 @@
+---
+description: Apply protected-branch, focused-commit, pull-request, automated quality gate, artifact, release, and deployment approval standards.
+globs: "**/*.{yml,yaml,json,toml,md}"
+alwaysApply: false
+---
+# Git and CI/CD Standard
+
+## Git
+
+- Never commit directly to a protected main or release branch.
+- Use descriptive branch names such as `feature/TKT-123-short-name`, `fix/BUG-101-short-name`, or `chore/TKT-456-short-name`.
+- Use concise conventional commit messages with the relevant ticket or requirement reference.
+- Keep commits logically focused and free of generated noise, secrets, personal data, or unrelated formatting.
+- Do not rewrite shared branch history without explicit team approval.
+
+## Pull Requests
+
+Every PR must include:
+
+- Purpose and linked ticket/requirement
+- Scope and key design decisions
+- API/database/configuration impact
+- Security and permission impact
+- Test evidence and commands
+- Screenshots for visual changes
+- Migration, rollout, monitoring, and rollback notes
+- Known limitations and follow-up items
+
+## CI Quality Gates
+
+Require applicable:
+
+- Formatting and linting
+- Static type checking
+- Unit and integration tests
+- Contract and workflow tests
+- Frontend build
+- Migration validation
+- Dependency, secret, SAST, and container scans
+- Artifact integrity and image scanning
+
+Production deployment must use an approved immutable artifact and the configured human release gate. Never bypass a failed gate to meet a deadline without an authorized, documented exception.

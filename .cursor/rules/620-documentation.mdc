@@ -1,0 +1,18 @@
+---
+description: Apply requirement-linked, versioned, accurate, concise architecture, API, runbook, decision, setup, and operational documentation standards.
+globs: "**/*.{md,mdx,rst,py,ts,tsx}"
+alwaysApply: false
+---
+# Documentation Standard
+
+- Update documentation in the same change as behavior, contract, configuration, migration, or workflow changes.
+- Link material implementation to ticket and requirement IDs.
+- Maintain clear README instructions for setup, local development, tests, migrations, workers, and troubleshooting.
+- Record major technical decisions as Architecture Decision Records containing context, options, decision, consequences, security, cost, migration, and rollback considerations.
+- Keep OpenAPI, event schemas, integration mappings, environment variables, and workflow diagrams current.
+- Document public modules, services, domain policies, agent tools, Temporal workflows, and non-obvious invariants.
+- Write comments that explain intent and constraints, not line-by-line mechanics.
+- Mark unknown, pending, deprecated, superseded, and experimental content explicitly.
+- Never document secrets or real client PII.
+- Include an owner, version, approval status, effective date, and review date for controlled standards and knowledge documents.
+- Remove or update stale instructions when the corresponding implementation changes.

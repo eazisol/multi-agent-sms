@@ -1,0 +1,21 @@
+---
+description: Apply consistent, responsive, accessible, professional UI and interaction standards to pages, components, forms, dashboards, and design changes.
+globs: "**/*.{tsx,jsx,css,scss,mdx}"
+alwaysApply: false
+---
+# UI, UX, and Accessibility Standard
+
+- Follow the approved design system, spacing scale, typography, component patterns, and content tone.
+- Target WCAG AA behavior for keyboard access, focus visibility, labels, contrast, semantics, errors, and dynamic announcements.
+- Design mobile, tablet, laptop, and desktop behavior explicitly.
+- Every screen must define loading, empty, error, success, permission-denied, and partial-data states.
+- Use confirmation dialogs for destructive or irreversible actions and show the exact impact.
+- Provide undo or recovery where safe and practical.
+- Keep primary actions clear; avoid multiple competing primary buttons.
+- Use tables for comparable structured data, not for every record detail or complex workflow.
+- Provide searchable, filterable, sortable, and paginated data views where the volume requires them.
+- Show status, owner, due date, risk, approval state, and next action consistently.
+- Do not expose internal agent reasoning; show concise explanations, sources, confidence, and required human decisions.
+- Use plain professional language for client-visible content and precise operational language for internal users.
+- Preserve user-entered data after validation errors.
+- Verify keyboard-only operation and screen-reader labels for critical flows.

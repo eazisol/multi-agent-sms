@@ -1,0 +1,39 @@
+---
+description: Apply strict TypeScript, Next.js, React, Tailwind, shadcn/ui, API-boundary, state, permission, and maintainability standards to frontend code.
+globs: "**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+# Frontend Next.js and TypeScript Standard
+
+## Project Consistency
+
+- Follow the routing and rendering approach already established in the repository; do not mix incompatible routing patterns.
+- Use strict TypeScript and avoid `any`.
+- Keep components focused and compose larger screens from reusable domain components.
+- Keep domain rules and authorization enforcement on the backend; frontend checks only improve the experience.
+- Do not place secrets, private keys, or privileged provider tokens in browser code or public environment variables.
+
+## Data Access
+
+- Use the approved API client and shared request/error handling.
+- Prefer generated types from OpenAPI when available.
+- Validate external data at the boundary.
+- Use stable query keys and invalidate only affected data.
+- Handle loading, empty, error, stale, permission-denied, and success states explicitly.
+- Prevent duplicate submissions and show durable workflow status for asynchronous actions.
+
+## Components and Forms
+
+- Use approved shadcn/ui and design-system components before creating new primitives.
+- Use semantic HTML and accessible labels, descriptions, errors, and focus behavior.
+- Validate on the client for usability and on the server for authority.
+- Preserve unsaved-change warnings for material forms.
+- Keep table columns, filters, pagination, and actions permission-aware.
+- Do not render sensitive fields and merely hide them with CSS.
+
+## Quality
+
+- Avoid unnecessary client-side rendering and large dependencies.
+- Memoize only after identifying a real rendering issue.
+- Add component, integration, and end-to-end coverage for critical workflows.
+- Keep user-visible messages professional, specific, and actionable.

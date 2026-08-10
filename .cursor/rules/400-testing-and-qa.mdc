@@ -1,0 +1,37 @@
+---
+description: Apply requirement-linked unit, integration, contract, workflow, end-to-end, regression, negative, security, and QA evidence standards to all changes.
+globs: "**/*test*.{py,ts,tsx,js,jsx}"
+alwaysApply: false
+---
+# Testing and QA Standard
+
+## Required Coverage
+
+- Add tests for every changed business rule, permission, status transition, approval gate, error path, and external boundary.
+- Link release-critical tests to requirement or acceptance-criteria IDs.
+- Cover positive, negative, boundary, validation, concurrency, retry, idempotency, tenant-isolation, authorization, and recovery scenarios.
+- Use the three approved synthetic projects to evaluate cross-role agent decisions and end-to-end workflows.
+
+## Test Layers
+
+- Unit tests: domain rules, policies, validators, state transitions, agent nodes, activity helpers.
+- Integration tests: database constraints/RLS, repositories, service transactions, APIs, queues, blob storage, providers in sandbox or controlled emulation.
+- Contract tests: OpenAPI clients, webhook payloads, event schemas, provider adapters.
+- Workflow tests: Temporal timers, signals, retries, cancellations, escalations, and QA loops.
+- End-to-end tests: critical user journeys and approval-controlled actions.
+
+## Test Quality
+
+- Tests must be deterministic, isolated, readable, and repeatable.
+- Do not depend on execution order or shared mutable state.
+- Freeze or control time and random values.
+- Mock only at external boundaries; do not mock the behavior being tested.
+- Never silence flaky tests by retrying them indefinitely.
+- Use sanitized factories/builders rather than real client data.
+- Record required QA evidence for manual or environment-dependent scenarios.
+
+## Release Gate
+
+- Critical unresolved defects block release.
+- High-severity defects require documented authorized acceptance.
+- A passing percentage does not override a failed Must-Have acceptance criterion.

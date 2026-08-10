@@ -1,0 +1,48 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+**/secrets/**
+**/*.pem
+**/*.key
+**/*.pfx
+**/*.p12
+**/credentials*.json
+
+# Dependencies and virtual environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Generated build output
+.next/
+dist/
+build/
+out/
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Runtime and local data
+logs/
+*.log
+uploads/
+quarantine/
+local-data/
+*.sqlite
+*.sqlite3
+
+# IDE and OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Large generated or archived artifacts
+artifacts/
+reports/generated/
+docs/archive/

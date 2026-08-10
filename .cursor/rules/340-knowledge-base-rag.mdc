@@ -1,0 +1,29 @@
+---
+description: Apply approved-version, permission-filtered, provenance-rich, conflict-aware, privacy-safe knowledge ingestion and retrieval standards.
+globs: "**/*.{py,md,mdx}"
+alwaysApply: false
+---
+# Knowledge Base and RAG Standard
+
+## Ingestion
+
+- Ingest only files that passed malware scanning, classification, ownership assignment, review, and approval.
+- Do not index draft, rejected, expired, superseded, or unauthorized content as authoritative.
+- Preserve document ID, version, owner, approver, effective date, confidentiality, organization, client, project, department, and tags.
+- Chunk content along semantic headings and preserve enough context to interpret tables, lists, requirements, and exceptions.
+- Re-index only after an approved version becomes effective.
+
+## Retrieval
+
+- Filter by organization, client, project, role, confidentiality, approval status, effective date, and version before semantic ranking.
+- Use this priority: approved project knowledge, approved client knowledge, approved department standards, company policies, approved examples.
+- Prefer the newest effective approved version at the same authority level.
+- Return source references and versions with material recommendations.
+- Never retrieve across tenants based only on vector similarity.
+
+## Conflicts and Deletion
+
+- Resolve authority in this order: legal/security policy, contract, approved SRS, approved change request, project process, department standard, company standard, template, historical example.
+- When authoritative sources conflict, stop the affected automated action and request human resolution.
+- Delete or restrict chunks and embeddings whenever the source is deleted, reclassified, expired, or access-revoked.
+- Log knowledge usage without copying unnecessary sensitive content.

@@ -1,0 +1,20 @@
+---
+description: Apply explicit error taxonomy, safe messages, bounded retries, exponential backoff, idempotency, compensation, and dead-letter handling.
+globs: "**/*.{py,ts,tsx}"
+alwaysApply: false
+---
+# Errors, Retries, and Idempotency Standard
+
+- Define domain, validation, authorization, conflict, not-found, dependency, rate-limit, temporary, permanent, and unexpected error categories.
+- Map errors to stable machine-readable codes and safe user messages.
+- Preserve the original exception and correlation ID for internal diagnostics without leaking implementation details.
+- Never swallow exceptions or use broad catch blocks without meaningful handling.
+- Retry only temporary failures.
+- Do not retry invalid input, denied access, failed business rules, expired approvals, or permanent provider errors.
+- Use bounded exponential backoff with jitter and provider retry instructions.
+- Make retryable APIs, activities, event consumers, webhooks, and synchronization operations idempotent.
+- Persist idempotency keys and result references for the required retention window.
+- Use dead-letter queues or failed-operation records when automated retries are exhausted.
+- Provide replay tooling with authorization, audit, duplicate protection, and a visible outcome.
+- Use compensation or rollback for partially completed multi-step operations.
+- Surface recovery instructions and next action to users rather than generic failure messages.

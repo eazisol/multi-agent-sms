@@ -1,0 +1,24 @@
+---
+description: Apply structured logging, OpenTelemetry, metrics, tracing, health, alerting, immutable audit, correlation, and privacy standards.
+globs: "**/*.{py,ts,tsx}"
+alwaysApply: false
+---
+# Observability and Audit Standard
+
+## Operational Telemetry
+
+- Use structured logs with timestamp, level, service, environment, correlation ID, trace/span ID, organization/project references where safe, actor type/ID, event, and outcome.
+- Never log secrets, access tokens, passwords, full sensitive payloads, or unnecessary PII.
+- Propagate correlation and causation IDs across APIs, workflows, activities, events, agents, and integrations.
+- Instrument critical requests, database calls, provider calls, workflow/activity execution, queue processing, and model calls with OpenTelemetry.
+- Expose secure liveness, readiness, and dependency health checks.
+- Add actionable metrics and alerts for error rate, latency, saturation, queue age, retries, DLQ, workflow backlog, failed agent runs, approval SLA, and backup failures.
+
+## Audit Trail
+
+- Audit is separate from application logging and is append-only.
+- Audit authentication, authorization denial, permission changes, status changes, assignments, approvals, overrides, restricted access, exports, agent tools, integration changes, deployments, rollback, backup/restore, and security events.
+- Include actor, action, entity, previous/new state or safe references, reason, source, correlation ID, timestamp, and risk level.
+- Redact secrets and minimize PII in before/after data.
+- Normal users and agents must not update or delete audit records.
+- Failure to create a mandatory audit event must fail the protected action or route it to a controlled recovery process.

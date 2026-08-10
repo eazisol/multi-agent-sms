@@ -1,0 +1,20 @@
+---
+description: Apply provider-adapter, OAuth, webhook, source-of-truth, sandbox, rate-limit, retry, mapping, and reconciliation standards to external integrations.
+globs: "**/integrations/**/*.py"
+alwaysApply: false
+---
+# External Integration Standard
+
+- Implement each provider behind a stable internal interface; provider-specific details must not leak into domain services.
+- Define the source of truth for every synchronized field and status.
+- For MVP, treat Gmail as the email delivery/thread source and Jira as the work-execution source while MASMS owns requirements, approvals, follow-ups, escalations, traceability, and audit.
+- Use OAuth or managed identity with minimum scopes; do not use personal production tokens.
+- Separate development, test, staging, and production credentials and webhook endpoints.
+- Validate webhook signatures, timestamp freshness, provider account/tenant mapping, event IDs, and payload schema.
+- Store raw provider payloads only when approved, protected, and retention-limited.
+- Prefer webhooks and incremental synchronization over frequent polling.
+- Respect provider rate limits, retry headers, quotas, and concurrency limits.
+- Use idempotency, external-ID mapping, and reconciliation jobs to prevent duplication and detect drift.
+- Classify errors as temporary, permanent, authorization, rate-limit, validation, or mapping failures.
+- Use sandbox/test accounts and representative test data before production enablement.
+- Define disconnect, revoked-consent, token-expiry, replay, and partial-outage behavior.

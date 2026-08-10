@@ -1,0 +1,46 @@
+---
+description: Enforce MASMS Definition of Ready and Definition of Done before starting, reviewing, testing, closing, or releasing work.
+globs: 
+alwaysApply: false
+---
+# Definition of Ready and Done
+
+## Definition of Ready
+
+A ticket may move to Ready only when it has:
+
+- Approved requirement and version reference
+- Clear business purpose and scope
+- Acceptance criteria
+- Required role and permission behavior
+- Validation and error behavior
+- Design/API/dependency references where applicable
+- Security and data-classification considerations
+- Estimate or sizing
+- Test expectations
+- Definition of Done
+- No unresolved blocker that prevents start
+
+## Development Definition of Done
+
+- Implementation satisfies the approved acceptance criteria
+- Code follows architecture and coding rules
+- Required migrations and configuration are included
+- Unit/integration/contract tests pass
+- Code review is approved
+- Build and automated quality gates pass
+- Audit, logging, metrics, and errors are implemented
+- Documentation is updated
+- Work is available in the approved test environment
+
+## QA and Release Definition of Done
+
+- Requirement-linked test cases are executed
+- Evidence is recorded
+- Failed work is returned through the controlled loop
+- No unresolved critical defect remains
+- High-risk known issues have authorized acceptance
+- Release notes, migration, backup, monitoring, and rollback plans are complete
+- Required QA, TL, PM/release, client, and deployment approvals are recorded
+
+Do not mark work Done solely because code exists or an agent recommends completion.

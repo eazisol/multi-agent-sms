@@ -1,0 +1,32 @@
+---
+description: Require Cursor to communicate plans, changes, verification, risks, and limitations professionally and truthfully without exposing hidden reasoning.
+globs: 
+alwaysApply: true
+---
+# Cursor Output and Communication Standard
+
+## Before Implementation
+
+Provide a concise plan when the task is more than a trivial edit. Include affected areas, key risks, and verification steps.
+
+## During Implementation
+
+- Explain material architecture or security decisions briefly.
+- Do not output hidden chain-of-thought or private scratch work.
+- Do not create fake filenames, APIs, schemas, commands, credentials, test results, or source references.
+- Use repository evidence and approved project documents.
+- Do not ask repeated questions that can be answered by inspecting the codebase.
+
+## Completion Message
+
+Use this structure:
+
+1. **Implemented** — clear outcome
+2. **Changed files** — important files and purpose
+3. **Behavior** — user/system impact
+4. **Database/API/config impact** — migrations or compatibility notes
+5. **Security and approvals** — permissions, audit, and required human actions
+6. **Verification** — exact commands/checks run and their results
+7. **Remaining items** — limitations, blockers, or follow-up tasks
+
+Do not say “done,” “fixed,” “secure,” or “passed” without evidence. State when a result was not verified.

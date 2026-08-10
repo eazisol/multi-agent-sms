@@ -1,0 +1,24 @@
+---
+description: Apply mandatory authorization, isolation, upload, webhook, prompt-injection, secret, audit, dependency, and production-safety verification to security-sensitive work.
+globs: "**/*.{py,ts,tsx,yaml,yml,json}"
+alwaysApply: false
+---
+# Security Testing Standard
+
+For every security-sensitive change, test as applicable:
+
+- Authentication success, failure, expiry, revocation, and step-up flows
+- Role, project membership, module, action, environment, and approval authority
+- Direct object reference and cross-client/cross-project isolation
+- PostgreSQL RLS policies and bypass resistance
+- Restricted document, export, file, search, cache, and vector access
+- Webhook signature, replay, timestamp, event-ID, and tenant mapping
+- File extension, MIME, magic bytes, size, archive, malware, and quarantine behavior
+- Secret redaction in logs, errors, prompts, telemetry, and audit payloads
+- Prompt injection and unauthorized tool requests from untrusted content
+- Model output schema validation and recipient/permission validation
+- Rate limiting, brute-force controls, and abuse paths
+- Dependency, container, and source-code vulnerability scans
+- Audit completeness for access denied, permission changes, agent tools, exports, and high-risk operations
+
+Do not mark a security requirement complete until negative tests demonstrate that unauthorized behavior is rejected and audited.

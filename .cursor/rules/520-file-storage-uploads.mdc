@@ -1,0 +1,20 @@
+---
+description: Apply private object storage, quarantine, allowlist validation, malware scanning, signed URL, checksum, permission, retention, and AI-indexing controls to files.
+globs: "**/*.{py,ts,tsx}"
+alwaysApply: false
+---
+# File Upload and Storage Standard
+
+- Store file bytes in approved private object storage and metadata in PostgreSQL.
+- Use tenant/client/project-scoped storage keys with non-predictable file IDs.
+- Never make upload containers publicly readable.
+- Use short-lived signed URLs after authorization at request time.
+- Quarantine every upload before availability or AI processing.
+- Validate extension, MIME type, file signature, size, file count, path safety, and archive expansion limits.
+- Scan for malware and reject or isolate failed files.
+- Rename stored files using generated identifiers while preserving the original name as metadata.
+- Record checksum, uploader, related entity, classification, scan status, size, content type, and timestamps.
+- Apply document permissions to original bytes, previews, extracted text, thumbnails, chunks, and embeddings.
+- Do not send files to models or knowledge indexing before scan, classification, and approval requirements pass.
+- Block executable/script types by default and allow only business-required formats.
+- Delete or retain files, derivatives, and backups according to the approved retention and legal-hold policy.

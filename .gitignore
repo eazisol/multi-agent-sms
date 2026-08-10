@@ -39,6 +39,4 @@ docker-data/
 
 # Lock / tooling artifacts that may be regenerated locally
 .uv/
-/.cursor
-.cursorignore
-.cursorindexingignore
+

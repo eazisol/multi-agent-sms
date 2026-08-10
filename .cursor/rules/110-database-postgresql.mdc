@@ -1,0 +1,23 @@
+---
+description: Apply PostgreSQL, SQLAlchemy model, indexing, constraints, RLS, versioning, audit, and migration-safe data design standards.
+globs: "**/*.{py,sql}"
+alwaysApply: false
+---
+# PostgreSQL and Data Modeling Standard
+
+- Use `snake_case`, plural table names, explicit foreign keys, and consistent constraint names.
+- Use UUID primary keys and `timestamptz` UTC timestamps.
+- Add `organization_id` and relevant client/project ownership fields to tenant-owned data.
+- Enforce invariants with database constraints when possible, not application checks alone.
+- Index foreign keys, tenant filters, status filters, due dates, external IDs, and common query combinations based on measured access paths.
+- Use partial and composite indexes deliberately; do not add speculative indexes.
+- Use JSONB only for flexible metadata, model output, or raw integration payloads that do not belong in stable relational columns.
+- Store files in object storage and only metadata/references in PostgreSQL.
+- Approved requirement and document versions are immutable.
+- Audit logs and status history are append-only.
+- Use effective dates for assignments, delegations, policies, and versions.
+- Enable and test RLS for designated sensitive multi-tenant tables; application filters do not replace RLS tests.
+- Avoid cascade deletes for records requiring audit retention.
+- Use soft deletion for business records and ensure default queries exclude deleted rows without hiding them from authorized audit access.
+- Prevent duplicate external/webhook processing with unique event or idempotency constraints.
+- Document every non-trivial constraint and data lifecycle decision in the migration or ADR.

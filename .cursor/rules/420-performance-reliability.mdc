@@ -1,0 +1,29 @@
+---
+description: Apply measurable performance, availability, load, caching, query, worker, timeout, degradation, and recovery standards to performance-sensitive changes.
+globs: "**/*.{py,ts,tsx}"
+alwaysApply: false
+---
+# Performance and Reliability Standard
+
+Use the MVP targets unless a later approved requirement supersedes them:
+
+- 95% of normal API requests under 2 seconds
+- Dashboard load under 3 seconds at normal pilot volume
+- Agent task initiation within 10 seconds after trigger
+- Follow-up reminder processing within 5 minutes of schedule
+- Webhook processing within 60 seconds
+- Normal notification delivery within 2 minutes
+- MVP pilot availability target of at least 99.5%
+
+## Engineering Rules
+
+- Measure before optimizing and record representative test conditions.
+- Avoid N+1 queries, unbounded list endpoints, full-table scans, excessive serialization, and oversized workflow/event payloads.
+- Paginate large datasets and stream or queue large exports.
+- Use cache only for safe, well-defined data with tenant/project-aware keys and explicit invalidation.
+- Define connection, request, activity, and provider timeouts.
+- Bound worker concurrency and respect downstream capacity and rate limits.
+- Provide graceful degradation for non-critical AI, notification, analytics, and external-integration failures.
+- Keep authoritative writes independent from dashboard/analytics availability.
+- Add load, soak, failure, retry, and recovery tests for critical paths.
+- Document RPO/RTO impact for persistence, deployment, backup, or infrastructure changes.

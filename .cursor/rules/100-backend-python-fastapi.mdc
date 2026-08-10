@@ -1,0 +1,49 @@
+---
+description: Apply Python, FastAPI, Pydantic, SQLAlchemy, modular architecture, typing, transaction, and service-layer standards when editing backend Python code.
+globs: "**/*.py"
+alwaysApply: false
+---
+# Backend Python and FastAPI Standard
+
+## Structure
+
+- Organize code by business module, not by generic technical folders alone.
+- Keep API routes thin: parse input, call an application service, map the response, and return.
+- Put business rules in domain/application services, not routes, ORM models, background jobs, or UI code.
+- Separate transport schemas, domain types, and persistence models.
+- Use dependency injection for sessions, identities, policies, configuration, clients, and services.
+
+## Python Quality
+
+- Use the repository-pinned Python version and strict type checking.
+- Add type annotations to public functions, methods, attributes, return values, and structured collections.
+- Avoid `Any`; when unavoidable, isolate and validate it at an external boundary.
+- Prefer small, cohesive functions and explicit domain types over primitive dictionaries.
+- Use timezone-aware UTC datetimes.
+- Use `UUID` for identifiers and `Decimal` for money.
+- Never use mutable values as default arguments.
+- Catch only exceptions that can be handled meaningfully.
+
+## FastAPI and Pydantic
+
+- Use explicit request and response models.
+- Validate field length, format, enum-like configuration references, and cross-field invariants.
+- Do not return ORM models directly.
+- Do not expose internal fields, secrets, authorization metadata, or stack traces.
+- Use consistent dependency-based authentication and authorization.
+- Keep OpenAPI operation IDs, tags, summaries, errors, and examples accurate.
+
+## Persistence and Transactions
+
+- Use SQLAlchemy 2 patterns consistently with the repository’s sync/async choice.
+- Define transaction boundaries in application services.
+- Flush when an identifier is needed; commit only at the owned transaction boundary.
+- Roll back on failure and never leave partial business state.
+- Use optimistic concurrency for version-sensitive updates.
+- Publish events through a transactional outbox when state and event delivery must remain consistent.
+
+## Async Behavior
+
+- Do not call blocking I/O in async request handlers.
+- Use activities or workers for long-running work.
+- Do not use ordinary background tasks for durable business workflows.

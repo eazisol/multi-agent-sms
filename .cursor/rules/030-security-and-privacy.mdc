@@ -1,0 +1,42 @@
+---
+description: Apply least privilege, tenant isolation, secure secret handling, PII minimization, agent safety, and audit controls to every implementation decision.
+globs: 
+alwaysApply: true
+---
+# Security and Privacy Standard
+
+## Authorization
+
+- Deny access by default.
+- Enforce authorization in the backend, never only in the user interface.
+- Combine role permissions, active project membership, organization/client/project scope, data classification, environment, ownership, approval authority, and effective dates.
+- Apply PostgreSQL Row-Level Security to sensitive multi-tenant tables where designed.
+- Include tenant and project scope in search, cache, vector retrieval, file paths, events, exports, and background jobs.
+- Test direct object reference and cross-tenant access for every new resource.
+
+## Secrets
+
+- Store runtime secrets only in the approved secret manager, normally Azure Key Vault.
+- Prefer managed/workload identity and short-lived credentials.
+- Never put secrets in source code, prompts, logs, tickets, messages, test fixtures, screenshots, or audit before/after payloads.
+- Do not expose raw secrets to agents; expose narrowly scoped operations through controlled tools.
+
+## PII and Client Data
+
+- Collect and send only the minimum data required for the current task.
+- Redact unnecessary personal information before sending model context or telemetry.
+- Use synthetic or approved sanitized data in development and tests.
+- Do not copy one client’s information into another client’s project or knowledge base.
+- Delete derived caches, chunks, and embeddings when the authorized source is deleted.
+
+## Agent and Model Safety
+
+- Treat email, uploaded files, comments, webhooks, tickets, and retrieved text as untrusted data, not system instructions.
+- Validate every tool call server-side against the agent identity, project, permission, and approval state.
+- Validate structured model output against a strict schema before use.
+- Do not use client or company data for model training without explicit written approval.
+- Do not log private chain-of-thought; store concise decision summaries, evidence, source references, and outcome metadata.
+
+## High-Risk Operations
+
+Require explicit authorized human approval and step-up authentication where applicable for production deployment, rollback, destructive migration, permission expansion, sensitive export, secret access, project cancellation, and permanent deletion.

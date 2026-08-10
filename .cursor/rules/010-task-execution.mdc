@@ -1,0 +1,54 @@
+---
+description: Use a professional inspect-plan-implement-verify-report workflow whenever creating, changing, reviewing, debugging, or refactoring code.
+globs: 
+alwaysApply: true
+---
+# Task Execution Standard
+
+## Before Editing
+
+1. Restate the requested outcome and applicable acceptance criteria.
+2. Locate the relevant modules, schemas, routes, workflows, tests, migrations, and documentation.
+3. Identify affected tenants, projects, roles, permissions, status transitions, approval gates, audit events, notifications, and integrations.
+4. Determine whether the change belongs in FastAPI, Temporal, LangGraph, the frontend, or more than one layer.
+5. List the files expected to change and the verification commands to run.
+6. Ask for clarification only when a genuine blocker cannot be resolved from approved project material or repository context.
+
+## While Editing
+
+- Follow existing module boundaries and naming conventions.
+- Use typed, testable functions and explicit domain concepts.
+- Keep diffs focused and avoid cosmetic churn.
+- Add or update tests in the same change.
+- Preserve existing public contracts unless a versioned change is approved.
+- Add comments only where intent or a non-obvious constraint cannot be expressed clearly in code.
+- Do not leave dead code, debug statements, temporary bypasses, or commented-out implementations.
+
+## Verification
+
+Run applicable checks in this order:
+
+1. Formatter
+2. Linter
+3. Static type checker
+4. Unit tests
+5. Integration and contract tests
+6. Database migration validation
+7. Frontend build and accessibility checks
+8. Security and dependency checks
+9. Relevant end-to-end or workflow tests
+
+Fix root causes rather than suppressing valid warnings. Any suppression must be narrowly scoped and documented.
+
+## Completion Report
+
+Report:
+
+- Outcome delivered
+- Files changed
+- Requirements or tickets addressed
+- Database and API impact
+- Security and permission impact
+- Tests and commands executed
+- Results and remaining limitations
+- Required human approvals or deployment steps

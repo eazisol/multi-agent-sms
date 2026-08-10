@@ -1,0 +1,21 @@
+---
+description: Apply versioned REST, validation, authorization, idempotency, pagination, error, concurrency, and OpenAPI contract standards to API work.
+globs: "**/*.{py,ts,tsx}"
+alwaysApply: false
+---
+# API Contract Standard
+
+- Version public APIs under `/api/v1` or the repository-approved versioning scheme.
+- Use nouns for resources and consistent HTTP methods and status codes.
+- Never encode authorization decisions only in route visibility or client behavior.
+- Validate tenant, project, entity ownership, role, action permission, transition permission, and approval state for every write.
+- Use a stable error envelope containing machine code, safe message, correlation ID, and optional field details.
+- Never return stack traces, SQL, secret values, internal hostnames, or provider tokens.
+- Support idempotency keys for retryable create or external-trigger operations.
+- Use cursor pagination for large or changing collections; define deterministic ordering.
+- Support filtering and sorting only through allowlisted fields.
+- Use optimistic concurrency or version checks for updates to version-sensitive records.
+- Use ETags or explicit version fields where they improve safe editing.
+- Return `202 Accepted` with an operation/workflow reference for asynchronous durable processing.
+- Document authentication, permissions, validation, examples, errors, pagination, idempotency, and side effects in OpenAPI.
+- Add contract tests for every added or changed endpoint.

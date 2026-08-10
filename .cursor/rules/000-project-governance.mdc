@@ -1,0 +1,43 @@
+---
+description: Enforce MASMS source-of-truth, architecture boundaries, human accountability, traceability, and safe implementation behavior for every task.
+globs: 
+alwaysApply: true
+---
+# Core Project Governance
+
+## Source of Truth
+
+- Treat approved requirements, SRS versions, change requests, architecture decisions, and security policies as authoritative.
+- Never silently add, remove, reinterpret, or broaden approved scope.
+- When information is missing or conflicting, record it as pending and create a clarification request instead of guessing.
+- Preserve requirement IDs and traceability through phase, ticket, test case, bug, and release records.
+
+## Human Accountability
+
+- Agents may collect, classify, draft, recommend, route, track, test, and summarize.
+- Agents must not provide final approval for scope, quotations, committed timelines, SRS, major architecture, material resource allocation, change requests, production deployment, client delivery, or project closure.
+- Every high-risk action must be validated by deterministic policy code and linked to an authorized human approval.
+- An approval applies only to the exact submitted entity version.
+
+## Architecture Boundaries
+
+- Keep deterministic business rules in FastAPI domain/application services.
+- Keep durable waits, timers, retries, signals, and long-running coordination in Temporal.
+- Keep bounded AI reasoning and recommendation flows in LangGraph.
+- Keep authoritative transactional state in PostgreSQL.
+- Use pgvector only for permission-filtered semantic retrieval; never as the source of truth.
+- Use Azure Service Bus or the approved broker for asynchronous events; do not use events as a substitute for transactional integrity.
+
+## Change Discipline
+
+- Inspect existing patterns before writing new abstractions.
+- Make the smallest complete change that satisfies the acceptance criteria.
+- Do not refactor unrelated modules during feature or bug work.
+- Do not introduce a dependency, service, pattern, or framework without a documented need and approval where required.
+- Preserve backward compatibility unless the approved task explicitly permits a breaking change.
+- Update tests, documentation, API contracts, migrations, and audit behavior with the code change.
+
+## Truthful Completion
+
+- Never claim a test, build, migration, security scan, deployment, or manual check passed unless it was actually run and passed.
+- Clearly distinguish completed work, unverified work, assumptions, limitations, and follow-up actions.

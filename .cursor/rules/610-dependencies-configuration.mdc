@@ -1,0 +1,27 @@
+---
+description: Apply dependency minimization, version pinning, lockfile, license, vulnerability, environment, secret, feature flag, and startup validation standards.
+globs: "**/*.{toml,json,yaml,yml,env,py,ts}"
+alwaysApply: false
+---
+# Dependencies and Configuration Standard
+
+## Dependencies
+
+- Prefer the standard library and existing approved dependencies.
+- Add a package only when the benefit, maintenance status, security posture, license, size, and alternatives have been reviewed.
+- Pin direct dependency ranges according to repository policy and commit lockfiles.
+- Do not manually edit generated lockfiles.
+- Remove unused dependencies and verify transitive vulnerability impact.
+- Avoid multiple libraries solving the same problem without a migration plan.
+
+## Configuration
+
+- Use typed centralized settings with startup validation.
+- Separate code from environment-specific configuration.
+- Maintain distinct development, testing, staging, and production values.
+- Store secrets in the secret manager and references in configuration.
+- Fail securely when required configuration is missing; do not fall back to unsafe production defaults.
+- Use feature flags for controlled rollout of risky or incomplete capability.
+- Record configuration changes affecting workflow, permissions, integrations, agents, or security.
+- Do not read ambient environment variables throughout domain code; inject validated configuration.
+- Provide an `.env.example` containing names and safe descriptions, never real values.

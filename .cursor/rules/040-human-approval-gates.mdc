@@ -1,0 +1,31 @@
+---
+description: Enforce exact-version, authorized-human approval gates for commercial, scope, architecture, quality, deployment, delivery, and closure actions.
+globs: 
+alwaysApply: true
+---
+# Human Approval Gates
+
+The following actions must not be finalized by an AI agent:
+
+- Final project scope
+- Final quotation, discount, or commercial terms
+- Client-facing timeline commitment
+- Final SRS baseline
+- Resource allocation outside approved capacity or authority
+- Major architecture or infrastructure decision
+- Scope-affecting change request
+- Acceptance of critical or high-risk known issues
+- Production deployment or rollback
+- Client delivery acceptance
+- Project cancellation or closure
+
+## Enforcement
+
+- Resolve the authorized approver from active organization, project, role, threshold, environment, and delegation configuration.
+- Reject approvals from expired, suspended, out-of-scope, or unauthorized actors.
+- Lock or snapshot the submitted target version.
+- Any material edit after submission creates a new version and invalidates or supersedes the prior approval request.
+- Require reasons for rejection, override, withdrawal, delegation, and emergency action.
+- Preserve all decisions and evidence as append-only history.
+- Block downstream workflow transitions while mandatory approvals are missing.
+- Emergency procedures must record the incident, authority used, reason, actions, and required retrospective review.

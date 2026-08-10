@@ -1,0 +1,37 @@
+---
+description: Apply deterministic, durable, version-safe Temporal workflow and activity standards for waits, timers, approvals, follow-ups, retries, and long-running processes.
+globs: "**/workflows/temporal/**/*.py"
+alwaysApply: false
+---
+# Temporal Workflow Standard
+
+## Determinism
+
+- Keep workflow code deterministic.
+- Do not perform network calls, database access, filesystem I/O, random generation, or direct wall-clock reads inside workflow code.
+- Execute side effects in activities.
+- Use Temporal-safe time, timers, signals, queries, and versioning mechanisms.
+
+## Workflow Design
+
+- Model business lifecycle and durable waiting in Temporal, not in request handlers or ordinary background tasks.
+- Use signals for external responses, approvals, cancellations, and human decisions.
+- Use queries only for read-only workflow state.
+- Represent approval, reminder, escalation, QA rejection, and change-request loops explicitly.
+- Preserve correlation between workflow instance, project, entity, follow-up, and audit records.
+- Keep workflow payloads small; store large content in the database/blob storage and pass references.
+
+## Activities
+
+- Make activities idempotent and safe to retry.
+- Define retryable and non-retryable errors explicitly.
+- Use timeouts appropriate to the external operation.
+- Do not retry validation, authorization, or permanent business-rule failures.
+- Use compensation or rollback activities where a multi-step process can partially succeed.
+
+## Evolution and Testing
+
+- Never make an incompatible change to running workflow history.
+- Use approved workflow versioning/patching and migration strategies.
+- Add deterministic unit tests, time-skipping tests, signal tests, retry tests, cancellation tests, and recovery tests.
+- Verify business calendars and SLA pause/resume behavior.

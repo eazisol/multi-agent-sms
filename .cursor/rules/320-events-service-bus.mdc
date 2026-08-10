@@ -1,0 +1,19 @@
+---
+description: Apply domain-event envelope, outbox, schema-versioning, idempotent consumer, dead-letter, correlation, and privacy standards to asynchronous messaging.
+globs: "**/*.{py,json,yaml,yml}"
+alwaysApply: false
+---
+# Events and Service Bus Standard
+
+- Name domain events in past tense, such as `TicketAssigned` or `ApprovalRejected`.
+- Use a standard event envelope containing event ID, event type, schema version, organization, project, actor, entity type/ID, correlation ID, causation ID, occurred timestamp, and payload.
+- Publish state-change events through a transactional outbox when atomicity matters.
+- Make every consumer idempotent and record processed event IDs.
+- Preserve ordering only where the business invariant requires it; do not assume global ordering.
+- Version event schemas and maintain backward-compatible consumers during rollout.
+- Validate event tenant and project scope before processing.
+- Minimize PII and never include secrets in events.
+- Configure bounded retries with exponential backoff and dead-letter handling.
+- Provide replay tools that preserve auditability and prevent duplicate business effects.
+- Monitor queue age, retry count, dead-letter volume, consumer failures, and processing latency.
+- Add contract tests between publishers and consumers.

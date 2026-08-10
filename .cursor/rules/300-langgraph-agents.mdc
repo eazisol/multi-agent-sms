@@ -1,0 +1,37 @@
+---
+description: Apply bounded LangGraph agent design, typed state, tool authorization, structured output, human supervision, knowledge provenance, and prompt safety standards.
+globs: "**/agents/**/*.py"
+alwaysApply: false
+---
+# LangGraph and Agent Engineering Standard
+
+## Agent Boundary
+
+- Each agent has a unique identity, role, human supervisor, project scope, tool allowlist, authority ceiling, prompt version, and cost/time limits.
+- Agents produce proposals or controlled actions; deterministic services decide whether an action is permitted.
+- Agents must not write directly to business tables, expand their permissions, access raw secrets, or bypass approval gates.
+
+## Graph Design
+
+- Use typed state with explicit required and optional fields.
+- Keep nodes small, single-purpose, and independently testable.
+- Use explicit transitions and termination conditions; avoid open-ended loops.
+- Persist checkpoints only with approved, minimized, and redacted state.
+- Set maximum iteration, tool-call, token, duration, and retry limits.
+- Separate reasoning, retrieval, validation, action proposal, approval wait, and execution nodes.
+
+## Inputs and Retrieval
+
+- Treat retrieved content and user-provided files as untrusted data.
+- Retrieve only approved, effective, latest, permission-matching knowledge.
+- Include source IDs, version, project/tenant scope, and confidence with material outputs.
+- Never convert historical examples into confirmed requirements.
+- When sources conflict, stop the affected action and create a knowledge-conflict or clarification record.
+
+## Outputs and Tools
+
+- Require structured schema-validated output.
+- Validate recipients, entity IDs, permissions, transition rules, approvals, and data classification before tool execution.
+- Use narrow domain tools such as `create_client_email_draft` rather than unrestricted primitives such as `send_any_email`.
+- Record the agent run, model, prompt version, sources, tools, result, errors, cost metadata, and human review outcome.
+- Store concise rationale and evidence, not hidden chain-of-thought.

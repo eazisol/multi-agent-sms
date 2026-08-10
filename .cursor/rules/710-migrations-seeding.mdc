@@ -1,0 +1,19 @@
+---
+description: Apply additive, reversible, zero-downtime-aware, reviewed migration and idempotent sanitized seed-data standards.
+globs: "**/migrations/**/*.{py,sql}"
+alwaysApply: false
+---
+# Database Migration and Seed Standard
+
+- Generate a migration for every schema change; never rely on automatic schema creation in production.
+- Prefer expand → migrate/backfill → contract for breaking or large changes.
+- Keep old and new application versions compatible during rolling deployment where required.
+- Add nullable columns or safe defaults before enforcing new non-null constraints on populated tables.
+- Backfill in bounded batches and monitor duration, locks, and failures.
+- Create indexes concurrently or through the approved low-lock process when production volume requires it.
+- Never drop data, tables, columns, constraints, or indexes without an approved data-retention and rollback plan.
+- Include downgrade logic when safe; otherwise document why reversal requires a forward fix or restore.
+- Test migrations from a realistic previous schema and verify rollback/recovery.
+- Review RLS, permissions, audit triggers, unique constraints, and tenant indexes with each affected table.
+- Seed scripts must be idempotent, environment-aware, sanitized, and free of production credentials or client PII.
+- Use stable codes/identifiers for configuration seed data and preserve user-customized values.
