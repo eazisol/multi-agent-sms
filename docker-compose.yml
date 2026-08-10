@@ -25,14 +25,14 @@ services:
       timeout: 3s
       retries: 10
 
-  # Optional local object-storage stand-in for later MOD-250 work (not required for MOD-010).
+  # Optional local object-storage stand-in for later file modules (not required for MOD-010/030).
   # Uncomment when needed:
-  # azurite:
-  #   image: mcr.microsoft.com/azure-storage/azurite
+  # localstack:
+  #   image: localstack/localstack:3
   #   ports:
-  #     - "10000:10000"
-  #     - "10001:10001"
-  #     - "10002:10002"
+  #     - "4566:4566"
+  #   environment:
+  #     SERVICES: s3,secretsmanager
 
 volumes:
   masms_pg_data:

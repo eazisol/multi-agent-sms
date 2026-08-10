@@ -574,7 +574,7 @@ Because the company currently uses Gmail, Slack, Jira, GitHub, Google Drive, Hub
 * Trello  
 * Asana  
 * GitLab  
-* Azure DevOps  
+* AWS CodePipeline  
 * OneDrive  
 * Additional CRM systems  
 * Additional accounting platforms  
@@ -600,12 +600,12 @@ EmailProvider
 WorkManagementProvider  
 ├── JiraProvider  
 ├── ClickUpProvider – Future  
-└── AzureDevOpsProvider – Future
+└── AwsWorkManagementProvider – Future
 
 SourceControlProvider  
 ├── GitHubProvider  
 ├── GitLabProvider – Future  
-└── AzureReposProvider – Future
+└── CodeCommitProvider – Future
 
 ---
 
@@ -821,7 +821,7 @@ ClickUp
 Trello  
 Asana  
 GitLab  
-Azure DevOps  
+AWS CodePipeline  
 OneDrive  
 Other CRM Platforms  
 Other Accounting Platforms  

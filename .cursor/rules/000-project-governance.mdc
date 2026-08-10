@@ -26,7 +26,7 @@ alwaysApply: true
 - Keep bounded AI reasoning and recommendation flows in LangGraph.
 - Keep authoritative transactional state in PostgreSQL.
 - Use pgvector only for permission-filtered semantic retrieval; never as the source of truth.
-- Use Azure Service Bus or the approved broker for asynchronous events; do not use events as a substitute for transactional integrity.
+- Use Amazon SNS/SQS (or the approved broker) for asynchronous events; do not use events as a substitute for transactional integrity.
 
 ## Change Discipline
 

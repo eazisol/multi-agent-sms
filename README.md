@@ -78,13 +78,13 @@ Before production coding, confirm and document:
 
 1. Exact Python and Node.js versions
 2. Package managers and lockfiles
-3. Authentication provider: Microsoft Entra ID, Auth0, or approved alternative
-4. AI provider: OpenAI or Azure OpenAI
-5. Deployment target: Azure Container Apps or approved Kubernetes platform
-6. CI/CD provider: GitHub Actions or Azure DevOps
+3. Authentication provider: Auth0, Amazon Cognito, or approved alternative
+4. AI provider: OpenAI or Amazon Bedrock
+5. Deployment target: Amazon ECS/Fargate or approved Kubernetes (EKS)
+6. CI/CD provider: GitHub Actions or AWS CodePipeline
 7. Code-formatting and type-checking commands
 8. Test coverage thresholds approved by the engineering and QA leads
-9. Environment naming and secret-store configuration
+9. Environment naming and secret-store configuration (AWS Secrets Manager)
 10. Production release and rollback approvers
 
 ## Non-Negotiable System Boundaries
@@ -95,7 +95,7 @@ Temporal    = durable, long-running business workflow orchestration
 LangGraph   = bounded AI reasoning and agent state
 PostgreSQL  = authoritative transactional state
 pgvector    = permission-filtered semantic retrieval
-Service Bus = asynchronous domain and integration events
+SNS/SQS     = asynchronous domain and integration events
 ```
 
 AI output is never authoritative by itself. Sensitive actions require deterministic validation and the configured human approval gate.

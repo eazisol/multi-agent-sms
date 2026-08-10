@@ -12,7 +12,7 @@
 - **LangGraph:** bounded AI reasoning and recommendations.
 - **PostgreSQL:** authoritative transactional state.
 - **pgvector:** permission-filtered semantic retrieval only.
-- **Service Bus:** asynchronous domain and integration events; never a replacement for transactions.
+- **SNS/SQS:** asynchronous domain and integration events; never a replacement for transactions.
 - **Human approval:** mandatory for scope, quotation, timeline, SRS, material allocation, architecture, change requests, production, delivery, and closure.
 
 ## 2. ID Structure
@@ -208,7 +208,7 @@ masms/
 
 ### MOD-010 — Repository, Toolchain, and Local Development Environment
 
-**Purpose:** Create a reproducible monorepo and local environment for Next.js, FastAPI, Temporal, LangGraph, PostgreSQL, Redis, Service Bus, and object storage.
+**Purpose:** Create a reproducible monorepo and local environment for Next.js, FastAPI, Temporal, LangGraph, PostgreSQL, Redis, SNS/SQS, and object storage.
 
 **Requirement Mapping:** Cursor Rules 010, Cursor Rules 600–720  
 **Dependencies:** MOD-000

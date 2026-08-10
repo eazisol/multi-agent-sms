@@ -329,10 +329,10 @@ Backend: .NET, Node.js or Python
 Database: PostgreSQL  
 Vector Database: pgvector, Pinecone or Qdrant  
 Agent Orchestration: LangGraph, Semantic Kernel or custom workflow engine  
-Queue: RabbitMQ, Redis or Azure Service Bus  
-File Storage: AWS S3 or Azure Blob Storage  
-AI Provider: OpenAI or Azure OpenAI  
-Authentication: Microsoft Entra ID, Auth0 or custom JWT
+Queue: RabbitMQ, Redis or Amazon SNS/SQS  
+File Storage: Amazon S3  
+AI Provider: OpenAI or Amazon Bedrock  
+Authentication: Amazon Cognito, Auth0 or custom JWT
 
 The final choice should depend on your team’s existing technical expertise and deployment environment.
 
@@ -350,7 +350,7 @@ Confirm whether the platform will replace or connect with systems such as:
 * Asana  
 * GitHub  
 * GitLab  
-* Azure DevOps  
+* AWS CodePipeline  
 * Google Drive  
 * OneDrive  
 * CRM systems  

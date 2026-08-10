@@ -8,7 +8,7 @@ alwaysApply: false
 - Implement each provider behind a stable internal interface; provider-specific details must not leak into domain services.
 - Define the source of truth for every synchronized field and status.
 - For MVP, treat Gmail as the email delivery/thread source and Jira as the work-execution source while MASMS owns requirements, approvals, follow-ups, escalations, traceability, and audit.
-- Use OAuth or managed identity with minimum scopes; do not use personal production tokens.
+- Use OAuth or IAM roles with minimum scopes; do not use personal production tokens.
 - Separate development, test, staging, and production credentials and webhook endpoints.
 - Validate webhook signatures, timestamp freshness, provider account/tenant mapping, event IDs, and payload schema.
 - Store raw provider payloads only when approved, protected, and retention-limited.

@@ -22,7 +22,7 @@ NIST zero-trust guidance emphasizes per-request, context-based, least-privilege 
 
 The system should support:
 
-* Single sign-on through Microsoft Entra ID, Google Workspace, Auth0, or another approved identity provider.  
+* Single sign-on through Amazon Cognito, Google Workspace, Auth0, or another approved identity provider.  
 * Multi-factor authentication.  
 * Secure account recovery.  
 * Session expiration.  
@@ -492,7 +492,7 @@ Status
 
 ## **Requirements**
 
-* Prefer workload identity or managed identity instead of static API keys.  
+* Prefer IAM roles / IRSA or IAM roles instead of static API keys.  
 * Store runtime secrets in a dedicated secrets manager.  
 * Store separate credentials for development, staging, and production.  
 * Use minimum API scopes.  
@@ -503,14 +503,14 @@ Status
 * Do not use an employee’s personal token for production services.  
 * Monitor unused and unusually used keys.
 
-Azure Key Vault provides centralized storage for API keys, passwords, connection strings, keys, and certificates. Current Microsoft guidance recommends least-privilege RBAC, monitoring, network restrictions, and separate vaults by application and environment. ([Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/secure-secrets?utm_source=chatgpt.com))
+AWS Secrets Manager provides centralized storage for API keys, passwords, connection strings, keys, and certificates. Follow AWS least-privilege IAM, CloudTrail monitoring, VPC endpoints or network restrictions, and separate secrets by application and environment.
 
 ## **Recommended Responsibility**
 
 1Password  
 → Human-controlled recovery details and controlled credential sharing
 
-Azure Key Vault  
+AWS Secrets Manager  
 → Runtime API credentials, database connections, certificates and service secrets
 
 ---

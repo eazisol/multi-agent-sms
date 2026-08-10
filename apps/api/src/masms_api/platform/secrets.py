@@ -1,7 +1,7 @@
 """Secret retrieval backends (MOD-030-MP-002).
 
 Local development may read from process env / `.env`.
-Non-local production must use the approved secret manager (Azure Key Vault).
+Non-local production must use the approved secret manager (AWS Secrets Manager).
 Agents must never receive raw secret values in prompts or logs.
 """
 
@@ -35,46 +35,50 @@ class LocalEnvSecretBackend(SecretBackend):
         return self._values[name]
 
 
-class AzureKeyVaultSecretBackend(SecretBackend):
-    """Placeholder for Azure Key Vault.
+class AwsSecretsManagerSecretBackend(SecretBackend):
+    """Placeholder for AWS Secrets Manager.
 
-    Real Key Vault SDK wiring is deferred until PRE stack approval and Key Vault
-    identities are provisioned. Instantiating this without a URI fails closed.
+    Real boto3/SDK wiring is deferred until PRE stack approval and IAM roles
+    are provisioned. Instantiating this without a region fails closed.
     """
 
-    def __init__(self, vault_uri: str | None) -> None:
-        if not vault_uri:
+    def __init__(self, *, region: str | None, secret_prefix: str | None) -> None:
+        if not region:
             raise SecretBackendError(
-                "MASMS_KEY_VAULT_URI is required when MASMS_SECRET_BACKEND=key_vault"
+                "MASMS_AWS_REGION is required when MASMS_SECRET_BACKEND=secrets_manager"
             )
-        self.vault_uri = vault_uri.rstrip("/")
+        self.region = region
+        self.secret_prefix = (secret_prefix or "masms").rstrip("/")
 
     def get_secret(self, name: str) -> str:
+        secret_id = f"{self.secret_prefix}/{name}"
         raise SecretBackendError(
-            "Azure Key Vault client is not enabled in this scaffold; "
-            f"configure workload identity for vault '{self.vault_uri}' "
-            f"before reading secret '{name}'"
+            "AWS Secrets Manager client is not enabled in this scaffold; "
+            f"configure an IAM role for region '{self.region}' "
+            f"before reading secret '{secret_id}'"
         )
 
 
 LOCAL_BACKEND: Final = "local_env"
-KEY_VAULT_BACKEND: Final = "key_vault"
+SECRETS_MANAGER_BACKEND: Final = "secrets_manager"
 
 
 def create_secret_backend(
     *,
     backend: str,
     environment: Environment,
-    key_vault_uri: str | None,
+    aws_region: str | None,
+    secrets_prefix: str | None,
     local_values: dict[str, str],
 ) -> SecretBackend:
     name = backend.strip().lower()
     if is_production(environment) and name == LOCAL_BACKEND:
         raise SecretBackendError(
-            "Production must not use local_env secret backend; set MASMS_SECRET_BACKEND=key_vault"
+            "Production must not use local_env secret backend; "
+            "set MASMS_SECRET_BACKEND=secrets_manager"
         )
     if name == LOCAL_BACKEND:
         return LocalEnvSecretBackend(local_values)
-    if name == KEY_VAULT_BACKEND:
-        return AzureKeyVaultSecretBackend(key_vault_uri)
+    if name == SECRETS_MANAGER_BACKEND:
+        return AwsSecretsManagerSecretBackend(region=aws_region, secret_prefix=secrets_prefix)
     raise SecretBackendError(f"Unsupported MASMS_SECRET_BACKEND '{backend}'")

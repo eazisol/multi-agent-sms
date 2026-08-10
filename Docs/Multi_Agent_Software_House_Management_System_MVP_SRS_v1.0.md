@@ -499,7 +499,7 @@ Technical decisions must be made for:
 
 A possible stack could be:
 
-Frontend: React or Next.js Backend: .NET, Node.js or Python Database: PostgreSQL Vector Database: pgvector, Pinecone or Qdrant Agent Orchestration: LangGraph, Semantic Kernel or custom workflow engine Queue: RabbitMQ, Redis or Azure Service Bus File Storage: AWS S3 or Azure Blob Storage AI Provider: OpenAI or Azure OpenAI Authentication: Microsoft Entra ID, Auth0 or custom JWT
+Frontend: React or Next.js Backend: .NET, Node.js or Python Database: PostgreSQL Vector Database: pgvector, Pinecone or Qdrant Agent Orchestration: LangGraph, Semantic Kernel or custom workflow engine Queue: RabbitMQ, Redis or Amazon SNS/SQS File Storage: Amazon S3 AI Provider: OpenAI or Amazon Bedrock Authentication: Amazon Cognito, Auth0 or custom JWT
 
 The final choice should depend on your team’s existing technical expertise and deployment environment.
 
@@ -525,7 +525,7 @@ Confirm whether the platform will replace or connect with systems such as:
 
 * GitLab
 
-* Azure DevOps
+* AWS CodePipeline
 
 * Google Drive
 
@@ -1759,20 +1759,20 @@ Yes. The **main backend can be built entirely in Python**, and for this AI-heavy
 | Vector search | pgvector |
 | Business workflows | Temporal Python SDK |
 | AI agent orchestration | LangGraph |
-| AI provider | OpenAI or Azure OpenAI |
+| AI provider | OpenAI or Amazon Bedrock |
 | Cache | Redis |
-| Domain-event messaging | Azure Service Bus or RabbitMQ |
+| Domain-event messaging | Amazon SNS/SQS or RabbitMQ |
 | Real-time updates | WebSockets |
-| Authentication | Keycloak, Auth0 or Microsoft Entra ID |
-| File storage | Azure Blob Storage or Amazon S3 |
+| Authentication | Keycloak, Auth0 or Amazon Cognito |
+| File storage | Amazon S3 |
 | Monitoring | OpenTelemetry |
-| Deployment | Docker \+ Azure Container Apps or Kubernetes |
+| Deployment | Docker \+ Amazon ECS/Fargate or Kubernetes |
 
 FastAPI is well-suited because it supports asynchronous APIs, WebSockets, dependency injection, Pydantic validation, OpenAPI, and automatic Swagger documentation. ([FastAPI](https://fastapi.tiangolo.com/features/?utm_source=chatgpt.com))
 
 ## **Recommended Architecture**
 
-Next.js Web Application │ ▼ FastAPI Backend │ ┌────────┼─────────────┐ ▼ ▼ ▼ PostgreSQL Temporal Redis \+ pgvector Workflows Cache │ ▼ Python Agent Workers │ ▼ LangGraph │ ▼ OpenAI / Azure OpenAI
+Next.js Web Application │ ▼ FastAPI Backend │ ┌────────┼─────────────┐ ▼ ▼ ▼ PostgreSQL Temporal Redis \+ pgvector Workflows Cache │ ▼ Python Agent Workers │ ▼ LangGraph │ ▼ OpenAI / Amazon Bedrock
 
 ## **What FastAPI Should Manage**
 
@@ -1998,17 +1998,17 @@ AI Agents: LangGraph
 
 Cache: Redis
 
-Messaging: Azure Service Bus
+Messaging: Amazon SNS/SQS
 
-Authentication: Microsoft Entra ID or Auth0
+Authentication: Amazon Cognito or Auth0
 
-Files: Azure Blob Storage
+Files: Amazon S3
 
 Monitoring: OpenTelemetry \+ Application Insights
 
-Deployment: Docker \+ Azure Container Apps
+Deployment: Docker \+ Amazon ECS/Fargate
 
-CI/CD: GitHub Actions or Azure DevOps
+CI/CD: GitHub Actions or AWS CodePipeline
 
 # **4\. Existing Company Process Transformation**
 
@@ -13611,7 +13611,7 @@ Because the company currently uses Gmail, Slack, Jira, GitHub, Google Drive, Hub
 
 * GitLab
 
-* Azure DevOps
+* AWS CodePipeline
 
 * OneDrive
 
@@ -13643,9 +13643,9 @@ The integration architecture should remain provider-based so additional systems 
 
 EmailProvider ├── GmailProvider └── OutlookProvider – Future
 
-WorkManagementProvider ├── JiraProvider ├── ClickUpProvider – Future └── AzureDevOpsProvider – Future
+WorkManagementProvider ├── JiraProvider ├── ClickUpProvider – Future └── AwsWorkManagementProvider – Future
 
-SourceControlProvider ├── GitHubProvider ├── GitLabProvider – Future └── AzureReposProvider – Future
+SourceControlProvider ├── GitHubProvider ├── GitLabProvider – Future └── CodeCommitProvider – Future
 
 ---
 
@@ -13872,7 +13872,7 @@ HubSpot \+ QuickBooks \+ Toggl
 
 ### **Future Provider Expansion**
 
-Outlook Microsoft Teams ClickUp Trello Asana GitLab Azure DevOps OneDrive Other CRM Platforms Other Accounting Platforms Other Time-Tracking Platforms
+Outlook Microsoft Teams ClickUp Trello Asana GitLab AWS CodePipeline OneDrive Other CRM Platforms Other Accounting Platforms Other Time-Tracking Platforms
 
 The most appropriate MVP decision is to integrate **Gmail for client communication and Jira for work execution**, while the agentic platform controls requirements, approvals, follow-ups, escalations, and audit history. This keeps the first release focused while still supporting the complete client-to-delivery workflow.
 
@@ -15218,7 +15218,7 @@ For the selected Python stack:
 
 PostgreSQL → Knowledge metadata, versions, ownership, permissions, approvals
 
-Azure Blob Storage or Amazon S3 → Original documents and attachments
+Amazon S3 → Original documents and attachments
 
 pgvector → Embeddings for approved searchable content
 
@@ -16347,7 +16347,7 @@ NIST zero-trust guidance emphasizes per-request, context-based, least-privilege 
 
 The system should support:
 
-* Single sign-on through Microsoft Entra ID, Google Workspace, Auth0, or another approved identity provider.
+* Single sign-on through Amazon Cognito, Google Workspace, Auth0, or another approved identity provider.
 
 * Multi-factor authentication.
 
@@ -16865,7 +16865,7 @@ Key ID Provider Purpose Environment Owner Allowed Service Allowed Scopes Creatio
 
 ### **Requirements**
 
-* Prefer workload identity or managed identity instead of static API keys.
+* Prefer IAM roles / IRSA or IAM roles instead of static API keys.
 
 * Store runtime secrets in a dedicated secrets manager.
 
@@ -16885,13 +16885,13 @@ Key ID Provider Purpose Environment Owner Allowed Service Allowed Scopes Creatio
 
 * Monitor unused and unusually used keys.
 
-Azure Key Vault provides centralized storage for API keys, passwords, connection strings, keys, and certificates. Current Microsoft guidance recommends least-privilege RBAC, monitoring, network restrictions, and separate vaults by application and environment. ([Microsoft Learn](https://learn.microsoft.com/en-us/azure/key-vault/secrets/secure-secrets?utm_source=chatgpt.com))
+AWS Secrets Manager provides centralized storage for API keys, passwords, connection strings, keys, and certificates. Follow AWS least-privilege IAM, CloudTrail monitoring, VPC endpoints or network restrictions, and separate secrets by application and environment.
 
 ### **Recommended Responsibility**
 
 1Password → Human-controlled recovery details and controlled credential sharing
 
-Azure Key Vault → Runtime API credentials, database connections, certificates and service secrets
+AWS Secrets Manager → Runtime API credentials, database connections, certificates and service secrets
 
 ---
 

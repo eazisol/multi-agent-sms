@@ -14,14 +14,14 @@ Yes. The **main backend can be built entirely in Python**, and for this AI-heavy
 | Vector search | pgvector |
 | Business workflows | Temporal Python SDK |
 | AI agent orchestration | LangGraph |
-| AI provider | OpenAI or Azure OpenAI |
+| AI provider | OpenAI or Amazon Bedrock |
 | Cache | Redis |
-| Domain-event messaging | Azure Service Bus or RabbitMQ |
+| Domain-event messaging | Amazon SNS/SQS or RabbitMQ |
 | Real-time updates | WebSockets |
-| Authentication | Keycloak, Auth0 or Microsoft Entra ID |
-| File storage | Azure Blob Storage or Amazon S3 |
+| Authentication | Keycloak, Auth0 or Amazon Cognito |
+| File storage | Amazon S3 |
 | Monitoring | OpenTelemetry |
-| Deployment | Docker \+ Azure Container Apps or Kubernetes |
+| Deployment | Docker \+ Amazon ECS/Fargate or Kubernetes |
 
 FastAPI is well-suited because it supports asynchronous APIs, WebSockets, dependency injection, Pydantic validation, OpenAPI, and automatic Swagger documentation. ([FastAPI](https://fastapi.tiangolo.com/features/?utm_source=chatgpt.com))
 
@@ -44,7 +44,7 @@ PostgreSQL Temporal   Redis
        LangGraph  
           │  
           ▼  
- OpenAI / Azure OpenAI
+ OpenAI / Amazon Bedrock
 
 ## **What FastAPI Should Manage**
 
@@ -274,19 +274,19 @@ Cache:
 Redis
 
 Messaging:  
-Azure Service Bus
+Amazon SNS/SQS
 
 Authentication:  
-Microsoft Entra ID or Auth0
+Amazon Cognito or Auth0
 
 Files:  
-Azure Blob Storage
+Amazon S3
 
 Monitoring:  
 OpenTelemetry \+ Application Insights
 
 Deployment:  
-Docker \+ Azure Container Apps
+Docker \+ Amazon ECS/Fargate
 
 CI/CD:  
-GitHub Actions or Azure DevOps
+GitHub Actions or AWS CodePipeline

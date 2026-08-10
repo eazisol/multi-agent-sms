@@ -232,7 +232,7 @@
 ### MOD-010
 
 **Title:** Repository, Toolchain, and Local Development Environment  
-**Purpose:** Create a reproducible monorepo and local environment for Next.js, FastAPI, Temporal, LangGraph, PostgreSQL, Redis, Service Bus, and object storage.  
+**Purpose:** Create a reproducible monorepo and local environment for Next.js, FastAPI, Temporal, LangGraph, PostgreSQL, Redis, SNS/SQS, and object storage.  
 **Requirements:** Cursor Rules 010, Cursor Rules 600-720  
 **Dependencies:** MOD-000
 
@@ -507,7 +507,7 @@
 - [x] **MOD-030-MP-001:** Implement and verify environment matrix.  
   - Evidence/note: Environment enum + config/environments examples
 - [x] **MOD-030-MP-002:** Implement and verify secret manager.  
-  - Evidence/note: SecretBackend local + Key Vault fail-closed stub
+  - Evidence/note: SecretBackend local + AWS Secrets Manager fail-closed stub
 - [x] **MOD-030-MP-003:** Implement and verify CI pipelines.  
   - Evidence/note: CI concurrency + junit/build-identity artifacts
 - [x] **MOD-030-MP-004:** Implement and verify staging deployment.  
@@ -515,14 +515,14 @@
 - [x] **MOD-030-MP-005:** Implement and verify production approval placeholder.  
   - Evidence/note: deploy-production.yml + check_production_gate.py
 - [x] **MOD-030-MP-006:** Implement and verify infrastructure as code.  
-  - Evidence/note: infra/bicep Key Vault skeleton
+  - Evidence/note: infra/terraform Secrets Manager skeleton
 
 #### Database / data design
 
 - [-] **MOD-030-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **environment matrix**.  
   - Evidence/note: No env matrix table — config files
 - [-] **MOD-030-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **secret manager**.  
-  - Evidence/note: Secrets in Key Vault / GH Environments — not DB
+  - Evidence/note: Secrets in AWS Secrets Manager / GH Environments — not DB
 - [-] **MOD-030-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **CI pipelines**.  
   - Evidence/note: CI is GitHub Actions — not DB
 - [-] **MOD-030-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **staging deployment**.  
@@ -530,7 +530,7 @@
 - [-] **MOD-030-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **production approval placeholder**.  
   - Evidence/note: Prod gate is workflow/script — not DB
 - [-] **MOD-030-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **infrastructure as code**.  
-  - Evidence/note: IaC is Bicep files — not DB
+  - Evidence/note: IaC is Terraform files — not DB
 
 #### Backend
 
@@ -608,7 +608,7 @@
 #### Acceptance gate
 
 - [~] **MOD-030-AC-001:** Environment credentials are isolated.  
-  - Evidence/note: Matrix + secret backend rules; live KV not wired
+  - Evidence/note: Matrix + secret backend rules; live Secrets Manager not wired
 - [x] **MOD-030-AC-002:** Production release requires human authorization.  
   - Evidence/note: Production workflow requires confirm+approver+reason+sha
 - [x] **MOD-030-AC-003:** Artifacts are reproducible and traceable.  

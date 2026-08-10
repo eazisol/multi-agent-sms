@@ -1,4 +1,4 @@
-# ADR-0003 — Provisional Auth0, OpenAI, and GitHub Actions
+# ADR-0003 — Provisional Auth0, OpenAI, GitHub Actions, and AWS
 
 **Status:** Proposed (PENDING formal PRE approval)  
 **Date (UTC):** 2026-08-10  
@@ -7,16 +7,19 @@
 
 ## Context
 
-Auth, model provider, and CI must be chosen before production wiring. Session selection preferred Auth0 + OpenAI + GitHub Actions.
+Auth, model provider, CI, and cloud target must be chosen before production wiring. Session selection preferred Auth0 + OpenAI + GitHub Actions and an AWS deployment/secrets direction.
 
 ## Decision (provisional)
 
 | Concern | Provisional choice | Not locked |
 |---|---|---|
-| Human authentication | Auth0 | Entra ID remains an approved alternative pending final sign-off |
-| AI provider | OpenAI | Azure OpenAI remains an approved alternative |
-| CI/CD | GitHub Actions | Azure DevOps remains an approved alternative |
-| Deploy target | Unchosen | Azure Container Apps or approved Kubernetes |
+| Human authentication | Auth0 | Amazon Cognito remains an approved alternative pending final sign-off |
+| AI provider | OpenAI | Amazon Bedrock remains an approved alternative |
+| CI/CD | GitHub Actions | AWS CodePipeline remains an approved alternative |
+| Deploy target | Amazon ECS/Fargate (or approved EKS) | Final cluster/service names PENDING |
+| Secret store | AWS Secrets Manager | PENDING formal PRE-ENV |
+| Object storage | Amazon S3 | PENDING |
+| Async messaging | Amazon SNS/SQS | PENDING broker topology |
 
 ## Consequences
 

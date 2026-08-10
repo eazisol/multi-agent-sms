@@ -7,8 +7,8 @@ from masms_api.config import Settings
 from masms_api.platform.environment import Environment, parse_environment
 from masms_api.platform.release_gate import evaluate_production_gate
 from masms_api.platform.secrets import (
-    KEY_VAULT_BACKEND,
     LOCAL_BACKEND,
+    SECRETS_MANAGER_BACKEND,
     SecretBackendError,
     create_secret_backend,
 )
@@ -32,7 +32,8 @@ def test_local_secret_backend() -> None:
     backend = create_secret_backend(
         backend=LOCAL_BACKEND,
         environment=Environment.LOCAL,
-        key_vault_uri=None,
+        aws_region=None,
+        secrets_prefix="masms",
         local_values={"database_url": "sqlite+pysqlite:///:memory:"},
     )
     assert backend.get_secret("database_url").startswith("sqlite")
@@ -43,20 +44,22 @@ def test_production_forbids_local_secret_backend() -> None:
         create_secret_backend(
             backend=LOCAL_BACKEND,
             environment=Environment.PRODUCTION,
-            key_vault_uri=None,
+            aws_region=None,
+            secrets_prefix="masms",
             local_values={"database_url": "x"},
         )
 
 
-def test_key_vault_backend_fails_closed_without_client() -> None:
+def test_secrets_manager_backend_fails_closed_without_client() -> None:
     backend = create_secret_backend(
-        backend=KEY_VAULT_BACKEND,
+        backend=SECRETS_MANAGER_BACKEND,
         environment=Environment.STAGING,
-        key_vault_uri="https://example.vault.azure.net/",
+        aws_region="us-east-1",
+        secrets_prefix="masms/staging",
         local_values={},
     )
     with pytest.raises(SecretBackendError):
-        backend.get_secret("database-url")
+        backend.get_secret("database_url")
 
 
 def test_production_gate_requires_human_fields() -> None:

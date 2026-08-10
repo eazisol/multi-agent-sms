@@ -3,7 +3,7 @@ description: Apply domain-event envelope, outbox, schema-versioning, idempotent 
 globs: "**/*.{py,json,yaml,yml}"
 alwaysApply: false
 ---
-# Events and Service Bus Standard
+# Events and SNS/SQS Standard
 
 - Name domain events in past tense, such as `TicketAssigned` or `ApprovalRejected`.
 - Use a standard event envelope containing event ID, event type, schema version, organization, project, actor, entity type/ID, correlation ID, causation ID, occurred timestamp, and payload.

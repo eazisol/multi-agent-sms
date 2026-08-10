@@ -27,7 +27,7 @@ Adopt option 2:
 | Bounded AI reasoning and recommendations | LangGraph |
 | Authoritative transactional state | PostgreSQL |
 | Permission-filtered semantic retrieval | pgvector (never SoT) |
-| Async domain/integration events | Azure Service Bus or approved broker + transactional outbox |
+| Async domain/integration events | Amazon SNS/SQS or approved broker + transactional outbox |
 
 Agents must not write business tables directly or receive raw secrets.
 

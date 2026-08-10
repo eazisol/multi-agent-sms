@@ -34,7 +34,7 @@ alwaysApply: true
 - Keep bounded AI reasoning and recommendation flows in LangGraph.
 - Keep authoritative transactional state in PostgreSQL.
 - Use pgvector only for permission-filtered semantic retrieval; never as the source of truth.
-- Use Azure Service Bus or the approved broker for asynchronous events; do not use events as a substitute for transactional integrity.
+- Use Amazon SNS/SQS or the approved broker for asynchronous events; do not use events as a substitute for transactional integrity.
 
 ## Change Discipline
 
@@ -160,8 +160,8 @@ alwaysApply: true
 
 ## Secrets
 
-- Store runtime secrets only in the approved secret manager, normally Azure Key Vault.
-- Prefer managed/workload identity and short-lived credentials.
+- Store runtime secrets only in the approved secret manager, normally AWS Secrets Manager.
+- Prefer IAM roles / IRSA and short-lived credentials.
 - Never put secrets in source code, prompts, logs, tickets, messages, test fixtures, screenshots, or audit before/after payloads.
 - Do not expose raw secrets to agents; expose narrowly scoped operations through controlled tools.
 
@@ -492,7 +492,7 @@ description: Apply domain-event envelope, outbox, schema-versioning, idempotent 
 globs: "**/*.{py,json,yaml,yml}"
 alwaysApply: false
 ---
-# Events and Service Bus Standard
+# Events and SNS/SQS Standard
 
 - Name domain events in past tense, such as `TicketAssigned` or `ApprovalRejected`.
 - Use a standard event envelope containing event ID, event type, schema version, organization, project, actor, entity type/ID, correlation ID, causation ID, occurred timestamp, and payload.
@@ -521,7 +521,7 @@ alwaysApply: false
 - Implement each provider behind a stable internal interface; provider-specific details must not leak into domain services.
 - Define the source of truth for every synchronized field and status.
 - For MVP, treat Gmail as the email delivery/thread source and Jira as the work-execution source while MASMS owns requirements, approvals, follow-ups, escalations, traceability, and audit.
-- Use OAuth or managed identity with minimum scopes; do not use personal production tokens.
+- Use OAuth or IAM roles with minimum scopes; do not use personal production tokens.
 - Separate development, test, staging, and production credentials and webhook endpoints.
 - Validate webhook signatures, timestamp freshness, provider account/tenant mapping, event IDs, and payload schema.
 - Store raw provider payloads only when approved, protected, and retention-limited.

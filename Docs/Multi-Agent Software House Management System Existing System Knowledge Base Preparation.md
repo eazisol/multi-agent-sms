@@ -1195,7 +1195,7 @@ For the selected Python stack:
 PostgreSQL  
 → Knowledge metadata, versions, ownership, permissions, approvals
 
-Azure Blob Storage or Amazon S3  
+Amazon S3  
 → Original documents and attachments
 
 pgvector  

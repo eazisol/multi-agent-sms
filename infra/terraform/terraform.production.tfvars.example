@@ -1,0 +1,3 @@
+environment_name = "production"
+org_short_name   = "masms"
+aws_region       = "us-east-1"

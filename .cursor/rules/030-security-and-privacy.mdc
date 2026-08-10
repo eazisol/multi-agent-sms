@@ -16,8 +16,8 @@ alwaysApply: true
 
 ## Secrets
 
-- Store runtime secrets only in the approved secret manager, normally Azure Key Vault.
-- Prefer managed/workload identity and short-lived credentials.
+- Store runtime secrets only in the approved secret manager, normally AWS Secrets Manager.
+- Prefer IAM roles (or IRSA / ECS task roles) and short-lived credentials.
 - Never put secrets in source code, prompts, logs, tickets, messages, test fixtures, screenshots, or audit before/after payloads.
 - Do not expose raw secrets to agents; expose narrowly scoped operations through controlled tools.
 

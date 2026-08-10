@@ -16,10 +16,10 @@ These items remain **PENDING formal human approval**. Working values below are *
 | PRE-AUTH | Auth provider | **Auth0** | PENDING |
 | PRE-AI | AI provider | **OpenAI** | PENDING |
 | PRE-CI | CI/CD provider | **GitHub Actions** | PENDING |
-| PRE-DEPLOY | Deploy target | Azure Container Apps or approved Kubernetes | PENDING — no provisional lock |
+| PRE-DEPLOY | Deploy target | **Amazon ECS/Fargate** or approved Kubernetes (EKS) | PENDING — provisional AWS direction |
 | PRE-FMT | Format/lint/typecheck commands | ruff + mypy (API); eslint/tsc (web when scaffolded) | PENDING thresholds |
 | PRE-COV | Coverage thresholds | Not set | PENDING eng + QA leads |
-| PRE-ENV | Environment names + secret store | `local` / `test` / `staging` / `production`; Azure Key Vault for runtime secrets | PENDING |
+| PRE-ENV | Environment names + secret store | `local` / `test` / `staging` / `production`; **AWS Secrets Manager** for runtime secrets | PENDING |
 | PRE-APPR | Production release/rollback approvers | Unnamed | PENDING |
 | PRE-SRS | Approve MVP SRS as functional baseline | BL-SRS-001 v1.0 | PENDING human approval |
 | PRE-SCOPE | Formal MVP scope + exclusions sign-off | From MVP SRS exclusions section | PENDING |

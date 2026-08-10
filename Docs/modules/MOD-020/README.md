@@ -25,7 +25,7 @@ Governance uses UoW, shared paging/concurrency, and enqueues `governance.baselin
 
 ## Remaining (beyond M1)
 
-- Outbox **publisher/consumer** runtime (Temporal/Service Bus — MOD-500ish)
+- Outbox **publisher/consumer** runtime (Temporal/SNS-SQS — MOD-500ish)
 - Full OpenAPI examples for every error path
 - Platform-wide enforcement that agents cannot open DB sessions
 - Human AC-901

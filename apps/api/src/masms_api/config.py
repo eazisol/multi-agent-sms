@@ -23,7 +23,8 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3000"
     default_organization_id: str = "00000000-0000-4000-8000-000000000001"
     secret_backend: str = LOCAL_BACKEND
-    key_vault_uri: str | None = None
+    aws_region: str | None = None
+    secrets_prefix: str = "masms"
 
     @field_validator("env")
     @classmethod
@@ -45,7 +46,8 @@ class Settings(BaseSettings):
         return create_secret_backend(
             backend=self.secret_backend,
             environment=self.environment,
-            key_vault_uri=self.key_vault_uri,
+            aws_region=self.aws_region,
+            secrets_prefix=self.secrets_prefix,
             local_values=local_values,
         )
 
