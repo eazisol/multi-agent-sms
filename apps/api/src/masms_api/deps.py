@@ -13,6 +13,7 @@ from masms_api.db import get_db
 from masms_api.errors import AppError
 from masms_api.kernel.actor import ActorKind
 from masms_api.kernel.context import RequestContext
+from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.modules.auth.provider import Auth0IdentityProvider
 
 __all__ = ["ActorKind", "RequestContext", "get_request_context"]
@@ -59,7 +60,7 @@ def get_request_context(
             project_id = UUID(x_project_id) if x_project_id else None
         except (ValueError, TypeError) as exc:
             raise HTTPException(status_code=400, detail="Invalid request identity headers") from exc
-        return RequestContext.from_parts(
+        ctx = RequestContext.from_parts(
             organization_id=identity.organization_id,
             actor_id=identity.actor_id,
             actor_kind=identity.actor_kind,
@@ -70,6 +71,9 @@ def get_request_context(
             session_id=identity.session_id,
             assurance_level=identity.assurance_level,
         )
+        if db is not None:
+            apply_tenant_rls(db, ctx.organization_id)
+        return ctx
 
     try:
         organization_id = UUID(x_organization_id or settings.default_organization_id)
@@ -85,7 +89,7 @@ def get_request_context(
     if assurance_level < 1 or assurance_level > 3:
         raise HTTPException(status_code=400, detail="X-Assurance-Level must be 1..3")
 
-    return RequestContext.from_parts(
+    ctx = RequestContext.from_parts(
         organization_id=organization_id,
         actor_id=actor_id,
         actor_kind=actor_kind,
@@ -95,3 +99,6 @@ def get_request_context(
         project_id=project_id,
         assurance_level=assurance_level,
     )
+    if db is not None:
+        apply_tenant_rls(db, ctx.organization_id)
+    return ctx
