@@ -24,7 +24,7 @@
 | MOD-020 | Phase 0 - Governance and Foundation | 49 | 23 | 13 | 4 | 1 | 8 | Blocked |
 | MOD-030 | Phase 0 - Governance and Foundation | 43 | 14 | 2 | 26 | 1 | 0 | Blocked |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 25 | 9 | 10 | 1 | 0 | Blocked |
-| MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
+| MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 31 | 9 | 8 | 1 | 0 | Blocked |
 | MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 103, partial 35, n/a 74, blocked 5, open 1532
+**Totals:** 1749 tasks — done 134, partial 44, n/a 82, blocked 6, open 1483
 
 ## Module index (plan order)
 
@@ -764,82 +764,131 @@
 
 #### Main points
 
-- [ ] **MOD-100-MP-001:** Implement and verify organizations.
-- [ ] **MOD-100-MP-002:** Implement and verify actors.
-- [ ] **MOD-100-MP-003:** Implement and verify human users.
-- [ ] **MOD-100-MP-004:** Implement and verify agents.
-- [ ] **MOD-100-MP-005:** Implement and verify roles.
-- [ ] **MOD-100-MP-006:** Implement and verify departments.
-- [ ] **MOD-100-MP-007:** Implement and verify teams.
-- [ ] **MOD-100-MP-008:** Implement and verify team members.
-- [ ] **MOD-100-MP-009:** Implement and verify reporting lines.
+- [x] **MOD-100-MP-001:** Implement and verify organizations.  
+  - Evidence/note: org_organizations + create/list API
+- [x] **MOD-100-MP-002:** Implement and verify actors.  
+  - Evidence/note: org_actors
+- [x] **MOD-100-MP-003:** Implement and verify human users.  
+  - Evidence/note: org_human_users
+- [x] **MOD-100-MP-004:** Implement and verify agents.  
+  - Evidence/note: org_agents + supervisor rule
+- [x] **MOD-100-MP-005:** Implement and verify roles.  
+  - Evidence/note: org_roles
+- [x] **MOD-100-MP-006:** Implement and verify departments.  
+  - Evidence/note: org_departments
+- [x] **MOD-100-MP-007:** Implement and verify teams.  
+  - Evidence/note: org_teams
+- [x] **MOD-100-MP-008:** Implement and verify team members.  
+  - Evidence/note: org_team_members
+- [x] **MOD-100-MP-009:** Implement and verify reporting lines.  
+  - Evidence/note: org_reporting_lines
 
 #### Database / data design
 
-- [ ] **MOD-100-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **organizations**.
-- [ ] **MOD-100-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **actors**.
-- [ ] **MOD-100-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **human users**.
-- [ ] **MOD-100-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **agents**.
-- [ ] **MOD-100-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **roles**.
-- [ ] **MOD-100-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **departments**.
-- [ ] **MOD-100-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **teams**.
-- [ ] **MOD-100-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **team members**.
-- [ ] **MOD-100-DB-009:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reporting lines**.
+- [x] **MOD-100-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **organizations**.  
+  - Evidence/note: migration 20260810_0004 org_organizations
+- [x] **MOD-100-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **actors**.  
+  - Evidence/note: org_actors
+- [x] **MOD-100-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **human users**.  
+  - Evidence/note: org_human_users
+- [x] **MOD-100-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **agents**.  
+  - Evidence/note: org_agents
+- [x] **MOD-100-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **roles**.  
+  - Evidence/note: org_roles
+- [x] **MOD-100-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **departments**.  
+  - Evidence/note: org_departments
+- [x] **MOD-100-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **teams**.  
+  - Evidence/note: org_teams
+- [x] **MOD-100-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **team members**.  
+  - Evidence/note: org_team_members
+- [x] **MOD-100-DB-009:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reporting lines**.  
+  - Evidence/note: org_reporting_lines
 
 #### Backend
 
-- [ ] **MOD-100-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-100-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-100-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-100-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-100-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: IdentityService
+- [~] **MOD-100-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: supervisor + tenant checks
+- [~] **MOD-100-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: org create outbox enqueue
+- [x] **MOD-100-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-100-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-100-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-100-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-100-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/identity CRUD-lite endpoints
+- [~] **MOD-100-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: paging on orgs/actors/humans/agents
+- [~] **MOD-100-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-100-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-100-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-100-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-100-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-100-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred — TEMPLATE_TASK_RATIONALE
+- [-] **MOD-100-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-100-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-100-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-100-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-100-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-100-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-100-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [-] **MOD-100-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: no Temporal WF in M1
+- [-] **MOD-100-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: no Temporal/LangGraph in M1
+- [~] **MOD-100-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on org create
+- [-] **MOD-100-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: no identity notifications in M1
 
 #### Security / privacy / audit
 
-- [ ] **MOD-100-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-100-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-100-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-100-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-100-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org scope via headers/context
+- [x] **MOD-100-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on org_* tables
+- [~] **MOD-100-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: no secrets in identity payloads
+- [x] **MOD-100-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on org/human/agent create
 
 #### Testing / verification
 
-- [ ] **MOD-100-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-100-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-100-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-100-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-100-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-100-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/identity
+- [x] **MOD-100-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/identity
+- [~] **MOD-100-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: supervisor negative covered in domain tests
+- [-] **MOD-100-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-100-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest + alembic
 
 #### Documentation
 
-- [ ] **MOD-100-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-100-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-100-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-100/README.md
+- [x] **MOD-100-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-100-AC-001:** Every action and owner resolves to one actor.
-- [ ] **MOD-100-AC-002:** Every operational agent has an active human supervisor.
-- [ ] **MOD-100-AC-003:** Agent and human identities are separate.
-- [ ] **MOD-100-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-100-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [~] **MOD-100-AC-001:** Every action and owner resolves to one actor.  
+  - Evidence/note: entities resolve to actor_id
+- [x] **MOD-100-AC-002:** Every operational agent has an active human supervisor.  
+  - Evidence/note: active agent requires active human supervisor
+- [x] **MOD-100-AC-003:** Agent and human identities are separate.  
+  - Evidence/note: distinct actor rows for human vs agent
+- [x] **MOD-100-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-100 defects filed
+- [!] **MOD-100-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
