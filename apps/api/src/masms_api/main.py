@@ -13,6 +13,7 @@ from masms_api.errors import AppError
 from masms_api.kernel.problem import PROBLEM_JSON_MEDIA_TYPE, problem_body
 from masms_api.modules.access.router import router as access_router
 from masms_api.modules.auth.router import router as auth_router
+from masms_api.modules.capacity.router import router as capacity_router
 from masms_api.modules.governance.router import router as governance_router
 from masms_api.modules.identity.router import router as identity_router
 from masms_api.observability.health import build_readiness
@@ -64,6 +65,7 @@ def create_app() -> FastAPI:
                 "MOD-100",
                 "MOD-110",
                 "MOD-120",
+                "MOD-130",
             ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
@@ -77,6 +79,7 @@ def create_app() -> FastAPI:
     app.include_router(identity_router, prefix="/api/v1")
     app.include_router(auth_router, prefix="/api/v1")
     app.include_router(access_router, prefix="/api/v1")
+    app.include_router(capacity_router, prefix="/api/v1")
     return app
 
 

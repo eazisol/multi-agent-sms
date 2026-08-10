@@ -19,6 +19,7 @@ def test_meta_lists_mod_020() -> None:
     assert "MOD-100" in body["modules"]
     assert "MOD-110" in body["modules"]
     assert "MOD-120" in body["modules"]
+    assert "MOD-130" in body["modules"]
     assert "environment" in body
     assert "auth_provider" in body
 

@@ -36,7 +36,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 6 | MOD-100 | Blocked | 31 | 9 | 0 |
 | 7 | MOD-110 | Blocked | 26 | 8 | 0 |
 | 8 | MOD-120 | Blocked | 30 | 6 | 0 |
-| 9 | MOD-130 | Not started | 0 | 0 | 47 |
+| 9 | MOD-130 | Blocked | 30 | 6 | 0 |
 | 10 | MOD-140 | Not started | 0 | 0 | 47 |
 | 11 | MOD-200 | Not started | 0 | 0 | 43 |
 | 12 | MOD-210 | Not started | 0 | 0 | 43 |
@@ -68,7 +68,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 190 · partial 58 · n/a 102 · blocked 8 · open 1391
+**All tasks:** 1749 · done 220 · partial 64 · n/a 112 · blocked 9 · open 1344
 
 ## Phase 0 - Governance and Foundation
 
@@ -616,74 +616,74 @@ M10: [!] Acceptance / Done gate
      M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-120-AC-900)
      M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-120-AC-901)
 
-### Module 9: [ ] MOD-130 — Skills, Availability, Capacity, Working Hours, and Business Calendars
+### Module 9: [!] MOD-130 — Skills, Availability, Capacity, Working Hours, and Business Calendars
 
-M1: [ ] Main goals
-     M1-1: [ ] Build and verify: skills  (MOD-130-MP-001)
-     M1-2: [ ] Build and verify: actor skills  (MOD-130-MP-002)
-     M1-3: [ ] Build and verify: availability  (MOD-130-MP-003)
-     M1-4: [ ] Build and verify: capacity allocations  (MOD-130-MP-004)
-     M1-5: [ ] Build and verify: business calendars  (MOD-130-MP-005)
-     M1-6: [ ] Build and verify: holidays  (MOD-130-MP-006)
-     M1-7: [ ] Build and verify: leave periods  (MOD-130-MP-007)
-     M1-8: [ ] Build and verify: on-call schedules  (MOD-130-MP-008)
+M1: [x] Main goals
+     M1-1: [x] Build and verify: skills  (MOD-130-MP-001)
+     M1-2: [x] Build and verify: actor skills  (MOD-130-MP-002)
+     M1-3: [x] Build and verify: availability  (MOD-130-MP-003)
+     M1-4: [x] Build and verify: capacity allocations  (MOD-130-MP-004)
+     M1-5: [x] Build and verify: business calendars  (MOD-130-MP-005)
+     M1-6: [x] Build and verify: holidays  (MOD-130-MP-006)
+     M1-7: [x] Build and verify: leave periods  (MOD-130-MP-007)
+     M1-8: [x] Build and verify: on-call schedules  (MOD-130-MP-008)
 
-M2: [ ] Database
-     M2-1: [ ] Design and migrate data for: skills  (MOD-130-DB-001)
-     M2-2: [ ] Design and migrate data for: actor skills  (MOD-130-DB-002)
-     M2-3: [ ] Design and migrate data for: availability  (MOD-130-DB-003)
-     M2-4: [ ] Design and migrate data for: capacity allocations  (MOD-130-DB-004)
-     M2-5: [ ] Design and migrate data for: business calendars  (MOD-130-DB-005)
-     M2-6: [ ] Design and migrate data for: holidays  (MOD-130-DB-006)
-     M2-7: [ ] Design and migrate data for: leave periods  (MOD-130-DB-007)
-     M2-8: [ ] Design and migrate data for: on-call schedules  (MOD-130-DB-008)
+M2: [x] Database
+     M2-1: [x] Design and migrate data for: skills  (MOD-130-DB-001)
+     M2-2: [x] Design and migrate data for: actor skills  (MOD-130-DB-002)
+     M2-3: [x] Design and migrate data for: availability  (MOD-130-DB-003)
+     M2-4: [x] Design and migrate data for: capacity allocations  (MOD-130-DB-004)
+     M2-5: [x] Design and migrate data for: business calendars  (MOD-130-DB-005)
+     M2-6: [x] Design and migrate data for: holidays  (MOD-130-DB-006)
+     M2-7: [x] Design and migrate data for: leave periods  (MOD-130-DB-007)
+     M2-8: [x] Design and migrate data for: on-call schedules  (MOD-130-DB-008)
 
-M3: [ ] Backend
-     M3-1: [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-130-BE-001)
-     M3-2: [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-130-BE-002)
-     M3-3: [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-130-BE-003)
-     M3-4: [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-130-BE-004)
+M3: [~] Backend
+     M3-1: [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-130-BE-001)
+     M3-2: [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-130-BE-002)
+     M3-3: [-] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-130-BE-003)
+     M3-4: [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-130-BE-004)
 
-M4: [ ] API
-     M4-1: [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-130-API-001)
-     M4-2: [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-130-API-002)
-     M4-3: [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-130-API-003)
+M4: [~] API
+     M4-1: [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-130-API-001)
+     M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-130-API-002)
+     M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-130-API-003)
 
-M5: [ ] Frontend
-     M5-1: [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-130-FE-001)
-     M5-2: [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-130-FE-002)
-     M5-3: [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-130-FE-003)
-     M5-4: [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-130-FE-004)
+M5: [~] Frontend
+     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-130-FE-001)
+     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-130-FE-002)
+     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-130-FE-003)
+     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-130-FE-004)
 
-M6: [ ] Workflow / agents / events
-     M6-1: [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-130-WF-001)
-     M6-2: [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-130-WF-002)
-     M6-3: [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-130-WF-003)
-     M6-4: [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-130-WF-004)
+M6: [~] Workflow / agents / events
+     M6-1: [-] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-130-WF-001)
+     M6-2: [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-130-WF-002)
+     M6-3: [-] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-130-WF-003)
+     M6-4: [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-130-WF-004)
 
-M7: [ ] Security / audit
-     M7-1: [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-130-SEC-001)
-     M7-2: [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-130-SEC-002)
-     M7-3: [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-130-SEC-003)
-     M7-4: [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-130-SEC-004)
+M7: [~] Security / audit
+     M7-1: [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-130-SEC-001)
+     M7-2: [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-130-SEC-002)
+     M7-3: [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-130-SEC-003)
+     M7-4: [~] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-130-SEC-004)
 
-M8: [ ] Testing
-     M8-1: [ ] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-130-QA-001)
-     M8-2: [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-130-QA-002)
-     M8-3: [ ] Add role-permission negative tests and tenant/project isolation tests.  (MOD-130-QA-003)
-     M8-4: [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-130-QA-004)
-     M8-5: [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-130-QA-005)
+M8: [~] Testing
+     M8-1: [x] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-130-QA-001)
+     M8-2: [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-130-QA-002)
+     M8-3: [~] Add role-permission negative tests and tenant/project isolation tests.  (MOD-130-QA-003)
+     M8-4: [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-130-QA-004)
+     M8-5: [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-130-QA-005)
 
-M9: [ ] Docs
-     M9-1: [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-130-DOC-001)
-     M9-2: [ ] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-130-DOC-002)
+M9: [x] Docs
+     M9-1: [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-130-DOC-001)
+     M9-2: [x] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-130-DOC-002)
 
-M10: [ ] Acceptance / Done gate
-     M10-1: [ ] Assignments can evaluate skill, access, capacity, calendar, and deadline.  (MOD-130-AC-001)
-     M10-2: [ ] SLA calculations respect business calendars and time zones.  (MOD-130-AC-002)
-     M10-3: [ ] Unnecessary personal data is excluded.  (MOD-130-AC-003)
-     M10-4: [ ] All Critical and High defects for this module are resolved.  (MOD-130-AC-900)
-     M10-5: [ ] The responsible human owner reviews and approves the completion evidence.  (MOD-130-AC-901)
+M10: [!] Acceptance / Done gate
+     M10-1: [x] Assignments can evaluate skill, access, capacity, calendar, and deadline.  (MOD-130-AC-001)
+     M10-2: [x] SLA calculations respect business calendars and time zones.  (MOD-130-AC-002)
+     M10-3: [x] Unnecessary personal data is excluded.  (MOD-130-AC-003)
+     M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-130-AC-900)
+     M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-130-AC-901)
 
 ### Module 10: [ ] MOD-140 — Configuration Administration and Versioned Operational Rules
 
