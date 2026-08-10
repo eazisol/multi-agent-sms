@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     secret_backend: str = LOCAL_BACKEND
     aws_region: str | None = None
     secrets_prefix: str = "masms"
+    redis_url: str | None = None
 
     @field_validator("env")
     @classmethod

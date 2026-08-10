@@ -15,6 +15,7 @@ def test_meta_lists_mod_020() -> None:
     body = resp.json()
     assert "MOD-020" in body["modules"]
     assert "MOD-030" in body["modules"]
+    assert "MOD-040" in body["modules"]
     assert body["kernel"] == "masms_api.kernel"
     assert "environment" in body
 
