@@ -1,0 +1,67 @@
+[project]
+name = "masms"
+version = "0.1.0"
+description = "Multi-Agent Software House Management System"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "masms-api",
+]
+
+[tool.uv.workspace]
+members = ["apps/api"]
+
+[tool.uv.sources]
+masms-api = { workspace = true }
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.0",
+  "pytest-asyncio>=0.25.0",
+  "httpx>=0.28.0",
+  "ruff>=0.9.0",
+  "mypy>=1.14.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["apps/api/src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["masms_api"]
+mypy_path = "apps/api/src"
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+  "fastapi",
+  "fastapi.*",
+  "sqlalchemy",
+  "sqlalchemy.*",
+  "alembic",
+  "alembic.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+  "masms_api.main",
+  "masms_api.modules.governance.router",
+  "masms_api.db",
+]
+disable_error_code = ["untyped-decorator", "no-any-return"]
+
+[[tool.mypy.overrides]]
+module = "masms_api.modules.governance.service"
+disable_error_code = ["no-any-return"]

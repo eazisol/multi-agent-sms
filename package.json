@@ -1,0 +1,13 @@
+{
+  "name": "masms",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "web:dev": "pnpm --filter @masms/web dev",
+    "web:build": "pnpm --filter @masms/web build",
+    "web:lint": "pnpm --filter @masms/web lint"
+  }
+}

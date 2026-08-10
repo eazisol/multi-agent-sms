@@ -1,0 +1,185 @@
+{
+  "files": [
+    {
+      "path": ".cursor/rules/000-project-governance.mdc",
+      "bytes": 2513,
+      "sha256": "0646fddc56d66e602887b0197d589ef238b80de825c859c02115ee21bbce6d72"
+    },
+    {
+      "path": ".cursor/rules/010-task-execution.mdc",
+      "bytes": 2044,
+      "sha256": "bdbe600dbea15813018ccc64286656057cd11adc5be64703368409b2a8591a35"
+    },
+    {
+      "path": ".cursor/rules/020-domain-invariants.mdc",
+      "bytes": 1968,
+      "sha256": "3b82db3a763c267e0dc8436abd858e1354a9ec1ed979802741797c3d0a1611fb"
+    },
+    {
+      "path": ".cursor/rules/030-security-and-privacy.mdc",
+      "bytes": 2452,
+      "sha256": "dbebcec84be2e99e0b3472160b52b19cdb5085fd0f5b1756558106d224523c78"
+    },
+    {
+      "path": ".cursor/rules/040-human-approval-gates.mdc",
+      "bytes": 1437,
+      "sha256": "1c03e59dcdc64c52fe5c6e16449a371eda4877ae55e10c748565681c7c7c9a1a"
+    },
+    {
+      "path": ".cursor/rules/100-backend-python-fastapi.mdc",
+      "bytes": 2387,
+      "sha256": "3c380afba39345c2f1a47e4d831f040b58a7c49ac6ed41253b6b67eea5b50328"
+    },
+    {
+      "path": ".cursor/rules/110-database-postgresql.mdc",
+      "bytes": 1684,
+      "sha256": "f1967125cdf2e8f6c2f61ebe0c96176098f83427cda6b1f1a39923badbb7c45e"
+    },
+    {
+      "path": ".cursor/rules/120-api-contracts.mdc",
+      "bytes": 1477,
+      "sha256": "69fd75ea74e229501a189a79b499c149066d1281a3d49d520eb2bfd0d30b93c7"
+    },
+    {
+      "path": ".cursor/rules/200-frontend-nextjs.mdc",
+      "bytes": 1922,
+      "sha256": "85c956384485adab7b6419e8ab8417d68dc817594d2b8c5e61b897ff06f25f47"
+    },
+    {
+      "path": ".cursor/rules/210-ui-ux-accessibility.mdc",
+      "bytes": 1524,
+      "sha256": "a868c2e8ae7b270ceee989a8cfb53ff90e0c30e8b185f840f96089f69e949354"
+    },
+    {
+      "path": ".cursor/rules/300-langgraph-agents.mdc",
+      "bytes": 2080,
+      "sha256": "479b0d3753db2d130935ac29b2e400948e98a5e1a8fa638a103a0efb8c648726"
+    },
+    {
+      "path": ".cursor/rules/310-temporal-workflows.mdc",
+      "bytes": 1823,
+      "sha256": "3e039d712d126bfa21823d8f33e2e4fbe47f4881b3bfd253b430214053472465"
+    },
+    {
+      "path": ".cursor/rules/320-events-service-bus.mdc",
+      "bytes": 1299,
+      "sha256": "80f0c125a65bc51523ac74025c07be42de36e789b7d99f08dcbbbd629f02b05e"
+    },
+    {
+      "path": ".cursor/rules/330-integrations.mdc",
+      "bytes": 1555,
+      "sha256": "4a13d6d0ab3eb8d00286226dfe914ca569eca1b07908970bcd85f257baf48133"
+    },
+    {
+      "path": ".cursor/rules/340-knowledge-base-rag.mdc",
+      "bytes": 1797,
+      "sha256": "7826111b9894b6aeb19e044c5495b798d22b2eaab9a13a1510389e81218ee53e"
+    },
+    {
+      "path": ".cursor/rules/400-testing-and-qa.mdc",
+      "bytes": 1933,
+      "sha256": "1da34f4ab654c9e7055fe28c975cf79f5243d037960f1276642be0d9514a165a"
+    },
+    {
+      "path": ".cursor/rules/410-security-testing.mdc",
+      "bytes": 1396,
+      "sha256": "91916ca8c381770bb9892c6ed50e0c8756fd6dd246214c68673b4ea50b8a3ab1"
+    },
+    {
+      "path": ".cursor/rules/420-performance-reliability.mdc",
+      "bytes": 1568,
+      "sha256": "b287f8469f83e863fa8b4c2c77998f8b9cfba38c9fb6b9e66bfee3f6335c5225"
+    },
+    {
+      "path": ".cursor/rules/500-observability-audit.mdc",
+      "bytes": 1719,
+      "sha256": "7366441efe667b269ad311ef28c259b50d3ce8042235ef187d27e74497d17b4b"
+    },
+    {
+      "path": ".cursor/rules/510-errors-retries-idempotency.mdc",
+      "bytes": 1441,
+      "sha256": "a08ab019514aebccdfcaec6f2e14bfc30e439501eb7ff16d3aaaf9b3b46907f9"
+    },
+    {
+      "path": ".cursor/rules/520-file-storage-uploads.mdc",
+      "bytes": 1397,
+      "sha256": "4384765f351fef5d17b31655b2b9825aadbbe531170d87e4a575106218056758"
+    },
+    {
+      "path": ".cursor/rules/600-git-ci-cd.mdc",
+      "bytes": 1520,
+      "sha256": "8291caacd29e0e24f4f12f8df6b1d3345823c206e66d34ff73d5009c45dd8be4"
+    },
+    {
+      "path": ".cursor/rules/610-dependencies-configuration.mdc",
+      "bytes": 1517,
+      "sha256": "472a686d9374e2d19dc429e00fe58a0e66a02f00adf667e5a9bd9e30c5a2a497"
+    },
+    {
+      "path": ".cursor/rules/620-documentation.mdc",
+      "bytes": 1359,
+      "sha256": "1b558f7029ede23aa44a15d81c5290d0a8ca5fd8d3a1f18621a28aa101302b38"
+    },
+    {
+      "path": ".cursor/rules/700-code-review.mdc",
+      "bytes": 1525,
+      "sha256": "9dedd995fe89b42b45632c249665b22b722b99e06916942e6f3e5234a4d65659"
+    },
+    {
+      "path": ".cursor/rules/710-migrations-seeding.mdc",
+      "bytes": 1409,
+      "sha256": "56f8d9e412b4cbfb71c08271eed815016d23897106b83f0f5879c7af3d013ee5"
+    },
+    {
+      "path": ".cursor/rules/720-definition-ready-done.mdc",
+      "bytes": 1583,
+      "sha256": "c8f9a3fbe6aec5762c1e96004b9eb7aaa8bb83c099ba71451664e8762e2ce7a0"
+    },
+    {
+      "path": ".cursor/rules/800-cursor-output-standards.mdc",
+      "bytes": 1377,
+      "sha256": "1ae4fed9f1dfbb96c6ec707a26c749fa536528d8341aa5947f017abdda0df644"
+    },
+    {
+      "path": ".cursorignore",
+      "bytes": 558,
+      "sha256": "098fee8b3033e89fb9f338b845767dc75b6f86c7234a1534ea8c5d5e1f20d35d"
+    },
+    {
+      "path": ".cursorindexingignore",
+      "bytes": 176,
+      "sha256": "1bb383cbfa0f5d15ff48e6b318ad07666fc7cbb38754ab07207a925626c5c8e3"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 1953,
+      "sha256": "d106d2f263757519b969b6c155cacbc85fe617fc0730d96338c84033f7cd5eaa"
+    },
+    {
+      "path": "CURSOR_RULES_MASTER.md",
+      "bytes": 48910,
+      "sha256": "fdc8fcb655bb3fb9a87ef2dc20881b829a6d1702593a2d6b2a81f22bf6c79107"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2879,
+      "sha256": "80850b18e1713b118f3bdb3eb534fbb0e167278272ba40ddcfd1b71f1f8325d3"
+    },
+    {
+      "path": "docs/CURSOR_RULES_CATALOG.md",
+      "bytes": 6054,
+      "sha256": "c99ea522d751ed3d976555e6abb6753368b4a470ff20c6aa0c13c3617030fbd3"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_CHECKLIST.md",
+      "bytes": 1468,
+      "sha256": "0144082e803abe0596f64ca4f6e45f104bc10b0dfcfe51342480ce6f9206906b"
+    },
+    {
+      "path": "docs/TASK_PROMPT_TEMPLATES.md",
+      "bytes": 2628,
+      "sha256": "18a38520e2132d954e7af117025ea16c3b6da96ada0d85fd8015fb7c67d11184"
+    }
+  ],
+  "validation_errors": []
+}

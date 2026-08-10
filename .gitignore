@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Env and secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Runtime / local data
+*.log
+.tmp/
+.temp/
+coverage/
+docker-data/
+
+# Lock / tooling artifacts that may be regenerated locally
+.uv/
+/.cursor
+.cursorignore
+.cursorindexingignore

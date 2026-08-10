@@ -1,0 +1,10 @@
+{
+  "name": "@masms/web",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "echo Web app not scaffolded yet && exit 1",
+    "build": "echo Web app not scaffolded yet && exit 1",
+    "lint": "echo Web app not scaffolded yet && exit 1"
+  }
+}
