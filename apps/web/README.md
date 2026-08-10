@@ -1,9 +1,24 @@
-# @masms/web
+# MASMS Web (`apps/web`)
 
-Placeholder Next.js application package for MOD-010.
+Next.js 15 frontend for MASMS. Current scope: **MOD-000 baselines UI only**.
 
-**Status:** Not implemented.  
-**Engines:** Node.js 22+  
-**Package manager:** pnpm (host activation currently blocked — see `docs/governance/PENDING_DECISIONS.md`)
+## Run
 
-Do not treat this package as a runnable frontend until MOD-010 frontend scaffolding is completed.
+```bash
+# API
+uv run uvicorn masms_api.main:app --app-dir apps/api/src --reload --port 8000
+
+# Web
+cp apps/web/.env.example apps/web/.env.local
+npm --prefix apps/web install
+npm --prefix apps/web run dev
+```
+
+Open http://localhost:3000/governance/baselines
+
+## Notes
+
+- Uses provisional header-based identity (`X-Actor-*`) until Auth0 / MOD-110.
+- UI role selector is for UX variants from `docs/governance/UI_ROLE_VARIANTS.md`.
+- Server remains the authority for approve/reject and org isolation.
+- Package manager: **npm** for this app (pnpm host activation blocked).

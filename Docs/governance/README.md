@@ -21,6 +21,8 @@ Establish one approved source of truth, requirement-to-module traceability, arch
 | Change control process | `CHANGE_CONTROL.md` | Versioning and CR rules for material changes |
 | Approval records process | `APPROVAL_RECORDS.md` | Exact-version approval lifecycle |
 | Pending decisions | `PENDING_DECISIONS.md` | Tooling/provider decisions not yet formally approved |
+| UI role variants | `UI_ROLE_VARIANTS.md` | CHK-MOD-000-RDY-005 screen variants and access matrix |
+| Workflow definition | `WORKFLOW.md` | MOD-000-WF-* triggers, statuses, events, deferred Temporal/notifications |
 | ADRs | `adrs/` | Architecture and tooling decisions |
 | Data dictionary | `data-dictionary/MOD-000-entities.md` | Runtime entity design for governance API |
 

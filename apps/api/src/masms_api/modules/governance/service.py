@@ -6,11 +6,11 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.deps import RequestContext
-from masms_api.errors import ConflictError, NotFoundError
+from masms_api.errors import ConflictError, NotFoundError, ValidationAppError
 from masms_api.modules.governance import domain
 from masms_api.modules.governance.models import (
     ArchitectureDecision,
@@ -29,8 +29,34 @@ from masms_api.modules.governance.schemas import (
     BaselineUpdate,
     ChangeRequestCreate,
     ChangeRequestTransition,
+    PageMeta,
     RequirementMappingCreate,
 )
+
+MAX_PAGE_LIMIT = 100
+BASELINE_SORT_FIELDS = {
+    "baseline_key": SourceBaseline.baseline_key,
+    "updated_at": SourceBaseline.updated_at,
+    "approval_status": SourceBaseline.approval_status,
+    "version": SourceBaseline.version,
+}
+
+
+def _page_meta(*, limit: int, offset: int, total: int) -> PageMeta:
+    return PageMeta(
+        limit=limit,
+        offset=offset,
+        total=total,
+        has_more=offset + limit < total,
+    )
+
+
+def _normalize_paging(limit: int, offset: int) -> tuple[int, int]:
+    if limit < 1 or limit > MAX_PAGE_LIMIT:
+        raise ValidationAppError(f"limit must be between 1 and {MAX_PAGE_LIMIT}")
+    if offset < 0:
+        raise ValidationAppError("offset must be >= 0")
+    return limit, offset
 
 
 class GovernanceService:
@@ -106,16 +132,72 @@ class GovernanceService:
             raise NotFoundError("Source baseline not found")
         return row
 
-    def list_baselines(self) -> list[SourceBaseline]:
+    def list_baselines(
+        self,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+        status: str | None = None,
+        q: str | None = None,
+        sort: str = "baseline_key",
+    ) -> tuple[list[SourceBaseline], PageMeta]:
+        limit, offset = _normalize_paging(limit, offset)
+        if sort not in BASELINE_SORT_FIELDS:
+            raise ValidationAppError(
+                f"Unsupported sort field '{sort}'. Allowed: {sorted(BASELINE_SORT_FIELDS)}"
+            )
+        filters = [
+            SourceBaseline.organization_id == self.ctx.organization_id,
+            SourceBaseline.deleted_at.is_(None),
+        ]
+        if status:
+            filters.append(SourceBaseline.approval_status == status)
+        if q:
+            pattern = f"%{q}%"
+            filters.append(
+                or_(
+                    SourceBaseline.baseline_key.ilike(pattern),
+                    SourceBaseline.title.ilike(pattern),
+                )
+            )
+        total = (
+            self.db.scalar(select(func.count()).select_from(SourceBaseline).where(*filters)) or 0
+        )
         rows = self.db.scalars(
             select(SourceBaseline)
-            .where(
-                SourceBaseline.organization_id == self.ctx.organization_id,
-                SourceBaseline.deleted_at.is_(None),
-            )
-            .order_by(SourceBaseline.baseline_key, SourceBaseline.version)
+            .where(*filters)
+            .order_by(BASELINE_SORT_FIELDS[sort], SourceBaseline.id)
+            .offset(offset)
+            .limit(limit)
         )
-        return list(rows)
+        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
+
+    def list_baseline_history(
+        self,
+        baseline_id: UUID,
+        *,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> tuple[list[GovernanceAuditEvent], PageMeta]:
+        self.get_baseline(baseline_id)
+        limit, offset = _normalize_paging(limit, offset)
+        filters = [
+            GovernanceAuditEvent.organization_id == self.ctx.organization_id,
+            GovernanceAuditEvent.entity_type == "source_baseline",
+            GovernanceAuditEvent.entity_id == baseline_id,
+        ]
+        total = (
+            self.db.scalar(select(func.count()).select_from(GovernanceAuditEvent).where(*filters))
+            or 0
+        )
+        rows = self.db.scalars(
+            select(GovernanceAuditEvent)
+            .where(*filters)
+            .order_by(GovernanceAuditEvent.created_at.desc())
+            .offset(offset)
+            .limit(limit)
+        )
+        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
 
     def update_baseline(self, baseline_id: UUID, data: BaselineUpdate) -> SourceBaseline:
         row = self.get_baseline(baseline_id)
@@ -200,16 +282,39 @@ class GovernanceService:
         self.db.refresh(row)
         return row
 
-    def list_requirement_mappings(self) -> list[RequirementMapping]:
+    def list_requirement_mappings(
+        self,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+        q: str | None = None,
+    ) -> tuple[list[RequirementMapping], PageMeta]:
+        limit, offset = _normalize_paging(limit, offset)
+        filters = [
+            RequirementMapping.organization_id == self.ctx.organization_id,
+            RequirementMapping.deleted_at.is_(None),
+        ]
+        if q:
+            pattern = f"%{q}%"
+            filters.append(
+                or_(
+                    RequirementMapping.requirement_id.ilike(pattern),
+                    RequirementMapping.module_id.ilike(pattern),
+                    RequirementMapping.requirement_title.ilike(pattern),
+                )
+            )
+        total = (
+            self.db.scalar(select(func.count()).select_from(RequirementMapping).where(*filters))
+            or 0
+        )
         rows = self.db.scalars(
             select(RequirementMapping)
-            .where(
-                RequirementMapping.organization_id == self.ctx.organization_id,
-                RequirementMapping.deleted_at.is_(None),
-            )
+            .where(*filters)
             .order_by(RequirementMapping.requirement_id, RequirementMapping.module_id)
+            .offset(offset)
+            .limit(limit)
         )
-        return list(rows)
+        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
 
     def create_adr(self, data: AdrCreate) -> ArchitectureDecision:
         row = ArchitectureDecision(
@@ -241,16 +346,32 @@ class GovernanceService:
         self.db.refresh(row)
         return row
 
-    def list_adrs(self) -> list[ArchitectureDecision]:
+    def list_adrs(
+        self,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+        status: str | None = None,
+    ) -> tuple[list[ArchitectureDecision], PageMeta]:
+        limit, offset = _normalize_paging(limit, offset)
+        filters = [
+            ArchitectureDecision.organization_id == self.ctx.organization_id,
+            ArchitectureDecision.deleted_at.is_(None),
+        ]
+        if status:
+            filters.append(ArchitectureDecision.status == status)
+        total = (
+            self.db.scalar(select(func.count()).select_from(ArchitectureDecision).where(*filters))
+            or 0
+        )
         rows = self.db.scalars(
             select(ArchitectureDecision)
-            .where(
-                ArchitectureDecision.organization_id == self.ctx.organization_id,
-                ArchitectureDecision.deleted_at.is_(None),
-            )
+            .where(*filters)
             .order_by(ArchitectureDecision.adr_key, ArchitectureDecision.version)
+            .offset(offset)
+            .limit(limit)
         )
-        return list(rows)
+        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_adr(self, adr_id: UUID) -> ArchitectureDecision:
         row = self.db.scalar(
@@ -331,16 +452,34 @@ class GovernanceService:
         self.db.refresh(row)
         return row
 
-    def list_change_requests(self) -> list[GovernanceChangeRequest]:
+    def list_change_requests(
+        self,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+        status: str | None = None,
+    ) -> tuple[list[GovernanceChangeRequest], PageMeta]:
+        limit, offset = _normalize_paging(limit, offset)
+        filters = [
+            GovernanceChangeRequest.organization_id == self.ctx.organization_id,
+            GovernanceChangeRequest.deleted_at.is_(None),
+        ]
+        if status:
+            filters.append(GovernanceChangeRequest.status == status)
+        total = (
+            self.db.scalar(
+                select(func.count()).select_from(GovernanceChangeRequest).where(*filters)
+            )
+            or 0
+        )
         rows = self.db.scalars(
             select(GovernanceChangeRequest)
-            .where(
-                GovernanceChangeRequest.organization_id == self.ctx.organization_id,
-                GovernanceChangeRequest.deleted_at.is_(None),
-            )
+            .where(*filters)
             .order_by(GovernanceChangeRequest.created_at.desc())
+            .offset(offset)
+            .limit(limit)
         )
-        return list(rows)
+        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_change_request(self, change_request_id: UUID) -> GovernanceChangeRequest:
         row = self.db.scalar(
@@ -415,16 +554,31 @@ class GovernanceService:
         self.db.refresh(row)
         return row
 
-    def list_approvals(self) -> list[GovernanceApprovalRecord]:
+    def list_approvals(
+        self,
+        *,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[GovernanceApprovalRecord], PageMeta]:
+        limit, offset = _normalize_paging(limit, offset)
+        filters = [
+            GovernanceApprovalRecord.organization_id == self.ctx.organization_id,
+            GovernanceApprovalRecord.deleted_at.is_(None),
+        ]
+        total = (
+            self.db.scalar(
+                select(func.count()).select_from(GovernanceApprovalRecord).where(*filters)
+            )
+            or 0
+        )
         rows = self.db.scalars(
             select(GovernanceApprovalRecord)
-            .where(
-                GovernanceApprovalRecord.organization_id == self.ctx.organization_id,
-                GovernanceApprovalRecord.deleted_at.is_(None),
-            )
+            .where(*filters)
             .order_by(GovernanceApprovalRecord.decided_at.desc())
+            .offset(offset)
+            .limit(limit)
         )
-        return list(rows)
+        return list(rows), _page_meta(limit=limit, offset=offset, total=int(total))
 
     def list_audit_events(self) -> list[GovernanceAuditEvent]:
         rows = self.db.scalars(

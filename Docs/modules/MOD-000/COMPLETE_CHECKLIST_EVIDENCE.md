@@ -13,8 +13,10 @@ Only items listed below were marked `[x]` in `MASMS_CURSOR_COMPLETE_DEVELOPMENT_
 | CHK-MOD-000-BEAPI-002 | Human-only approve; immutable approved; invalid transitions blocked |
 | CHK-MOD-000-BEAPI-003 | N/A for MOD-000 stub — no async outbox consumers required yet |
 | CHK-MOD-000-BEAPI-004 | expected_version checks + CR idempotency_key |
-| CHK-MOD-000-BEAPI-005 | `/api/v1/governance/*` create/list/get/patch/transitions |
+| CHK-MOD-000-BEAPI-005 | `/api/v1/governance/*` create/list/get/patch/transitions + baseline history |
+| CHK-MOD-000-BEAPI-006 | Paginated list envelopes with limit/offset/filter/sort (baselines) |
 | CHK-MOD-000-BEAPI-007 | `AppError` → structured JSON (`code`, `message`, `correlation_id`) |
+| CHK-MOD-000-BEAPI-008 | OpenAPI examples on BaselineRead + ProblemDetails; route error responses |
 | CHK-MOD-000-CMP-01-01 | `gov_source_baselines` model + Alembic `20260810_0001` |
 | CHK-MOD-000-CMP-01-02 | Data dictionary + model fields (org, owner, version, soft delete, audit) |
 | CHK-MOD-000-CMP-01-03 | Unique (org, baseline_key, version); indexes; optimistic version |
@@ -41,16 +43,18 @@ Only items listed below were marked `[x]` in `MASMS_CURSOR_COMPLETE_DEVELOPMENT_
 | CHK-MOD-000-RDY-001 | No dependencies; none required |
 | CHK-MOD-000-RDY-002 | `docs/governance/` + MVP exclusions referenced in REQUIREMENT_MODULE_MAP |
 | CHK-MOD-000-RDY-004 | Statuses/transitions/approvals/audit defined in domain.py + governance docs |
+| CHK-MOD-000-RDY-005 | `docs/governance/UI_ROLE_VARIANTS.md` variants, screens, action matrix |
 | CHK-MOD-000-RDY-006 | API tests + Docs sample projects available for acceptance scenarios |
 | CHK-MOD-000-SEC-005 | Approve/reject requires `ActorKind.HUMAN` |
 | CHK-MOD-000-SEC-006 | `gov_audit_events` on create/update/transition/approval |
 | CHK-MOD-000-SEC-007 | Audit fields include actor, org, action, entity, reason, source, correlation, timestamp |
-| CHK-MOD-000-WF-001 | Governance docs + domain transition tables |
-| CHK-MOD-000-WF-002 | N/A — no durable waits in MOD-000 stub |
+| CHK-MOD-000-WF-001 | `docs/governance/WORKFLOW.md` triggers/owners/statuses/approvals/evidence/closure |
+| CHK-MOD-000-WF-002 | N/A — no Temporal waits in MOD-000; FastAPI mutations only |
 | CHK-MOD-000-WF-003 | N/A — no LangGraph reasoning in MOD-000 stub |
 | CHK-MOD-000-WF-004 | `GovernanceService` owns mutations |
 | CHK-MOD-000-WF-006 | `X-Correlation-Id` → audit `correlation_id` |
 | CHK-MOD-000-WF-008 | Agent approve blocked with 403; human approve required |
+| CHK-MOD-000-WF-009 | N/A — notifications deferred to MOD-440 (WORKFLOW.md) |
 | PRE-003 | `.cursor/rules/`, `AGENTS.md`, `MANIFEST.json` present |
 | PRE-011 | Python `>=3.12,<3.13` in pyproject; Node `>=22` in package.json; ADR-0002 |
 | PRE-012 | `uv.lock` present; pnpm workspace declared (host Corepack EPERM for pnpm runtime) |

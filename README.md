@@ -7,30 +7,30 @@ Authoritative product inputs live under `Docs/`. Engineering rules live under `.
 
 | Module | Status |
 |---|---|
-| MOD-000 Governance | Draft implementation (docs + API). Human Done approval pending |
-| MOD-010+ | Not started (minimal folder placeholders only) |
+| MOD-000 Governance | In progress (API + baselines UI). Human Done approval pending |
+| MOD-010 Toolchain | Implementation draft (CI, compose, pins, check scripts). AC-901 pending |
+| MOD-020+ | Not started |
 
-Detailed plan task IDs and checkmarks: `MASMS_IMPLEMENTATION_PROGRESS_CHECKLIST.md`  
-Regen: `uv run python scripts/generate_implementation_progress_checklist.py`  
-Module notes: `docs/modules/MOD-000/README.md` and `docs/governance/`.
+Detailed plan task IDs: `MASMS_IMPLEMENTATION_PROGRESS_CHECKLIST.md`  
+Easy hierarchy: `MASMS_PLAIN_MODULE_CHECKLIST.md`  
+Toolchain start guide: `docs/modules/MOD-010/README.md`
 
-## Quick start (API)
-
-```bash
-uv sync
-uv run pytest
-uv run uvicorn masms_api.main:app --app-dir apps/api/src --reload
-```
-
-Optional local dependencies:
+## Quick start (API + web)
 
 ```bash
 docker compose up -d postgres redis
+uv sync
 cp .env.example .env
 uv run alembic upgrade head
+uv run uvicorn masms_api.main:app --app-dir apps/api/src --reload --port 8000
+
+# other terminal
+cp apps/web/.env.example apps/web/.env.local
+npm --prefix apps/web install
+npm --prefix apps/web run dev
 ```
 
-Provisional stack decisions are recorded in `docs/governance/PENDING_DECISIONS.md` and ADRs.
+Quality gate: `powershell -File scripts/dev-check.ps1`
 
 ---
 

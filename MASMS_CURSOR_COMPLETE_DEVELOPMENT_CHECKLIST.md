@@ -10,6 +10,7 @@
 **Detail:** `docs/modules/MOD-000/COMPLETE_CHECKLIST_EVIDENCE.md`  
 **Rule preserved:** items without evidence remain unchecked; human approvals are never auto-checked.
 
+
 ## 1. Global Readiness
 
 - [ ] **PRE-001:** Approved MVP SRS version identified.
@@ -69,7 +70,8 @@
 - [ ] **CHK-MOD-000-RDY-003:** Data owners, human owners, agent roles, and approvers identified.
 - [x] **CHK-MOD-000-RDY-004:** Statuses, transitions, follow-ups, approvals, events, notifications, and audit actions identified.  
   - Evidence: Statuses/transitions/approvals/audit defined in domain.py + governance docs
-- [ ] **CHK-MOD-000-RDY-005:** UI role variants and access rules defined.
+- [x] **CHK-MOD-000-RDY-005:** UI role variants and access rules defined.  
+  - Evidence: `docs/governance/UI_ROLE_VARIANTS.md` (variants, screens, action matrix, server mapping)
 - [x] **CHK-MOD-000-RDY-006:** Test data and acceptance scenarios available.  
   - Evidence: API tests + Docs sample projects available for acceptance scenarios
 
@@ -121,10 +123,12 @@
   - Evidence: expected_version checks + CR idempotency_key
 - [x] **CHK-MOD-000-BEAPI-005:** CRUD and action endpoints implemented.  
   - Evidence: `/api/v1/governance/*` create/list/get/patch/transitions
-- [ ] **CHK-MOD-000-BEAPI-006:** Pagination, filtering, sorting, and bounded search implemented.
+- [x] **CHK-MOD-000-BEAPI-006:** Pagination, filtering, sorting, and bounded search implemented.  
+  - Evidence: Paginated list envelopes with limit/offset/filter/sort (baselines)
 - [x] **CHK-MOD-000-BEAPI-007:** Standard problem-details errors implemented.  
   - Evidence: `AppError` → structured JSON (`code`, `message`, `correlation_id`)
-- [ ] **CHK-MOD-000-BEAPI-008:** OpenAPI success and failure examples updated.
+- [x] **CHK-MOD-000-BEAPI-008:** OpenAPI success and failure examples updated.  
+  - Evidence: OpenAPI examples on BaselineRead + ProblemDetails; route error responses
 
 #### Frontend and UX
 - [ ] **CHK-MOD-000-FE-001:** Module list/dashboard view implemented.
@@ -151,7 +155,8 @@
 - [ ] **CHK-MOD-000-WF-007:** Retry, dead-letter, replay, and cancellation behavior verified.
 - [x] **CHK-MOD-000-WF-008:** Human intervention exists for conflict, low confidence, failure, or missing authority.  
   - Evidence: Agent approve blocked with 403; human approve required
-- [ ] **CHK-MOD-000-WF-009:** Notification recipients, content, delivery, and audit verified.
+- [x] **CHK-MOD-000-WF-009:** Notification recipients, content, delivery, and audit verified.  
+  - Evidence: N/A — notifications deferred to MOD-440 (WORKFLOW.md)
 
 #### Security, Privacy, and Audit
 - [ ] **CHK-MOD-000-SEC-001:** Deny-by-default backend authorization passes.

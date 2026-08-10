@@ -154,4 +154,51 @@ def test_tenant_isolation_on_list(client: TestClient) -> None:
     other_org = "00000000-0000-4000-8000-000000000002"
     listed = client.get("/api/v1/governance/baselines", headers=_headers(org=other_org))
     assert listed.status_code == 200
-    assert listed.json() == []
+    body = listed.json()
+    assert body["items"] == []
+    assert body["page"]["total"] == 0
+
+
+def test_baseline_list_pagination_filter_and_history(client: TestClient) -> None:
+    for key in ("BL-A", "BL-B", "BL-SEARCH"):
+        created = client.post(
+            "/api/v1/governance/baselines",
+            headers=_headers(),
+            json={
+                "baseline_key": key,
+                "title": f"Title {key}",
+                "artifact_path": f"docs/{key}.md",
+                "document_version": "1",
+            },
+        )
+        assert created.status_code == 201, created.text
+
+    page = client.get(
+        "/api/v1/governance/baselines",
+        headers=_headers(),
+        params={"limit": 2, "offset": 0, "sort": "baseline_key"},
+    )
+    assert page.status_code == 200, page.text
+    payload = page.json()
+    assert len(payload["items"]) == 2
+    assert payload["page"]["total"] == 3
+    assert payload["page"]["has_more"] is True
+
+    filtered = client.get(
+        "/api/v1/governance/baselines",
+        headers=_headers(),
+        params={"q": "SEARCH"},
+    )
+    assert filtered.status_code == 200
+    assert filtered.json()["page"]["total"] == 1
+    baseline_id = filtered.json()["items"][0]["id"]
+
+    history = client.get(
+        f"/api/v1/governance/baselines/{baseline_id}/history",
+        headers=_headers(),
+    )
+    assert history.status_code == 200, history.text
+    hist = history.json()
+    assert hist["page"]["total"] >= 1
+    assert hist["items"][0]["entity_type"] == "source_baseline"
+    assert hist["items"][0]["action"] == "create"

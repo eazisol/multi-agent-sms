@@ -35,7 +35,28 @@ class BaselineTransition(BaseModel):
 
 
 class BaselineRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "id": "00000000-0000-4000-8000-000000000301",
+                    "organization_id": "00000000-0000-4000-8000-000000000001",
+                    "baseline_key": "BL-SRS-001",
+                    "title": "MVP SRS",
+                    "artifact_path": (
+                        "Docs/Multi_Agent_Software_House_Management_System_MVP_SRS_v1.0.md"
+                    ),
+                    "document_version": "v1.0",
+                    "classification": "internal",
+                    "approval_status": "draft",
+                    "version": 1,
+                    "created_at": "2026-08-10T12:00:00Z",
+                    "updated_at": "2026-08-10T12:00:00Z",
+                }
+            ]
+        },
+    )
 
     id: UUID
     organization_id: UUID
@@ -169,7 +190,98 @@ class ApprovalRead(BaseModel):
     correlation_id: UUID
 
 
+class AuditEventRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    organization_id: UUID
+    actor_id: UUID
+    actor_kind: str
+    action: str
+    entity_type: str
+    entity_id: UUID
+    entity_version: int | None
+    reason: str | None
+    source: str
+    correlation_id: UUID
+    created_at: datetime
+
+
+class PageMeta(BaseModel):
+    limit: int
+    offset: int
+    total: int
+    has_more: bool
+
+
+class BaselinePage(BaseModel):
+    items: list[BaselineRead]
+    page: PageMeta
+
+
+class RequirementMappingPage(BaseModel):
+    items: list[RequirementMappingRead]
+    page: PageMeta
+
+
+class AdrPage(BaseModel):
+    items: list[AdrRead]
+    page: PageMeta
+
+
+class ChangeRequestPage(BaseModel):
+    items: list[ChangeRequestRead]
+    page: PageMeta
+
+
+class ApprovalPage(BaseModel):
+    items: list[ApprovalRead]
+    page: PageMeta
+
+
+class AuditEventPage(BaseModel):
+    items: list[AuditEventRead]
+    page: PageMeta
+
+
 class ProblemDetails(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "code": "forbidden",
+                    "message": "Only human actors may approve or reject governance records",
+                    "correlation_id": "00000000-0000-4000-8000-000000000999",
+                    "details": None,
+                },
+                {
+                    "code": "conflict",
+                    "message": "Stale version; refresh and retry",
+                    "correlation_id": "00000000-0000-4000-8000-000000000999",
+                    "details": None,
+                },
+                {
+                    "code": "invalid_transition",
+                    "message": "Transition from 'draft' to 'approved' is not allowed",
+                    "correlation_id": "00000000-0000-4000-8000-000000000999",
+                    "details": None,
+                },
+                {
+                    "code": "not_found",
+                    "message": "Source baseline not found",
+                    "correlation_id": "00000000-0000-4000-8000-000000000999",
+                    "details": None,
+                },
+                {
+                    "code": "approval_required",
+                    "message": "Cannot update a record in immutable status 'approved'",
+                    "correlation_id": "00000000-0000-4000-8000-000000000999",
+                    "details": None,
+                },
+            ]
+        }
+    )
+
     code: str
     message: str
     correlation_id: UUID | None = None

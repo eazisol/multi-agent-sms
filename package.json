@@ -6,8 +6,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "web:dev": "pnpm --filter @masms/web dev",
-    "web:build": "pnpm --filter @masms/web build",
-    "web:lint": "pnpm --filter @masms/web lint"
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:lint": "npm --prefix apps/web run lint"
   }
 }

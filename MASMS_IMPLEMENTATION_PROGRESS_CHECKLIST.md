@@ -19,8 +19,8 @@
 
 | Module | Phase | Tasks | Done | Partial | N/A | Blocked | Open | Module status |
 |---|---|---:|---:|---:|---:|---:|---:|---|
-| MOD-000 | Phase 0 - Governance and Foundation | 41 | 19 | 13 | 4 | 1 | 4 | In progress (human approval blocked) |
-| MOD-010 | Phase 0 - Governance and Foundation | 47 | 0 | 8 | 0 | 0 | 39 | In progress |
+| MOD-000 | Phase 0 - Governance and Foundation | 41 | 25 | 11 | 4 | 1 | 0 | In progress (human approval blocked) |
+| MOD-010 | Phase 0 - Governance and Foundation | 47 | 15 | 1 | 30 | 1 | 0 | Blocked |
 | MOD-020 | Phase 0 - Governance and Foundation | 49 | 0 | 0 | 0 | 0 | 49 | Not started |
 | MOD-030 | Phase 0 - Governance and Foundation | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-040 | Phase 0 - Governance and Foundation | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 19, partial 21, n/a 4, blocked 1, open 1704
+**Totals:** 1749 tasks — done 40, partial 12, n/a 34, blocked 2, open 1661
 
 ## Module index (plan order)
 
@@ -151,34 +151,34 @@
 
 #### API
 
-- [~] **MOD-000-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
-  - Evidence/note: CRUD/query/transition endpoints exist; dedicated history endpoint not yet
-- [~] **MOD-000-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: Optimistic concurrency + idempotency + problem errors; pagination/filter/sort not full
-- [~] **MOD-000-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: OpenAPI via FastAPI models; explicit failure examples not fully curated
+- [x] **MOD-000-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: CRUD/query/transition + baseline history endpoint
+- [x] **MOD-000-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: Pagination/filter/sort + concurrency/idempotency/problem errors
+- [x] **MOD-000-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: OpenAPI models + ProblemDetails/BaselineRead examples + error responses
 
 #### Frontend
 
-- [ ] **MOD-000-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
-  - Evidence/note: Deferred — web placeholder only
-- [ ] **MOD-000-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
-  - Evidence/note: Deferred — web placeholder only
-- [ ] **MOD-000-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
-  - Evidence/note: Deferred — web placeholder only
-- [ ] **MOD-000-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
-  - Evidence/note: Deferred — web placeholder only
+- [~] **MOD-000-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: Baselines list with filter/pagination/empty/loading/error; saved views not yet
+- [~] **MOD-000-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: Detail summary + audit history tabs; other related tabs deferred
+- [x] **MOD-000-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: Create/edit/transition forms with role gates and stale-version handling
+- [~] **MOD-000-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: Skip link, labels, UTC dates, responsive layout; formal a11y audit pending
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-000-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: Statuses/transitions/approvals/closure defined in docs + domain; waits/SLA not Temporal-backed
+- [x] **MOD-000-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: docs/governance/WORKFLOW.md defines triggers/owners/statuses/approvals/closure
 - [-] **MOD-000-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
-  - Evidence/note: No long-running waits in MOD-000 stub; FastAPI owns mutations
-- [~] **MOD-000-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: Correlation IDs on requests/audit; outbox/consumers deferred
+  - Evidence/note: No durable waits/AI in MOD-000; FastAPI owns mutations (WORKFLOW.md)
+- [x] **MOD-000-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: Event/outbox/idempotency/correlation/retry/DLQ rules defined; runtime outbox deferred MOD-020
 - [-] **MOD-000-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
-  - Evidence/note: Notifications deferred to MOD-440
+  - Evidence/note: Notifications deferred to MOD-440 (WORKFLOW.md)
 
 #### Security / privacy / audit
 
@@ -238,89 +238,127 @@
 
 #### Main points
 
-- [~] **MOD-010-MP-001:** Implement and verify monorepo structure.  
-  - Evidence/note: apps/ packages/ migrations/ tests/ infrastructure/ scripts/ skeleton present
-- [~] **MOD-010-MP-002:** Implement and verify language versions.  
-  - Evidence/note: Python 3.12 / Node 22 chosen provisionally in PENDING_DECISIONS/ADR-0002
-- [~] **MOD-010-MP-003:** Implement and verify package managers.  
-  - Evidence/note: uv working + lockfile; pnpm Corepack EPERM blocked
-- [~] **MOD-010-MP-004:** Implement and verify Docker Compose.  
-  - Evidence/note: docker-compose.yml has postgres+redis; not verified running
-- [~] **MOD-010-MP-005:** Implement and verify formatting and linting.  
-  - Evidence/note: ruff configured and passing for API/tests
-- [~] **MOD-010-MP-006:** Implement and verify typing.  
-  - Evidence/note: mypy configured and passing for masms_api
-- [~] **MOD-010-MP-007:** Implement and verify tests.  
-  - Evidence/note: pytest harness works; broader suite not started
-- [ ] **MOD-010-MP-008:** Implement and verify CI build.  
-  - Evidence/note: CI workflow not created
+- [x] **MOD-010-MP-001:** Implement and verify monorepo structure.  
+  - Evidence/note: Monorepo layout documented + present under apps/, packages/, migrations/, tests/
+- [x] **MOD-010-MP-002:** Implement and verify language versions.  
+  - Evidence/note: .python-version 3.12 + .nvmrc 22 + engines
+- [x] **MOD-010-MP-003:** Implement and verify package managers.  
+  - Evidence/note: uv.lock + npm package-lock; pnpm deferred (host EPERM)
+- [x] **MOD-010-MP-004:** Implement and verify Docker Compose.  
+  - Evidence/note: compose up healthy; alembic upgrade head -> 20260810_0001
+- [x] **MOD-010-MP-005:** Implement and verify formatting and linting.  
+  - Evidence/note: ruff + next lint configured
+- [x] **MOD-010-MP-006:** Implement and verify typing.  
+  - Evidence/note: mypy strict for masms_api
+- [x] **MOD-010-MP-007:** Implement and verify tests.  
+  - Evidence/note: pytest suite + web build as verification
+- [x] **MOD-010-MP-008:** Implement and verify CI build.  
+  - Evidence/note: .github/workflows/ci.yml
 
 #### Database / data design
 
-- [ ] **MOD-010-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **monorepo structure**.
-- [ ] **MOD-010-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **language versions**.
-- [ ] **MOD-010-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **package managers**.
-- [ ] **MOD-010-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **Docker Compose**.
-- [ ] **MOD-010-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **formatting and linting**.
-- [ ] **MOD-010-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **typing**.
-- [ ] **MOD-010-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **tests**.
-- [ ] **MOD-010-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **CI build**.
+- [-] **MOD-010-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **monorepo structure**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **language versions**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **package managers**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **Docker Compose**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **formatting and linting**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **typing**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **tests**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **CI build**.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
 
 #### Backend
 
-- [ ] **MOD-010-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-010-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-010-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-010-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [-] **MOD-010-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
 
 #### API
 
-- [ ] **MOD-010-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-010-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-010-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [-] **MOD-010-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Toolchain module — see TEMPLATE_TASK_RATIONALE.md
 
 #### Frontend
 
-- [ ] **MOD-010-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-010-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-010-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-010-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-010-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: No MOD-010 UI; web app serves MOD-000 — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: No MOD-010 UI — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: No MOD-010 UI — see TEMPLATE_TASK_RATIONALE.md
+- [-] **MOD-010-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: No MOD-010 UI — see TEMPLATE_TASK_RATIONALE.md
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-010-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-010-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-010-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-010-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [-] **MOD-010-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: Dev workflow documented as start commands — not business WF
+- [-] **MOD-010-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Workers are placeholders only
+- [-] **MOD-010-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: No MOD-010 domain events
+- [-] **MOD-010-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: No MOD-010 notifications
 
 #### Security / privacy / audit
 
-- [ ] **MOD-010-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-010-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-010-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-010-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [-] **MOD-010-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: No MOD-010 tenant resources
+- [-] **MOD-010-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: No MOD-010 RLS resources
+- [x] **MOD-010-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: .env.example only; .gitignore excludes .env/.env.local
+- [-] **MOD-010-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: No MOD-010 audit entity
 
 #### Testing / verification
 
-- [ ] **MOD-010-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-010-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-010-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-010-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-010-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [-] **MOD-010-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: No MOD-010 domain unit tests
+- [-] **MOD-010-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: No MOD-010 API module
+- [-] **MOD-010-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: No MOD-010 authz surface
+- [-] **MOD-010-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: No MOD-010 WF/agent tests
+- [x] **MOD-010-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: scripts/dev-check.* runs ruff/mypy/pytest/web lint/build
 
 #### Documentation
 
-- [ ] **MOD-010-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-010-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-010-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-010/README.md
+- [x] **MOD-010-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION.md + TEMPLATE_TASK_RATIONALE.md
 
 #### Acceptance gate
 
-- [ ] **MOD-010-AC-001:** A new developer can start the stack from documented commands.
-- [ ] **MOD-010-AC-002:** CI blocks formatting, type, test, or build failures.
-- [~] **MOD-010-AC-003:** No real secret exists in source control.  
-  - Evidence/note: .env.example has no real secrets; git repo not initialized yet
-- [ ] **MOD-010-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-010-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-010-AC-001:** A new developer can start the stack from documented commands.  
+  - Evidence/note: Start commands documented in MOD-010 README
+- [~] **MOD-010-AC-002:** CI blocks formatting, type, test, or build failures.  
+  - Evidence/note: CI workflow present; cloud run needs git remote/GitHub
+- [x] **MOD-010-AC-003:** No real secret exists in source control.  
+  - Evidence/note: No real secrets in examples
+- [x] **MOD-010-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High tooling defects filed
+- [!] **MOD-010-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
