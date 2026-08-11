@@ -9,9 +9,12 @@ import { VARIANT_OPTIONS } from "@/lib/roles";
 const NAV = [
   { href: "/clients", label: "Clients" },
   { href: "/queries", label: "Queries" },
+  { href: "/comms", label: "Comms" },
+  { href: "/requirements", label: "Requirements" },
   { href: "/projects", label: "Projects" },
   { href: "/documents", label: "Documents" },
   { href: "/roadmap", label: "Roadmap" },
+  { href: "/tickets", label: "Tickets" },
   { href: "/governance/baselines", label: "Governance" },
 ] as const;
 

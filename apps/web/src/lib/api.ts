@@ -625,3 +625,501 @@ export async function completeMilestone(
   );
   return parse<Milestone>(response);
 }
+
+/* ---- Comms / Requirements / Tickets desks (MOD-220, 230, 300) ---- */
+
+export type Conversation = {
+  id: string;
+  subject: string;
+  channel: string;
+  related_entity_type: string;
+  related_entity_id: string;
+  status: string;
+  classification: string;
+  created_at: string;
+};
+
+export type CommsMessage = {
+  id: string;
+  conversation_id: string;
+  body: string;
+  status: string;
+  classification: string;
+  requires_approval: boolean;
+  approved_by_actor_id: string | null;
+  sent_at: string | null;
+  revision_number: number;
+  created_at: string;
+};
+
+export type Questionnaire = {
+  id: string;
+  code: string;
+  title: string;
+  status: string;
+};
+
+export type QuestionnaireVersion = {
+  id: string;
+  questionnaire_id: string;
+  version_number: number;
+  status: string;
+  questions_json: Array<{
+    key: string;
+    text: string;
+    mandatory: boolean;
+    answer_type: string;
+  }>;
+};
+
+export type CompletenessScore = {
+  id: string;
+  percentage: string | number;
+  meets_threshold: boolean;
+  mandatory_total: number;
+  covered_count: number;
+  gap_question_keys: string[];
+};
+
+export type RequirementsBrief = {
+  id: string;
+  title: string;
+  summary: string;
+  status: string;
+  version_number: number;
+  approved_by_actor_id: string | null;
+};
+
+export type Ticket = {
+  id: string;
+  project_id: string;
+  phase_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  owner_actor_id: string | null;
+  queue_code: string | null;
+  estimate_points: string | number | null;
+  acceptance_criteria: string | null;
+  definition_of_done: string | null;
+  version: number;
+  reopen_reason: string | null;
+  created_at: string;
+};
+
+export type TicketCheck = {
+  id: string;
+  check_code: string;
+  label: string;
+  is_required: boolean;
+  is_satisfied: boolean;
+};
+
+export type TicketEvidence = {
+  id: string;
+  evidence_type: string;
+  title: string;
+  created_at: string;
+};
+
+export async function createConversation(
+  session: SessionState,
+  body: {
+    subject: string;
+    related_entity_type: string;
+    related_entity_id: string;
+    channel?: string;
+    classification?: string;
+    project_id?: string;
+  },
+): Promise<Conversation> {
+  const response = await fetch(`${apiBase()}/api/v1/comms/conversations`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Conversation>(response);
+}
+
+export async function createCommsMessage(
+  session: SessionState,
+  body: { conversation_id: string; body: string; classification?: string },
+): Promise<CommsMessage> {
+  const response = await fetch(`${apiBase()}/api/v1/comms/messages`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<CommsMessage>(response);
+}
+
+export async function listConversationMessages(
+  session: SessionState,
+  conversationId: string,
+): Promise<CommsMessage[]> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/comms/conversations/${conversationId}/messages`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<CommsMessage[]>(response);
+}
+
+export async function addMessageRecipient(
+  session: SessionState,
+  body: { message_id: string; address: string; role?: string },
+): Promise<{ id: string }> {
+  const response = await fetch(`${apiBase()}/api/v1/comms/recipients`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function approveCommsMessage(
+  session: SessionState,
+  messageId: string,
+): Promise<CommsMessage> {
+  const response = await fetch(`${apiBase()}/api/v1/comms/messages/${messageId}/approve`, {
+    method: "POST",
+    headers: headers(session),
+  });
+  return parse<CommsMessage>(response);
+}
+
+export async function sendCommsMessage(
+  session: SessionState,
+  messageId: string,
+): Promise<CommsMessage> {
+  const response = await fetch(`${apiBase()}/api/v1/comms/messages/${messageId}/send`, {
+    method: "POST",
+    headers: headers(session),
+  });
+  return parse<CommsMessage>(response);
+}
+
+export async function createQuestionnaire(
+  session: SessionState,
+  body: { code: string; title: string },
+): Promise<Questionnaire> {
+  const response = await fetch(`${apiBase()}/api/v1/requirements/questionnaires`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Questionnaire>(response);
+}
+
+export async function createQuestionnaireVersion(
+  session: SessionState,
+  body: {
+    questionnaire_id: string;
+    questions: Array<{
+      key: string;
+      text: string;
+      mandatory?: boolean;
+      answer_type?: string;
+    }>;
+  },
+): Promise<QuestionnaireVersion> {
+  const response = await fetch(`${apiBase()}/api/v1/requirements/questionnaire-versions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<QuestionnaireVersion>(response);
+}
+
+export async function publishQuestionnaireVersion(
+  session: SessionState,
+  versionId: string,
+): Promise<QuestionnaireVersion> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/requirements/questionnaire-versions/${versionId}/publish`,
+    { method: "POST", headers: headers(session) },
+  );
+  return parse<QuestionnaireVersion>(response);
+}
+
+export async function upsertRequirementAnswer(
+  session: SessionState,
+  body: {
+    questionnaire_version_id: string;
+    related_entity_type: string;
+    related_entity_id: string;
+    question_key: string;
+    answer_text?: string;
+    project_id?: string;
+  },
+): Promise<{ id: string }> {
+  const response = await fetch(`${apiBase()}/api/v1/requirements/answers`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function computeCompleteness(
+  session: SessionState,
+  body: {
+    questionnaire_version_id: string;
+    related_entity_type: string;
+    related_entity_id: string;
+  },
+): Promise<CompletenessScore> {
+  const response = await fetch(`${apiBase()}/api/v1/requirements/completeness-scores`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<CompletenessScore>(response);
+}
+
+export async function createClarification(
+  session: SessionState,
+  body: {
+    questionnaire_version_id: string;
+    related_entity_type: string;
+    related_entity_id: string;
+    question_key: string;
+    question_text: string;
+    owner_actor_id: string;
+  },
+): Promise<{ id: string }> {
+  const response = await fetch(`${apiBase()}/api/v1/requirements/clarifications`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function createRequirementsBrief(
+  session: SessionState,
+  body: {
+    related_entity_type: string;
+    related_entity_id: string;
+    title: string;
+    summary: string;
+    questionnaire_version_id?: string;
+    completeness_score_id?: string;
+    project_id?: string;
+  },
+): Promise<RequirementsBrief> {
+  const response = await fetch(`${apiBase()}/api/v1/requirements/briefs`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<RequirementsBrief>(response);
+}
+
+export async function approveRequirementsBrief(
+  session: SessionState,
+  briefId: string,
+): Promise<RequirementsBrief> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/requirements/briefs/${briefId}/approve`,
+    { method: "POST", headers: headers(session) },
+  );
+  return parse<RequirementsBrief>(response);
+}
+
+export async function listRequirementsBriefs(
+  session: SessionState,
+  relatedEntityType: string,
+  relatedEntityId: string,
+): Promise<RequirementsBrief[]> {
+  const query = new URLSearchParams({
+    related_entity_type: relatedEntityType,
+    related_entity_id: relatedEntityId,
+  });
+  const response = await fetch(`${apiBase()}/api/v1/requirements/briefs?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<RequirementsBrief[]>(response);
+}
+
+export async function createTicket(
+  session: SessionState,
+  body: {
+    project_id: string;
+    code: string;
+    title: string;
+    description?: string;
+    ticket_type?: string;
+    priority?: string;
+    phase_id?: string;
+    owner_actor_id?: string;
+    queue_code?: string;
+    estimate_points?: string;
+    acceptance_criteria?: string;
+    definition_of_done?: string;
+    requirement_id?: string;
+  },
+): Promise<Ticket> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Ticket>(response);
+}
+
+export async function listTickets(
+  session: SessionState,
+  projectId: string,
+): Promise<Ticket[]> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/projects/${projectId}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<Ticket[]>(response);
+}
+
+export async function updateTicket(
+  session: SessionState,
+  ticketId: string,
+  body: {
+    title?: string;
+    description?: string;
+    priority?: string;
+    phase_id?: string;
+    owner_actor_id?: string;
+    queue_code?: string;
+    estimate_points?: string;
+    acceptance_criteria?: string;
+    definition_of_done?: string;
+    expected_version: number;
+  },
+): Promise<Ticket> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}`, {
+    method: "PATCH",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Ticket>(response);
+}
+
+export async function transitionTicket(
+  session: SessionState,
+  ticketId: string,
+  body: {
+    next_status: string;
+    reason?: string;
+    blocked_reason?: string;
+    expected_version: number;
+  },
+): Promise<Ticket> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}/transitions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Ticket>(response);
+}
+
+export async function reopenTicket(
+  session: SessionState,
+  ticketId: string,
+  body: {
+    reason: string;
+    evidence_id: string;
+    next_status?: string;
+    expected_version: number;
+  },
+): Promise<Ticket> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}/reopen`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Ticket>(response);
+}
+
+export async function linkTicketRequirement(
+  session: SessionState,
+  body: { ticket_id: string; requirement_id: string },
+): Promise<{ id: string }> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/requirement-links`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function addTicketEvidence(
+  session: SessionState,
+  body: {
+    ticket_id: string;
+    evidence_type: string;
+    title: string;
+    summary?: string;
+  },
+): Promise<TicketEvidence> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/evidence`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<TicketEvidence>(response);
+}
+
+export async function listReadinessChecks(
+  session: SessionState,
+  ticketId: string,
+): Promise<TicketCheck[]> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/tickets/${ticketId}/readiness-checks`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<TicketCheck[]>(response);
+}
+
+export async function satisfyReadinessCheck(
+  session: SessionState,
+  checkId: string,
+  notes?: string,
+): Promise<TicketCheck> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/tickets/readiness-checks/${checkId}/satisfy`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify({ notes }),
+    },
+  );
+  return parse<TicketCheck>(response);
+}
+
+export async function listDoneChecks(
+  session: SessionState,
+  ticketId: string,
+): Promise<TicketCheck[]> {
+  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}/done-checks`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<TicketCheck[]>(response);
+}
+
+export async function satisfyDoneCheck(
+  session: SessionState,
+  checkId: string,
+  notes?: string,
+): Promise<TicketCheck> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/tickets/done-checks/${checkId}/satisfy`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify({ notes }),
+    },
+  );
+  return parse<TicketCheck>(response);
+}

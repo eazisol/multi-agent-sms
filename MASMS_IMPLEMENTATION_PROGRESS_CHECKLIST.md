@@ -31,12 +31,12 @@
 | MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 7 | 4 | 1 | 0 | Blocked |
 | MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
+| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
+| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 35 | 8 | 3 | 1 | 0 | Blocked |
 | MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 33 | 9 | 2 | 1 | 0 | Blocked |
 | MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 29 | 8 | 7 | 1 | 0 | Blocked |
+| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 33 | 8 | 3 | 1 | 0 | Blocked |
 | MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 0 | 0 | 0 | 0 | 41 | Not started |
 | MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 495, partial 136, n/a 155, blocked 18, open 945
+**Totals:** 1749 tasks — done 507, partial 136, n/a 143, blocked 18, open 945
 
 ## Module index (plan order)
 
@@ -1745,14 +1745,14 @@
 
 #### Frontend
 
-- [-] **MOD-220-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
-  - Evidence/note: FE deferred
-- [-] **MOD-220-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
-  - Evidence/note: FE deferred
-- [-] **MOD-220-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
-  - Evidence/note: FE deferred
-- [-] **MOD-220-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
-  - Evidence/note: FE deferred
+- [x] **MOD-220-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: comms desk /comms
+- [x] **MOD-220-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: comms desk /comms
+- [x] **MOD-220-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: comms desk /comms
+- [x] **MOD-220-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: comms desk /comms
 
 #### Workflow / agent / events / notifications
 
@@ -1872,14 +1872,14 @@
 
 #### Frontend
 
-- [-] **MOD-230-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
-  - Evidence/note: FE deferred
-- [-] **MOD-230-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
-  - Evidence/note: FE deferred
-- [-] **MOD-230-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
-  - Evidence/note: FE deferred
-- [-] **MOD-230-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
-  - Evidence/note: FE deferred
+- [x] **MOD-230-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: requirements desk /requirements
+- [x] **MOD-230-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: requirements desk /requirements
+- [x] **MOD-230-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: requirements desk /requirements
+- [x] **MOD-230-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: requirements desk /requirements
 
 #### Workflow / agent / events / notifications
 
@@ -2398,14 +2398,14 @@
 
 #### Frontend
 
-- [-] **MOD-300-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
-  - Evidence/note: tickets desk deferred
-- [-] **MOD-300-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
-  - Evidence/note: tickets desk deferred
-- [-] **MOD-300-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
-  - Evidence/note: tickets desk deferred
-- [-] **MOD-300-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
-  - Evidence/note: tickets desk deferred
+- [x] **MOD-300-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: tickets desk /tickets
+- [x] **MOD-300-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: tickets desk /tickets
+- [x] **MOD-300-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: tickets desk /tickets
+- [x] **MOD-300-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: tickets desk /tickets
 
 #### Workflow / agent / events / notifications
 

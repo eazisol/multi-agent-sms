@@ -41,12 +41,12 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 10 | MOD-140 | Blocked | 31 | 8 | 0 |
 | 11 | MOD-200 | Blocked | 31 | 7 | 0 |
 | 12 | MOD-210 | Blocked | 31 | 8 | 0 |
-| 13 | MOD-220 | Blocked | 27 | 8 | 0 |
-| 14 | MOD-230 | Blocked | 27 | 8 | 0 |
+| 13 | MOD-220 | Blocked | 31 | 8 | 0 |
+| 14 | MOD-230 | Blocked | 31 | 8 | 0 |
 | 15 | MOD-240 | Blocked | 35 | 8 | 0 |
 | 16 | MOD-250 | Blocked | 33 | 9 | 0 |
 | 17 | MOD-260 | Blocked | 31 | 8 | 0 |
-| 18 | MOD-300 | Blocked | 29 | 8 | 0 |
+| 18 | MOD-300 | Blocked | 33 | 8 | 0 |
 | 19 | MOD-310 | Not started | 0 | 0 | 41 |
 | 20 | MOD-320 | Not started | 0 | 0 | 43 |
 | 21 | MOD-330 | Not started | 0 | 0 | 45 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 495 · partial 136 · n/a 155 · blocked 18 · open 945
+**All tasks:** 1749 · done 507 · partial 136 · n/a 143 · blocked 18 · open 945
 
 ## Phase 0 - Governance and Foundation
 
@@ -916,11 +916,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-220-API-002`)
   - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-220-API-003`)
 
-- [~] **Frontend**
-  - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-220-FE-001`)
-  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-220-FE-002`)
-  - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-220-FE-003`)
-  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-220-FE-004`)
+- [x] **Frontend**
+  - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-220-FE-001`)
+  - [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-220-FE-002`)
+  - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-220-FE-003`)
+  - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-220-FE-004`)
 
 - [~] **Workflow / agents / events**
   - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-220-WF-001`)
@@ -981,11 +981,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-230-API-002`)
   - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-230-API-003`)
 
-- [~] **Frontend**
-  - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-230-FE-001`)
-  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-230-FE-002`)
-  - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-230-FE-003`)
-  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-230-FE-004`)
+- [x] **Frontend**
+  - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-230-FE-001`)
+  - [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-230-FE-002`)
+  - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-230-FE-003`)
+  - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-230-FE-004`)
 
 - [~] **Workflow / agents / events**
   - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-230-WF-001`)
@@ -1251,11 +1251,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-300-API-002`)
   - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-300-API-003`)
 
-- [~] **Frontend**
-  - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-300-FE-001`)
-  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-300-FE-002`)
-  - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-300-FE-003`)
-  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-300-FE-004`)
+- [x] **Frontend**
+  - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-300-FE-001`)
+  - [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-300-FE-002`)
+  - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-300-FE-003`)
+  - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-300-FE-004`)
 
 - [~] **Workflow / agents / events**
   - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-300-WF-001`)
