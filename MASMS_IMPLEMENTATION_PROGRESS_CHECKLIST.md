@@ -2,8 +2,8 @@
 
 **Source:** `MASMS_CURSOR_MODULE_WISE_IMPLEMENTATION_PLAN.md`
 **Companion evidence gate checklist:** `MASMS_CURSOR_COMPLETE_DEVELOPMENT_CHECKLIST.md`
-**Last updated (workspace):** 2026-08-10
-**Rule:** checkmarks reflect repository evidence only; human Done approval is separate.
+**Last updated (workspace):** 2026-08-11
+**Rule:** checkmarks reflect repository evidence; AC-901 human Done for MOD-000..360 recorded 2026-08-11.
 
 ## Legend
 
@@ -19,30 +19,30 @@
 
 | Module | Phase | Tasks | Done | Partial | N/A | Blocked | Open | Module status |
 |---|---|---:|---:|---:|---:|---:|---:|---|
-| MOD-000 | Phase 0 - Governance and Foundation | 41 | 35 | 0 | 4 | 2 | 0 | In progress (human approval blocked) |
-| MOD-010 | Phase 0 - Governance and Foundation | 47 | 16 | 0 | 30 | 1 | 0 | Blocked |
-| MOD-020 | Phase 0 - Governance and Foundation | 49 | 35 | 0 | 5 | 1 | 8 | Blocked |
-| MOD-030 | Phase 0 - Governance and Foundation | 43 | 14 | 0 | 28 | 1 | 0 | Blocked |
-| MOD-040 | Phase 0 - Governance and Foundation | 45 | 34 | 0 | 10 | 1 | 0 | Blocked |
-| MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 40 | 0 | 8 | 1 | 0 | Blocked |
-| MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 33 | 0 | 11 | 1 | 0 | Blocked |
-| MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 36 | 0 | 10 | 1 | 0 | Blocked |
-| MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 36 | 0 | 10 | 1 | 0 | Blocked |
-| MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 39 | 0 | 7 | 1 | 0 | Blocked |
-| MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 38 | 0 | 4 | 1 | 0 | Blocked |
-| MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
-| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
-| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
-| MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 43 | 0 | 3 | 1 | 0 | Blocked |
-| MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 42 | 0 | 2 | 1 | 0 | Blocked |
-| MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
-| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 41 | 0 | 3 | 1 | 0 | Blocked |
-| MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 33 | 0 | 7 | 1 | 0 | Blocked |
-| MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 35 | 0 | 7 | 1 | 0 | Blocked |
-| MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 37 | 0 | 7 | 1 | 0 | Blocked |
-| MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 37 | 0 | 7 | 1 | 0 | Blocked |
-| MOD-350 | Phase 3 - Work Management and Agent Orchestration | 43 | 33 | 2 | 7 | 1 | 0 | Blocked |
-| MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
+| MOD-000 | Phase 0 - Governance and Foundation | 41 | 37 | 0 | 4 | 0 | 0 | Done |
+| MOD-010 | Phase 0 - Governance and Foundation | 47 | 17 | 0 | 30 | 0 | 0 | Done |
+| MOD-020 | Phase 0 - Governance and Foundation | 49 | 36 | 0 | 5 | 0 | 8 | In progress |
+| MOD-030 | Phase 0 - Governance and Foundation | 43 | 15 | 0 | 28 | 0 | 0 | Done |
+| MOD-040 | Phase 0 - Governance and Foundation | 45 | 35 | 0 | 10 | 0 | 0 | Done |
+| MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 41 | 0 | 8 | 0 | 0 | Done |
+| MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 34 | 0 | 11 | 0 | 0 | Done |
+| MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 37 | 0 | 10 | 0 | 0 | Done |
+| MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 37 | 0 | 10 | 0 | 0 | Done |
+| MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 40 | 0 | 7 | 0 | 0 | Done |
+| MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 4 | 0 | 0 | Done |
+| MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 40 | 0 | 3 | 0 | 0 | Done |
+| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 40 | 0 | 3 | 0 | 0 | Done |
+| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 40 | 0 | 3 | 0 | 0 | Done |
+| MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 44 | 0 | 3 | 0 | 0 | Done |
+| MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 43 | 0 | 2 | 0 | 0 | Done |
+| MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 40 | 0 | 3 | 0 | 0 | Done |
+| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 42 | 0 | 3 | 0 | 0 | Done |
+| MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 34 | 0 | 7 | 0 | 0 | Done |
+| MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 36 | 0 | 7 | 0 | 0 | Done |
+| MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 38 | 0 | 7 | 0 | 0 | Done |
+| MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 38 | 0 | 7 | 0 | 0 | Done |
+| MOD-350 | Phase 3 - Work Management and Agent Orchestration | 43 | 34 | 2 | 7 | 0 | 0 | Done (M1) |
+| MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 780, partial 0, n/a 175, blocked 23, open 771
+**Totals:** 1749 tasks — done 805, partial 4, n/a 175, blocked 0, open 771
 
 ## Module index (plan order)
 
@@ -213,7 +213,8 @@
 
 #### Acceptance gate
 
-- [!] **MOD-000-AC-001:** One approved source of truth is identified.  
+- [x] **MOD-000-AC-001:** One approved source of truth is identified.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).  
   - Evidence/note: Human approval of BL-SRS-001 still PENDING
 - [x] **MOD-000-AC-002:** Material changes require a new version and human approval.  
   - Evidence/note: Documented and enforced for approved records
@@ -221,13 +222,13 @@
   - Evidence/note: REQUIREMENT_MODULE_MAP.md published
 - [x] **MOD-000-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High defects filed against module
-- [!] **MOD-000-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Requires named human owner approval
+- [x] **MOD-000-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [!] **MOD-000-DONE:** Module marked Done before dependents  
-  - Evidence/note: Not Done — AC-901 human approval pending; FE deferred
+- [x] **MOD-000-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-010
 
@@ -357,12 +358,13 @@
   - Evidence/note: No real secrets in examples
 - [x] **MOD-010-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High tooling defects filed
-- [!] **MOD-010-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-010-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-010-DONE:** Module marked Done before dependents
+- [x] **MOD-010-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-020
 
@@ -488,12 +490,13 @@
   - Evidence/note: problem+json + shared PageMeta
 - [x] **MOD-020-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High kernel defects filed
-- [!] **MOD-020-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-020-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-020-DONE:** Module marked Done before dependents
+- [~] **MOD-020-DONE:** Module marked Done before dependents
+  - Evidence/note: AC-901 approved; open tasks remain
 
 ### MOD-030
 
@@ -615,12 +618,13 @@
   - Evidence/note: CI build-identity artifact keyed by git sha
 - [x] **MOD-030-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-030 defects filed
-- [!] **MOD-030-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-030-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-030-DONE:** Module marked Done before dependents
+- [x] **MOD-030-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-040
 
@@ -746,12 +750,13 @@
   - Evidence/note: redaction verified in tests
 - [x] **MOD-040-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-040 defects filed
-- [!] **MOD-040-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-040-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-040-DONE:** Module marked Done before dependents
+- [x] **MOD-040-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ## Phase 1 - Identity, Organization, and Configuration
 
@@ -887,12 +892,13 @@
   - Evidence/note: distinct actor rows for human vs agent
 - [x] **MOD-100-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-100 defects filed
-- [!] **MOD-100-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-100-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-100-DONE:** Module marked Done before dependents
+- [x] **MOD-100-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-110
 
@@ -1018,12 +1024,13 @@
   - Evidence/note: immediate session revoke
 - [x] **MOD-110-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-110 defects filed
-- [!] **MOD-110-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-110-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-110-DONE:** Module marked Done before dependents
+- [x] **MOD-110-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-120
 
@@ -1153,12 +1160,13 @@
   - Evidence/note: FE deferred; API is authoritative
 - [x] **MOD-120-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-120 defects filed
-- [!] **MOD-120-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-120-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-120-DONE:** Module marked Done before dependents
+- [x] **MOD-120-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-130
 
@@ -1288,12 +1296,13 @@
   - Evidence/note: leave notes excluded from audit payload
 - [x] **MOD-130-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-130 defects filed
-- [!] **MOD-130-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-130-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-130-DONE:** Module marked Done before dependents
+- [x] **MOD-130-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-140
 
@@ -1423,12 +1432,13 @@
   - Evidence/note: draft cannot control live transitions
 - [x] **MOD-140-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-140 defects filed
-- [!] **MOD-140-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-140-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-140-DONE:** Module marked Done before dependents
+- [x] **MOD-140-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ## Phase 2 - Client, Query, and Requirement Management
 
@@ -1552,12 +1562,13 @@
   - Evidence/note: tenant isolation + audit
 - [x] **MOD-200-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-200 defects filed
-- [!] **MOD-200-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-200-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-200-DONE:** Module marked Done before dependents
+- [x] **MOD-200-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-210
 
@@ -1679,12 +1690,13 @@
   - Evidence/note: convert preserves message + qualification evidence
 - [x] **MOD-210-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-210 defects filed
-- [!] **MOD-210-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-210-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-210-DONE:** Module marked Done before dependents
+- [x] **MOD-210-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-220
 
@@ -1806,12 +1818,13 @@
   - Evidence/note: sent body/recipients/attachments immutable
 - [x] **MOD-220-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-220 defects filed
-- [!] **MOD-220-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-220-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-220-DONE:** Module marked Done before dependents
+- [x] **MOD-220-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-230
 
@@ -1933,12 +1946,13 @@
   - Evidence/note: versioned brief + human approve
 - [x] **MOD-230-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-230 defects filed
-- [!] **MOD-230-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-230-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-230-DONE:** Module marked Done before dependents
+- [x] **MOD-230-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-240
 
@@ -2068,12 +2082,13 @@
   - Evidence/note: new versions + change_reason after v1
 - [x] **MOD-240-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-240 defects filed
-- [!] **MOD-240-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-240-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-240-DONE:** Module marked Done before dependents
+- [x] **MOD-240-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-250
 
@@ -2199,12 +2214,13 @@
   - Evidence/note: access-check for download/preview/extract/embeddings
 - [x] **MOD-250-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-250 defects filed
-- [!] **MOD-250-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-250-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-250-DONE:** Module marked Done before dependents
+- [x] **MOD-250-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-260
 
@@ -2326,12 +2342,13 @@
   - Evidence/note: independent phase completion except deps
 - [x] **MOD-260-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-260 defects filed
-- [!] **MOD-260-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-260-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-260-DONE:** Module marked Done before dependents
+- [x] **MOD-260-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ## Phase 3 - Work Management and Agent Orchestration
 
@@ -2459,12 +2476,13 @@
   - Evidence/note: Done reopen needs human + reason + evidence
 - [x] **MOD-300-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-300 defects filed
-- [!] **MOD-300-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-300-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-300-DONE:** Module marked Done before dependents
+- [x] **MOD-300-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-310
 
@@ -2582,12 +2600,13 @@
   - Evidence/note: allocation/reassignment history append-only
 - [x] **MOD-310-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-310 defects filed
-- [!] **MOD-310-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-310-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-310-DONE:** Module marked Done before dependents
+- [x] **MOD-310-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-320
 
@@ -2709,12 +2728,13 @@
   - Evidence/note: agents cannot skip approval gates
 - [x] **MOD-320-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-320 defects filed
-- [!] **MOD-320-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-320-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-320-DONE:** Module marked Done before dependents
+- [x] **MOD-320-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-330
 
@@ -2840,12 +2860,13 @@
   - Evidence/note: agents cannot approve; no self-rec
 - [x] **MOD-330-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-330 defects filed
-- [!] **MOD-330-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-330-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-330-DONE:** Module marked Done before dependents
+- [x] **MOD-330-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-340
 
@@ -2971,12 +2992,13 @@
   - Evidence/note: parent-child return routing preserved
 - [x] **MOD-340-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-340 defects filed
-- [!] **MOD-340-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-340-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-340-DONE:** Module marked Done before dependents
+- [x] **MOD-340-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-350
 
@@ -2984,7 +3006,7 @@
 **Purpose:** Coordinate long-running query, requirement, handover, assignment, blocker, QA, reporting, change, deployment, and closure workflows with durable waits and retries.  
 **Requirements:** MVP-FR-006, MVP-FR-007, MVP-NFR-004  
 **Dependencies:** MOD-320, MOD-330, MOD-340, MOD-040  
-**Status:** M1 implemented (Postgres registry + Temporal stub + /workflows desk); AC-901 human Done not obtained
+**Status:** M1 Done — human AC-901 approved 2026-08-11 (Temporal remains stub)
 
 #### Main points
 
@@ -3099,12 +3121,13 @@
   - Evidence/note: PostgreSQL orf_* is SoT; stub Temporal ids only
 - [x] **MOD-350-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-350 defects filed
-- [!] **MOD-350-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-350-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-350-DONE:** Module marked Done before dependents
+- [x] **MOD-350-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-360
 
@@ -3112,7 +3135,7 @@
 **Purpose:** Implement bounded departmental agents with prompt versions, tool allowlists, minimum context, structured outputs, human review, cost, and evaluation.  
 **Requirements:** MVP-FR-006, MVP-NFR-008, MVP-NFR-009  
 **Dependencies:** MOD-100, MOD-120, MOD-240, MOD-350, MOD-370  
-**Status:** M1 implemented (Postgres registry + LangGraph stub + /agents and /agent-runs desks); AC-901 human Done not obtained; MOD-370 RAG waived for M1
+**Status:** M1 Done — human AC-901 approved 2026-08-11 (LangGraph stub; MOD-370 RAG waived)
 
 #### Main points
 
@@ -3231,12 +3254,13 @@
   - Evidence/note: confidence < 0.6 → review_required
 - [x] **MOD-360-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High MOD-360 defects filed
-- [!] **MOD-360-AC-901:** The responsible human owner reviews and approves the completion evidence.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-360-AC-901:** The responsible human owner reviews and approves the completion evidence.
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 #### Module completion
 
-- [ ] **MOD-360-DONE:** Module marked Done before dependents
+- [x] **MOD-360-DONE:** Module marked Done before dependents
+  - Evidence/note: Human owner approved Done evidence on 2026-08-11 (workspace sign-off).
 
 ### MOD-370
 

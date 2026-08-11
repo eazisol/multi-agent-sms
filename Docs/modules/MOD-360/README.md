@@ -1,7 +1,7 @@
 # MOD-360 — LangGraph Agent Runtime, Agent Runs, Tools, and Human Supervision
 
 **Status:** Implementation draft (M1 registry + stub adapter + ops desks)  
-**Human Done (AC-901):** NOT obtained
+**Human Done (AC-901):** Approved 2026-08-11 by workspace owner
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Persist approved agent definitions, prompt versions, tool policies, context prof
 - MOD-370 RAG is waived for M1: context profiles are stored stubs only.
 - Agents mutate only `agr_*` (+ outbox/audit), not other business tables.
 - Frontend desks list definitions and runs — not a full agent studio.
-- AC-901 remains blocked pending human review.
+- AC-901 human Done approved 2026-08-11 by workspace owner.
 
 ## M1 delivered
 

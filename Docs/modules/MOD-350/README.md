@@ -1,7 +1,7 @@
 # MOD-350 — Temporal Orchestrator and Durable Business Workflows
 
 **Status:** Implementation draft (M1 registry + stub adapter + ops desk)  
-**Human Done (AC-901):** NOT obtained
+**Human Done (AC-901):** Approved 2026-08-11 by workspace owner
 
 ## Purpose
 

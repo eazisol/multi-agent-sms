@@ -11,6 +11,6 @@
 | QA-004 | N/A | No live Temporal worker suite in M1 |
 | BE-003 | partial | Outbox written; publisher runtime separate |
 | AC-001 | blocked | Requires real Temporal durability |
-| AC-901 | blocked | Human Done not obtained |
+| AC-901 | done | Human owner approved 2026-08-11 |
 
 Catalog enforcement and Postgres-as-SoT live in `orchestrator.domain` / `OrchestratorService`.
