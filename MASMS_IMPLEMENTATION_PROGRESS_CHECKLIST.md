@@ -3,7 +3,7 @@
 **Source:** `MASMS_CURSOR_MODULE_WISE_IMPLEMENTATION_PLAN.md`
 **Companion evidence gate checklist:** `MASMS_CURSOR_COMPLETE_DEVELOPMENT_CHECKLIST.md`
 **Last updated (workspace):** 2026-08-11
-**Rule:** checkmarks reflect repository evidence; AC-901 human Done for MOD-000..360 recorded 2026-08-11.
+**Rule:** checkmarks reflect repository evidence; AC-901 human Done for MOD-000..370, MOD-400, and MOD-410..430 recorded 2026-08-11.
 
 ## Legend
 
@@ -43,11 +43,11 @@
 | MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 38 | 0 | 7 | 0 | 0 | Done |
 | MOD-350 | Phase 3 - Work Management and Agent Orchestration | 43 | 34 | 2 | 7 | 0 | 0 | Done (M1) |
 | MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
-| MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
-| MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
+| MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
+| MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
-| MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 33 | 2 | 7 | 1 | 0 | Blocked |
-| MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 36 | 2 | 8 | 1 | 0 | Blocked |
+| MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 34 | 2 | 7 | 0 | 0 | Done (M1) |
+| MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 37 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-450 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-460 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -3276,7 +3276,7 @@
 **Purpose:** Provide approved, effective, versioned, owned, permission-controlled company and project knowledge with source citations and conflict handling.  
 **Requirements:** MVP-FR-010, MVP-NFR-008, MVP-NFR-009  
 **Dependencies:** MOD-250, MOD-120, MOD-040  
-**Status:** M1 implemented (Postgres registry + stub retrieval + `/knowledge` desk); AC-901 human Done not obtained; live embeddings/pgvector deferred
+**Status:** M1 Done — human AC-901 approved 2026-08-11 (stub retrieval; live embeddings/pgvector deferred)
 
 #### Main points
 
@@ -3395,12 +3395,12 @@
   - Evidence/note: draft/unactivated excluded in test
 - [x] **MOD-370-AC-900:** Crit/High cleared.  
   - Evidence/note: none filed
-- [!] **MOD-370-AC-901:** Human owner approval.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-370-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approved 2026-08-11
 
 #### Module completion
 
-- [ ] **MOD-370-DONE:** Module marked Done before dependents
+- [x] **MOD-370-DONE:** Module marked Done before dependents
 
 ### MOD-400
 
@@ -3408,7 +3408,7 @@
 **Purpose:** Create requirement-linked test cases and execution records for functional, negative, boundary, validation, permission, integration, concurrency, regression, browser, and device testing.  
 **Requirements:** MVP-FR-009, MVP-FR-013  
 **Dependencies:** MOD-240, MOD-300, MOD-360  
-**Status:** M1 Done — AC-901 blocked pending human approval
+**Status:** M1 Done — human AC-901 approved 2026-08-11
 
 #### Main points
 
@@ -3527,12 +3527,12 @@
   - Evidence/note: evidence inherits run env/build
 - [x] **MOD-400-AC-900:** Crit/High cleared.  
   - Evidence/note: none filed
-- [!] **MOD-400-AC-901:** Human owner approval.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-400-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approved 2026-08-11
 
 #### Module completion
 
-- [ ] **MOD-400-DONE:** Module marked Done before dependents
+- [x] **MOD-400-DONE:** Module marked Done before dependents
 
 ### MOD-410
 
@@ -3672,7 +3672,7 @@
 **Purpose:** Manage project risks and formal changes to approved scope, requirements, design, timeline, cost, resource, security, data, integration, and release plans.  
 **Requirements:** MVP-FR-008, MVP-FR-013  
 **Dependencies:** MOD-240, MOD-260, MOD-300, MOD-330, MOD-340  
-**Status:** M1 Done — AC-901 blocked pending human approval
+**Status:** M1 Done — human AC-901 approved 2026-08-11
 
 #### Main points
 
@@ -3787,12 +3787,12 @@
   - Evidence/note: decision fields on CR + approval rows
 - [x] **MOD-420-AC-900:** Crit/High cleared.  
   - Evidence/note: none filed
-- [!] **MOD-420-AC-901:** Human owner approval.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-420-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approved 2026-08-11
 
 #### Module completion
 
-- [ ] **MOD-420-DONE:** Module marked Done before dependents
+- [x] **MOD-420-DONE:** Module marked Done before dependents
 
 ### MOD-430
 
@@ -3800,7 +3800,7 @@
 **Purpose:** Package release items, enforce quality and human release gates, record deployment, smoke tests, rollback, client delivery, and closure.  
 **Requirements:** MVP-FR-008, MVP-FR-009  
 **Dependencies:** MOD-330, MOD-400, MOD-410, MOD-420, MOD-350  
-**Status:** M1 Done — AC-901 blocked pending human approval
+**Status:** M1 Done — human AC-901 approved 2026-08-11
 
 #### Main points
 
@@ -3923,12 +3923,12 @@
   - Evidence/note: completion dual acceptance
 - [x] **MOD-430-AC-900:** Crit/High cleared.  
   - Evidence/note: none filed
-- [!] **MOD-430-AC-901:** Human owner approval.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-430-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approved 2026-08-11
 
 #### Module completion
 
-- [ ] **MOD-430-DONE:** Module marked Done before dependents
+- [x] **MOD-430-DONE:** Module marked Done before dependents
 
 ### MOD-440
 

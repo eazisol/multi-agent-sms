@@ -53,11 +53,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 22 | MOD-340 | Done | 38 | 0 | 0 |
 | 23 | MOD-350 | Done (M1) | 34 | 2 | 0 |
 | 24 | MOD-360 | Done (M1) | 35 | 2 | 0 |
-| 25 | MOD-370 | Blocked (AC-901) | 34 | 2 | 0 |
-| 26 | MOD-400 | Blocked (AC-901) | 34 | 2 | 0 |
+| 25 | MOD-370 | Done (M1) | 35 | 2 | 0 |
+| 26 | MOD-400 | Done (M1) | 35 | 2 | 0 |
 | 27 | MOD-410 | Done (M1) | 35 | 2 | 0 |
-| 28 | MOD-420 | Blocked (AC-901) | 33 | 2 | 0 |
-| 29 | MOD-430 | Blocked (AC-901) | 36 | 2 | 0 |
+| 28 | MOD-420 | Done (M1) | 34 | 2 | 0 |
+| 29 | MOD-430 | Done (M1) | 37 | 2 | 0 |
 | 30 | MOD-440 | Not started | 0 | 0 | 45 |
 | 31 | MOD-450 | Not started | 0 | 0 | 45 |
 | 32 | MOD-460 | Not started | 0 | 0 | 43 |
@@ -1681,7 +1681,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (MOD-360-AC-900)
   - [x] The responsible human owner reviews and approves the completion evidence. (MOD-360-AC-901)
 
-### Module 25: [!] MOD-370 — Knowledge Base, Approved Content, Permission-Filtered RAG, and Source Citation
+### Module 25: [x] MOD-370 — Knowledge Base, Approved Content, Permission-Filtered RAG, and Source Citation
 
 - [x] **Main goals**
   - [x] Build and verify: knowledge items (`MOD-370-MP-001`)
@@ -1741,14 +1741,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-370-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-370-DOC-002`)
 
-- [!] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Every answer cites source and version. (`MOD-370-AC-001`)
   - [x] Project-approved knowledge outranks generic company knowledge. (`MOD-370-AC-002`)
   - [x] Unauthorized, expired, rejected, and superseded knowledge is excluded. (`MOD-370-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-370-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-370-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-370-AC-901`)
 
-### Module 26: [!] MOD-400 — Test Cases, Test Steps, Test Runs, Evidence, and Coverage
+### Module 26: [x] MOD-400 — Test Cases, Test Steps, Test Runs, Evidence, and Coverage
 
 - [x] **Main goals**
   - [x] Build and verify: test cases (MOD-400-MP-001)
@@ -1808,12 +1808,12 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (MOD-400-DOC-001)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (MOD-400-DOC-002)
 
-- [!] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Every Must-Have requirement has approved test coverage. (MOD-400-AC-001)
   - [x] Critical permissions have negative tests. (MOD-400-AC-002)
   - [x] Test evidence is tied to environment and build. (MOD-400-AC-003)
   - [x] All Critical and High defects for this module are resolved. (MOD-400-AC-900)
-  - [!] The responsible human owner reviews and approves the completion evidence. (MOD-400-AC-901)
+  - [x] The responsible human owner reviews and approves the completion evidence. (MOD-400-AC-901)
 
 ### Module 27: [x] MOD-410 — Bug Lifecycle, QA Rejection, Development Reopen, and Retesting
 
@@ -1882,7 +1882,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (MOD-410-AC-900)
   - [x] The responsible human owner reviews and approves the completion evidence. (MOD-410-AC-901)
 
-### Module 28: [!] MOD-420 — Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates
+### Module 28: [x] MOD-420 — Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates
 
 - [x] **Main goals**
   - [x] Build and verify: risks (MOD-420-MP-001)
@@ -1940,14 +1940,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (MOD-420-DOC-001)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (MOD-420-DOC-002)
 
-- [!] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Out-of-scope work cannot silently enter development. (MOD-420-AC-001)
   - [x] Approved changes update affected versions and tickets. (MOD-420-AC-002)
   - [x] Rejected and deferred changes preserve evidence and rationale. (MOD-420-AC-003)
   - [x] All Critical and High defects for this module are resolved. (MOD-420-AC-900)
-  - [!] The responsible human owner reviews and approves the completion evidence. (MOD-420-AC-901)
+  - [x] The responsible human owner reviews and approves the completion evidence. (MOD-420-AC-901)
 
-### Module 29: [!] MOD-430 — Releases, Deployment Requests, Production Approval, Rollback, and Closure
+### Module 29: [x] MOD-430 — Releases, Deployment Requests, Production Approval, Rollback, and Closure
 
 - [x] **Main goals**
   - [x] Build and verify: releases (MOD-430-MP-001)
@@ -2009,12 +2009,12 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (MOD-430-DOC-001)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (MOD-430-DOC-002)
 
-- [!] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Production cannot start without evidence and approval. (MOD-430-AC-001)
   - [x] Releases trace to requirements, tickets, tests, bugs, changes, and documents. (MOD-430-AC-002)
   - [x] Closure requires client and internal acceptance. (MOD-430-AC-003)
   - [x] All Critical and High defects for this module are resolved. (MOD-430-AC-900)
-  - [!] The responsible human owner reviews and approves the completion evidence. (MOD-430-AC-901)
+  - [x] The responsible human owner reviews and approves the completion evidence. (MOD-430-AC-901)
 
 ### Module 30: [ ] MOD-440 — Notifications, Preferences, Digests, Delivery, and Failure Handling
 

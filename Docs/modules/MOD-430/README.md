@@ -1,7 +1,7 @@
 # MOD-430 — Releases, Deployment Requests, Production Approval, Rollback, and Closure
 
-**Status:** Implementation draft (M1 registry + production gate + `/releases` desk)  
-**Human Done (AC-901):** NOT obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-11)
+**Human Done (AC-901):** Obtained 2026-08-11
 
 ## Purpose
 
@@ -12,7 +12,7 @@ Package release items, enforce production approval + backup evidence, record dep
 - No live deployer/CI; deployments and checks are recorded in PostgreSQL.
 - FE is list + create/submit/approve — not a full release orchestration studio.
 - Deployments nav remains separate placeholder; data lives under `/api/v1/releases`.
-- AC-901 remains blocked pending human review.
+- AC-901 obtained 2026-08-11 (human owner sign-off).
 
 ## M1 delivered
 

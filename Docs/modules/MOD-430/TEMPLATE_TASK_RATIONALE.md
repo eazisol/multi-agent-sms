@@ -8,4 +8,4 @@ M1 delivers production release gates and closure evidence for human-governed go-
 | WF-002 | N/A | No Temporal/LangGraph inside releases module |
 | WF-004 | N/A | Notifications → MOD-440 |
 | QA-003/004 | partial / N/A | Isolation suite deferred; no live deployer |
-| AC-901 | blocked | Human Done not obtained |
+| AC-901 | Done | Human owner approved 2026-08-11 |

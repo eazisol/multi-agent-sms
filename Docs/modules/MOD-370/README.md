@@ -1,7 +1,7 @@
 # MOD-370 — Knowledge Base, Approved Content, Permission-Filtered RAG, and Source Citation
 
-**Status:** Implementation draft (M1 registry + stub retrieval + `/knowledge` desk)  
-**Human Done (AC-901):** NOT obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-11; stub retrieval; live embeddings/pgvector deferred)
+**Human Done (AC-901):** Obtained 2026-08-11
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Persist approved, versioned, permission-controlled knowledge with chunking, stub
 - `KnowledgeRetrievalAdapter` uses token-overlap scoring + deterministic stub vectors in JSON.
 - FE is list + publish + search — not a full knowledge studio.
 - Notifications / Temporal / LangGraph wiring deferred.
-- AC-901 remains blocked pending human review.
+- AC-901 obtained 2026-08-11 (human owner sign-off).
 
 ## M1 delivered
 

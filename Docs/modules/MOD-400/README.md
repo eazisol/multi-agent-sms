@@ -1,7 +1,7 @@
 # MOD-400 — Test Cases, Test Steps, Test Suites, Test Plans, Test Runs, Evidence, Coverage Links
 
-**Status:** Implementation draft (M1 registry + execution + `/test-cases` desk)  
-**Human Done (AC-901):** NOT obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-11)
+**Human Done (AC-901):** Obtained 2026-08-11
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Persist requirement-linked test cases with steps, suites, plans, runs, environme
 - Suites and plans store case/suite ID lists as JSON (lightweight composition).
 - FE is list + create + approve + run + coverage summary — not a full QA studio.
 - Notifications / Temporal / LangGraph wiring deferred.
-- AC-901 remains blocked pending human review.
+- AC-901 obtained 2026-08-11 (human owner sign-off).
 
 ## M1 delivered
 

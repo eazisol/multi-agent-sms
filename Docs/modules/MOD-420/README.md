@@ -1,7 +1,7 @@
 # MOD-420 — Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates
 
-**Status:** Implementation draft (M1 registry + development gate + `/change-requests` desk)  
-**Human Done (AC-901):** NOT obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-11)
+**Human Done (AC-901):** Obtained 2026-08-11
 
 ## Purpose
 
@@ -12,7 +12,7 @@ Govern out-of-scope work via risks, change requests, impact analysis, human appr
 - Baseline updates are recorded as links/version bumps — does not mutate MOD-000/240 artifact rows itself.
 - FE is list + create/submit/approve/reject + development-gate — not a full CAB studio.
 - Notifications / Temporal / LangGraph wiring deferred.
-- AC-901 remains blocked pending human review.
+- AC-901 obtained 2026-08-11 (human owner sign-off).
 
 ## M1 delivered
 
