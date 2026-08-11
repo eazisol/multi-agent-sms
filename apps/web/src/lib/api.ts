@@ -1960,3 +1960,172 @@ export async function searchKnowledge(
   });
   return parse<{ query: string; items: KnowledgeCitation[]; stub: boolean }>(response);
 }
+
+export type TestCase = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  case_type: string;
+  priority: string;
+  status: string;
+  preconditions: string | null;
+  expected_result: string | null;
+  owner_actor_id: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type TestRun = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  case_id: string;
+  plan_id: string | null;
+  status: string;
+  environment_code: string;
+  build_ref: string | null;
+  result_summary: string | null;
+  executed_by_actor_id: string;
+  version: number;
+  started_at: string | null;
+  finished_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CoverageSummary = {
+  must_have_total: number;
+  must_have_covered: number;
+  permission_negative_cases: number;
+  uncovered_must_have_requirement_ids: string[];
+};
+
+export async function listTestCases(
+  session: SessionState,
+  params: {
+    status?: string;
+    case_type?: string;
+    project_id?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<TestCase>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.case_type) query.set("case_type", params.case_type);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/cases?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<TestCase>>(response);
+}
+
+export async function createTestCase(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    description?: string;
+    project_id?: string;
+    case_type?: string;
+    priority?: string;
+    preconditions?: string;
+    expected_result?: string;
+    steps?: { step_number: number; action_text: string; expected_text?: string }[];
+  },
+): Promise<TestCase> {
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/cases`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<TestCase>(response);
+}
+
+export async function approveTestCase(
+  session: SessionState,
+  caseId: string,
+  expectedVersion?: number,
+): Promise<TestCase> {
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/cases/${caseId}/approve`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({ expected_version: expectedVersion }),
+  });
+  return parse<TestCase>(response);
+}
+
+export async function linkTestCoverage(
+  session: SessionState,
+  caseId: string,
+  body: {
+    requirement_id: string;
+    requirement_priority?: string;
+    coverage_notes?: string;
+  },
+): Promise<{ id: string; case_id: string; requirement_id: string }> {
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/cases/${caseId}/coverage`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string; case_id: string; requirement_id: string }>(response);
+}
+
+export async function startTestRun(
+  session: SessionState,
+  body: {
+    case_id: string;
+    plan_id?: string;
+    project_id?: string;
+    environment_code?: string;
+    build_ref?: string;
+  },
+): Promise<TestRun> {
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/runs`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<TestRun>(response);
+}
+
+export async function completeTestRun(
+  session: SessionState,
+  runId: string,
+  body: {
+    status: string;
+    result_summary?: string;
+    expected_version?: number;
+    evidence_title?: string;
+    evidence_body?: string;
+  },
+): Promise<TestRun> {
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/runs/${runId}/complete`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<TestRun>(response);
+}
+
+export async function summarizeTestCoverage(
+  session: SessionState,
+  body: { must_have_requirement_ids?: string[] } = {},
+): Promise<CoverageSummary> {
+  const response = await apiFetch(`${apiBase()}/api/v1/test-cases/coverage/summary`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<CoverageSummary>(response);
+}
