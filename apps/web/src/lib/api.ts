@@ -1747,3 +1747,100 @@ export async function startWorkflowInstance(
   });
   return parse<WorkflowInstance>(response);
 }
+
+export const AGENT_RUNTIME_CODES = [
+  "query_intake_agent",
+  "requirements_clarifier",
+  "roadmap_planner",
+  "ticket_triage_agent",
+  "qa_review_assistant",
+  "status_report_drafter",
+] as const;
+
+export type AgentDefinition = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  description: string | null;
+  status: string;
+  department_code: string;
+  authority_level: string;
+  supervisor_actor_id: string | null;
+  created_at: string;
+};
+
+export type AgentRun = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  definition_id: string;
+  agent_code: string;
+  prompt_version_id: string;
+  related_entity_type: string;
+  related_entity_id: string;
+  status: string;
+  langgraph_run_id: string | null;
+  model_name: string;
+  prompt_version_number: number;
+  confidence: number | null;
+  review_required: boolean;
+  owner_actor_id: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function listAgentDefinitions(session: SessionState): Promise<AgentDefinition[]> {
+  const response = await apiFetch(`${apiBase()}/api/v1/agent-runtime/definitions`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<AgentDefinition[]>(response);
+}
+
+export async function listAgentRuns(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    agent_code?: string;
+    project_id?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<AgentRun>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  if (params.agent_code) query.set("agent_code", params.agent_code);
+  if (params.project_id) query.set("project_id", params.project_id);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/agent-runtime/runs?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<AgentRun>>(response);
+}
+
+export async function startAgentRun(
+  session: SessionState,
+  body: {
+    agent_code: string;
+    related_entity_type: string;
+    related_entity_id: string;
+    project_id?: string;
+    owner_actor_id?: string;
+    input_json?: Record<string, unknown>;
+    prompt_version_id?: string;
+    idempotency_key?: string;
+  },
+): Promise<AgentRun> {
+  const response = await apiFetch(`${apiBase()}/api/v1/agent-runtime/runs`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<AgentRun>(response);
+}

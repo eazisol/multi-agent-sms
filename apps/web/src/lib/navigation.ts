@@ -63,8 +63,8 @@ export const NAV_SECTIONS: NavSection[] = [
     id: "ai",
     label: "AI Operations",
     items: [
-      { href: "/agents", label: "Agents", ready: false },
-      { href: "/agent-runs", label: "Agent Runs", ready: false },
+      { href: "/agents", label: "Agents", ready: true },
+      { href: "/agent-runs", label: "Agent Runs", ready: true },
       { href: "/knowledge", label: "Knowledge Base", ready: false },
     ],
   },
