@@ -25,6 +25,7 @@ from masms_api.modules.documents import models as _documents_models  # noqa: F40
 from masms_api.modules.roadmap import models as _roadmap_models  # noqa: F401
 from masms_api.modules.tickets import models as _tickets_models  # noqa: F401
 from masms_api.modules.assignments import models as _assignments_models  # noqa: F401
+from masms_api.modules.statusengine import models as _statusengine_models  # noqa: F401
 from masms_api.observability import models as _observability_models  # noqa: F401
 
 config = context.config

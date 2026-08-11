@@ -48,7 +48,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 17 | MOD-260 | Blocked | 31 | 8 | 0 |
 | 18 | MOD-300 | Blocked | 33 | 8 | 0 |
 | 19 | MOD-310 | Blocked | 25 | 8 | 0 |
-| 20 | MOD-320 | Not started | 0 | 0 | 43 |
+| 20 | MOD-320 | Blocked | 27 | 8 | 0 |
 | 21 | MOD-330 | Not started | 0 | 0 | 45 |
 | 22 | MOD-340 | Not started | 0 | 0 | 45 |
 | 23 | MOD-350 | Not started | 0 | 0 | 43 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 532 · partial 144 · n/a 150 · blocked 19 · open 904
+**All tasks:** 1749 · done 559 · partial 152 · n/a 157 · blocked 20 · open 861
 
 ## Phase 0 - Governance and Foundation
 
@@ -1350,70 +1350,70 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (`MOD-310-AC-900`)
   - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-310-AC-901`)
 
-### Module 20: [ ] MOD-320 — Configurable Status and Transition Engine
+### Module 20: [!] MOD-320 — Configurable Status and Transition Engine
 
-- [ ] **Main goals**
-  - [ ] Build and verify: workflow resolver (`MOD-320-MP-001`)
-  - [ ] Build and verify: transition evaluator (`MOD-320-MP-002`)
-  - [ ] Build and verify: status history (`MOD-320-MP-003`)
-  - [ ] Build and verify: hold records (`MOD-320-MP-004`)
-  - [ ] Build and verify: reopen records (`MOD-320-MP-005`)
-  - [ ] Build and verify: available next actions (`MOD-320-MP-006`)
+- [x] **Main goals**
+  - [x] Build and verify: workflow resolver (`MOD-320-MP-001`)
+  - [x] Build and verify: transition evaluator (`MOD-320-MP-002`)
+  - [x] Build and verify: status history (`MOD-320-MP-003`)
+  - [x] Build and verify: hold records (`MOD-320-MP-004`)
+  - [x] Build and verify: reopen records (`MOD-320-MP-005`)
+  - [x] Build and verify: available next actions (`MOD-320-MP-006`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: workflow resolver (`MOD-320-DB-001`)
-  - [ ] Design and migrate data for: transition evaluator (`MOD-320-DB-002`)
-  - [ ] Design and migrate data for: status history (`MOD-320-DB-003`)
-  - [ ] Design and migrate data for: hold records (`MOD-320-DB-004`)
-  - [ ] Design and migrate data for: reopen records (`MOD-320-DB-005`)
-  - [ ] Design and migrate data for: available next actions (`MOD-320-DB-006`)
+- [x] **Database**
+  - [x] Design and migrate data for: workflow resolver (`MOD-320-DB-001`)
+  - [x] Design and migrate data for: transition evaluator (`MOD-320-DB-002`)
+  - [x] Design and migrate data for: status history (`MOD-320-DB-003`)
+  - [x] Design and migrate data for: hold records (`MOD-320-DB-004`)
+  - [x] Design and migrate data for: reopen records (`MOD-320-DB-005`)
+  - [x] Design and migrate data for: available next actions (`MOD-320-DB-006`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-320-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-320-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-320-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-320-BE-004`)
+- [~] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-320-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-320-BE-002`)
+  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-320-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-320-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-320-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-320-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-320-API-003`)
+- [~] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-320-API-001`)
+  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-320-API-002`)
+  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-320-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-320-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-320-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-320-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-320-FE-004`)
+- [~] **Frontend**
+  - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-320-FE-001`)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-320-FE-002`)
+  - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-320-FE-003`)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-320-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-320-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-320-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-320-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-320-WF-004`)
+- [~] **Workflow / agents / events**
+  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-320-WF-001`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-320-WF-002`)
+  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-320-WF-003`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-320-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-320-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-320-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-320-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-320-SEC-004`)
+- [~] **Security / audit**
+  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-320-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-320-SEC-002`)
+  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-320-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-320-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-320-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-320-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-320-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-320-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-320-QA-005`)
+- [~] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-320-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-320-QA-002`)
+  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-320-QA-003`)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-320-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-320-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-320-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-320-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-320-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-320-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] No business status is hard-coded as a database enum. (`MOD-320-AC-001`)
-  - [ ] Every transition creates history and audit. (`MOD-320-AC-002`)
-  - [ ] Agents cannot skip required approval gates. (`MOD-320-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-320-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-320-AC-901`)
+- [!] **Acceptance / Done gate**
+  - [x] No business status is hard-coded as a database enum. (`MOD-320-AC-001`)
+  - [x] Every transition creates history and audit. (`MOD-320-AC-002`)
+  - [x] Agents cannot skip required approval gates. (`MOD-320-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-320-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-320-AC-901`)
 
 ### Module 21: [ ] MOD-330 — Human Approval Gates, Delegation, Rejection, and Override
 
