@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
@@ -40,6 +40,27 @@ def create_conversation(
     body: ConversationCreate, service: CommsService = Depends(_service)
 ) -> ConversationRead:
     return ConversationRead.model_validate(service.create_conversation(body))
+
+
+@router.get("/conversations", response_model=list[ConversationRead])
+def list_conversations(
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    project_id: UUID | None = Query(default=None),
+    classification: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    service: CommsService = Depends(_service),
+) -> list[ConversationRead]:
+    rows = service.list_conversations(
+        status=status,
+        q=q,
+        project_id=project_id,
+        classification=classification,
+        limit=limit,
+        offset=offset,
+    )
+    return [ConversationRead.model_validate(r) for r in rows]
 
 
 @router.post("/messages", response_model=MessageRead, status_code=201)

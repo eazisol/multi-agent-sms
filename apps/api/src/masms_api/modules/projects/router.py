@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
@@ -44,6 +44,28 @@ def create_project(
     body: ProjectCreate, service: ProjectsService = Depends(_service)
 ) -> ProjectRead:
     return ProjectRead.model_validate(service.create_project(body))
+
+
+@router.get("", response_model=list[ProjectRead])
+def list_projects(
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    client_id: UUID | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    service: ProjectsService = Depends(_service),
+) -> list[ProjectRead]:
+    rows = service.list_projects(
+        status=status, q=q, client_id=client_id, limit=limit, offset=offset
+    )
+    return [ProjectRead.model_validate(r) for r in rows]
+
+
+@router.get("/{project_id}", response_model=ProjectRead)
+def get_project(
+    project_id: UUID, service: ProjectsService = Depends(_service)
+) -> ProjectRead:
+    return ProjectRead.model_validate(service.get_project(project_id))
 
 
 @router.post("/requirements", response_model=RequirementRead, status_code=201)

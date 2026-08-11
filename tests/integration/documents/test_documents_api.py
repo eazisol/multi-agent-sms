@@ -225,3 +225,21 @@ def test_document_scan_gate_permissions_and_authoritative_version(
         },
     )
     assert deny_embed.status_code == 403
+
+    documents = client.get("/api/v1/documents", headers=headers)
+    assert documents.status_code == 200, documents.text
+    assert any(row["id"] == document_id for row in documents.json())
+
+    filtered = client.get("/api/v1/documents", headers=headers, params={"status": "draft"})
+    assert filtered.status_code == 200
+    assert all(row["status"] == "draft" for row in filtered.json())
+    assert any(row["id"] == document_id for row in filtered.json())
+
+    searched = client.get("/api/v1/documents", headers=headers, params={"q": "Acme"})
+    assert searched.status_code == 200
+    assert any(row["id"] == document_id for row in searched.json())
+
+    got = client.get(f"/api/v1/documents/{document_id}", headers=headers)
+    assert got.status_code == 200
+    assert got.json()["id"] == document_id
+    assert got.json()["title"] == "Acme SRS"

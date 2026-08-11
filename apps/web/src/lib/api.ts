@@ -313,6 +313,8 @@ export type DocumentRecord = {
   status: string;
   owner_actor_id: string;
   current_version_id: string | null;
+  project_id?: string | null;
+  created_at?: string;
 };
 
 export type DocumentVersion = {
@@ -418,6 +420,29 @@ export async function transitionQuery(
   return parse<ClientQuery>(response);
 }
 
+export async function listProjects(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    client_id?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<Project[]> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  if (params.client_id) query.set("client_id", params.client_id);
+  query.set("limit", String(params.limit ?? 50));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await fetch(`${apiBase()}/api/v1/projects?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<Project[]>(response);
+}
+
 export async function createProject(
   session: SessionState,
   body: { code: string; title: string; client_id?: string },
@@ -520,6 +545,31 @@ export async function approveSrsBaseline(
     { method: "POST", headers: headers(session) },
   );
   return parse<SrsBaseline>(response);
+}
+
+export async function listDocuments(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    project_id?: string;
+    classification?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<DocumentRecord[]> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.classification) query.set("classification", params.classification);
+  query.set("limit", String(params.limit ?? 50));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await fetch(`${apiBase()}/api/v1/documents?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<DocumentRecord[]>(response);
 }
 
 export async function createDocument(
@@ -757,6 +807,31 @@ export type TicketEvidence = {
   title: string;
   created_at: string;
 };
+
+export async function listConversations(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    project_id?: string;
+    classification?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<Conversation[]> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.classification) query.set("classification", params.classification);
+  query.set("limit", String(params.limit ?? 50));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await fetch(`${apiBase()}/api/v1/comms/conversations?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<Conversation[]>(response);
+}
 
 export async function createConversation(
   session: SessionState,

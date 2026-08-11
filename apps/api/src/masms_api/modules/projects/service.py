@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ForbiddenError, NotFoundError, ValidationAppError
@@ -79,6 +79,36 @@ class ProjectsService:
         self.uow.commit()
         self.uow.refresh(row)
         return row
+
+    def list_projects(
+        self,
+        *,
+        status: str | None = None,
+        q: str | None = None,
+        client_id: UUID | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[Project]:
+        stmt = select(Project).where(Project.organization_id == self.ctx.organization_id)
+        ctx_client = self.ctx.tenant.client_id
+        if ctx_client is not None:
+            stmt = stmt.where(Project.client_id == ctx_client)
+        elif client_id is not None:
+            stmt = stmt.where(Project.client_id == client_id)
+        if status:
+            stmt = stmt.where(Project.status == status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            stmt = stmt.where(or_(Project.code.ilike(like), Project.title.ilike(like)))
+        stmt = (
+            stmt.order_by(Project.created_at.desc())
+            .offset(max(0, offset))
+            .limit(max(1, min(limit, 200)))
+        )
+        return list(self.db.scalars(stmt).all())
+
+    def get_project(self, project_id: UUID) -> Project:
+        return self._get_project(project_id)
 
     def create_requirement(self, data: RequirementCreate) -> ProjectRequirement:
         project = self._get_project(data.project_id)

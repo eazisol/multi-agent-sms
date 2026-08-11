@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ForbiddenError, NotFoundError
@@ -74,6 +74,38 @@ class CommsService:
         self.uow.commit()
         self.uow.refresh(row)
         return row
+
+    def list_conversations(
+        self,
+        *,
+        status: str | None = None,
+        q: str | None = None,
+        project_id: UUID | None = None,
+        classification: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[Conversation]:
+        stmt = select(Conversation).where(
+            Conversation.organization_id == self.ctx.organization_id
+        )
+        ctx_client = self.ctx.tenant.client_id
+        if ctx_client is not None:
+            stmt = stmt.where(Conversation.client_id == ctx_client)
+        if status:
+            stmt = stmt.where(Conversation.status == status)
+        if classification:
+            stmt = stmt.where(Conversation.classification == classification)
+        if project_id is not None:
+            stmt = stmt.where(Conversation.project_id == project_id)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            stmt = stmt.where(Conversation.subject.ilike(like))
+        stmt = (
+            stmt.order_by(Conversation.created_at.desc())
+            .offset(max(0, offset))
+            .limit(max(1, min(limit, 200)))
+        )
+        return list(self.db.scalars(stmt).all())
 
     def create_message(self, data: MessageCreate) -> Message:
         conversation = self._get_conversation(data.conversation_id)

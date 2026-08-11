@@ -204,3 +204,21 @@ def test_project_requirement_ac_and_srs_approval(client: TestClient) -> None:
     assert listed.status_code == 200
     assert len(listed.json()) == 1
     assert listed.json()[0]["status"] == "approved"
+
+    projects = client.get("/api/v1/projects", headers=headers)
+    assert projects.status_code == 200, projects.text
+    assert any(row["id"] == project_id for row in projects.json())
+
+    filtered = client.get("/api/v1/projects", headers=headers, params={"status": "active"})
+    assert filtered.status_code == 200
+    assert all(row["status"] == "active" for row in filtered.json())
+    assert any(row["id"] == project_id for row in filtered.json())
+
+    searched = client.get("/api/v1/projects", headers=headers, params={"q": "ACME"})
+    assert searched.status_code == 200
+    assert any(row["id"] == project_id for row in searched.json())
+
+    got = client.get(f"/api/v1/projects/{project_id}", headers=headers)
+    assert got.status_code == 200
+    assert got.json()["id"] == project_id
+    assert got.json()["code"] == "ACME-PORTAL"

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
@@ -69,6 +69,34 @@ def create_document(
     body: DocumentCreate, service: DocumentsService = Depends(_service)
 ) -> DocumentRead:
     return DocumentRead.model_validate(service.create_document(body))
+
+
+@router.get("", response_model=list[DocumentRead])
+def list_documents(
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    project_id: UUID | None = Query(default=None),
+    classification: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    service: DocumentsService = Depends(_service),
+) -> list[DocumentRead]:
+    rows = service.list_documents(
+        status=status,
+        q=q,
+        project_id=project_id,
+        classification=classification,
+        limit=limit,
+        offset=offset,
+    )
+    return [DocumentRead.model_validate(r) for r in rows]
+
+
+@router.get("/{document_id}", response_model=DocumentRead)
+def get_document(
+    document_id: UUID, service: DocumentsService = Depends(_service)
+) -> DocumentRead:
+    return DocumentRead.model_validate(service.get_document(document_id))
 
 
 @router.post("/versions", response_model=DocumentVersionRead, status_code=201)
