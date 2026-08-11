@@ -2373,3 +2373,89 @@ export async function getChangeDevelopmentGate(
   );
   return parse<DevelopmentGate>(response);
 }
+
+export type Release = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  status: string;
+  version_label: string;
+  approval_evidence: string | null;
+  approved_by_actor_id: string | null;
+  approved_at: string | null;
+  owner_actor_id: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function listReleases(
+  session: SessionState,
+  params: {
+    status?: string;
+    project_id?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<Release>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/releases?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<Release>>(response);
+}
+
+export async function createRelease(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    description?: string;
+    project_id?: string;
+    version_label?: string;
+    items?: { link_type: string; linked_entity_id: string; notes?: string }[];
+  },
+): Promise<Release> {
+  const response = await apiFetch(`${apiBase()}/api/v1/releases`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Release>(response);
+}
+
+export async function submitRelease(
+  session: SessionState,
+  releaseId: string,
+  expectedVersion?: number,
+): Promise<Release> {
+  const response = await apiFetch(`${apiBase()}/api/v1/releases/${releaseId}/submit`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({ expected_version: expectedVersion }),
+  });
+  return parse<Release>(response);
+}
+
+export async function approveRelease(
+  session: SessionState,
+  releaseId: string,
+  body: { evidence: string; expected_version?: number },
+): Promise<Release> {
+  const response = await apiFetch(`${apiBase()}/api/v1/releases/${releaseId}/approve`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Release>(response);
+}

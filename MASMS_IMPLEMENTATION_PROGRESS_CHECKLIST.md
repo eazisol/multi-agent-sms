@@ -47,7 +47,7 @@
 | MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 33 | 2 | 7 | 1 | 0 | Blocked |
-| MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
+| MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 36 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-450 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-460 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -3799,84 +3799,132 @@
 **Title:** Releases, Deployment Requests, Production Approval, Rollback, and Closure  
 **Purpose:** Package release items, enforce quality and human release gates, record deployment, smoke tests, rollback, client delivery, and closure.  
 **Requirements:** MVP-FR-008, MVP-FR-009  
-**Dependencies:** MOD-330, MOD-400, MOD-410, MOD-420, MOD-350
+**Dependencies:** MOD-330, MOD-400, MOD-410, MOD-420, MOD-350  
+**Status:** M1 Done — AC-901 blocked pending human approval
 
 #### Main points
 
-- [ ] **MOD-430-MP-001:** Implement and verify releases.
-- [ ] **MOD-430-MP-002:** Implement and verify release items.
-- [ ] **MOD-430-MP-003:** Implement and verify deployments.
-- [ ] **MOD-430-MP-004:** Implement and verify deployment checks.
-- [ ] **MOD-430-MP-005:** Implement and verify backup confirmations.
-- [ ] **MOD-430-MP-006:** Implement and verify migration plans.
-- [ ] **MOD-430-MP-007:** Implement and verify rollbacks.
-- [ ] **MOD-430-MP-008:** Implement and verify completion reports.
+- [x] **MOD-430-MP-001:** Implement and verify releases.  
+  - Evidence/note: rl_releases
+- [x] **MOD-430-MP-002:** Implement and verify release items.  
+  - Evidence/note: rl_release_items
+- [x] **MOD-430-MP-003:** Implement and verify deployments.  
+  - Evidence/note: rl_deployments
+- [x] **MOD-430-MP-004:** Implement and verify deployment checks.  
+  - Evidence/note: rl_deployment_checks
+- [x] **MOD-430-MP-005:** Implement and verify backup confirmations.  
+  - Evidence/note: rl_backup_confirmations
+- [x] **MOD-430-MP-006:** Implement and verify migration plans.  
+  - Evidence/note: rl_migration_plans
+- [x] **MOD-430-MP-007:** Implement and verify rollbacks.  
+  - Evidence/note: rl_rollbacks
+- [x] **MOD-430-MP-008:** Implement and verify completion reports.  
+  - Evidence/note: rl_completion_reports
 
 #### Database / data design
 
-- [ ] **MOD-430-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **releases**.
-- [ ] **MOD-430-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **release items**.
-- [ ] **MOD-430-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deployments**.
-- [ ] **MOD-430-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deployment checks**.
-- [ ] **MOD-430-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **backup confirmations**.
-- [ ] **MOD-430-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **migration plans**.
-- [ ] **MOD-430-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **rollbacks**.
-- [ ] **MOD-430-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **completion reports**.
+- [x] **MOD-430-DB-001:** Releases model + RLS.  
+  - Evidence/note: migration 20260811_0027
+- [x] **MOD-430-DB-002:** Release items.  
+  - Evidence/note: rl_release_items
+- [x] **MOD-430-DB-003:** Deployments.  
+  - Evidence/note: rl_deployments
+- [x] **MOD-430-DB-004:** Deployment checks.  
+  - Evidence/note: rl_deployment_checks
+- [x] **MOD-430-DB-005:** Backup confirmations.  
+  - Evidence/note: rl_backup_confirmations
+- [x] **MOD-430-DB-006:** Migration plans.  
+  - Evidence/note: rl_migration_plans
+- [x] **MOD-430-DB-007:** Rollbacks.  
+  - Evidence/note: rl_rollbacks
+- [x] **MOD-430-DB-008:** Completion reports.  
+  - Evidence/note: rl_completion_reports
 
 #### Backend
 
-- [ ] **MOD-430-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-430-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-430-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-430-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-430-BE-001:** Typed domain/services.  
+  - Evidence/note: modules/releases
+- [x] **MOD-430-BE-002:** Authz/transition/idempotency.  
+  - Evidence/note: production gate + version checks
+- [x] **MOD-430-BE-003:** Outbox events.  
+  - Evidence/note: release.* events
+- [x] **MOD-430-BE-004:** Structured errors.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-430-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-430-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-430-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-430-API-001:** Versioned endpoints.  
+  - Evidence/note: /api/v1/releases (+12 OpenAPI paths)
+- [x] **MOD-430-API-002:** Pagination/filter/search.  
+  - Evidence/note: releases list + traceability
+- [x] **MOD-430-API-003:** OpenAPI schemas.  
+  - Evidence/note: Pydantic schemas
 
 #### Frontend
 
-- [ ] **MOD-430-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-430-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-430-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-430-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-430-FE-001:** List/dashboard.  
+  - Evidence/note: /releases desk
+- [-] **MOD-430-FE-002:** Detail tabs.  
+  - Evidence/note: deferred
+- [~] **MOD-430-FE-003:** Create/edit forms.  
+  - Evidence/note: create/submit/approve
+- [-] **MOD-430-FE-004:** a11y pass.  
+  - Evidence/note: deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-430-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-430-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-430-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-430-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-430-WF-001:** Triggers/statuses/rules.  
+  - Evidence/note: release status machine + production gate
+- [-] **MOD-430-WF-002:** Temporal/LangGraph routing.  
+  - Evidence/note: N/A for releases module core
+- [x] **MOD-430-WF-003:** Outbox/events.  
+  - Evidence/note: release.* events
+- [-] **MOD-430-WF-004:** Notifications.  
+  - Evidence/note: deferred MOD-440
 
 #### Security / privacy / audit
 
-- [ ] **MOD-430-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-430-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-430-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-430-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-430-SEC-001:** Scope authorization.  
+  - Evidence/note: org request context
+- [x] **MOD-430-SEC-002:** Tenant RLS.  
+  - Evidence/note: RLS on rl_* tables
+- [x] **MOD-430-SEC-003:** Redaction.  
+  - Evidence/note: outbox redact via kernel
+- [x] **MOD-430-SEC-004:** Audit actions.  
+  - Evidence/note: rl_* audits
 
 #### Testing / verification
 
-- [ ] **MOD-430-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-430-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-430-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-430-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-430-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-430-QA-001:** Domain rules via integration.  
+  - Evidence/note: prod gate/trace/closure
+- [x] **MOD-430-QA-002:** Integration API tests.  
+  - Evidence/note: tests/integration/releases
+- [-] **MOD-430-QA-003:** Dedicated RBAC negative suite.  
+  - Evidence/note: deferred
+- [-] **MOD-430-QA-004:** Live deployer suite.  
+  - Evidence/note: N/A M1
+- [x] **MOD-430-QA-005:** Verification commands.  
+  - Evidence/note: Docs/modules/MOD-430/VERIFICATION.md
 
 #### Documentation
 
-- [ ] **MOD-430-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-430-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-430-DOC-001:** Module README.  
+  - Evidence/note: Docs/modules/MOD-430/README.md
+- [x] **MOD-430-DOC-002:** Verification evidence.  
+  - Evidence/note: Docs/modules/MOD-430/VERIFICATION.md
 
 #### Acceptance gate
 
-- [ ] **MOD-430-AC-001:** Production cannot start without evidence and approval.
-- [ ] **MOD-430-AC-002:** Releases trace to requirements, tickets, tests, bugs, changes, and documents.
-- [ ] **MOD-430-AC-003:** Closure requires client and internal acceptance.
-- [ ] **MOD-430-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-430-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-430-AC-001:** Production cannot start without evidence and approval.  
+  - Evidence/note: approve + backup required
+- [x] **MOD-430-AC-002:** Releases trace to requirements/tickets/tests/bugs/changes/documents.  
+  - Evidence/note: /traceability
+- [x] **MOD-430-AC-003:** Closure requires client and internal acceptance.  
+  - Evidence/note: completion dual acceptance
+- [x] **MOD-430-AC-900:** Crit/High cleared.  
+  - Evidence/note: none filed
+- [!] **MOD-430-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

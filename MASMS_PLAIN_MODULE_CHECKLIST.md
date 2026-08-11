@@ -57,7 +57,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 26 | MOD-400 | Blocked (AC-901) | 34 | 2 | 0 |
 | 27 | MOD-410 | Done (M1) | 35 | 2 | 0 |
 | 28 | MOD-420 | Blocked (AC-901) | 33 | 2 | 0 |
-| 29 | MOD-430 | Not started | 0 | 0 | 47 |
+| 29 | MOD-430 | Blocked (AC-901) | 36 | 2 | 0 |
 | 30 | MOD-440 | Not started | 0 | 0 | 45 |
 | 31 | MOD-450 | Not started | 0 | 0 | 45 |
 | 32 | MOD-460 | Not started | 0 | 0 | 43 |
@@ -1947,74 +1947,74 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (MOD-420-AC-900)
   - [!] The responsible human owner reviews and approves the completion evidence. (MOD-420-AC-901)
 
-### Module 29: [ ] MOD-430 — Releases, Deployment Requests, Production Approval, Rollback, and Closure
+### Module 29: [!] MOD-430 — Releases, Deployment Requests, Production Approval, Rollback, and Closure
 
-- [ ] **Main goals**
-  - [ ] Build and verify: releases (`MOD-430-MP-001`)
-  - [ ] Build and verify: release items (`MOD-430-MP-002`)
-  - [ ] Build and verify: deployments (`MOD-430-MP-003`)
-  - [ ] Build and verify: deployment checks (`MOD-430-MP-004`)
-  - [ ] Build and verify: backup confirmations (`MOD-430-MP-005`)
-  - [ ] Build and verify: migration plans (`MOD-430-MP-006`)
-  - [ ] Build and verify: rollbacks (`MOD-430-MP-007`)
-  - [ ] Build and verify: completion reports (`MOD-430-MP-008`)
+- [x] **Main goals**
+  - [x] Build and verify: releases (MOD-430-MP-001)
+  - [x] Build and verify: release items (MOD-430-MP-002)
+  - [x] Build and verify: deployments (MOD-430-MP-003)
+  - [x] Build and verify: deployment checks (MOD-430-MP-004)
+  - [x] Build and verify: backup confirmations (MOD-430-MP-005)
+  - [x] Build and verify: migration plans (MOD-430-MP-006)
+  - [x] Build and verify: rollbacks (MOD-430-MP-007)
+  - [x] Build and verify: completion reports (MOD-430-MP-008)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: releases (`MOD-430-DB-001`)
-  - [ ] Design and migrate data for: release items (`MOD-430-DB-002`)
-  - [ ] Design and migrate data for: deployments (`MOD-430-DB-003`)
-  - [ ] Design and migrate data for: deployment checks (`MOD-430-DB-004`)
-  - [ ] Design and migrate data for: backup confirmations (`MOD-430-DB-005`)
-  - [ ] Design and migrate data for: migration plans (`MOD-430-DB-006`)
-  - [ ] Design and migrate data for: rollbacks (`MOD-430-DB-007`)
-  - [ ] Design and migrate data for: completion reports (`MOD-430-DB-008`)
+- [x] **Database**
+  - [x] Design and migrate data for: releases (MOD-430-DB-001)
+  - [x] Design and migrate data for: release items (MOD-430-DB-002)
+  - [x] Design and migrate data for: deployments (MOD-430-DB-003)
+  - [x] Design and migrate data for: deployment checks (MOD-430-DB-004)
+  - [x] Design and migrate data for: backup confirmations (MOD-430-DB-005)
+  - [x] Design and migrate data for: migration plans (MOD-430-DB-006)
+  - [x] Design and migrate data for: rollbacks (MOD-430-DB-007)
+  - [x] Design and migrate data for: completion reports (MOD-430-DB-008)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-430-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-430-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-430-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-430-BE-004`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (MOD-430-BE-001)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (MOD-430-BE-002)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (MOD-430-BE-003)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (MOD-430-BE-004)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-430-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-430-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-430-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (MOD-430-API-001)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (MOD-430-API-002)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (MOD-430-API-003)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-430-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-430-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-430-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-430-FE-004`)
+- [~] **Frontend**
+  - [~] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (MOD-430-FE-001)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (MOD-430-FE-002)
+  - [~] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (MOD-430-FE-003)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (MOD-430-FE-004)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-430-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-430-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-430-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-430-WF-004`)
+- [~] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (MOD-430-WF-001)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (MOD-430-WF-002)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (MOD-430-WF-003)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (MOD-430-WF-004)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-430-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-430-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-430-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-430-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (MOD-430-SEC-001)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (MOD-430-SEC-002)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (MOD-430-SEC-003)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (MOD-430-SEC-004)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-430-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-430-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-430-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-430-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-430-QA-005`)
+- [x] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (MOD-430-QA-001)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (MOD-430-QA-002)
+  - [-] Add role-permission negative tests and tenant/project isolation tests. (MOD-430-QA-003)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (MOD-430-QA-004)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (MOD-430-QA-005)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-430-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-430-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (MOD-430-DOC-001)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (MOD-430-DOC-002)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] Production cannot start without evidence and approval. (`MOD-430-AC-001`)
-  - [ ] Releases trace to requirements, tickets, tests, bugs, changes, and documents. (`MOD-430-AC-002`)
-  - [ ] Closure requires client and internal acceptance. (`MOD-430-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-430-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-430-AC-901`)
+- [!] **Acceptance / Done gate**
+  - [x] Production cannot start without evidence and approval. (MOD-430-AC-001)
+  - [x] Releases trace to requirements, tickets, tests, bugs, changes, and documents. (MOD-430-AC-002)
+  - [x] Closure requires client and internal acceptance. (MOD-430-AC-003)
+  - [x] All Critical and High defects for this module are resolved. (MOD-430-AC-900)
+  - [!] The responsible human owner reviews and approves the completion evidence. (MOD-430-AC-901)
 
 ### Module 30: [ ] MOD-440 — Notifications, Preferences, Digests, Delivery, and Failure Handling
 
