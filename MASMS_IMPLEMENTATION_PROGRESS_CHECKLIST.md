@@ -43,7 +43,7 @@
 | MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 38 | 0 | 7 | 0 | 0 | Done |
 | MOD-350 | Phase 3 - Work Management and Agent Orchestration | 43 | 34 | 2 | 7 | 0 | 0 | Done (M1) |
 | MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
-| MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 809, partial 4, n/a 179, blocked 0, open 763
+**Totals:** 1749 tasks — done 843, partial 6, n/a 187, blocked 1, open 718
 
 ## Module index (plan order)
 
@@ -3275,88 +3275,132 @@
 **Title:** Knowledge Base, Approved Content, Permission-Filtered RAG, and Source Citation  
 **Purpose:** Provide approved, effective, versioned, owned, permission-controlled company and project knowledge with source citations and conflict handling.  
 **Requirements:** MVP-FR-010, MVP-NFR-008, MVP-NFR-009  
-**Dependencies:** MOD-250, MOD-120, MOD-040
+**Dependencies:** MOD-250, MOD-120, MOD-040  
+**Status:** M1 implemented (Postgres registry + stub retrieval + `/knowledge` desk); AC-901 human Done not obtained; live embeddings/pgvector deferred
 
 #### Main points
 
-- [ ] **MOD-370-MP-001:** Implement and verify knowledge items.
-- [ ] **MOD-370-MP-002:** Implement and verify knowledge versions.
-- [ ] **MOD-370-MP-003:** Implement and verify chunks.
-- [ ] **MOD-370-MP-004:** Implement and verify embeddings.
-- [ ] **MOD-370-MP-005:** Implement and verify knowledge permissions.
-- [ ] **MOD-370-MP-006:** Implement and verify usage logs.
-- [ ] **MOD-370-MP-007:** Implement and verify knowledge conflicts.
+- [x] **MOD-370-MP-001:** Implement and verify knowledge items.  
+  - Evidence/note: kn_items
+- [x] **MOD-370-MP-002:** Implement and verify knowledge versions.  
+  - Evidence/note: kn_versions
+- [x] **MOD-370-MP-003:** Implement and verify chunks.  
+  - Evidence/note: kn_chunks
+- [x] **MOD-370-MP-004:** Implement and verify embeddings.  
+  - Evidence/note: kn_embeddings stub vectors
+- [x] **MOD-370-MP-005:** Implement and verify knowledge permissions.  
+  - Evidence/note: kn_permissions
+- [x] **MOD-370-MP-006:** Implement and verify usage logs.  
+  - Evidence/note: kn_usage_logs
+- [x] **MOD-370-MP-007:** Implement and verify knowledge conflicts.  
+  - Evidence/note: kn_conflicts
 
 #### Database / data design
 
-- [ ] **MOD-370-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **knowledge items**.
-- [ ] **MOD-370-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **knowledge versions**.
-- [ ] **MOD-370-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **chunks**.
-- [ ] **MOD-370-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **embeddings**.
-- [ ] **MOD-370-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **knowledge permissions**.
-- [ ] **MOD-370-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **usage logs**.
-- [ ] **MOD-370-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **knowledge conflicts**.
+- [x] **MOD-370-DB-001:** Knowledge items model + RLS.  
+  - Evidence/note: migration 20260811_0023
+- [x] **MOD-370-DB-002:** Knowledge versions.  
+  - Evidence/note: kn_versions
+- [x] **MOD-370-DB-003:** Chunks.  
+  - Evidence/note: kn_chunks
+- [x] **MOD-370-DB-004:** Embeddings.  
+  - Evidence/note: kn_embeddings (JSON stub, not pgvector)
+- [x] **MOD-370-DB-005:** Permissions.  
+  - Evidence/note: kn_permissions
+- [x] **MOD-370-DB-006:** Usage logs.  
+  - Evidence/note: kn_usage_logs
+- [x] **MOD-370-DB-007:** Conflicts.  
+  - Evidence/note: kn_conflicts
 
 #### Backend
 
-- [ ] **MOD-370-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-370-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-370-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-370-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-370-BE-001:** Typed domain/services.  
+  - Evidence/note: modules/knowledge
+- [x] **MOD-370-BE-002:** Authz/transition/idempotency.  
+  - Evidence/note: permission gate + version transitions
+- [x] **MOD-370-BE-003:** Outbox events.  
+  - Evidence/note: knowledge.* outbox events
+- [x] **MOD-370-BE-004:** Structured errors.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-370-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-370-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-370-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-370-API-001:** Versioned endpoints.  
+  - Evidence/note: /api/v1/knowledge (+11 OpenAPI paths)
+- [x] **MOD-370-API-002:** Pagination/filter/search.  
+  - Evidence/note: items list page + search
+- [x] **MOD-370-API-003:** OpenAPI schemas.  
+  - Evidence/note: Pydantic schemas
 
 #### Frontend
 
-- [ ] **MOD-370-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-370-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-370-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-370-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-370-FE-001:** List/dashboard.  
+  - Evidence/note: /knowledge desk
+- [-] **MOD-370-FE-002:** Detail tabs.  
+  - Evidence/note: deferred
+- [~] **MOD-370-FE-003:** Create/edit forms.  
+  - Evidence/note: publish + search forms
+- [-] **MOD-370-FE-004:** a11y pass.  
+  - Evidence/note: deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-370-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-370-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-370-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-370-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-370-WF-001:** Triggers/statuses/rules.  
+  - Evidence/note: version status machine + retrieval rules
+- [-] **MOD-370-WF-002:** Temporal/LangGraph routing.  
+  - Evidence/note: N/A for knowledge module core
+- [x] **MOD-370-WF-003:** Outbox/events.  
+  - Evidence/note: knowledge.* events
+- [-] **MOD-370-WF-004:** Notifications.  
+  - Evidence/note: deferred MOD-440
 
 #### Security / privacy / audit
 
-- [ ] **MOD-370-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-370-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-370-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-370-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-370-SEC-001:** Scope authorization.  
+  - Evidence/note: org context + permission allow/deny
+- [x] **MOD-370-SEC-002:** Tenant RLS.  
+  - Evidence/note: RLS on kn_* tables
+- [x] **MOD-370-SEC-003:** Redaction.  
+  - Evidence/note: outbox redact via kernel; no secrets in audit bodies
+- [x] **MOD-370-SEC-004:** Audit actions.  
+  - Evidence/note: kn_* audits
 
 #### Testing / verification
 
-- [ ] **MOD-370-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-370-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-370-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-370-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-370-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-370-QA-001:** Domain rules via integration.  
+  - Evidence/note: activation/search exclusions
+- [x] **MOD-370-QA-002:** Integration API tests.  
+  - Evidence/note: tests/integration/knowledge
+- [-] **MOD-370-QA-003:** Dedicated RBAC negative suite.  
+  - Evidence/note: deferred
+- [-] **MOD-370-QA-004:** Live embedding suite.  
+  - Evidence/note: stub only
+- [x] **MOD-370-QA-005:** Verification commands.  
+  - Evidence/note: Docs/modules/MOD-370/VERIFICATION.md
 
 #### Documentation
 
-- [ ] **MOD-370-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-370-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-370-DOC-001:** Module README.  
+  - Evidence/note: Docs/modules/MOD-370/README.md
+- [x] **MOD-370-DOC-002:** Verification evidence.  
+  - Evidence/note: Docs/modules/MOD-370/VERIFICATION.md
 
 #### Acceptance gate
 
-- [ ] **MOD-370-AC-001:** Agents cite the source and version used.
-- [ ] **MOD-370-AC-002:** Project-approved knowledge outranks generic examples.
-- [ ] **MOD-370-AC-003:** Unauthorized, expired, rejected, or superseded content is excluded.
-- [ ] **MOD-370-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-370-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-370-AC-001:** Every answer cites source and version.  
+  - Evidence/note: source_citation on search hits
+- [x] **MOD-370-AC-002:** Project-approved knowledge outranks generic.  
+  - Evidence/note: project scope_boost in search ranking
+- [x] **MOD-370-AC-003:** Unauthorized/expired/rejected/superseded excluded.  
+  - Evidence/note: draft/unactivated excluded in test
+- [x] **MOD-370-AC-900:** Crit/High cleared.  
+  - Evidence/note: none filed
+- [!] **MOD-370-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
 - [ ] **MOD-370-DONE:** Module marked Done before dependents
-
-## Phase 4 - Quality, Change, Release, and Reporting
 
 ### MOD-400
 

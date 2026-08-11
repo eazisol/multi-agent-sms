@@ -1844,3 +1844,119 @@ export async function startAgentRun(
   });
   return parse<AgentRun>(response);
 }
+
+export type KnowledgeItem = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  status: string;
+  classification: string;
+  owner_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type KnowledgeVersion = {
+  id: string;
+  item_id: string;
+  version_number: number;
+  status: string;
+  body_text: string;
+  version: number;
+};
+
+export type KnowledgeCitation = {
+  item_id: string;
+  item_code: string;
+  item_title: string;
+  version_id: string;
+  version_number: number;
+  chunk_id: string;
+  chunk_index: number;
+  content_text: string;
+  score: number;
+  project_id: string | null;
+  source_citation: string;
+};
+
+export async function listKnowledgeItems(
+  session: SessionState,
+  params: {
+    status?: string;
+    project_id?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<KnowledgeItem>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/knowledge/items?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<KnowledgeItem>>(response);
+}
+
+export async function createKnowledgeItem(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    description?: string;
+    project_id?: string;
+    classification?: string;
+  },
+): Promise<KnowledgeItem> {
+  const response = await apiFetch(`${apiBase()}/api/v1/knowledge/items`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<KnowledgeItem>(response);
+}
+
+export async function createKnowledgeVersion(
+  session: SessionState,
+  itemId: string,
+  body: { body_text: string; change_summary?: string },
+): Promise<KnowledgeVersion> {
+  const response = await apiFetch(`${apiBase()}/api/v1/knowledge/items/${itemId}/versions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<KnowledgeVersion>(response);
+}
+
+export async function activateKnowledgeVersion(
+  session: SessionState,
+  versionId: string,
+  expectedVersion?: number,
+): Promise<KnowledgeVersion> {
+  const response = await apiFetch(`${apiBase()}/api/v1/knowledge/versions/${versionId}/activate`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({ expected_version: expectedVersion }),
+  });
+  return parse<KnowledgeVersion>(response);
+}
+
+export async function searchKnowledge(
+  session: SessionState,
+  body: { query: string; project_id?: string; limit?: number },
+): Promise<{ query: string; items: KnowledgeCitation[]; stub: boolean }> {
+  const response = await apiFetch(`${apiBase()}/api/v1/knowledge/search`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ query: string; items: KnowledgeCitation[]; stub: boolean }>(response);
+}
