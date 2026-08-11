@@ -15,6 +15,7 @@ from masms_api.modules.identity import models as _identity_models  # noqa: F401
 from masms_api.modules.auth import models as _auth_models  # noqa: F401
 from masms_api.modules.access import models as _access_models  # noqa: F401
 from masms_api.modules.capacity import models as _capacity_models  # noqa: F401
+from masms_api.modules.configadmin import models as _config_models  # noqa: F401
 from masms_api.observability import models as _observability_models  # noqa: F401
 
 config = context.config

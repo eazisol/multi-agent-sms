@@ -28,7 +28,7 @@
 | MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 26 | 8 | 10 | 1 | 0 | Blocked |
 | MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
 | MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
-| MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
+| MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 220, partial 64, n/a 112, blocked 9, open 1344
+**Totals:** 1749 tasks — done 251, partial 72, n/a 119, blocked 10, open 1297
 
 ## Module index (plan order)
 
@@ -1304,80 +1304,127 @@
 
 #### Main points
 
-- [ ] **MOD-140-MP-001:** Implement and verify workflow definitions.
-- [ ] **MOD-140-MP-002:** Implement and verify status definitions.
-- [ ] **MOD-140-MP-003:** Implement and verify transition rules.
-- [ ] **MOD-140-MP-004:** Implement and verify follow-up rules.
-- [ ] **MOD-140-MP-005:** Implement and verify reminder rules.
-- [ ] **MOD-140-MP-006:** Implement and verify escalation rules.
-- [ ] **MOD-140-MP-007:** Implement and verify approval workflows.
-- [ ] **MOD-140-MP-008:** Implement and verify configuration versions.
+- [x] **MOD-140-MP-001:** Implement and verify workflow definitions.  
+  - Evidence/note: cfg_workflow_definitions
+- [x] **MOD-140-MP-002:** Implement and verify status definitions.  
+  - Evidence/note: cfg_status_definitions
+- [x] **MOD-140-MP-003:** Implement and verify transition rules.  
+  - Evidence/note: cfg_transition_rules
+- [x] **MOD-140-MP-004:** Implement and verify follow-up rules.  
+  - Evidence/note: cfg_followup_rules
+- [x] **MOD-140-MP-005:** Implement and verify reminder rules.  
+  - Evidence/note: cfg_reminder_rules
+- [x] **MOD-140-MP-006:** Implement and verify escalation rules.  
+  - Evidence/note: cfg_escalation_rules
+- [x] **MOD-140-MP-007:** Implement and verify approval workflows.  
+  - Evidence/note: cfg_approval_workflows
+- [x] **MOD-140-MP-008:** Implement and verify configuration versions.  
+  - Evidence/note: cfg_configuration_versions lifecycle
 
 #### Database / data design
 
-- [ ] **MOD-140-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **workflow definitions**.
-- [ ] **MOD-140-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **status definitions**.
-- [ ] **MOD-140-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **transition rules**.
-- [ ] **MOD-140-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **follow-up rules**.
-- [ ] **MOD-140-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reminder rules**.
-- [ ] **MOD-140-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **escalation rules**.
-- [ ] **MOD-140-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **approval workflows**.
-- [ ] **MOD-140-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **configuration versions**.
+- [x] **MOD-140-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **workflow definitions**.  
+  - Evidence/note: migration 20260811_0008 workflows
+- [x] **MOD-140-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **status definitions**.  
+  - Evidence/note: cfg_status_definitions
+- [x] **MOD-140-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **transition rules**.  
+  - Evidence/note: cfg_transition_rules
+- [x] **MOD-140-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **follow-up rules**.  
+  - Evidence/note: cfg_followup_rules
+- [x] **MOD-140-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reminder rules**.  
+  - Evidence/note: cfg_reminder_rules
+- [x] **MOD-140-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **escalation rules**.  
+  - Evidence/note: cfg_escalation_rules
+- [x] **MOD-140-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **approval workflows**.  
+  - Evidence/note: cfg_approval_workflows
+- [x] **MOD-140-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **configuration versions**.  
+  - Evidence/note: cfg_configuration_versions
 
 #### Backend
 
-- [ ] **MOD-140-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-140-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-140-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-140-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-140-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: ConfigAdminService
+- [x] **MOD-140-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: draft-only edits; approve/activate/rollback gates
+- [~] **MOD-140-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on activate; publisher deferred
+- [x] **MOD-140-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-140-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-140-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-140-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-140-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/config endpoints + live transition check
+- [~] **MOD-140-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite; paging deferred
+- [~] **MOD-140-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-140-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-140-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-140-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-140-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-140-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-140-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-140-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-140-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-140-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-140-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-140-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-140-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-140-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: rules stored; Temporal execution deferred
+- [-] **MOD-140-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: no Temporal/LangGraph runtime in M1
+- [~] **MOD-140-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on activate
+- [-] **MOD-140-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: reminder channel execution deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-140-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-140-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-140-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-140-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-140-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped; RBAC matrix deferred to callers
+- [x] **MOD-140-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on cfg_* tables
+- [~] **MOD-140-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit without secrets
+- [x] **MOD-140-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on version lifecycle + workflow create
 
 #### Testing / verification
 
-- [ ] **MOD-140-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-140-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-140-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-140-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-140-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-140-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/configadmin
+- [x] **MOD-140-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/configadmin
+- [~] **MOD-140-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: draft edit denied after approve
+- [-] **MOD-140-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-140-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-140-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-140-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-140-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-140/README.md
+- [x] **MOD-140-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-140-AC-001:** Only approved effective configuration controls live execution.
-- [ ] **MOD-140-AC-002:** Configuration changes require validation, audit, and rollback support.
-- [ ] **MOD-140-AC-003:** Draft configuration cannot affect live workflows.
-- [ ] **MOD-140-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-140-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-140-AC-001:** Only approved effective configuration controls live execution.  
+  - Evidence/note: live check uses effective only
+- [x] **MOD-140-AC-002:** Configuration changes require validation, audit, and rollback support.  
+  - Evidence/note: approve/activate/rollback + audit
+- [x] **MOD-140-AC-003:** Draft configuration cannot affect live workflows.  
+  - Evidence/note: draft cannot control live transitions
+- [x] **MOD-140-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-140 defects filed
+- [!] **MOD-140-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
