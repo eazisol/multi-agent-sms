@@ -93,8 +93,8 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 | MOD-300 Tickets | yes | yes | yes | ready | **partial** (project UUID gate) |
 | MOD-310 Assignments | yes | yes | yes | n/a | **API-only** |
 | MOD-320 Status engine | yes | yes | yes | n/a | **API-only** |
-| MOD-330 Approvals | yes | yes | yes | soon | **API-only** |
-| MOD-340 Follow-ups | yes | yes | yes | soon | **API-only** |
+| MOD-330 Approvals | yes | yes | yes | ready | **mostly** (queue + decide wired) |
+| MOD-340 Follow-ups | yes | yes | yes | ready | **mostly** (open list + close wired) |
 
 ---
 
@@ -107,7 +107,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 5. **P0** Dashboard ready with mock data  
 6. **P1** Clients search not server-backed  
 7. ~~**P1** Requirements desk localStorage entity/version loss~~ **fixed** — questionnaire inventory, published version, answers, briefs reload from API; discovery links to `crm_query` / project  
-8. **P1** Approvals & Follow-ups APIs unused by FE  
+8. ~~**P1** Approvals & Follow-ups APIs unused by FE~~ **fixed** — desks wired; nav `ready: true`  
 9. **P2** Milestone list not reloadable  
 10. **P2** Postgres RLS / Alembic never proven in CI  
 

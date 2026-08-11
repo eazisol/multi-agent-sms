@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { FollowUpsDeskPage } from "@/components/follow-ups-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Follow-ups"
-      description="SLA-aware follow-ups with owners, due dates, and escalations."
-    />
-  );
+  return <FollowUpsDeskPage />;
 }

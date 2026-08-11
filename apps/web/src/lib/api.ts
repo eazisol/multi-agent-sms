@@ -1308,3 +1308,259 @@ export async function satisfyDoneCheck(
   );
   return parse<TicketCheck>(response);
 }
+
+/* ---- Approvals (MOD-330) / Follow-ups (MOD-340) ---- */
+
+export type ApprovalRequest = {
+  id: string;
+  action_code: string;
+  title: string;
+  target_entity_type: string;
+  target_entity_id: string;
+  target_version: number;
+  status: string;
+  current_step_order: number;
+  version: number;
+  project_id: string | null;
+  owner_actor_id: string;
+  created_at: string;
+  decided_at: string | null;
+};
+
+export type ApprovalStep = {
+  id: string;
+  approval_id: string;
+  step_order: number;
+  role_code: string;
+  status: string;
+  assignee_actor_id: string | null;
+};
+
+export type ApprovalDecision = {
+  id: string;
+  approval_id: string;
+  decision: string;
+  actor_id: string;
+  reason: string | null;
+  decided_at: string;
+};
+
+export type FollowUp = {
+  id: string;
+  title: string;
+  direction: string;
+  source_entity_type: string;
+  source_entity_id: string;
+  recipient_actor_id: string;
+  owner_actor_id: string;
+  required_response: string;
+  closure_condition: string;
+  status: string;
+  due_at: string;
+  sla_paused: boolean;
+  project_id: string | null;
+  reminder_offset_hours: number;
+  escalation_after_hours: number;
+  created_at: string;
+  closed_at: string | null;
+};
+
+export type FollowUpReminder = {
+  id: string;
+  scheduled_for: string;
+  status: string;
+  channel: string;
+  triggered_at: string | null;
+};
+
+export type FollowUpEscalation = {
+  id: string;
+  escalate_to_role_code: string;
+  reason: string;
+  status: string;
+  triggered_at: string;
+};
+
+export async function listApprovals(
+  session: SessionState,
+  params: { status?: string; action_code?: string } = {},
+): Promise<ApprovalRequest[]> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.action_code) query.set("action_code", params.action_code);
+  const qs = query.toString();
+  const response = await fetch(`${apiBase()}/api/v1/approvals${qs ? `?${qs}` : ""}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ApprovalRequest[]>(response);
+}
+
+export async function getApproval(
+  session: SessionState,
+  approvalId: string,
+): Promise<ApprovalRequest> {
+  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ApprovalRequest>(response);
+}
+
+export async function createApproval(
+  session: SessionState,
+  body: {
+    action_code: string;
+    title: string;
+    target_entity_type: string;
+    target_entity_id: string;
+    target_version: number;
+    project_id?: string;
+    steps?: Array<{ role_code: string; order?: number; assignee_actor_id?: string }>;
+  },
+): Promise<ApprovalRequest> {
+  const response = await fetch(`${apiBase()}/api/v1/approvals`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<ApprovalRequest>(response);
+}
+
+export async function listApprovalSteps(
+  session: SessionState,
+  approvalId: string,
+): Promise<ApprovalStep[]> {
+  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/steps`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ApprovalStep[]>(response);
+}
+
+export async function listApprovalDecisions(
+  session: SessionState,
+  approvalId: string,
+): Promise<ApprovalDecision[]> {
+  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/decisions`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ApprovalDecision[]>(response);
+}
+
+export async function decideApproval(
+  session: SessionState,
+  approvalId: string,
+  body: { decision: "approve" | "reject" | "withdraw"; reason?: string; expected_version?: number },
+): Promise<ApprovalDecision> {
+  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/decisions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<ApprovalDecision>(response);
+}
+
+export async function addApprovalEvidence(
+  session: SessionState,
+  approvalId: string,
+  body: { evidence_ref: string; evidence_type?: string; note?: string },
+): Promise<{ id: string }> {
+  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/evidence`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function listOpenFollowUps(session: SessionState): Promise<FollowUp[]> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<FollowUp[]>(response);
+}
+
+export async function createFollowUp(
+  session: SessionState,
+  body: {
+    title: string;
+    source_entity_type: string;
+    source_entity_id: string;
+    recipient_actor_id: string;
+    owner_actor_id: string;
+    required_response: string;
+    closure_condition: string;
+    due_offset_hours?: number;
+    project_id?: string;
+    rule_version_id?: string;
+    reminder_offset_hours?: number;
+    escalation_after_hours?: number;
+  },
+): Promise<FollowUp> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<FollowUp>(response);
+}
+
+export async function addFollowUpClosureEvidence(
+  session: SessionState,
+  followUpId: string,
+  body: { evidence_ref: string; evidence_type?: string; note?: string },
+): Promise<{ id: string }> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/closure-evidence`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function closeFollowUp(
+  session: SessionState,
+  followUpId: string,
+): Promise<FollowUp> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/close`, {
+    method: "POST",
+    headers: headers(session),
+  });
+  return parse<FollowUp>(response);
+}
+
+export async function processFollowUpOverdue(
+  session: SessionState,
+  followUpId: string,
+): Promise<{ followup_id: string; reminders_created: number; escalations_created: number }> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/process-overdue`, {
+    method: "POST",
+    headers: headers(session),
+  });
+  return parse(response);
+}
+
+export async function listFollowUpReminders(
+  session: SessionState,
+  followUpId: string,
+): Promise<FollowUpReminder[]> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/reminders`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<FollowUpReminder[]>(response);
+}
+
+export async function listFollowUpEscalations(
+  session: SessionState,
+  followUpId: string,
+): Promise<FollowUpEscalation[]> {
+  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/escalations`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<FollowUpEscalation[]>(response);
+}

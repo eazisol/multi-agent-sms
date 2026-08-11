@@ -47,8 +47,8 @@ export const NAV_SECTIONS: NavSection[] = [
     id: "coord",
     label: "Coordination",
     items: [
-      { href: "/follow-ups", label: "Follow-ups", ready: false },
-      { href: "/approvals", label: "Approvals", ready: false },
+      { href: "/follow-ups", label: "Follow-ups", ready: true },
+      { href: "/approvals", label: "Approvals", ready: true },
     ],
   },
   {
