@@ -741,6 +741,7 @@ export type Questionnaire = {
   code: string;
   title: string;
   status: string;
+  created_at?: string;
 };
 
 export type QuestionnaireVersion = {
@@ -754,6 +755,8 @@ export type QuestionnaireVersion = {
     mandatory: boolean;
     answer_type: string;
   }>;
+  published_at?: string | null;
+  created_at?: string;
 };
 
 export type CompletenessScore = {
@@ -772,6 +775,18 @@ export type RequirementsBrief = {
   status: string;
   version_number: number;
   approved_by_actor_id: string | null;
+  related_entity_type?: string;
+  related_entity_id?: string;
+  created_at?: string;
+};
+
+export type RequirementAnswer = {
+  id: string;
+  question_key: string;
+  answer_text: string | null;
+  questionnaire_version_id: string;
+  related_entity_type: string;
+  related_entity_id: string;
 };
 
 export type Ticket = {
@@ -909,6 +924,58 @@ export async function sendCommsMessage(
   return parse<CommsMessage>(response);
 }
 
+export async function listQuestionnaires(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<Questionnaire[]> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 50));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await fetch(`${apiBase()}/api/v1/requirements/questionnaires?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<Questionnaire[]>(response);
+}
+
+export async function getPublishedQuestionnaireVersion(
+  session: SessionState,
+  questionnaireId: string,
+): Promise<QuestionnaireVersion> {
+  const response = await fetch(
+    `${apiBase()}/api/v1/requirements/questionnaires/${questionnaireId}/published-version`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<QuestionnaireVersion>(response);
+}
+
+export async function listRequirementAnswers(
+  session: SessionState,
+  params: {
+    questionnaire_version_id: string;
+    related_entity_type: string;
+    related_entity_id: string;
+  },
+): Promise<RequirementAnswer[]> {
+  const query = new URLSearchParams({
+    questionnaire_version_id: params.questionnaire_version_id,
+    related_entity_type: params.related_entity_type,
+    related_entity_id: params.related_entity_id,
+  });
+  const response = await fetch(`${apiBase()}/api/v1/requirements/answers?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<RequirementAnswer[]>(response);
+}
+
 export async function createQuestionnaire(
   session: SessionState,
   body: { code: string; title: string },
@@ -1039,13 +1106,22 @@ export async function approveRequirementsBrief(
 
 export async function listRequirementsBriefs(
   session: SessionState,
-  relatedEntityType: string,
-  relatedEntityId: string,
+  params: {
+    related_entity_type?: string;
+    related_entity_id?: string;
+    status?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
 ): Promise<RequirementsBrief[]> {
-  const query = new URLSearchParams({
-    related_entity_type: relatedEntityType,
-    related_entity_id: relatedEntityId,
-  });
+  const query = new URLSearchParams();
+  if (params.related_entity_type) query.set("related_entity_type", params.related_entity_type);
+  if (params.related_entity_id) query.set("related_entity_id", params.related_entity_id);
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 50));
+  query.set("offset", String(params.offset ?? 0));
   const response = await fetch(`${apiBase()}/api/v1/requirements/briefs?${query}`, {
     headers: headers(session),
     cache: "no-store",

@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.errors import NotFoundError
 from masms_api.modules.requirements.schemas import (
     AnswerRead,
     AnswerUpsert,
@@ -42,6 +43,51 @@ def create_questionnaire(
     return QuestionnaireRead.model_validate(service.create_questionnaire(body))
 
 
+@router.get("/questionnaires", response_model=list[QuestionnaireRead])
+def list_questionnaires(
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    service: RequirementsService = Depends(_service),
+) -> list[QuestionnaireRead]:
+    rows = service.list_questionnaires(status=status, q=q, limit=limit, offset=offset)
+    return [QuestionnaireRead.model_validate(r) for r in rows]
+
+
+@router.get("/questionnaires/{questionnaire_id}", response_model=QuestionnaireRead)
+def get_questionnaire(
+    questionnaire_id: UUID, service: RequirementsService = Depends(_service)
+) -> QuestionnaireRead:
+    return QuestionnaireRead.model_validate(service.get_questionnaire(questionnaire_id))
+
+
+@router.get(
+    "/questionnaires/{questionnaire_id}/versions",
+    response_model=list[QuestionnaireVersionRead],
+)
+def list_questionnaire_versions(
+    questionnaire_id: UUID, service: RequirementsService = Depends(_service)
+) -> list[QuestionnaireVersionRead]:
+    return [
+        QuestionnaireVersionRead.model_validate(r)
+        for r in service.list_questionnaire_versions(questionnaire_id)
+    ]
+
+
+@router.get(
+    "/questionnaires/{questionnaire_id}/published-version",
+    response_model=QuestionnaireVersionRead,
+)
+def get_published_version(
+    questionnaire_id: UUID, service: RequirementsService = Depends(_service)
+) -> QuestionnaireVersionRead:
+    row = service.get_latest_published_version(questionnaire_id)
+    if row is None:
+        raise NotFoundError("No published questionnaire version found")
+    return QuestionnaireVersionRead.model_validate(row)
+
+
 @router.post("/questionnaire-versions", response_model=QuestionnaireVersionRead, status_code=201)
 def create_version(
     body: QuestionnaireVersionCreate, service: RequirementsService = Depends(_service)
@@ -64,6 +110,21 @@ def upsert_answer(
     body: AnswerUpsert, service: RequirementsService = Depends(_service)
 ) -> AnswerRead:
     return AnswerRead.model_validate(service.upsert_answer(body))
+
+
+@router.get("/answers", response_model=list[AnswerRead])
+def list_answers(
+    questionnaire_version_id: UUID = Query(),
+    related_entity_type: str = Query(min_length=2, max_length=64),
+    related_entity_id: UUID = Query(),
+    service: RequirementsService = Depends(_service),
+) -> list[AnswerRead]:
+    rows = service.list_answers(
+        questionnaire_version_id=questionnaire_version_id,
+        related_entity_type=related_entity_type,
+        related_entity_id=related_entity_id,
+    )
+    return [AnswerRead.model_validate(r) for r in rows]
 
 
 @router.post("/completeness-scores", response_model=CompletenessScoreRead, status_code=201)
@@ -96,8 +157,12 @@ def approve_brief(
 
 @router.get("/briefs", response_model=list[BriefRead])
 def list_briefs(
-    related_entity_type: str = Query(min_length=2, max_length=64),
-    related_entity_id: UUID = Query(),
+    related_entity_type: str | None = Query(default=None, min_length=2, max_length=64),
+    related_entity_id: UUID | None = Query(default=None),
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
     service: RequirementsService = Depends(_service),
 ) -> list[BriefRead]:
     return [
@@ -105,5 +170,16 @@ def list_briefs(
         for b in service.list_briefs(
             related_entity_type=related_entity_type,
             related_entity_id=related_entity_id,
+            status=status,
+            q=q,
+            limit=limit,
+            offset=offset,
         )
     ]
+
+
+@router.get("/briefs/{brief_id}", response_model=BriefRead)
+def get_brief(
+    brief_id: UUID, service: RequirementsService = Depends(_service)
+) -> BriefRead:
+    return BriefRead.model_validate(service.get_brief(brief_id))

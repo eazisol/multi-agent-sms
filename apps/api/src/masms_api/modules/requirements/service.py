@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ForbiddenError, NotFoundError
@@ -60,6 +60,83 @@ class RequirementsService:
         self.uow.commit()
         self.uow.refresh(row)
         return row
+
+    def list_questionnaires(
+        self,
+        *,
+        status: str | None = None,
+        q: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[Questionnaire]:
+        stmt = select(Questionnaire).where(
+            Questionnaire.organization_id == self.ctx.organization_id
+        )
+        if status:
+            stmt = stmt.where(Questionnaire.status == status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            stmt = stmt.where(
+                or_(Questionnaire.code.ilike(like), Questionnaire.title.ilike(like))
+            )
+        stmt = (
+            stmt.order_by(Questionnaire.created_at.desc())
+            .offset(max(0, offset))
+            .limit(max(1, min(limit, 200)))
+        )
+        return list(self.db.scalars(stmt).all())
+
+    def get_questionnaire(self, questionnaire_id: UUID) -> Questionnaire:
+        return self._get_questionnaire(questionnaire_id)
+
+    def list_questionnaire_versions(
+        self, questionnaire_id: UUID
+    ) -> list[QuestionnaireVersion]:
+        self._get_questionnaire(questionnaire_id)
+        return list(
+            self.db.scalars(
+                select(QuestionnaireVersion)
+                .where(
+                    QuestionnaireVersion.organization_id == self.ctx.organization_id,
+                    QuestionnaireVersion.questionnaire_id == questionnaire_id,
+                )
+                .order_by(QuestionnaireVersion.version_number.desc())
+            )
+        )
+
+    def get_latest_published_version(
+        self, questionnaire_id: UUID
+    ) -> QuestionnaireVersion | None:
+        self._get_questionnaire(questionnaire_id)
+        return self.db.scalar(
+            select(QuestionnaireVersion)
+            .where(
+                QuestionnaireVersion.organization_id == self.ctx.organization_id,
+                QuestionnaireVersion.questionnaire_id == questionnaire_id,
+                QuestionnaireVersion.status == "published",
+            )
+            .order_by(QuestionnaireVersion.version_number.desc())
+            .limit(1)
+        )
+
+    def list_answers(
+        self,
+        *,
+        questionnaire_version_id: UUID,
+        related_entity_type: str,
+        related_entity_id: UUID,
+    ) -> list[RequirementAnswer]:
+        self._get_version(questionnaire_version_id)
+        stmt = select(RequirementAnswer).where(
+            RequirementAnswer.organization_id == self.ctx.organization_id,
+            RequirementAnswer.questionnaire_version_id == questionnaire_version_id,
+            RequirementAnswer.related_entity_type == related_entity_type,
+            RequirementAnswer.related_entity_id == related_entity_id,
+        )
+        ctx_client = self.ctx.tenant.client_id
+        if ctx_client is not None:
+            stmt = stmt.where(RequirementAnswer.client_id == ctx_client)
+        return list(self.db.scalars(stmt.order_by(RequirementAnswer.question_key)).all())
 
     def create_version(self, data: QuestionnaireVersionCreate) -> QuestionnaireVersion:
         questionnaire = self._get_questionnaire(data.questionnaire_id)
@@ -361,18 +438,41 @@ class RequirementsService:
         return row
 
     def list_briefs(
-        self, *, related_entity_type: str, related_entity_id: UUID
+        self,
+        *,
+        related_entity_type: str | None = None,
+        related_entity_id: UUID | None = None,
+        status: str | None = None,
+        q: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
     ) -> list[RequirementBrief]:
-        rows = self.db.scalars(
-            select(RequirementBrief)
-            .where(
-                RequirementBrief.organization_id == self.ctx.organization_id,
-                RequirementBrief.related_entity_type == related_entity_type,
-                RequirementBrief.related_entity_id == related_entity_id,
-            )
-            .order_by(RequirementBrief.version_number)
+        stmt = select(RequirementBrief).where(
+            RequirementBrief.organization_id == self.ctx.organization_id
         )
-        return list(rows)
+        ctx_client = self.ctx.tenant.client_id
+        if ctx_client is not None:
+            stmt = stmt.where(RequirementBrief.client_id == ctx_client)
+        if related_entity_type:
+            stmt = stmt.where(RequirementBrief.related_entity_type == related_entity_type)
+        if related_entity_id is not None:
+            stmt = stmt.where(RequirementBrief.related_entity_id == related_entity_id)
+        if status:
+            stmt = stmt.where(RequirementBrief.status == status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            stmt = stmt.where(
+                or_(RequirementBrief.title.ilike(like), RequirementBrief.summary.ilike(like))
+            )
+        stmt = (
+            stmt.order_by(RequirementBrief.created_at.desc())
+            .offset(max(0, offset))
+            .limit(max(1, min(limit, 200)))
+        )
+        return list(self.db.scalars(stmt).all())
+
+    def get_brief(self, brief_id: UUID) -> RequirementBrief:
+        return self._get_brief(brief_id)
 
     def _get_questionnaire(self, questionnaire_id: UUID) -> Questionnaire:
         row = self.db.scalar(select(Questionnaire).where(Questionnaire.id == questionnaire_id))

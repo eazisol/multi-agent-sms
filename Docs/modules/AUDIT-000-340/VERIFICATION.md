@@ -62,7 +62,7 @@ Treat checklist `done` as **M1 implementation claimed**, not “production-compl
 | `/clients` | **Yes** | Search is client-side on first 50 |
 | `/queries` | **Yes** | Fixed list+filters (`eb95c1a`) |
 | `/comms` | **Yes** | Inbox list + thread |
-| `/requirements` | **Scoped only** | Briefs for local entity UUID |
+| `/requirements` | **Yes** | Questionnaires + briefs from API; links to crm_query |
 | `/projects` | **Yes** | Inventory + search; sets workspace project |
 | `/documents` | **Yes** | Library + search; reload keeps selection |
 
@@ -86,7 +86,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 | MOD-200 Clients | yes | yes | yes | ready | **mostly** |
 | MOD-210 Queries | yes | yes | yes | ready | **mostly** (post list fix) |
 | MOD-220 Comms | yes | yes | yes | ready | **mostly** (inbox list wired) |
-| MOD-230 Requirements | yes | yes | yes | ready | **weak** (local entity gate) |
+| MOD-230 Requirements | yes | yes | yes | ready | **mostly** (questionnaire/brief lists wired) |
 | MOD-240 Projects | yes | yes | yes | ready | **mostly** (inventory list wired) |
 | MOD-250 Documents | yes | yes | yes | ready | **mostly** (library list wired) |
 | MOD-260 Roadmap | yes | yes | yes | ready | **partial** (project UUID gate) |
@@ -106,7 +106,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 4. ~~**P0** Missing `GET /documents`~~ **fixed** — list + get + Documents library  
 5. **P0** Dashboard ready with mock data  
 6. **P1** Clients search not server-backed  
-7. **P1** Requirements desk localStorage entity/version loss  
+7. ~~**P1** Requirements desk localStorage entity/version loss~~ **fixed** — questionnaire inventory, published version, answers, briefs reload from API; discovery links to `crm_query` / project  
 8. **P1** Approvals & Follow-ups APIs unused by FE  
 9. **P2** Milestone list not reloadable  
 10. **P2** Postgres RLS / Alembic never proven in CI  

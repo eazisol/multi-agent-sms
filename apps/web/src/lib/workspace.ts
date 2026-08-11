@@ -1,11 +1,11 @@
-/** Shared workspace IDs persisted locally (CRUD-lite APIs often lack list endpoints). */
+/** Shared workspace IDs persisted locally across desks. */
 
 const PROJECT_KEY = "masms.workspace.projectId";
 const QUERY_KEY = "masms.workspace.queryId";
 const DOCUMENT_KEY = "masms.workspace.documentId";
 const CONVERSATION_KEY = "masms.workspace.conversationId";
 const TICKET_KEY = "masms.workspace.ticketId";
-const REQUIREMENT_ENTITY_KEY = "masms.workspace.requirementEntityId";
+const QUESTIONNAIRE_KEY = "masms.workspace.questionnaireId";
 
 function read(key: string): string {
   if (typeof window === "undefined") return "";
@@ -58,10 +58,20 @@ export function setWorkspaceTicketId(id: string) {
   write(TICKET_KEY, id);
 }
 
-export function getWorkspaceRequirementEntityId(): string {
-  return read(REQUIREMENT_ENTITY_KEY);
+export function getWorkspaceQuestionnaireId(): string {
+  return read(QUESTIONNAIRE_KEY);
 }
 
+export function setWorkspaceQuestionnaireId(id: string) {
+  write(QUESTIONNAIRE_KEY, id);
+}
+
+/** Prefer linking discovery to a crm_query / project from loaded APIs. */
+export function getWorkspaceRequirementEntityId(): string {
+  return getWorkspaceQueryId() || getWorkspaceProjectId();
+}
+
+/** Prefer setWorkspaceQueryId / setWorkspaceProjectId. */
 export function setWorkspaceRequirementEntityId(id: string) {
-  write(REQUIREMENT_ENTITY_KEY, id);
+  setWorkspaceQueryId(id);
 }
