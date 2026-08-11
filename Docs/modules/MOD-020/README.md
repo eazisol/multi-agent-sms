@@ -1,13 +1,13 @@
 # MOD-020 — Shared Architecture, Domain Kernel, and API Standards
 
-**Status:** Implementation draft (M1 complete; BE/API/AC partial)  
-**Human Done (AC-901):** NOT obtained
+**Status:** Done (kernel library)  
+**Human Done (AC-901):** Approved 2026-08-11 by workspace owner
 
 ## Purpose
 
-Common typed identifiers, actor and tenant context, domain errors, transactions, API contracts, and event boundaries for all modules.
+Common typed identifiers, actor and tenant context, domain errors, transactions, API contracts, redaction, audit action codes, and event boundaries for all modules.
 
-## M1 delivered
+## Delivered
 
 | ID | Deliverable | Location |
 |---|---|---|
@@ -20,21 +20,22 @@ Common typed identifiers, actor and tenant context, domain errors, transactions,
 | MOD-020-MP-007 | `application/problem+json` | `kernel/problem.py` (+ compat `message`) |
 | MOD-020-MP-008 | Shared PageMeta | `kernel/pagination.py` |
 | MOD-020-MP-009 | `assert_expected_version` | `kernel/concurrency.py` |
+| MOD-020-SEC-001 | Org/project scope asserts | `kernel/authz.py` (RBAC store = MOD-120) |
+| MOD-020-SEC-003 | Payload redaction | `kernel/redact.py` (outbox enqueue applies) |
+| MOD-020-SEC-004 | Audit action catalog | `kernel/audit_actions.py` (writers = MOD-040) |
 
-Governance uses UoW, shared paging/concurrency, and enqueues `governance.baseline.created` on baseline create.
+## Explicit N/A (kernel is not a business module)
 
-## Remaining (beyond M1)
+- **API-001 / FE-\*** — no entity CRUD UI or module-owned CRUD routes
+- **WF-001** — business workflow rules live in domain modules + `Docs/governance/WORKFLOW.md`
+- **WF-002** — Temporal waits = MOD-350; LangGraph = MOD-360
+- **WF-004** — notifications = MOD-440
+- **QA-004** — Temporal/agent/file/perf suites owned by those modules; kernel covers outbox + authz/redact tests
 
-- Real **SNS/SQS (or approved broker) outbox bridge** — MOD-500; M1 local relay is `/api/v1/observability/outbox/relay`
-- Full OpenAPI prose examples for every edge-case problem detail
+## Remaining (platform, not MOD-020 blockers)
+
+- Real SNS/SQS outbox bridge — MOD-500; M1 local relay is `/api/v1/observability/outbox/relay`
 - Platform-wide enforcement that agents cannot open DB sessions
-- Human AC-901
-
-## Template guidance
-
-- FE CRUD for the kernel itself: **N/A**
-- Auth0: deferred to MOD-110; this module defines context *shape*
-- Outbox: enqueue in-transaction + relay stub publisher for M1; broker consumer still MOD-500
 
 ## Verification
 

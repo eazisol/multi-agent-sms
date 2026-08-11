@@ -11,6 +11,7 @@ from sqlalchemy.orm import Mapped, Session, mapped_column
 from sqlalchemy.types import JSON, Uuid
 
 from masms_api.db import Base
+from masms_api.kernel.redact import redact_mapping
 
 
 class OutboxMessage(Base):
@@ -60,7 +61,7 @@ def enqueue_outbox(
         aggregate_type=aggregate_type,
         aggregate_id=aggregate_id,
         event_type=event_type,
-        payload=payload,
+        payload=redact_mapping(payload),
         correlation_id=correlation_id,
         causation_id=causation_id,
         status="pending",

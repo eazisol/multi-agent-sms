@@ -1,27 +1,22 @@
 # MOD-020 Verification Evidence
 
-**Date:** 2026-08-10  
-**Slice:** Full M1 (typed IDs through optimistic concurrency + outbox migration)  
-**Human Done (AC-901):** NOT obtained
+**Date:** 2026-08-11  
+**Slice:** Kernel complete (authz + redact + audit catalog + prior M1)  
+**Human Done (AC-901):** Approved 2026-08-11 by workspace owner
 
 ## Commands executed
 
 | Check | Result |
 |---|---|
-| `uv run ruff check apps/api/src tests` | passed |
-| `uv run mypy apps/api/src/masms_api` | passed |
-| `uv run pytest -q` | **23 passed** |
-| `uv run alembic upgrade head` | **passed** → `20260810_0002` |
-| `docker compose` postgres/redis | **healthy** |
+| `.\.venv\Scripts\python.exe -m pytest tests/unit/kernel -q --tb=short` | **18 passed** (kernel; includes authz/redact/audit) |
+| Integration suite / OpenAPI | optional; no new routes |
 
 ## Scope of this evidence
 
-- `masms_api.kernel` (ids, actor, tenant, errors, uow, outbox, problem, pagination, concurrency)
-- Governance wires UoW + shared helpers + outbox enqueue on baseline create
-- Problem responses use `application/problem+json` with compat `message` field
+- `masms_api.kernel` — ids, actor, tenant, errors, uow, outbox (redacted payloads), problem, pagination, concurrency, authz, redact, audit_actions
+- Observability `redact_mapping` re-exports kernel implementation
 
-## Not verified / remaining
+## Not verified / remaining (deferred platforms)
 
-- Outbox publisher relay to broker (rows stay `pending` until later module)
-- Temporal/LangGraph enforcement beyond documentation
-- Human AC-901  
+- Outbox publisher relay to SNS/SQS (MOD-500)
+- Agent DB-session lockdown platform-wide

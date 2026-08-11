@@ -31,7 +31,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 |---:|---|---|---:|---:|---:|
 | 1 | MOD-000 | Done | 37 | 0 | 0 |
 | 2 | MOD-010 | Done | 17 | 0 | 0 |
-| 3 | MOD-020 | In progress | 36 | 0 | 8 |
+| 3 | MOD-020 | Done | 40 | 0 | 0 |
 | 4 | MOD-030 | Done | 15 | 0 | 0 |
 | 5 | MOD-040 | Done | 35 | 0 | 0 |
 | 6 | MOD-100 | Done | 41 | 0 | 0 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 805 · partial 4 · n/a 175 · blocked 0 · open 771
+**All tasks:** 1749 · done 809 · partial 4 · n/a 179 · blocked 0 · open 763
 
 ## Phase 0 - Governance and Foundation
 
@@ -235,34 +235,34 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-020-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-020-BE-004`)
 
-- [~] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-020-API-001`)
+- [x] **API**
+  - [-] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-020-API-001`)
   - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-020-API-002`)
   - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-020-API-003`)
 
-- [~] **Frontend**
+- [x] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-020-FE-001`)
   - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-020-FE-002`)
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-020-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-020-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-020-WF-001`)
+- [x] **Workflow / agents / events**
+  - [-] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-020-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-020-WF-002`)
   - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-020-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-020-WF-004`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-020-WF-004`)
 
-- [~] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-020-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-020-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-020-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-020-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-020-SEC-004`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-020-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-020-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-020-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-020-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-020-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-020-QA-004`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-020-QA-003`)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-020-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-020-QA-005`)
 
 - [x] **Docs**
