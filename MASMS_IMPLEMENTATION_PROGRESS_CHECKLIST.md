@@ -34,7 +34,7 @@
 | MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 29 | 9 | 6 | 1 | 0 | Blocked |
 | MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 0 | 0 | 0 | 0 | 41 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 390, partial 111, n/a 155, blocked 15, open 1078
+**Totals:** 1749 tasks — done 419, partial 120, n/a 161, blocked 16, open 1033
 
 ## Module index (plan order)
 
@@ -2084,78 +2084,123 @@
 
 #### Main points
 
-- [ ] **MOD-250-MP-001:** Implement and verify documents.
-- [ ] **MOD-250-MP-002:** Implement and verify document versions.
-- [ ] **MOD-250-MP-003:** Implement and verify templates.
-- [ ] **MOD-250-MP-004:** Implement and verify template versions.
-- [ ] **MOD-250-MP-005:** Implement and verify attachments.
-- [ ] **MOD-250-MP-006:** Implement and verify document permissions.
-- [ ] **MOD-250-MP-007:** Implement and verify scan results.
+- [x] **MOD-250-MP-001:** Implement and verify documents.  
+  - Evidence/note: doc_documents
+- [x] **MOD-250-MP-002:** Implement and verify document versions.  
+  - Evidence/note: doc_document_versions
+- [x] **MOD-250-MP-003:** Implement and verify templates.  
+  - Evidence/note: doc_templates
+- [x] **MOD-250-MP-004:** Implement and verify template versions.  
+  - Evidence/note: doc_template_versions
+- [x] **MOD-250-MP-005:** Implement and verify attachments.  
+  - Evidence/note: doc_attachments
+- [x] **MOD-250-MP-006:** Implement and verify document permissions.  
+  - Evidence/note: doc_document_permissions
+- [x] **MOD-250-MP-007:** Implement and verify scan results.  
+  - Evidence/note: doc_scan_results
 
 #### Database / data design
 
-- [ ] **MOD-250-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **documents**.
-- [ ] **MOD-250-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **document versions**.
-- [ ] **MOD-250-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **templates**.
-- [ ] **MOD-250-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **template versions**.
-- [ ] **MOD-250-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **attachments**.
-- [ ] **MOD-250-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **document permissions**.
-- [ ] **MOD-250-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **scan results**.
+- [x] **MOD-250-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **documents**.  
+  - Evidence/note: migration 20260811_0014 doc_documents
+- [x] **MOD-250-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **document versions**.  
+  - Evidence/note: doc_document_versions
+- [x] **MOD-250-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **templates**.  
+  - Evidence/note: doc_templates
+- [x] **MOD-250-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **template versions**.  
+  - Evidence/note: doc_template_versions
+- [x] **MOD-250-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **attachments**.  
+  - Evidence/note: doc_attachments
+- [x] **MOD-250-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **document permissions**.  
+  - Evidence/note: doc_document_permissions
+- [x] **MOD-250-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **scan results**.  
+  - Evidence/note: doc_scan_results
 
 #### Backend
 
-- [ ] **MOD-250-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-250-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-250-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-250-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-250-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: DocumentsService
+- [x] **MOD-250-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: scan gate + access checks + available metadata
+- [~] **MOD-250-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on scan record
+- [x] **MOD-250-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-250-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-250-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-250-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-250-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/documents endpoints
+- [~] **MOD-250-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite actions
+- [~] **MOD-250-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-250-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-250-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-250-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-250-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-250-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-250-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-250-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-250-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-250-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-250-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-250-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-250-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-250-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: scan->quarantine/available flow
+- [-] **MOD-250-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-250-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on scan
+- [-] **MOD-250-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-250-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-250-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-250-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-250-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-250-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client/project scope
+- [x] **MOD-250-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on doc_* tables
+- [~] **MOD-250-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit omits file contents
+- [x] **MOD-250-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/scan/available/permission
 
 #### Testing / verification
 
-- [ ] **MOD-250-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-250-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-250-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-250-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-250-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-250-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/documents
+- [x] **MOD-250-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/documents
+- [~] **MOD-250-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: permission denials + client scope
+- [~] **MOD-250-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: scan stub; no real AV
+- [x] **MOD-250-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-250-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-250-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-250-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-250/README.md
+- [x] **MOD-250-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-250-AC-001:** Authoritative documents have version, owner, status, and effective date.
-- [ ] **MOD-250-AC-002:** Unsafe files never become available or indexed.
-- [ ] **MOD-250-AC-003:** Access applies to files, previews, extracted text, and embeddings.
-- [ ] **MOD-250-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-250-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-250-AC-001:** Authoritative documents have version, owner, status, and effective date.  
+  - Evidence/note: available versions require owner/status/version/effective_at
+- [x] **MOD-250-AC-002:** Unsafe files never become available or indexed.  
+  - Evidence/note: unsafe scans quarantine; indexing blocked
+- [x] **MOD-250-AC-003:** Access applies to files, previews, extracted text, and embeddings.  
+  - Evidence/note: access-check for download/preview/extract/embeddings
+- [x] **MOD-250-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-250 defects filed
+- [!] **MOD-250-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

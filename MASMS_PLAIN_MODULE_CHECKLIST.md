@@ -43,7 +43,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 13 | MOD-220 | Blocked | 27 | 8 | 0 |
 | 14 | MOD-230 | Blocked | 27 | 8 | 0 |
 | 15 | MOD-240 | Blocked | 31 | 8 | 0 |
-| 16 | MOD-250 | Not started | 0 | 0 | 45 |
+| 16 | MOD-250 | Blocked | 29 | 9 | 0 |
 | 17 | MOD-260 | Not started | 0 | 0 | 43 |
 | 18 | MOD-300 | Not started | 0 | 0 | 45 |
 | 19 | MOD-310 | Not started | 0 | 0 | 41 |
@@ -68,7 +68,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 390 · partial 111 · n/a 155 · blocked 15 · open 1078
+**All tasks:** 1749 · done 419 · partial 120 · n/a 161 · blocked 16 · open 1033
 
 ## Phase 0 - Governance and Foundation
 
@@ -1085,72 +1085,72 @@ M10: [!] Acceptance / Done gate
      M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-240-AC-900)
      M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-240-AC-901)
 
-### Module 16: [ ] MOD-250 — Documents, Standard Templates, Versioning, and Secure File Storage
+### Module 16: [!] MOD-250 — Documents, Standard Templates, Versioning, and Secure File Storage
 
-M1: [ ] Main goals
-     M1-1: [ ] Build and verify: documents  (MOD-250-MP-001)
-     M1-2: [ ] Build and verify: document versions  (MOD-250-MP-002)
-     M1-3: [ ] Build and verify: templates  (MOD-250-MP-003)
-     M1-4: [ ] Build and verify: template versions  (MOD-250-MP-004)
-     M1-5: [ ] Build and verify: attachments  (MOD-250-MP-005)
-     M1-6: [ ] Build and verify: document permissions  (MOD-250-MP-006)
-     M1-7: [ ] Build and verify: scan results  (MOD-250-MP-007)
+M1: [x] Main goals
+     M1-1: [x] Build and verify: documents  (MOD-250-MP-001)
+     M1-2: [x] Build and verify: document versions  (MOD-250-MP-002)
+     M1-3: [x] Build and verify: templates  (MOD-250-MP-003)
+     M1-4: [x] Build and verify: template versions  (MOD-250-MP-004)
+     M1-5: [x] Build and verify: attachments  (MOD-250-MP-005)
+     M1-6: [x] Build and verify: document permissions  (MOD-250-MP-006)
+     M1-7: [x] Build and verify: scan results  (MOD-250-MP-007)
 
-M2: [ ] Database
-     M2-1: [ ] Design and migrate data for: documents  (MOD-250-DB-001)
-     M2-2: [ ] Design and migrate data for: document versions  (MOD-250-DB-002)
-     M2-3: [ ] Design and migrate data for: templates  (MOD-250-DB-003)
-     M2-4: [ ] Design and migrate data for: template versions  (MOD-250-DB-004)
-     M2-5: [ ] Design and migrate data for: attachments  (MOD-250-DB-005)
-     M2-6: [ ] Design and migrate data for: document permissions  (MOD-250-DB-006)
-     M2-7: [ ] Design and migrate data for: scan results  (MOD-250-DB-007)
+M2: [x] Database
+     M2-1: [x] Design and migrate data for: documents  (MOD-250-DB-001)
+     M2-2: [x] Design and migrate data for: document versions  (MOD-250-DB-002)
+     M2-3: [x] Design and migrate data for: templates  (MOD-250-DB-003)
+     M2-4: [x] Design and migrate data for: template versions  (MOD-250-DB-004)
+     M2-5: [x] Design and migrate data for: attachments  (MOD-250-DB-005)
+     M2-6: [x] Design and migrate data for: document permissions  (MOD-250-DB-006)
+     M2-7: [x] Design and migrate data for: scan results  (MOD-250-DB-007)
 
-M3: [ ] Backend
-     M3-1: [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-250-BE-001)
-     M3-2: [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-250-BE-002)
-     M3-3: [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-250-BE-003)
-     M3-4: [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-250-BE-004)
+M3: [~] Backend
+     M3-1: [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-250-BE-001)
+     M3-2: [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-250-BE-002)
+     M3-3: [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-250-BE-003)
+     M3-4: [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-250-BE-004)
 
-M4: [ ] API
-     M4-1: [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-250-API-001)
-     M4-2: [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-250-API-002)
-     M4-3: [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-250-API-003)
+M4: [~] API
+     M4-1: [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-250-API-001)
+     M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-250-API-002)
+     M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-250-API-003)
 
-M5: [ ] Frontend
-     M5-1: [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-250-FE-001)
-     M5-2: [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-250-FE-002)
-     M5-3: [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-250-FE-003)
-     M5-4: [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-250-FE-004)
+M5: [~] Frontend
+     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-250-FE-001)
+     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-250-FE-002)
+     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-250-FE-003)
+     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-250-FE-004)
 
-M6: [ ] Workflow / agents / events
-     M6-1: [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-250-WF-001)
-     M6-2: [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-250-WF-002)
-     M6-3: [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-250-WF-003)
-     M6-4: [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-250-WF-004)
+M6: [~] Workflow / agents / events
+     M6-1: [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-250-WF-001)
+     M6-2: [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-250-WF-002)
+     M6-3: [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-250-WF-003)
+     M6-4: [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-250-WF-004)
 
-M7: [ ] Security / audit
-     M7-1: [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-250-SEC-001)
-     M7-2: [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-250-SEC-002)
-     M7-3: [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-250-SEC-003)
-     M7-4: [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-250-SEC-004)
+M7: [~] Security / audit
+     M7-1: [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-250-SEC-001)
+     M7-2: [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-250-SEC-002)
+     M7-3: [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-250-SEC-003)
+     M7-4: [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-250-SEC-004)
 
-M8: [ ] Testing
-     M8-1: [ ] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-250-QA-001)
-     M8-2: [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-250-QA-002)
-     M8-3: [ ] Add role-permission negative tests and tenant/project isolation tests.  (MOD-250-QA-003)
-     M8-4: [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-250-QA-004)
-     M8-5: [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-250-QA-005)
+M8: [~] Testing
+     M8-1: [x] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-250-QA-001)
+     M8-2: [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-250-QA-002)
+     M8-3: [~] Add role-permission negative tests and tenant/project isolation tests.  (MOD-250-QA-003)
+     M8-4: [~] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-250-QA-004)
+     M8-5: [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-250-QA-005)
 
-M9: [ ] Docs
-     M9-1: [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-250-DOC-001)
-     M9-2: [ ] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-250-DOC-002)
+M9: [x] Docs
+     M9-1: [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-250-DOC-001)
+     M9-2: [x] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-250-DOC-002)
 
-M10: [ ] Acceptance / Done gate
-     M10-1: [ ] Authoritative documents have version, owner, status, and effective date.  (MOD-250-AC-001)
-     M10-2: [ ] Unsafe files never become available or indexed.  (MOD-250-AC-002)
-     M10-3: [ ] Access applies to files, previews, extracted text, and embeddings.  (MOD-250-AC-003)
-     M10-4: [ ] All Critical and High defects for this module are resolved.  (MOD-250-AC-900)
-     M10-5: [ ] The responsible human owner reviews and approves the completion evidence.  (MOD-250-AC-901)
+M10: [!] Acceptance / Done gate
+     M10-1: [x] Authoritative documents have version, owner, status, and effective date.  (MOD-250-AC-001)
+     M10-2: [x] Unsafe files never become available or indexed.  (MOD-250-AC-002)
+     M10-3: [x] Access applies to files, previews, extracted text, and embeddings.  (MOD-250-AC-003)
+     M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-250-AC-900)
+     M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-250-AC-901)
 
 ### Module 17: [ ] MOD-260 — Project Phases, Milestones, Roadmaps, Dependencies, and Baselines
 
