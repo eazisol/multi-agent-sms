@@ -30,7 +30,7 @@
 | MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
 | MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 7 | 8 | 1 | 0 | Blocked |
-| MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 278, partial 79, n/a 127, blocked 11, open 1254
+**Totals:** 1749 tasks — done 305, partial 87, n/a 134, blocked 12, open 1211
 
 ## Module index (plan order)
 
@@ -1568,76 +1568,119 @@
 
 #### Main points
 
-- [ ] **MOD-210-MP-001:** Implement and verify queries.
-- [ ] **MOD-210-MP-002:** Implement and verify opportunities.
-- [ ] **MOD-210-MP-003:** Implement and verify qualification answers.
-- [ ] **MOD-210-MP-004:** Implement and verify query sources.
-- [ ] **MOD-210-MP-005:** Implement and verify query status history.
-- [ ] **MOD-210-MP-006:** Implement and verify first response SLA.
+- [x] **MOD-210-MP-001:** Implement and verify queries.  
+  - Evidence/note: crm_queries
+- [x] **MOD-210-MP-002:** Implement and verify opportunities.  
+  - Evidence/note: crm_opportunities
+- [x] **MOD-210-MP-003:** Implement and verify qualification answers.  
+  - Evidence/note: crm_qualification_answers
+- [x] **MOD-210-MP-004:** Implement and verify query sources.  
+  - Evidence/note: crm_query_sources
+- [x] **MOD-210-MP-005:** Implement and verify query status history.  
+  - Evidence/note: crm_query_status_history
+- [x] **MOD-210-MP-006:** Implement and verify first response SLA.  
+  - Evidence/note: first-response SLA fields
 
 #### Database / data design
 
-- [ ] **MOD-210-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **queries**.
-- [ ] **MOD-210-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **opportunities**.
-- [ ] **MOD-210-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **qualification answers**.
-- [ ] **MOD-210-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **query sources**.
-- [ ] **MOD-210-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **query status history**.
-- [ ] **MOD-210-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **first response SLA**.
+- [x] **MOD-210-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **queries**.  
+  - Evidence/note: migration 20260811_0010 crm_queries
+- [x] **MOD-210-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **opportunities**.  
+  - Evidence/note: crm_opportunities
+- [x] **MOD-210-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **qualification answers**.  
+  - Evidence/note: crm_qualification_answers
+- [x] **MOD-210-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **query sources**.  
+  - Evidence/note: crm_query_sources
+- [x] **MOD-210-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **query status history**.  
+  - Evidence/note: crm_query_status_history
+- [x] **MOD-210-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **first response SLA**.  
+  - Evidence/note: sla_due_at/first_responded_at/sla_status
 
 #### Backend
 
-- [ ] **MOD-210-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-210-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-210-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-210-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-210-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: QueriesService
+- [x] **MOD-210-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: transition map + history
+- [~] **MOD-210-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on create/convert
+- [x] **MOD-210-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-210-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-210-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-210-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-210-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/queries endpoints
+- [~] **MOD-210-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite
+- [~] **MOD-210-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-210-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-210-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-210-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-210-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-210-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-210-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-210-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-210-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-210-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-210-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-210-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-210-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-210-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: status history + SLA fields
+- [-] **MOD-210-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-210-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on create/convert
+- [-] **MOD-210-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-210-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-210-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-210-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-210-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-210-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client scope
+- [x] **MOD-210-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on crm query tables
+- [~] **MOD-210-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: original_message stored; audit omits body
+- [x] **MOD-210-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/transition/convert
 
 #### Testing / verification
 
-- [ ] **MOD-210-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-210-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-210-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-210-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-210-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-210-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/queries
+- [x] **MOD-210-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/queries
+- [~] **MOD-210-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: client scope checks in service
+- [-] **MOD-210-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-210-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-210-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-210-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-210-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-210/README.md
+- [x] **MOD-210-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-210-AC-001:** Each valid inquiry creates one traceable query.
-- [ ] **MOD-210-AC-002:** Qualification is reviewable and explainable.
-- [ ] **MOD-210-AC-003:** Conversion preserves communication, documents, follow-ups, and decisions.
-- [ ] **MOD-210-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-210-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-210-AC-001:** Each valid inquiry creates one traceable query.  
+  - Evidence/note: one query row per inquiry
+- [x] **MOD-210-AC-002:** Qualification is reviewable and explainable.  
+  - Evidence/note: qualification answers + rationale
+- [x] **MOD-210-AC-003:** Conversion preserves communication, documents, follow-ups, and decisions.  
+  - Evidence/note: convert preserves message + qualification evidence
+- [x] **MOD-210-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-210 defects filed
+- [!] **MOD-210-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

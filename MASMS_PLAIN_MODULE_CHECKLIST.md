@@ -39,7 +39,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 9 | MOD-130 | Blocked | 30 | 6 | 0 |
 | 10 | MOD-140 | Blocked | 31 | 8 | 0 |
 | 11 | MOD-200 | Blocked | 27 | 7 | 0 |
-| 12 | MOD-210 | Not started | 0 | 0 | 43 |
+| 12 | MOD-210 | Blocked | 27 | 8 | 0 |
 | 13 | MOD-220 | Not started | 0 | 0 | 43 |
 | 14 | MOD-230 | Not started | 0 | 0 | 43 |
 | 15 | MOD-240 | Not started | 0 | 0 | 47 |
@@ -68,7 +68,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 278 · partial 79 · n/a 127 · blocked 11 · open 1254
+**All tasks:** 1749 · done 305 · partial 87 · n/a 134 · blocked 12 · open 1211
 
 ## Phase 0 - Governance and Foundation
 
@@ -821,70 +821,70 @@ M10: [!] Acceptance / Done gate
      M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-200-AC-900)
      M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-200-AC-901)
 
-### Module 12: [ ] MOD-210 — Client Queries, Qualification, and Opportunities
+### Module 12: [!] MOD-210 — Client Queries, Qualification, and Opportunities
 
-M1: [ ] Main goals
-     M1-1: [ ] Build and verify: queries  (MOD-210-MP-001)
-     M1-2: [ ] Build and verify: opportunities  (MOD-210-MP-002)
-     M1-3: [ ] Build and verify: qualification answers  (MOD-210-MP-003)
-     M1-4: [ ] Build and verify: query sources  (MOD-210-MP-004)
-     M1-5: [ ] Build and verify: query status history  (MOD-210-MP-005)
-     M1-6: [ ] Build and verify: first response SLA  (MOD-210-MP-006)
+M1: [x] Main goals
+     M1-1: [x] Build and verify: queries  (MOD-210-MP-001)
+     M1-2: [x] Build and verify: opportunities  (MOD-210-MP-002)
+     M1-3: [x] Build and verify: qualification answers  (MOD-210-MP-003)
+     M1-4: [x] Build and verify: query sources  (MOD-210-MP-004)
+     M1-5: [x] Build and verify: query status history  (MOD-210-MP-005)
+     M1-6: [x] Build and verify: first response SLA  (MOD-210-MP-006)
 
-M2: [ ] Database
-     M2-1: [ ] Design and migrate data for: queries  (MOD-210-DB-001)
-     M2-2: [ ] Design and migrate data for: opportunities  (MOD-210-DB-002)
-     M2-3: [ ] Design and migrate data for: qualification answers  (MOD-210-DB-003)
-     M2-4: [ ] Design and migrate data for: query sources  (MOD-210-DB-004)
-     M2-5: [ ] Design and migrate data for: query status history  (MOD-210-DB-005)
-     M2-6: [ ] Design and migrate data for: first response SLA  (MOD-210-DB-006)
+M2: [x] Database
+     M2-1: [x] Design and migrate data for: queries  (MOD-210-DB-001)
+     M2-2: [x] Design and migrate data for: opportunities  (MOD-210-DB-002)
+     M2-3: [x] Design and migrate data for: qualification answers  (MOD-210-DB-003)
+     M2-4: [x] Design and migrate data for: query sources  (MOD-210-DB-004)
+     M2-5: [x] Design and migrate data for: query status history  (MOD-210-DB-005)
+     M2-6: [x] Design and migrate data for: first response SLA  (MOD-210-DB-006)
 
-M3: [ ] Backend
-     M3-1: [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-210-BE-001)
-     M3-2: [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-210-BE-002)
-     M3-3: [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-210-BE-003)
-     M3-4: [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-210-BE-004)
+M3: [~] Backend
+     M3-1: [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  (MOD-210-BE-001)
+     M3-2: [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  (MOD-210-BE-002)
+     M3-3: [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required.  (MOD-210-BE-003)
+     M3-4: [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  (MOD-210-BE-004)
 
-M4: [ ] API
-     M4-1: [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-210-API-001)
-     M4-2: [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-210-API-002)
-     M4-3: [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-210-API-003)
+M4: [~] API
+     M4-1: [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module.  (MOD-210-API-001)
+     M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-210-API-002)
+     M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-210-API-003)
 
-M5: [ ] Frontend
-     M5-1: [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-210-FE-001)
-     M5-2: [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-210-FE-002)
-     M5-3: [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-210-FE-003)
-     M5-4: [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-210-FE-004)
+M5: [~] Frontend
+     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-210-FE-001)
+     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-210-FE-002)
+     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-210-FE-003)
+     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-210-FE-004)
 
-M6: [ ] Workflow / agents / events
-     M6-1: [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-210-WF-001)
-     M6-2: [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-210-WF-002)
-     M6-3: [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-210-WF-003)
-     M6-4: [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-210-WF-004)
+M6: [~] Workflow / agents / events
+     M6-1: [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-210-WF-001)
+     M6-2: [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  (MOD-210-WF-002)
+     M6-3: [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  (MOD-210-WF-003)
+     M6-4: [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  (MOD-210-WF-004)
 
-M7: [ ] Security / audit
-     M7-1: [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-210-SEC-001)
-     M7-2: [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-210-SEC-002)
-     M7-3: [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-210-SEC-003)
-     M7-4: [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-210-SEC-004)
+M7: [~] Security / audit
+     M7-1: [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  (MOD-210-SEC-001)
+     M7-2: [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  (MOD-210-SEC-002)
+     M7-3: [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  (MOD-210-SEC-003)
+     M7-4: [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  (MOD-210-SEC-004)
 
-M8: [ ] Testing
-     M8-1: [ ] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-210-QA-001)
-     M8-2: [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-210-QA-002)
-     M8-3: [ ] Add role-permission negative tests and tenant/project isolation tests.  (MOD-210-QA-003)
-     M8-4: [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-210-QA-004)
-     M8-5: [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-210-QA-005)
+M8: [~] Testing
+     M8-1: [x] Add unit tests for domain rules, validation, conflicts, and invalid state.  (MOD-210-QA-001)
+     M8-2: [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  (MOD-210-QA-002)
+     M8-3: [~] Add role-permission negative tests and tenant/project isolation tests.  (MOD-210-QA-003)
+     M8-4: [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  (MOD-210-QA-004)
+     M8-5: [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  (MOD-210-QA-005)
 
-M9: [ ] Docs
-     M9-1: [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-210-DOC-001)
-     M9-2: [ ] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-210-DOC-002)
+M9: [x] Docs
+     M9-1: [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  (MOD-210-DOC-001)
+     M9-2: [x] Record migration, rollback, known limitations, verification commands, and evidence references.  (MOD-210-DOC-002)
 
-M10: [ ] Acceptance / Done gate
-     M10-1: [ ] Each valid inquiry creates one traceable query.  (MOD-210-AC-001)
-     M10-2: [ ] Qualification is reviewable and explainable.  (MOD-210-AC-002)
-     M10-3: [ ] Conversion preserves communication, documents, follow-ups, and decisions.  (MOD-210-AC-003)
-     M10-4: [ ] All Critical and High defects for this module are resolved.  (MOD-210-AC-900)
-     M10-5: [ ] The responsible human owner reviews and approves the completion evidence.  (MOD-210-AC-901)
+M10: [!] Acceptance / Done gate
+     M10-1: [x] Each valid inquiry creates one traceable query.  (MOD-210-AC-001)
+     M10-2: [x] Qualification is reviewable and explainable.  (MOD-210-AC-002)
+     M10-3: [x] Conversion preserves communication, documents, follow-ups, and decisions.  (MOD-210-AC-003)
+     M10-4: [x] All Critical and High defects for this module are resolved.  (MOD-210-AC-900)
+     M10-5: [!] The responsible human owner reviews and approves the completion evidence.  (MOD-210-AC-901)
 
 ### Module 13: [ ] MOD-220 — Conversations, Messages, Attachments, and Communication History
 
