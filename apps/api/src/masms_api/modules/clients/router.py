@@ -51,11 +51,13 @@ def create_client(
 
 @router.get("", response_model=ClientPage)
 def list_clients(
+    q: str | None = Query(default=None),
+    status: str | None = Query(default=None),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: ClientsService = Depends(_service),
 ) -> ClientPage:
-    items, page = service.list_clients(limit=limit, offset=offset)
+    items, page = service.list_clients(q=q, status=status, limit=limit, offset=offset)
     return ClientPage(items=[ClientRead.model_validate(i) for i in items], page=page)
 
 

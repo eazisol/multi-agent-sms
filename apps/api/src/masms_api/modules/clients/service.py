@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ConflictError, ForbiddenError, NotFoundError, ValidationAppError
@@ -86,7 +86,14 @@ class ClientsService:
         self.uow.refresh(row)
         return row
 
-    def list_clients(self, *, limit: int = 20, offset: int = 0) -> tuple[list[Client], PageMeta]:
+    def list_clients(
+        self,
+        *,
+        q: str | None = None,
+        status: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[Client], PageMeta]:
         limit, offset = normalize_paging(limit, offset)
         filters = [
             Client.organization_id == self.ctx.organization_id,
@@ -94,6 +101,18 @@ class ClientsService:
         ]
         if self.ctx.tenant.client_id is not None:
             filters.append(Client.id == self.ctx.tenant.client_id)
+        if status:
+            filters.append(Client.status == status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            filters.append(
+                or_(
+                    Client.legal_name.ilike(like),
+                    Client.code.ilike(like),
+                    Client.trading_name.ilike(like),
+                    Client.industry.ilike(like),
+                )
+            )
         total = self.db.scalar(select(func.count()).select_from(Client).where(*filters)) or 0
         rows = list(
             self.db.scalars(

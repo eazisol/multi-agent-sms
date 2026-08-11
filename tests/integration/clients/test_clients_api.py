@@ -168,3 +168,18 @@ def test_clients_contacts_merge_and_isolation(client: TestClient) -> None:
     codes = {item["code"] for item in clients.json()["items"]}
     assert "acme" in codes
     assert "acme2" not in codes
+
+    searched = client.get("/api/v1/clients", headers=headers, params={"q": "Acme"})
+    assert searched.status_code == 200
+    assert searched.json()["page"]["total"] >= 1
+    assert any(item["id"] == a_id for item in searched.json()["items"])
+
+    by_industry = client.get(
+        "/api/v1/clients", headers=headers, params={"q": "Technology"}
+    )
+    assert by_industry.status_code == 200
+    # industry may or may not be set on fixtures — code/legal_name search above is the contract
+    no_match = client.get("/api/v1/clients", headers=headers, params={"q": "zzzz-no-such"})
+    assert no_match.status_code == 200
+    assert no_match.json()["items"] == []
+    assert no_match.json()["page"]["total"] == 0

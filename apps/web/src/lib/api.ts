@@ -353,9 +353,11 @@ export type Milestone = {
 
 export async function listClients(
   session: SessionState,
-  params: { limit?: number; offset?: number } = {},
+  params: { q?: string; status?: string; limit?: number; offset?: number } = {},
 ): Promise<ClientPage> {
   const query = new URLSearchParams();
+  if (params.q) query.set("q", params.q);
+  if (params.status) query.set("status", params.status);
   query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await fetch(`${apiBase()}/api/v1/clients?${query}`, {

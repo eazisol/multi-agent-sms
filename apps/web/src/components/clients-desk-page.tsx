@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Plus, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
@@ -36,31 +36,25 @@ export function ClientsDeskPage() {
     setLoading(true);
     setError(null);
     try {
-      const page = await listClients(session, { limit: 50, offset: 0 });
+      const page = await listClients(session, {
+        q: q.trim() || undefined,
+        limit: 50,
+        offset: 0,
+      });
       setItems(page.items);
       setTotal(page.page.total);
     } catch (err) {
       setError(err instanceof ApiError ? err.problem.message : "Unable to load clients");
       setItems([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
-  }, [session]);
+  }, [session, q]);
 
   useEffect(() => {
     void load();
   }, [load]);
-
-  const filtered = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    if (!query) return items;
-    return items.filter(
-      (c) =>
-        c.legal_name.toLowerCase().includes(query) ||
-        c.code.toLowerCase().includes(query) ||
-        (c.industry ?? "").toLowerCase().includes(query),
-    );
-  }, [items, q]);
 
   async function onCreate(event: FormEvent) {
     event.preventDefault();
@@ -118,7 +112,12 @@ export function ClientsDeskPage() {
                   onChange={(e) => {
                     setLegalName(e.target.value);
                     if (!code) {
-                      setCode(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""));
+                      setCode(
+                        e.target.value
+                          .toLowerCase()
+                          .replace(/[^a-z0-9]+/g, "-")
+                          .replace(/^-|-$/g, ""),
+                      );
                     }
                   }}
                   placeholder="Acme Corporation"
@@ -156,23 +155,29 @@ export function ClientsDeskPage() {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
             <Input
               className="pl-9"
-              placeholder="Search clients..."
+              placeholder="Search name, code, or industry…"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               aria-label="Search clients"
             />
           </div>
-          <p className="text-sm text-[var(--muted)]">{total} total</p>
+          <p className="text-sm text-[var(--muted)]">
+            {total} match{total === 1 ? "" : "es"}
+          </p>
         </CardHeader>
         {loading ? (
           <SkeletonRows />
-        ) : filtered.length === 0 ? (
+        ) : items.length === 0 ? (
           <CardBody>
             <EmptyState
-              title="No clients yet"
-              body="Clients anchor every query, project, and delivery conversation. Start by adding your first account."
+              title={q.trim() ? "No matching clients" : "No clients yet"}
+              body={
+                q.trim()
+                  ? "Try a different name, code, or industry."
+                  : "Clients anchor every query, project, and delivery conversation. Start by adding your first account."
+              }
               action={
-                can(session.variant, "create") ? (
+                !q.trim() && can(session.variant, "create") ? (
                   <Button onClick={() => setShowCreate(true)}>
                     <Plus className="h-4 w-4" />
                     Add client
@@ -180,10 +185,12 @@ export function ClientsDeskPage() {
                 ) : null
               }
               secondaryAction={
-                <Button variant="ai">
-                  <Sparkles className="h-4 w-4" />
-                  Import with AI
-                </Button>
+                !q.trim() ? (
+                  <Button variant="ai">
+                    <Sparkles className="h-4 w-4" />
+                    Import with AI
+                  </Button>
+                ) : null
               }
             />
           </CardBody>
@@ -199,7 +206,7 @@ export function ClientsDeskPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((client) => (
+                {items.map((client) => (
                   <tr
                     key={client.id}
                     className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"

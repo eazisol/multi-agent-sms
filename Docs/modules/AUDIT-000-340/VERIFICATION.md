@@ -105,7 +105,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 3. ~~**P0** Missing `GET /comms/conversations`~~ **fixed** — list + Messages inbox  
 4. ~~**P0** Missing `GET /documents`~~ **fixed** — list + get + Documents library  
 5. ~~**P0** Dashboard ready with mock data~~ **fixed** — live org counts + attention feed  
-6. **P1** Clients search not server-backed  
+6. ~~**P1** Clients search not server-backed~~ **fixed** — `GET /clients?q=` filters legal_name/code/trading_name/industry  
 7. ~~**P1** Requirements desk localStorage entity/version loss~~ **fixed** — questionnaire inventory, published version, answers, briefs reload from API; discovery links to `crm_query` / project  
 8. ~~**P1** Approvals & Follow-ups APIs unused by FE~~ **fixed** — desks wired; nav `ready: true`  
 9. ~~**P2** Milestone list not reloadable~~ **fixed** — `GET /roadmap/projects/{id}/milestones` + Roadmap desk inventory  
