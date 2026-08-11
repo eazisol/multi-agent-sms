@@ -56,7 +56,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 25 | MOD-370 | Blocked (AC-901) | 34 | 2 | 0 |
 | 26 | MOD-400 | Blocked (AC-901) | 34 | 2 | 0 |
 | 27 | MOD-410 | Done (M1) | 35 | 2 | 0 |
-| 28 | MOD-420 | Not started | 0 | 0 | 43 |
+| 28 | MOD-420 | Blocked (AC-901) | 33 | 2 | 0 |
 | 29 | MOD-430 | Not started | 0 | 0 | 47 |
 | 30 | MOD-440 | Not started | 0 | 0 | 45 |
 | 31 | MOD-450 | Not started | 0 | 0 | 45 |
@@ -1882,70 +1882,70 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (MOD-410-AC-900)
   - [x] The responsible human owner reviews and approves the completion evidence. (MOD-410-AC-901)
 
-### Module 28: [ ] MOD-420 — Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates
+### Module 28: [!] MOD-420 — Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates
 
-- [ ] **Main goals**
-  - [ ] Build and verify: risks (`MOD-420-MP-001`)
-  - [ ] Build and verify: risk reviews (`MOD-420-MP-002`)
-  - [ ] Build and verify: change requests (`MOD-420-MP-003`)
-  - [ ] Build and verify: impact analyses (`MOD-420-MP-004`)
-  - [ ] Build and verify: change approvals (`MOD-420-MP-005`)
-  - [ ] Build and verify: baseline updates (`MOD-420-MP-006`)
+- [x] **Main goals**
+  - [x] Build and verify: risks (MOD-420-MP-001)
+  - [x] Build and verify: risk reviews (MOD-420-MP-002)
+  - [x] Build and verify: change requests (MOD-420-MP-003)
+  - [x] Build and verify: impact analyses (MOD-420-MP-004)
+  - [x] Build and verify: change approvals (MOD-420-MP-005)
+  - [x] Build and verify: baseline updates (MOD-420-MP-006)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: risks (`MOD-420-DB-001`)
-  - [ ] Design and migrate data for: risk reviews (`MOD-420-DB-002`)
-  - [ ] Design and migrate data for: change requests (`MOD-420-DB-003`)
-  - [ ] Design and migrate data for: impact analyses (`MOD-420-DB-004`)
-  - [ ] Design and migrate data for: change approvals (`MOD-420-DB-005`)
-  - [ ] Design and migrate data for: baseline updates (`MOD-420-DB-006`)
+- [x] **Database**
+  - [x] Design and migrate data for: risks (MOD-420-DB-001)
+  - [x] Design and migrate data for: risk reviews (MOD-420-DB-002)
+  - [x] Design and migrate data for: change requests (MOD-420-DB-003)
+  - [x] Design and migrate data for: impact analyses (MOD-420-DB-004)
+  - [x] Design and migrate data for: change approvals (MOD-420-DB-005)
+  - [x] Design and migrate data for: baseline updates (MOD-420-DB-006)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-420-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-420-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-420-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-420-BE-004`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (MOD-420-BE-001)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (MOD-420-BE-002)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (MOD-420-BE-003)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (MOD-420-BE-004)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-420-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-420-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-420-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (MOD-420-API-001)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (MOD-420-API-002)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (MOD-420-API-003)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-420-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-420-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-420-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-420-FE-004`)
+- [~] **Frontend**
+  - [~] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (MOD-420-FE-001)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (MOD-420-FE-002)
+  - [~] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (MOD-420-FE-003)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (MOD-420-FE-004)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-420-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-420-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-420-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-420-WF-004`)
+- [~] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (MOD-420-WF-001)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (MOD-420-WF-002)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (MOD-420-WF-003)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (MOD-420-WF-004)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-420-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-420-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-420-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-420-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (MOD-420-SEC-001)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (MOD-420-SEC-002)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (MOD-420-SEC-003)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (MOD-420-SEC-004)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-420-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-420-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-420-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-420-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-420-QA-005`)
+- [x] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (MOD-420-QA-001)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (MOD-420-QA-002)
+  - [-] Add role-permission negative tests and tenant/project isolation tests. (MOD-420-QA-003)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (MOD-420-QA-004)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (MOD-420-QA-005)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-420-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-420-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (MOD-420-DOC-001)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (MOD-420-DOC-002)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] Out-of-scope work cannot silently enter development. (`MOD-420-AC-001`)
-  - [ ] Approved changes update affected versions and tickets. (`MOD-420-AC-002`)
-  - [ ] Rejected and deferred changes preserve evidence and rationale. (`MOD-420-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-420-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-420-AC-901`)
+- [!] **Acceptance / Done gate**
+  - [x] Out-of-scope work cannot silently enter development. (MOD-420-AC-001)
+  - [x] Approved changes update affected versions and tickets. (MOD-420-AC-002)
+  - [x] Rejected and deferred changes preserve evidence and rationale. (MOD-420-AC-003)
+  - [x] All Critical and High defects for this module are resolved. (MOD-420-AC-900)
+  - [!] The responsible human owner reviews and approves the completion evidence. (MOD-420-AC-901)
 
 ### Module 29: [ ] MOD-430 — Releases, Deployment Requests, Production Approval, Rollback, and Closure
 

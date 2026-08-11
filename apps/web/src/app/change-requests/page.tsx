@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { ChangeRequestsDeskPage } from "@/components/change-requests-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Change Requests"
-      description="Scope-affecting changes with versioned approvals."
-    />
-  );
+  return <ChangeRequestsDeskPage />;
 }

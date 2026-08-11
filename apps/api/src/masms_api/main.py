@@ -34,6 +34,7 @@ from masms_api.modules.agents.router import router as agents_router
 from masms_api.modules.knowledge.router import router as knowledge_router
 from masms_api.modules.testcases.router import router as testcases_router
 from masms_api.modules.bugs.router import router as bugs_router
+from masms_api.modules.changecontrol.router import router as changecontrol_router
 from masms_api.observability.health import build_readiness
 from masms_api.observability.router import router as observability_router
 
@@ -104,6 +105,7 @@ def create_app() -> FastAPI:
                 "MOD-370",
                 "MOD-400",
                 "MOD-410",
+                "MOD-420",
             ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
@@ -136,6 +138,7 @@ def create_app() -> FastAPI:
     app.include_router(knowledge_router, prefix="/api/v1")
     app.include_router(testcases_router, prefix="/api/v1")
     app.include_router(bugs_router, prefix="/api/v1")
+    app.include_router(changecontrol_router, prefix="/api/v1")
     return app
 
 

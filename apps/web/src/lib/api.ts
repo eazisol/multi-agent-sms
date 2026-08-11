@@ -2241,3 +2241,135 @@ export async function getBugReleaseGate(
   });
   return parse<ReleaseGate>(response);
 }
+
+export type ChangeRequest = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  change_type: string;
+  status: string;
+  rationale: string | null;
+  decision_evidence: string | null;
+  owner_actor_id: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DevelopmentGate = {
+  change_request_id: string;
+  status: string;
+  allowed: boolean;
+  reason: string;
+};
+
+export async function listChangeRequests(
+  session: SessionState,
+  params: {
+    status?: string;
+    project_id?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<ChangeRequest>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/change-control/change-requests?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<ChangeRequest>>(response);
+}
+
+export async function createChangeRequest(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    description?: string;
+    project_id?: string;
+    change_type?: string;
+    rationale?: string;
+  },
+): Promise<ChangeRequest> {
+  const response = await apiFetch(`${apiBase()}/api/v1/change-control/change-requests`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<ChangeRequest>(response);
+}
+
+export async function addChangeImpact(
+  session: SessionState,
+  crId: string,
+  body: {
+    summary: string;
+    affected_areas?: string[];
+    estimated_effort_hours?: number;
+    expected_version?: number;
+  },
+): Promise<{ id: string }> {
+  const response = await apiFetch(`${apiBase()}/api/v1/change-control/change-requests/${crId}/impacts`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string }>(response);
+}
+
+export async function submitChangeRequest(
+  session: SessionState,
+  crId: string,
+  expectedVersion?: number,
+): Promise<ChangeRequest> {
+  const response = await apiFetch(`${apiBase()}/api/v1/change-control/change-requests/${crId}/submit`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({ expected_version: expectedVersion }),
+  });
+  return parse<ChangeRequest>(response);
+}
+
+export async function decideChangeRequest(
+  session: SessionState,
+  crId: string,
+  body: {
+    decision: string;
+    rationale: string;
+    evidence?: string;
+    expected_version?: number;
+  },
+): Promise<{ id: string; decision: string }> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/change-control/change-requests/${crId}/approvals`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse<{ id: string; decision: string }>(response);
+}
+
+export async function getChangeDevelopmentGate(
+  session: SessionState,
+  crId: string,
+): Promise<DevelopmentGate> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/change-control/change-requests/${crId}/development-gate`,
+    {
+      headers: headers(session),
+      cache: "no-store",
+    },
+  );
+  return parse<DevelopmentGate>(response);
+}

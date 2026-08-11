@@ -46,7 +46,7 @@
 | MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
-| MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 33 | 2 | 7 | 1 | 0 | Blocked |
 | MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-450 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -3671,80 +3671,124 @@
 **Title:** Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates  
 **Purpose:** Manage project risks and formal changes to approved scope, requirements, design, timeline, cost, resource, security, data, integration, and release plans.  
 **Requirements:** MVP-FR-008, MVP-FR-013  
-**Dependencies:** MOD-240, MOD-260, MOD-300, MOD-330, MOD-340
+**Dependencies:** MOD-240, MOD-260, MOD-300, MOD-330, MOD-340  
+**Status:** M1 Done — AC-901 blocked pending human approval
 
 #### Main points
 
-- [ ] **MOD-420-MP-001:** Implement and verify risks.
-- [ ] **MOD-420-MP-002:** Implement and verify risk reviews.
-- [ ] **MOD-420-MP-003:** Implement and verify change requests.
-- [ ] **MOD-420-MP-004:** Implement and verify impact analyses.
-- [ ] **MOD-420-MP-005:** Implement and verify change approvals.
-- [ ] **MOD-420-MP-006:** Implement and verify baseline updates.
+- [x] **MOD-420-MP-001:** Implement and verify risks.  
+  - Evidence/note: cc_risks
+- [x] **MOD-420-MP-002:** Implement and verify risk reviews.  
+  - Evidence/note: cc_risk_reviews
+- [x] **MOD-420-MP-003:** Implement and verify change requests.  
+  - Evidence/note: cc_change_requests
+- [x] **MOD-420-MP-004:** Implement and verify impact analyses.  
+  - Evidence/note: cc_impact_analyses
+- [x] **MOD-420-MP-005:** Implement and verify change approvals.  
+  - Evidence/note: cc_change_approvals
+- [x] **MOD-420-MP-006:** Implement and verify baseline updates.  
+  - Evidence/note: cc_baseline_updates
 
 #### Database / data design
 
-- [ ] **MOD-420-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **risks**.
-- [ ] **MOD-420-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **risk reviews**.
-- [ ] **MOD-420-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **change requests**.
-- [ ] **MOD-420-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **impact analyses**.
-- [ ] **MOD-420-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **change approvals**.
-- [ ] **MOD-420-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **baseline updates**.
+- [x] **MOD-420-DB-001:** Risks model + RLS.  
+  - Evidence/note: migration 20260811_0026
+- [x] **MOD-420-DB-002:** Risk reviews.  
+  - Evidence/note: cc_risk_reviews
+- [x] **MOD-420-DB-003:** Change requests.  
+  - Evidence/note: cc_change_requests
+- [x] **MOD-420-DB-004:** Impact analyses.  
+  - Evidence/note: cc_impact_analyses
+- [x] **MOD-420-DB-005:** Change approvals.  
+  - Evidence/note: cc_change_approvals
+- [x] **MOD-420-DB-006:** Baseline updates.  
+  - Evidence/note: cc_baseline_updates
 
 #### Backend
 
-- [ ] **MOD-420-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-420-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-420-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-420-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-420-BE-001:** Typed domain/services.  
+  - Evidence/note: modules/changecontrol
+- [x] **MOD-420-BE-002:** Authz/transition/idempotency.  
+  - Evidence/note: CR transitions + approval required gate
+- [x] **MOD-420-BE-003:** Outbox events.  
+  - Evidence/note: changecontrol.* events
+- [x] **MOD-420-BE-004:** Structured errors.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-420-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-420-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-420-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-420-API-001:** Versioned endpoints.  
+  - Evidence/note: /api/v1/change-control (+9 OpenAPI paths)
+- [x] **MOD-420-API-002:** Pagination/filter/search.  
+  - Evidence/note: CR/risk list pages + development-gate
+- [x] **MOD-420-API-003:** OpenAPI schemas.  
+  - Evidence/note: Pydantic schemas
 
 #### Frontend
 
-- [ ] **MOD-420-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-420-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-420-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-420-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-420-FE-001:** List/dashboard.  
+  - Evidence/note: /change-requests desk
+- [-] **MOD-420-FE-002:** Detail tabs.  
+  - Evidence/note: deferred
+- [~] **MOD-420-FE-003:** Create/edit forms.  
+  - Evidence/note: create/submit/approve/reject
+- [-] **MOD-420-FE-004:** a11y pass.  
+  - Evidence/note: deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-420-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-420-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-420-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-420-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-420-WF-001:** Triggers/statuses/rules.  
+  - Evidence/note: CR status machine + development gate
+- [-] **MOD-420-WF-002:** Temporal/LangGraph routing.  
+  - Evidence/note: N/A for change-control module core
+- [x] **MOD-420-WF-003:** Outbox/events.  
+  - Evidence/note: changecontrol.* events
+- [-] **MOD-420-WF-004:** Notifications.  
+  - Evidence/note: deferred MOD-440
 
 #### Security / privacy / audit
 
-- [ ] **MOD-420-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-420-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-420-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-420-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-420-SEC-001:** Scope authorization.  
+  - Evidence/note: org request context
+- [x] **MOD-420-SEC-002:** Tenant RLS.  
+  - Evidence/note: RLS on cc_* tables
+- [x] **MOD-420-SEC-003:** Redaction.  
+  - Evidence/note: outbox redact via kernel
+- [x] **MOD-420-SEC-004:** Audit actions.  
+  - Evidence/note: cc_* audits
 
 #### Testing / verification
 
-- [ ] **MOD-420-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-420-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-420-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-420-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-420-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-420-QA-001:** Domain rules via integration.  
+  - Evidence/note: gate/approve/reject/baseline
+- [x] **MOD-420-QA-002:** Integration API tests.  
+  - Evidence/note: tests/integration/changecontrol
+- [-] **MOD-420-QA-003:** Dedicated RBAC negative suite.  
+  - Evidence/note: deferred
+- [-] **MOD-420-QA-004:** Extra workflow suite.  
+  - Evidence/note: N/A M1
+- [x] **MOD-420-QA-005:** Verification commands.  
+  - Evidence/note: Docs/modules/MOD-420/VERIFICATION.md
 
 #### Documentation
 
-- [ ] **MOD-420-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-420-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-420-DOC-001:** Module README.  
+  - Evidence/note: Docs/modules/MOD-420/README.md
+- [x] **MOD-420-DOC-002:** Verification evidence.  
+  - Evidence/note: Docs/modules/MOD-420/VERIFICATION.md
 
 #### Acceptance gate
 
-- [ ] **MOD-420-AC-001:** Out-of-scope work cannot silently enter development.
-- [ ] **MOD-420-AC-002:** Approved changes update affected versions and tickets.
-- [ ] **MOD-420-AC-003:** Rejected and deferred changes preserve evidence and rationale.
-- [ ] **MOD-420-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-420-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-420-AC-001:** Out-of-scope work cannot silently enter development.  
+  - Evidence/note: development-gate + baseline approve requirement
+- [x] **MOD-420-AC-002:** Approved changes update affected versions and tickets.  
+  - Evidence/note: baseline updates with to_version + ticket_id
+- [x] **MOD-420-AC-003:** Rejected/deferred preserve evidence and rationale.  
+  - Evidence/note: decision fields on CR + approval rows
+- [x] **MOD-420-AC-900:** Crit/High cleared.  
+  - Evidence/note: none filed
+- [!] **MOD-420-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

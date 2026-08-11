@@ -82,7 +82,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { href: "/governance/baselines", label: "Source Baselines", ready: true },
       { href: "/architecture-decisions", label: "Architecture Decisions", ready: false },
-      { href: "/change-requests", label: "Change Requests", ready: false },
+      { href: "/change-requests", label: "Change Requests", ready: true },
       { href: "/audit-logs", label: "Audit Logs", ready: false },
     ],
   },
