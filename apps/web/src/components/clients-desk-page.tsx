@@ -215,14 +215,14 @@ export function ClientsDeskPage() {
           </CardBody>
         ) : (
           <>
-            <TableScroll>
-              <table className="min-w-[720px] text-left text-sm">
+            <TableScroll className="rounded-none border-0 border-t border-[var(--line)]">
+              <table className="w-full min-w-full table-fixed text-left text-sm">
                 <thead className="sticky top-0 z-10 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
                   <tr>
-                    <th className="px-5 py-3 font-medium">Client</th>
-                    <th className="px-5 py-3 font-medium">Industry</th>
-                    <th className="px-5 py-3 font-medium">Status</th>
-                    <th className="px-5 py-3 font-medium">Created</th>
+                    <th className="w-[40%] px-5 py-3 font-medium">Client</th>
+                    <th className="w-[25%] px-5 py-3 font-medium">Industry</th>
+                    <th className="w-[15%] px-5 py-3 font-medium">Status</th>
+                    <th className="w-[20%] px-5 py-3 font-medium">Created</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -232,16 +232,16 @@ export function ClientsDeskPage() {
                       className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
                     >
                       <td className="px-5 py-3">
-                        <p className="font-medium">{client.legal_name}</p>
-                        <p className="text-xs text-[var(--muted)]">{client.code}</p>
+                        <p className="truncate font-medium">{client.legal_name}</p>
+                        <p className="truncate text-xs text-[var(--muted)]">{client.code}</p>
                       </td>
                       <td className="px-5 py-3 text-[var(--muted)]">
-                        {client.industry || "—"}
+                        <span className="line-clamp-2">{client.industry || "—"}</span>
                       </td>
                       <td className="px-5 py-3">
                         <StatusBadge status={client.status} />
                       </td>
-                      <td className="px-5 py-3 text-[var(--muted)]">
+                      <td className="whitespace-nowrap px-5 py-3 text-[var(--muted)]">
                         {formatUtc(client.created_at)}
                       </td>
                     </tr>
