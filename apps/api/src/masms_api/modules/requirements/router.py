@@ -5,11 +5,13 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
 from masms_api.errors import NotFoundError
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.requirements.schemas import (
     AnswerRead,
     AnswerUpsert,
@@ -29,6 +31,16 @@ from masms_api.modules.requirements.service import RequirementsService
 router = APIRouter(prefix="/requirements", tags=["requirements"])
 
 
+class QuestionnairePage(BaseModel):
+    items: list[QuestionnaireRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
+class BriefPage(BaseModel):
+    items: list[BriefRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -43,16 +55,20 @@ def create_questionnaire(
     return QuestionnaireRead.model_validate(service.create_questionnaire(body))
 
 
-@router.get("/questionnaires", response_model=list[QuestionnaireRead])
+@router.get("/questionnaires", response_model=QuestionnairePage)
 def list_questionnaires(
     status: str | None = Query(default=None),
     q: str | None = Query(default=None),
-    limit: int = Query(default=50, ge=1, le=200),
+    limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: RequirementsService = Depends(_service),
-) -> list[QuestionnaireRead]:
-    rows = service.list_questionnaires(status=status, q=q, limit=limit, offset=offset)
-    return [QuestionnaireRead.model_validate(r) for r in rows]
+) -> QuestionnairePage:
+    items, page = service.list_questionnaires(
+        status=status, q=q, limit=limit, offset=offset
+    )
+    return QuestionnairePage(
+        items=[QuestionnaireRead.model_validate(r) for r in items], page=page
+    )
 
 
 @router.get("/questionnaires/{questionnaire_id}", response_model=QuestionnaireRead)
@@ -155,27 +171,25 @@ def approve_brief(
     return BriefRead.model_validate(service.approve_brief(brief_id))
 
 
-@router.get("/briefs", response_model=list[BriefRead])
+@router.get("/briefs", response_model=BriefPage)
 def list_briefs(
     related_entity_type: str | None = Query(default=None, min_length=2, max_length=64),
     related_entity_id: UUID | None = Query(default=None),
     status: str | None = Query(default=None),
     q: str | None = Query(default=None),
-    limit: int = Query(default=50, ge=1, le=200),
+    limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: RequirementsService = Depends(_service),
-) -> list[BriefRead]:
-    return [
-        BriefRead.model_validate(b)
-        for b in service.list_briefs(
-            related_entity_type=related_entity_type,
-            related_entity_id=related_entity_id,
-            status=status,
-            q=q,
-            limit=limit,
-            offset=offset,
-        )
-    ]
+) -> BriefPage:
+    items, page = service.list_briefs(
+        related_entity_type=related_entity_type,
+        related_entity_id=related_entity_id,
+        status=status,
+        q=q,
+        limit=limit,
+        offset=offset,
+    )
+    return BriefPage(items=[BriefRead.model_validate(b) for b in items], page=page)
 
 
 @router.get("/briefs/{brief_id}", response_model=BriefRead)

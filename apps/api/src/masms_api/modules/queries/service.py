@@ -6,12 +6,13 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ConflictError, ForbiddenError, NotFoundError, ValidationAppError
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.queries import domain
@@ -278,30 +279,37 @@ class QueriesService:
         status: str | None = None,
         sla_status: str | None = None,
         q: str | None = None,
-        limit: int = 50,
+        limit: int = 20,
         offset: int = 0,
-    ) -> list[ClientQuery]:
-        stmt = select(ClientQuery).where(
-            ClientQuery.organization_id == self.ctx.organization_id
-        )
+    ) -> tuple[list[ClientQuery], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [ClientQuery.organization_id == self.ctx.organization_id]
         ctx_client = self.ctx.tenant.client_id
         if ctx_client is not None:
-            stmt = stmt.where(ClientQuery.client_id == ctx_client)
+            filters.append(ClientQuery.client_id == ctx_client)
         if status:
-            stmt = stmt.where(ClientQuery.status == status)
+            filters.append(ClientQuery.status == status)
         if sla_status:
-            stmt = stmt.where(ClientQuery.sla_status == sla_status)
+            filters.append(ClientQuery.sla_status == sla_status)
         if q and q.strip():
             like = f"%{q.strip()}%"
-            stmt = stmt.where(
+            filters.append(
                 or_(ClientQuery.subject.ilike(like), ClientQuery.summary.ilike(like))
             )
-        stmt = (
-            stmt.order_by(ClientQuery.created_at.desc())
-            .offset(max(0, offset))
-            .limit(max(1, min(limit, 200)))
+        total = (
+            self.db.scalar(select(func.count()).select_from(ClientQuery).where(*filters))
+            or 0
         )
-        return list(self.db.scalars(stmt).all())
+        rows = list(
+            self.db.scalars(
+                select(ClientQuery)
+                .where(*filters)
+                .order_by(ClientQuery.created_at.desc())
+                .offset(offset)
+                .limit(limit)
+            )
+        )
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_query(self, query_id: UUID) -> ClientQuery:
         return self._get_query(query_id)

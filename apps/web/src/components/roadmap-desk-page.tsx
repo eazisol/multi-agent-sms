@@ -42,7 +42,8 @@ export function RoadmapDeskPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const rows = await listProjects(session, { limit: 100 });
+        const result = await listProjects(session, { limit: 100 });
+        const rows = result.items;
         setProjects(rows);
         const workspace = getWorkspaceProjectId();
         setProjectId((prev) => {

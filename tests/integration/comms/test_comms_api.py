@@ -160,20 +160,20 @@ def test_conversation_message_send_and_immutable_history(client: TestClient) -> 
 
     conversations = client.get("/api/v1/comms/conversations", headers=headers)
     assert conversations.status_code == 200, conversations.text
-    assert any(row["id"] == conversation_id for row in conversations.json())
+    assert any(row["id"] == conversation_id for row in conversations.json()["items"])
 
     filtered = client.get(
         "/api/v1/comms/conversations", headers=headers, params={"status": "open"}
     )
     assert filtered.status_code == 200
-    assert all(row["status"] == "open" for row in filtered.json())
-    assert any(row["id"] == conversation_id for row in filtered.json())
+    assert all(row["status"] == "open" for row in filtered.json()["items"])
+    assert any(row["id"] == conversation_id for row in filtered.json()["items"])
 
     searched = client.get(
         "/api/v1/comms/conversations", headers=headers, params={"q": "follow-up"}
     )
     assert searched.status_code == 200
-    assert any(row["id"] == conversation_id for row in searched.json())
+    assert any(row["id"] == conversation_id for row in searched.json()["items"])
 
 
 def test_sensitive_message_requires_approval(client: TestClient) -> None:

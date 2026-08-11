@@ -38,48 +38,96 @@ export function DashboardPage() {
   const { session } = useSession();
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [projectsTotal, setProjectsTotal] = useState(0);
+  const [activeProjectsTotal, setActiveProjectsTotal] = useState(0);
+  const [atRiskTotal, setAtRiskTotal] = useState(0);
   const [approvals, setApprovals] = useState<ApprovalRequest[]>([]);
+  const [approvalsTotal, setApprovalsTotal] = useState(0);
   const [followUps, setFollowUps] = useState<FollowUp[]>([]);
+  const [followUpsTotal, setFollowUpsTotal] = useState(0);
   const [queries, setQueries] = useState<ClientQuery[]>([]);
+  const [queriesTotal, setQueriesTotal] = useState(0);
+  const [breachedQueriesTotal, setBreachedQueriesTotal] = useState(0);
+  const [receivedQueriesTotal, setReceivedQueriesTotal] = useState(0);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [projectsResult, approvalsResult, followUpsResult, queriesResult] =
-        await Promise.allSettled([
-          listProjects(session, { limit: 100 }),
-          listApprovals(session, { status: "pending" }),
-          listOpenFollowUps(session),
-          listQueries(session, { limit: 100 }),
-        ]);
+      const [
+        projectsResult,
+        activeResult,
+        atRiskResult,
+        blockedResult,
+        onHoldResult,
+        approvalsResult,
+        followUpsResult,
+        queriesResult,
+        breachedResult,
+        receivedResult,
+      ] = await Promise.allSettled([
+        listProjects(session, { limit: 20 }),
+        listProjects(session, { status: "active", limit: 1 }),
+        listProjects(session, { status: "at_risk", limit: 1 }),
+        listProjects(session, { status: "blocked", limit: 1 }),
+        listProjects(session, { status: "on_hold", limit: 1 }),
+        listApprovals(session, { status: "pending", limit: 20 }),
+        listOpenFollowUps(session, { limit: 20 }),
+        listQueries(session, { limit: 20 }),
+        listQueries(session, { sla_status: "breached", limit: 1 }),
+        listQueries(session, { status: "received", limit: 1 }),
+      ]);
 
       if (projectsResult.status === "fulfilled") {
-        setProjects(projectsResult.value);
+        setProjects(projectsResult.value.items);
+        setProjectsTotal(projectsResult.value.page.total);
       } else {
         setProjects([]);
+        setProjectsTotal(0);
         notifyApiError("Unable to load projects", projectsResult.reason);
       }
 
+      setActiveProjectsTotal(
+        activeResult.status === "fulfilled" ? activeResult.value.page.total : 0,
+      );
+      const riskTotal =
+        (atRiskResult.status === "fulfilled" ? atRiskResult.value.page.total : 0) +
+        (blockedResult.status === "fulfilled" ? blockedResult.value.page.total : 0) +
+        (onHoldResult.status === "fulfilled" ? onHoldResult.value.page.total : 0);
+      setAtRiskTotal(riskTotal);
+
       if (approvalsResult.status === "fulfilled") {
-        setApprovals(approvalsResult.value);
+        setApprovals(approvalsResult.value.items);
+        setApprovalsTotal(approvalsResult.value.page.total);
       } else {
         setApprovals([]);
+        setApprovalsTotal(0);
         notifyApiError("Unable to load approvals", approvalsResult.reason);
       }
 
       if (followUpsResult.status === "fulfilled") {
-        setFollowUps(followUpsResult.value);
+        setFollowUps(followUpsResult.value.items);
+        setFollowUpsTotal(followUpsResult.value.page.total);
       } else {
         setFollowUps([]);
+        setFollowUpsTotal(0);
         notifyApiError("Unable to load follow-ups", followUpsResult.reason);
       }
 
       if (queriesResult.status === "fulfilled") {
-        setQueries(queriesResult.value);
+        setQueries(queriesResult.value.items);
+        setQueriesTotal(queriesResult.value.page.total);
       } else {
         setQueries([]);
+        setQueriesTotal(0);
         notifyApiError("Unable to load queries", queriesResult.reason);
       }
+
+      setBreachedQueriesTotal(
+        breachedResult.status === "fulfilled" ? breachedResult.value.page.total : 0,
+      );
+      setReceivedQueriesTotal(
+        receivedResult.status === "fulfilled" ? receivedResult.value.page.total : 0,
+      );
     } finally {
       setLoading(false);
     }
@@ -91,14 +139,6 @@ export function DashboardPage() {
 
   const now = Date.now();
 
-  const activeProjects = useMemo(
-    () => projects.filter((p) => p.status === "active"),
-    [projects],
-  );
-  const atRiskProjects = useMemo(
-    () => projects.filter((p) => ["at_risk", "blocked", "on_hold"].includes(p.status)),
-    [projects],
-  );
   const overdueFollowUps = useMemo(
     () => followUps.filter((f) => new Date(f.due_at).getTime() < now),
     [followUps, now],
@@ -111,35 +151,35 @@ export function DashboardPage() {
   const kpis = [
     {
       label: "Projects",
-      value: `${activeProjects.length} active`,
+      value: `${activeProjectsTotal} active`,
       hint:
-        atRiskProjects.length > 0
-          ? `${atRiskProjects.length} at risk / blocked`
-          : `${projects.length} total in org`,
+        atRiskTotal > 0
+          ? `${atRiskTotal} at risk / blocked`
+          : `${projectsTotal} total in org`,
       href: "/projects",
     },
     {
       label: "Approvals",
-      value: `${approvals.length} pending`,
-      hint: approvals.length ? "Needs human decision" : "Queue clear",
+      value: `${approvalsTotal} pending`,
+      hint: approvalsTotal ? "Needs human decision" : "Queue clear",
       href: "/approvals",
     },
     {
       label: "Follow-ups",
-      value: `${followUps.length} open`,
+      value: `${followUpsTotal} open`,
       hint:
         overdueFollowUps.length > 0
-          ? `${overdueFollowUps.length} overdue`
-          : "None overdue",
+          ? `${overdueFollowUps.length} overdue (this page)`
+          : "None overdue in loaded set",
       href: "/follow-ups",
     },
     {
       label: "Queries",
-      value: `${queries.length} total`,
+      value: `${queriesTotal} total`,
       hint:
-        breachedQueries.length > 0
-          ? `${breachedQueries.length} SLA breached`
-          : `${queries.filter((q) => q.status === "received").length} newly received`,
+        breachedQueriesTotal > 0
+          ? `${breachedQueriesTotal} SLA breached`
+          : `${receivedQueriesTotal} newly received`,
       href: "/queries",
     },
   ];

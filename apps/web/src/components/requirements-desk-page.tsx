@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   approveRequirementsBrief,
   computeCompleteness,
   createClarification,
@@ -27,6 +29,7 @@ import {
   upsertRequirementAnswer,
   type ClientQuery,
   type CompletenessScore,
+  type PageMeta,
   type Questionnaire,
   type QuestionnaireVersion,
   type RequirementsBrief,
@@ -55,6 +58,9 @@ export function RequirementsDeskPage() {
   const [title, setTitle] = useState("Discovery intake");
   const [search, setSearch] = useState("");
   const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([]);
+  const [qPageMeta, setQPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
+  const [qOffset, setQOffset] = useState(0);
+  const [qLimit, setQLimit] = useState(20);
   const [questionnaireId, setQuestionnaireId] = useState<string | null>(null);
   const [version, setVersion] = useState<QuestionnaireVersion | null>(null);
   const [queries, setQueries] = useState<ClientQuery[]>([]);
@@ -62,6 +68,9 @@ export function RequirementsDeskPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [score, setScore] = useState<CompletenessScore | null>(null);
   const [briefs, setBriefs] = useState<RequirementsBrief[]>([]);
+  const [briefPageMeta, setBriefPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
+  const [briefOffset, setBriefOffset] = useState(0);
+  const [briefLimit, setBriefLimit] = useState(20);
 
   const questions = useMemo(
     () => (version?.questions_json?.length ? version.questions_json : DEFAULT_QUESTIONS),
@@ -71,11 +80,14 @@ export function RequirementsDeskPage() {
   const loadQuestionnaires = useCallback(async () => {
     setLoading(true);
     try {
-      const rows = await listQuestionnaires(session, {
+      const result = await listQuestionnaires(session, {
         q: search.trim() || undefined,
-        limit: 100,
+        limit: qLimit,
+        offset: qOffset,
       });
-      setQuestionnaires(rows);
+      setQuestionnaires(result.items);
+      setQPageMeta(result.page);
+      const rows = result.items;
       const workspaceId = getWorkspaceQuestionnaireId();
       setQuestionnaireId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
@@ -85,10 +97,11 @@ export function RequirementsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load questionnaires", err);
       setQuestionnaires([]);
+      setQPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, search]);
+  }, [session, search, qLimit, qOffset]);
 
   useEffect(() => {
     void loadQuestionnaires();
@@ -97,7 +110,8 @@ export function RequirementsDeskPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const rows = await listQueries(session, { limit: 100 });
+        const result = await listQueries(session, { limit: 100 });
+        const rows = result.items;
         setQueries(rows);
         const workspaceQuery = getWorkspaceQueryId();
         setEntityId((prev) => {
@@ -168,21 +182,25 @@ export function RequirementsDeskPage() {
 
   const refreshBriefs = useCallback(async () => {
     try {
-      if (entityId && relatedEntityType) {
-        setBriefs(
-          await listRequirementsBriefs(session, {
-            related_entity_type: relatedEntityType,
-            related_entity_id: entityId,
-            limit: 100,
-          }),
-        );
-      } else {
-        setBriefs(await listRequirementsBriefs(session, { limit: 100 }));
-      }
+      const result =
+        entityId && relatedEntityType
+          ? await listRequirementsBriefs(session, {
+              related_entity_type: relatedEntityType,
+              related_entity_id: entityId,
+              limit: briefLimit,
+              offset: briefOffset,
+            })
+          : await listRequirementsBriefs(session, {
+              limit: briefLimit,
+              offset: briefOffset,
+            });
+      setBriefs(result.items);
+      setBriefPageMeta(result.page);
     } catch {
       setBriefs([]);
+      setBriefPageMeta(EMPTY_PAGE_META);
     }
-  }, [entityId, relatedEntityType, session]);
+  }, [entityId, relatedEntityType, session, briefLimit, briefOffset]);
 
   useEffect(() => {
     void refreshBriefs();
@@ -198,6 +216,7 @@ export function RequirementsDeskPage() {
     setEntityId(id);
     if (queries.some((q) => q.id === id)) setWorkspaceQueryId(id);
     setScore(null);
+    setBriefOffset(0);
   }
 
   async function onBootstrap(event: FormEvent) {
@@ -370,7 +389,10 @@ export function RequirementsDeskPage() {
               <Input
                 className="pl-9"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setQOffset(0);
+                }}
                 placeholder="Search code or title"
                 aria-label="Search questionnaires"
               />
@@ -381,18 +403,24 @@ export function RequirementsDeskPage() {
           ) : questionnaires.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No questionnaires yet"
-                body="Publish an intake questionnaire, capture answers, then draft an approved requirements brief."
+                title={search.trim() ? "No matching questionnaires" : "No questionnaires yet"}
+                body={
+                  search.trim()
+                    ? "Try a different code or title."
+                    : "Publish an intake questionnaire, capture answers, then draft an approved requirements brief."
+                }
                 action={
-                  can(session.variant, "create") ? (
+                  !search.trim() && can(session.variant, "create") ? (
                     <Button onClick={() => setShowBootstrap(true)}>Start questionnaire</Button>
                   ) : null
                 }
                 secondaryAction={
-                  <Button variant="ai">
-                    <Sparkles className="h-4 w-4" />
-                    Suggest questions
-                  </Button>
+                  !search.trim() ? (
+                    <Button variant="ai">
+                      <Sparkles className="h-4 w-4" />
+                      Suggest questions
+                    </Button>
+                  ) : null
                 }
               />
             </CardBody>
@@ -420,6 +448,14 @@ export function RequirementsDeskPage() {
               ))}
             </ul>
           )}
+          {!loading && (questionnaires.length > 0 || qPageMeta.total > 0) ? (
+            <ListPagination
+              page={qPageMeta}
+              onOffsetChange={setQOffset}
+              onLimitChange={setQLimit}
+              label="questionnaires"
+            />
+          ) : null}
         </Card>
 
         <div className="space-y-4">
@@ -581,6 +617,14 @@ export function RequirementsDeskPage() {
                 </table>
               </div>
             )}
+            {briefs.length > 0 || briefPageMeta.total > 0 ? (
+              <ListPagination
+                page={briefPageMeta}
+                onOffsetChange={setBriefOffset}
+                onLimitChange={setBriefLimit}
+                label="briefs"
+              />
+            ) : null}
           </Card>
         </div>
       </div>

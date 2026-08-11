@@ -4,25 +4,32 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
-import { formatUtc, listBaselines, type Baseline } from "@/lib/api";
+import {
+  EMPTY_PAGE_META,
+  formatUtc,
+  listBaselines,
+  type Baseline,
+  type PageMeta,
+} from "@/lib/api";
 import { notifyApiError } from "@/lib/toast";
 import { can } from "@/lib/roles";
 
 export function BaselineListPage() {
   const { session } = useSession();
   const [items, setItems] = useState<Baseline[]>([]);
-  const [total, setTotal] = useState(0);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
   const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(10);
   const [loading, setLoading] = useState(true);
-  const limit = 10;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -35,15 +42,15 @@ export function BaselineListPage() {
         sort: "baseline_key",
       });
       setItems(page.items);
-      setTotal(page.page.total);
+      setPageMeta(page.page);
     } catch (err) {
       notifyApiError("Unable to load baselines", err);
       setItems([]);
-      setTotal(0);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, offset, q, status]);
+  }, [session, offset, limit, q, status]);
 
   useEffect(() => {
     void load();
@@ -169,33 +176,15 @@ export function BaselineListPage() {
             </table>
           </div>
         )}
+        {!loading && (items.length > 0 || pageMeta.total > 0) ? (
+          <ListPagination
+            page={pageMeta}
+            onOffsetChange={setOffset}
+            onLimitChange={setLimit}
+            label="baselines"
+          />
+        ) : null}
       </Card>
-
-      <div className="flex items-center justify-between text-sm">
-        <p className="text-[var(--muted)]">
-          Showing {items.length} of {total}
-        </p>
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={offset === 0 || loading}
-            onClick={() => setOffset((value) => Math.max(0, value - limit))}
-          >
-            Previous
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={offset + limit >= total || loading}
-            onClick={() => setOffset((value) => value + limit)}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

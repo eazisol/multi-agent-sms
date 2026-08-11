@@ -5,12 +5,13 @@ from __future__ import annotations
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ConflictError, NotFoundError, ValidationAppError
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.configadmin import domain as config_domain
@@ -161,17 +162,35 @@ class FollowUpService:
     def get(self, followup_id: UUID) -> FollowUp:
         return self._get(followup_id)
 
-    def list_open(self) -> list[FollowUp]:
-        return list(
+    def list_followups(
+        self,
+        *,
+        status: str | None = "open",
+        q: str | None = None,
+        project_id: UUID | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[FollowUp], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [FollowUp.organization_id == self.ctx.organization_id]
+        if status is not None and status != "all":
+            filters.append(FollowUp.status == status)
+        if project_id is not None:
+            filters.append(FollowUp.project_id == project_id)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            filters.append(FollowUp.title.ilike(like))
+        total = self.db.scalar(select(func.count()).select_from(FollowUp).where(*filters)) or 0
+        rows = list(
             self.db.scalars(
                 select(FollowUp)
-                .where(
-                    FollowUp.organization_id == self.ctx.organization_id,
-                    FollowUp.status == "open",
-                )
+                .where(*filters)
                 .order_by(FollowUp.due_at.asc())
-            ).all()
+                .offset(offset)
+                .limit(limit)
+            )
         )
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def link_child(self, parent_id: UUID, data: ChildLinkCreate) -> FollowUpLink:
         parent = self._get(parent_id)

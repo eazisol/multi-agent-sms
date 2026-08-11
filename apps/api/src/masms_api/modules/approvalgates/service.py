@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from typing import TypedDict
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import (
@@ -18,6 +18,7 @@ from masms_api.errors import (
 )
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.approvalgates import domain
@@ -143,17 +144,44 @@ class ApprovalGatesService:
         return self._get_approval(approval_id)
 
     def list_approvals(
-        self, *, status: str | None = None, action_code: str | None = None
-    ) -> list[ApprovalRequest]:
-        stmt = select(ApprovalRequest).where(
-            ApprovalRequest.organization_id == self.ctx.organization_id
-        )
+        self,
+        *,
+        status: str | None = None,
+        action_code: str | None = None,
+        q: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[ApprovalRequest], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [ApprovalRequest.organization_id == self.ctx.organization_id]
         if status:
-            stmt = stmt.where(ApprovalRequest.status == status)
+            filters.append(ApprovalRequest.status == status)
         if action_code:
-            stmt = stmt.where(ApprovalRequest.action_code == action_code)
-        stmt = stmt.order_by(ApprovalRequest.created_at.desc())
-        return list(self.db.scalars(stmt).all())
+            filters.append(ApprovalRequest.action_code == action_code)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            filters.append(
+                or_(
+                    ApprovalRequest.title.ilike(like),
+                    ApprovalRequest.action_code.ilike(like),
+                )
+            )
+        total = (
+            self.db.scalar(
+                select(func.count()).select_from(ApprovalRequest).where(*filters)
+            )
+            or 0
+        )
+        rows = list(
+            self.db.scalars(
+                select(ApprovalRequest)
+                .where(*filters)
+                .order_by(ApprovalRequest.created_at.desc())
+                .offset(offset)
+                .limit(limit)
+            )
+        )
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_workflow(self, approval_id: UUID) -> ApprovalWorkflowInstance:
         self._get_approval(approval_id)

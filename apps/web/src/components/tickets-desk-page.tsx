@@ -1,16 +1,18 @@
 ﻿"use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { Field, Input, Textarea } from "@/components/ui/field";
+import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   addTicketEvidence,
   createTicket,
   formatUtc,
@@ -25,6 +27,7 @@ import {
   satisfyReadinessCheck,
   transitionTicket,
   updateTicket,
+  type PageMeta,
   type Ticket,
   type TicketCheck,
 } from "@/lib/api";
@@ -53,6 +56,11 @@ export function TicketsDeskPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [projectId, setProjectId] = useState("");
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
+  const [status, setStatus] = useState("");
+  const [search, setSearch] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [active, setActive] = useState<Ticket | null>(null);
   const [readiness, setReadiness] = useState<TicketCheck[]>([]);
   const [doneChecks, setDoneChecks] = useState<TicketCheck[]>([]);
@@ -73,12 +81,20 @@ export function TicketsDeskPage() {
   const refresh = useCallback(async () => {
     if (!projectId) {
       setTickets([]);
+      setPageMeta(EMPTY_PAGE_META);
       return;
     }
     setLoading(true);
     try {
-      const rows = await listTickets(session, projectId);
-      setTickets(rows);
+      const result = await listTickets(session, projectId, {
+        status: status || undefined,
+        q: search.trim() || undefined,
+        limit,
+        offset,
+      });
+      setTickets(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       const preferred = getWorkspaceTicketId();
       const selected =
         rows.find((t) => t.id === (active?.id ?? preferred)) ?? rows[0] ?? null;
@@ -94,10 +110,11 @@ export function TicketsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load tickets", err);
       setTickets([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [active?.id, projectId, session]);
+  }, [active?.id, projectId, session, status, search, limit, offset]);
 
   useEffect(() => {
     void refresh();
@@ -106,6 +123,7 @@ export function TicketsDeskPage() {
   function applyWorkspaceProject(id: string) {
     setProjectId(id);
     setWorkspaceProjectId(id);
+    setOffset(0);
   }
 
   async function selectTicket(ticket: Ticket) {
@@ -361,6 +379,41 @@ export function TicketsDeskPage() {
             <p className="text-sm text-[var(--muted)]">
               Select a ticket to prepare Ready, transition, or reopen.
             </p>
+            <div className="relative mt-3">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+              <Input
+                className="pl-9"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setOffset(0);
+                }}
+                placeholder="Search code or title"
+                aria-label="Search tickets"
+              />
+            </div>
+            <Field label="Status" className="mt-3 mb-0">
+              <Select
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  setOffset(0);
+                }}
+                aria-label="Filter tickets by status"
+              >
+                <option value="">Any status</option>
+                <option value="backlog">Backlog</option>
+                <option value="ready">Ready</option>
+                <option value="assigned">Assigned</option>
+                <option value="in_progress">In progress</option>
+                <option value="code_review">Code review</option>
+                <option value="ready_for_qa">Ready for QA</option>
+                <option value="qa_in_progress">QA in progress</option>
+                <option value="passed_qa">Passed QA</option>
+                <option value="done">Done</option>
+                <option value="blocked">Blocked</option>
+              </Select>
+            </Field>
           </CardHeader>
           {!projectId ? (
             <CardBody>
@@ -374,10 +427,14 @@ export function TicketsDeskPage() {
           ) : tickets.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No tickets yet"
-                body="Create the first work item for this project."
+                title={search.trim() || status ? "No matching tickets" : "No tickets yet"}
+                body={
+                  search.trim() || status
+                    ? "Try a different search or status filter."
+                    : "Create the first work item for this project."
+                }
                 action={
-                  can(session.variant, "create") ? (
+                  !search.trim() && !status && can(session.variant, "create") ? (
                     <Button onClick={() => setShowCreate(true)}>New ticket</Button>
                   ) : null
                 }
@@ -407,6 +464,14 @@ export function TicketsDeskPage() {
               ))}
             </ul>
           )}
+          {projectId && !loading && (tickets.length > 0 || pageMeta.total > 0) ? (
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="tickets"
+            />
+          ) : null}
         </Card>
 
         <Card>

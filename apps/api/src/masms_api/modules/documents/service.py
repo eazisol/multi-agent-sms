@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from masms_api.errors import ForbiddenError, NotFoundError
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.documents import domain
@@ -144,28 +145,34 @@ class DocumentsService:
         q: str | None = None,
         project_id: UUID | None = None,
         classification: str | None = None,
-        limit: int = 50,
+        limit: int = 20,
         offset: int = 0,
-    ) -> list[Document]:
-        stmt = select(Document).where(Document.organization_id == self.ctx.organization_id)
+    ) -> tuple[list[Document], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [Document.organization_id == self.ctx.organization_id]
         ctx_client = self.ctx.tenant.client_id
         if ctx_client is not None:
-            stmt = stmt.where(Document.client_id == ctx_client)
+            filters.append(Document.client_id == ctx_client)
         if status:
-            stmt = stmt.where(Document.status == status)
+            filters.append(Document.status == status)
         if classification:
-            stmt = stmt.where(Document.classification == classification)
+            filters.append(Document.classification == classification)
         if project_id is not None:
-            stmt = stmt.where(Document.project_id == project_id)
+            filters.append(Document.project_id == project_id)
         if q and q.strip():
             like = f"%{q.strip()}%"
-            stmt = stmt.where(Document.title.ilike(like))
-        stmt = (
-            stmt.order_by(Document.created_at.desc())
-            .offset(max(0, offset))
-            .limit(max(1, min(limit, 200)))
+            filters.append(Document.title.ilike(like))
+        total = self.db.scalar(select(func.count()).select_from(Document).where(*filters)) or 0
+        rows = list(
+            self.db.scalars(
+                select(Document)
+                .where(*filters)
+                .order_by(Document.created_at.desc())
+                .offset(offset)
+                .limit(limit)
+            )
         )
-        return list(self.db.scalars(stmt).all())
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_document(self, document_id: UUID) -> Document:
         return self._get_document(document_id)

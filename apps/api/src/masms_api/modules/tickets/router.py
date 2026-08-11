@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.tickets.schemas import (
     CheckCreate,
     CheckRead,
@@ -32,6 +34,11 @@ from masms_api.modules.tickets.service import TicketService
 router = APIRouter(prefix="/tickets", tags=["tickets"])
 
 
+class TicketPage(BaseModel):
+    items: list[TicketRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -46,11 +53,19 @@ def create_ticket(
     return TicketRead.model_validate(service.create_ticket(body))
 
 
-@router.get("/projects/{project_id}", response_model=list[TicketRead])
+@router.get("/projects/{project_id}", response_model=TicketPage)
 def list_tickets(
-    project_id: UUID, service: TicketService = Depends(_service)
-) -> list[TicketRead]:
-    return [TicketRead.model_validate(t) for t in service.list_tickets(project_id)]
+    project_id: UUID,
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: TicketService = Depends(_service),
+) -> TicketPage:
+    items, page = service.list_tickets(
+        project_id, status=status, q=q, limit=limit, offset=offset
+    )
+    return TicketPage(items=[TicketRead.model_validate(t) for t in items], page=page)
 
 
 @router.get("/{ticket_id}", response_model=TicketRead)

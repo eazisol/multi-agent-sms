@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from masms_api.errors import ForbiddenError, NotFoundError
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.comms import domain
@@ -82,30 +83,37 @@ class CommsService:
         q: str | None = None,
         project_id: UUID | None = None,
         classification: str | None = None,
-        limit: int = 50,
+        limit: int = 20,
         offset: int = 0,
-    ) -> list[Conversation]:
-        stmt = select(Conversation).where(
-            Conversation.organization_id == self.ctx.organization_id
-        )
+    ) -> tuple[list[Conversation], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [Conversation.organization_id == self.ctx.organization_id]
         ctx_client = self.ctx.tenant.client_id
         if ctx_client is not None:
-            stmt = stmt.where(Conversation.client_id == ctx_client)
+            filters.append(Conversation.client_id == ctx_client)
         if status:
-            stmt = stmt.where(Conversation.status == status)
+            filters.append(Conversation.status == status)
         if classification:
-            stmt = stmt.where(Conversation.classification == classification)
+            filters.append(Conversation.classification == classification)
         if project_id is not None:
-            stmt = stmt.where(Conversation.project_id == project_id)
+            filters.append(Conversation.project_id == project_id)
         if q and q.strip():
             like = f"%{q.strip()}%"
-            stmt = stmt.where(Conversation.subject.ilike(like))
-        stmt = (
-            stmt.order_by(Conversation.created_at.desc())
-            .offset(max(0, offset))
-            .limit(max(1, min(limit, 200)))
+            filters.append(Conversation.subject.ilike(like))
+        total = (
+            self.db.scalar(select(func.count()).select_from(Conversation).where(*filters))
+            or 0
         )
-        return list(self.db.scalars(stmt).all())
+        rows = list(
+            self.db.scalars(
+                select(Conversation)
+                .where(*filters)
+                .order_by(Conversation.created_at.desc())
+                .offset(offset)
+                .limit(limit)
+            )
+        )
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def create_message(self, data: MessageCreate) -> Message:
         conversation = self._get_conversation(data.conversation_id)

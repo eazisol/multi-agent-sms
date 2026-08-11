@@ -228,16 +228,16 @@ def test_document_scan_gate_permissions_and_authoritative_version(
 
     documents = client.get("/api/v1/documents", headers=headers)
     assert documents.status_code == 200, documents.text
-    assert any(row["id"] == document_id for row in documents.json())
+    assert any(row["id"] == document_id for row in documents.json()["items"])
 
     filtered = client.get("/api/v1/documents", headers=headers, params={"status": "draft"})
     assert filtered.status_code == 200
-    assert all(row["status"] == "draft" for row in filtered.json())
-    assert any(row["id"] == document_id for row in filtered.json())
+    assert all(row["status"] == "draft" for row in filtered.json()["items"])
+    assert any(row["id"] == document_id for row in filtered.json()["items"])
 
     searched = client.get("/api/v1/documents", headers=headers, params={"q": "Acme"})
     assert searched.status_code == 200
-    assert any(row["id"] == document_id for row in searched.json())
+    assert any(row["id"] == document_id for row in searched.json()["items"])
 
     got = client.get(f"/api/v1/documents/{document_id}", headers=headers)
     assert got.status_code == 200

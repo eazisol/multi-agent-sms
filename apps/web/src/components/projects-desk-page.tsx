@@ -4,13 +4,15 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { Field, Input, Textarea } from "@/components/ui/field";
+import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   addAcceptanceCriterion,
   approveRequirementVersion,
   approveSrsBaseline,
@@ -21,6 +23,7 @@ import {
   formatUtc,
   listProjects,
   listRequirements,
+  type PageMeta,
   type Project,
   type ProjectRequirement,
   type RequirementVersion,
@@ -36,8 +39,12 @@ export function ProjectsDeskPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [showReq, setShowReq] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [code, setCode] = useState("");
   const [title, setTitle] = useState("");
   const [reqCode, setReqCode] = useState("REQ-001");
@@ -49,11 +56,15 @@ export function ProjectsDeskPage() {
   const loadProjects = useCallback(async () => {
     setLoading(true);
     try {
-      const rows = await listProjects(session, {
+      const result = await listProjects(session, {
         q: search.trim() || undefined,
-        limit: 100,
+        status: status || undefined,
+        limit,
+        offset,
       });
-      setProjects(rows);
+      setProjects(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       const workspaceId = getWorkspaceProjectId();
       setProjectId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
@@ -63,10 +74,11 @@ export function ProjectsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load projects", err);
       setProjects([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, search]);
+  }, [session, search, status, limit, offset]);
 
   useEffect(() => {
     void loadProjects();
@@ -248,21 +260,47 @@ export function ProjectsDeskPage() {
               <Input
                 className="pl-9"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setOffset(0);
+                }}
                 placeholder="Search code or title"
                 aria-label="Search projects"
               />
             </div>
+            <Field label="Status" className="mt-3 mb-0">
+              <Select
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  setOffset(0);
+                }}
+                aria-label="Filter projects by status"
+              >
+                <option value="">Any status</option>
+                <option value="active">Active</option>
+                <option value="draft">Draft</option>
+                <option value="on_hold">On hold</option>
+                <option value="at_risk">At risk</option>
+                <option value="blocked">Blocked</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </Select>
+            </Field>
           </CardHeader>
           {loading ? (
             <SkeletonRows />
           ) : projects.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No projects yet"
-                body="Create a project to start drafting requirements and building an approved SRS."
+                title={search.trim() || status ? "No matching projects" : "No projects yet"}
+                body={
+                  search.trim() || status
+                    ? "Try a different search or status filter."
+                    : "Create a project to start drafting requirements and building an approved SRS."
+                }
                 action={
-                  can(session.variant, "create") ? (
+                  !search.trim() && !status && can(session.variant, "create") ? (
                     <Button onClick={() => setShowCreate(true)}>
                       <Plus className="h-4 w-4" />
                       New project
@@ -293,6 +331,14 @@ export function ProjectsDeskPage() {
               ))}
             </ul>
           )}
+          {!loading && (projects.length > 0 || pageMeta.total > 0) ? (
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="projects"
+            />
+          ) : null}
         </Card>
 
         <div className="space-y-4">

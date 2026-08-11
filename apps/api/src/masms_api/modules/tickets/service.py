@@ -5,12 +5,13 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ConflictError, ForbiddenError, NotFoundError, ValidationAppError
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.projects.models import Project, ProjectRequirement
@@ -161,17 +162,37 @@ class TicketService:
     def get_ticket(self, ticket_id: UUID) -> Ticket:
         return self._get_ticket(ticket_id)
 
-    def list_tickets(self, project_id: UUID) -> list[Ticket]:
+    def list_tickets(
+        self,
+        project_id: UUID,
+        *,
+        status: str | None = None,
+        q: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[Ticket], PageMeta]:
         self._get_project(project_id)
-        rows = self.db.scalars(
-            select(Ticket)
-            .where(
-                Ticket.organization_id == self.ctx.organization_id,
-                Ticket.project_id == project_id,
+        limit, offset = normalize_paging(limit, offset)
+        filters = [
+            Ticket.organization_id == self.ctx.organization_id,
+            Ticket.project_id == project_id,
+        ]
+        if status:
+            filters.append(Ticket.status == status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            filters.append(or_(Ticket.code.ilike(like), Ticket.title.ilike(like)))
+        total = self.db.scalar(select(func.count()).select_from(Ticket).where(*filters)) or 0
+        rows = list(
+            self.db.scalars(
+                select(Ticket)
+                .where(*filters)
+                .order_by(Ticket.code)
+                .offset(offset)
+                .limit(limit)
             )
-            .order_by(Ticket.code)
-        ).all()
-        return list(rows)
+        )
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def transition(self, ticket_id: UUID, data: TransitionRequest) -> Ticket:
         row = self._get_ticket(ticket_id)

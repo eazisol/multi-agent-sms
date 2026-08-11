@@ -4,17 +4,20 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Plus, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { Field, Input } from "@/components/ui/field";
+import { Field, Input, Select } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   createClient,
   formatUtc,
   listClients,
   type Client,
+  type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
@@ -22,9 +25,12 @@ import { can } from "@/lib/roles";
 export function ClientsDeskPage() {
   const { session } = useSession();
   const [items, setItems] = useState<Client[]>([]);
-  const [total, setTotal] = useState(0);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [status, setStatus] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [showCreate, setShowCreate] = useState(false);
   const [legalName, setLegalName] = useState("");
   const [code, setCode] = useState("");
@@ -33,21 +39,22 @@ export function ClientsDeskPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const page = await listClients(session, {
+      const result = await listClients(session, {
         q: q.trim() || undefined,
-        limit: 50,
-        offset: 0,
+        status: status || undefined,
+        limit,
+        offset,
       });
-      setItems(page.items);
-      setTotal(page.page.total);
+      setItems(result.items);
+      setPageMeta(result.page);
     } catch (err) {
       notifyApiError("Unable to load clients", err);
       setItems([]);
-      setTotal(0);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, q]);
+  }, [session, q, status, limit, offset]);
 
   useEffect(() => {
     void load();
@@ -142,19 +149,38 @@ export function ClientsDeskPage() {
       ) : null}
 
       <Card>
-        <CardHeader className="flex flex-wrap items-center gap-3">
+        <CardHeader className="flex flex-wrap items-end gap-3">
           <div className="relative min-w-[220px] flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
             <Input
               className="pl-9"
               placeholder="Search name, code, or industry…"
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => {
+                setQ(e.target.value);
+                setOffset(0);
+              }}
               aria-label="Search clients"
             />
           </div>
-          <p className="text-sm text-[var(--muted)]">
-            {total} match{total === 1 ? "" : "es"}
+          <Field label="Status" className="mb-0 min-w-[10rem]">
+            <Select
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                setOffset(0);
+              }}
+              aria-label="Filter by status"
+            >
+              <option value="">Any status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="prospect">Prospect</option>
+              <option value="archived">Archived</option>
+            </Select>
+          </Field>
+          <p className="pb-2 text-sm text-[var(--muted)]">
+            {pageMeta.total} match{pageMeta.total === 1 ? "" : "es"}
           </p>
         </CardHeader>
         {loading ? (
@@ -162,14 +188,14 @@ export function ClientsDeskPage() {
         ) : items.length === 0 ? (
           <CardBody>
             <EmptyState
-              title={q.trim() ? "No matching clients" : "No clients yet"}
+              title={q.trim() || status ? "No matching clients" : "No clients yet"}
               body={
-                q.trim()
-                  ? "Try a different name, code, or industry."
+                q.trim() || status
+                  ? "Try a different name, code, industry, or status."
                   : "Clients anchor every query, project, and delivery conversation. Start by adding your first account."
               }
               action={
-                !q.trim() && can(session.variant, "create") ? (
+                !q.trim() && !status && can(session.variant, "create") ? (
                   <Button onClick={() => setShowCreate(true)}>
                     <Plus className="h-4 w-4" />
                     Add client
@@ -177,7 +203,7 @@ export function ClientsDeskPage() {
                 ) : null
               }
               secondaryAction={
-                !q.trim() ? (
+                !q.trim() && !status ? (
                   <Button variant="ai">
                     <Sparkles className="h-4 w-4" />
                     Import with AI
@@ -187,41 +213,57 @@ export function ClientsDeskPage() {
             />
           </CardBody>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
-                <tr>
-                  <th className="px-5 py-3 font-medium">Client</th>
-                  <th className="px-5 py-3 font-medium">Industry</th>
-                  <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium">Created</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((client) => (
-                  <tr
-                    key={client.id}
-                    className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
-                  >
-                    <td className="px-5 py-3">
-                      <p className="font-medium">{client.legal_name}</p>
-                      <p className="text-xs text-[var(--muted)]">{client.code}</p>
-                    </td>
-                    <td className="px-5 py-3 text-[var(--muted)]">
-                      {client.industry || "—"}
-                    </td>
-                    <td className="px-5 py-3">
-                      <StatusBadge status={client.status} />
-                    </td>
-                    <td className="px-5 py-3 text-[var(--muted)]">
-                      {formatUtc(client.created_at)}
-                    </td>
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-left text-sm">
+                <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+                  <tr>
+                    <th className="px-5 py-3 font-medium">Client</th>
+                    <th className="px-5 py-3 font-medium">Industry</th>
+                    <th className="px-5 py-3 font-medium">Status</th>
+                    <th className="px-5 py-3 font-medium">Created</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {items.map((client) => (
+                    <tr
+                      key={client.id}
+                      className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+                    >
+                      <td className="px-5 py-3">
+                        <p className="font-medium">{client.legal_name}</p>
+                        <p className="text-xs text-[var(--muted)]">{client.code}</p>
+                      </td>
+                      <td className="px-5 py-3 text-[var(--muted)]">
+                        {client.industry || "—"}
+                      </td>
+                      <td className="px-5 py-3">
+                        <StatusBadge status={client.status} />
+                      </td>
+                      <td className="px-5 py-3 text-[var(--muted)]">
+                        {formatUtc(client.created_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="clients"
+            />
+          </>
         )}
+        {!loading && items.length === 0 && pageMeta.total > 0 ? (
+          <ListPagination
+            page={pageMeta}
+            onOffsetChange={setOffset}
+            onLimitChange={setLimit}
+            label="clients"
+          />
+        ) : null}
       </Card>
     </AppShell>
   );

@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.followups.schemas import (
     BusinessDeadlineRead,
     ChildLinkCreate,
@@ -28,6 +30,11 @@ from masms_api.modules.followups.service import FollowUpService
 router = APIRouter(prefix="/follow-ups", tags=["follow-ups"])
 
 
+class FollowUpPage(BaseModel):
+    items: list[FollowUpRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -42,9 +49,21 @@ def create_followup(
     return FollowUpRead.model_validate(service.create(body))
 
 
-@router.get("", response_model=list[FollowUpRead])
-def list_open(service: FollowUpService = Depends(_service)) -> list[FollowUpRead]:
-    return [FollowUpRead.model_validate(r) for r in service.list_open()]
+@router.get("", response_model=FollowUpPage)
+def list_followups(
+    status: str | None = Query(default="open"),
+    q: str | None = Query(default=None),
+    project_id: UUID | None = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: FollowUpService = Depends(_service),
+) -> FollowUpPage:
+    items, page = service.list_followups(
+        status=status, q=q, project_id=project_id, limit=limit, offset=offset
+    )
+    return FollowUpPage(
+        items=[FollowUpRead.model_validate(r) for r in items], page=page
+    )
 
 
 @router.get("/{followup_id}", response_model=FollowUpRead)

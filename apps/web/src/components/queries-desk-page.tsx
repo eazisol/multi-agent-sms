@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -11,12 +12,14 @@ import { Field, Input, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   createQuery,
   createQuerySource,
   formatUtc,
   listQueries,
   transitionQuery,
   type ClientQuery,
+  type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
@@ -47,6 +50,7 @@ const NEXT_ACTIONS: Record<string, { next: string; label: string; classification
 export function QueriesDeskPage() {
   const { session } = useSession();
   const [items, setItems] = useState<ClientQuery[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
   const [loading, setLoading] = useState(true);
   const [sourceId, setSourceId] = useState("");
   const [subject, setSubject] = useState("");
@@ -55,18 +59,23 @@ export function QueriesDeskPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [search, setSearch] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const tab = FILTER_TABS.find((t) => t.id === activeTab) ?? FILTER_TABS[0];
-      const rows = await listQueries(session, {
+      const result = await listQueries(session, {
         status: tab.status,
         sla_status: tab.sla_status,
         q: search.trim() || undefined,
-        limit: 100,
+        limit,
+        offset,
       });
-      setItems(rows);
+      setItems(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       const workspaceId = getWorkspaceQueryId();
       setCurrentId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
@@ -76,10 +85,11 @@ export function QueriesDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load inquiries", err);
       setItems([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, activeTab, search]);
+  }, [session, activeTab, search, limit, offset]);
 
   useEffect(() => {
     void load();
@@ -117,6 +127,7 @@ export function QueriesDeskPage() {
       setSummary("");
       setShowCreate(false);
       setActiveTab("all");
+      setOffset(0);
       await load();
     } catch (err) {
       notifyApiError("Could not create inquiry", err);
@@ -164,7 +175,10 @@ export function QueriesDeskPage() {
           <button
             key={tab.id}
             type="button"
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              setOffset(0);
+            }}
             className={`rounded-full px-3 py-1 text-xs font-medium ${
               activeTab === tab.id
                 ? "bg-[var(--accent-soft)] text-[var(--accent)]"
@@ -180,7 +194,10 @@ export function QueriesDeskPage() {
             className="pl-9"
             placeholder="Search subject or summary"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setOffset(0);
+            }}
             aria-label="Search inquiries"
           />
         </div>
@@ -226,7 +243,7 @@ export function QueriesDeskPage() {
 
       {loading ? (
         <SkeletonRows rows={5} />
-      ) : items.length === 0 ? (
+      ) : items.length === 0 && pageMeta.total === 0 ? (
         <EmptyState
           title="No inquiries found"
           body="New inbound requests appear here. Capture an inquiry or change the filter."
@@ -241,38 +258,57 @@ export function QueriesDeskPage() {
           <Card>
             <CardHeader>
               <h2 className="font-display text-lg">Inbox</h2>
-              <p className="text-sm text-[var(--muted)]">{items.length} inquiries</p>
+              <p className="text-sm text-[var(--muted)]">
+                {pageMeta.total} inquir{pageMeta.total === 1 ? "y" : "ies"}
+              </p>
             </CardHeader>
-            <CardBody className="space-y-2">
-              {items.map((item) => {
-                const selected = item.id === currentId;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => selectQuery(item.id)}
-                    className={`w-full rounded-lg border px-3 py-3 text-left transition ${
-                      selected
-                        ? "border-[var(--accent)] bg-[var(--accent-soft)]"
-                        : "border-[var(--line)] bg-[var(--surface)] hover:border-[var(--accent)]"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="font-medium text-[var(--ink)]">{item.subject}</p>
-                        <p className="mt-1 line-clamp-2 text-xs text-[var(--muted)]">
-                          {item.summary}
-                        </p>
-                        <p className="mt-1 text-[11px] text-[var(--muted)]">
-                          {formatUtc(item.created_at)}
-                        </p>
+            {items.length === 0 ? (
+              <CardBody>
+                <EmptyState
+                  title="No inquiries on this page"
+                  body="Try the previous page or change the filter."
+                />
+              </CardBody>
+            ) : (
+              <CardBody className="space-y-2">
+                {items.map((item) => {
+                  const selected = item.id === currentId;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => selectQuery(item.id)}
+                      className={`w-full rounded-lg border px-3 py-3 text-left transition ${
+                        selected
+                          ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                          : "border-[var(--line)] bg-[var(--surface)] hover:border-[var(--accent)]"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="font-medium text-[var(--ink)]">{item.subject}</p>
+                          <p className="mt-1 line-clamp-2 text-xs text-[var(--muted)]">
+                            {item.summary}
+                          </p>
+                          <p className="mt-1 text-[11px] text-[var(--muted)]">
+                            {formatUtc(item.created_at)}
+                          </p>
+                        </div>
+                        <StatusBadge status={item.status} />
                       </div>
-                      <StatusBadge status={item.status} />
-                    </div>
-                  </button>
-                );
-              })}
-            </CardBody>
+                    </button>
+                  );
+                })}
+              </CardBody>
+            )}
+            {items.length > 0 || pageMeta.total > 0 ? (
+              <ListPagination
+                page={pageMeta}
+                onOffsetChange={setOffset}
+                onLimitChange={setLimit}
+                label="inquiries"
+              />
+            ) : null}
           </Card>
 
           {current ? (

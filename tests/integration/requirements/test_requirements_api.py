@@ -177,18 +177,18 @@ def test_questionnaire_completeness_clarification_and_brief_approval(
         params={"related_entity_type": "crm_query", "related_entity_id": entity_id},
     )
     assert listed.status_code == 200
-    assert len(listed.json()) == 1
-    assert listed.json()[0]["status"] == "approved"
+    assert len(listed.json()["items"]) == 1
+    assert listed.json()["items"][0]["status"] == "approved"
 
     questionnaires = client.get("/api/v1/requirements/questionnaires", headers=headers)
     assert questionnaires.status_code == 200, questionnaires.text
-    assert any(row["id"] == questionnaire_id for row in questionnaires.json())
+    assert any(row["id"] == questionnaire_id for row in questionnaires.json()["items"])
 
     searched = client.get(
         "/api/v1/requirements/questionnaires", headers=headers, params={"q": "intake"}
     )
     assert searched.status_code == 200
-    assert any(row["id"] == questionnaire_id for row in searched.json())
+    assert any(row["id"] == questionnaire_id for row in searched.json()["items"])
 
     versions = client.get(
         f"/api/v1/requirements/questionnaires/{questionnaire_id}/versions",
@@ -219,7 +219,7 @@ def test_questionnaire_completeness_clarification_and_brief_approval(
 
     org_briefs = client.get("/api/v1/requirements/briefs", headers=headers)
     assert org_briefs.status_code == 200
-    assert any(row["id"] == brief_id for row in org_briefs.json())
+    assert any(row["id"] == brief_id for row in org_briefs.json()["items"])
 
     got_brief = client.get(f"/api/v1/requirements/briefs/{brief_id}", headers=headers)
     assert got_brief.status_code == 200

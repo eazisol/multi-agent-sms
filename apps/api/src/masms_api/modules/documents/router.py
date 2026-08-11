@@ -5,10 +5,12 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.documents.schemas import (
     AccessCheckRead,
     AccessCheckRequest,
@@ -31,6 +33,11 @@ from masms_api.modules.documents.schemas import (
 from masms_api.modules.documents.service import DocumentsService
 
 router = APIRouter(prefix="/documents", tags=["documents"])
+
+
+class DocumentPage(BaseModel):
+    items: list[DocumentRead]
+    page: PageMeta = Field(description="Pagination metadata")
 
 
 def _service(
@@ -71,17 +78,17 @@ def create_document(
     return DocumentRead.model_validate(service.create_document(body))
 
 
-@router.get("", response_model=list[DocumentRead])
+@router.get("", response_model=DocumentPage)
 def list_documents(
     status: str | None = Query(default=None),
     q: str | None = Query(default=None),
     project_id: UUID | None = Query(default=None),
     classification: str | None = Query(default=None),
-    limit: int = Query(default=50, ge=1, le=200),
+    limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: DocumentsService = Depends(_service),
-) -> list[DocumentRead]:
-    rows = service.list_documents(
+) -> DocumentPage:
+    items, page = service.list_documents(
         status=status,
         q=q,
         project_id=project_id,
@@ -89,7 +96,9 @@ def list_documents(
         limit=limit,
         offset=offset,
     )
-    return [DocumentRead.model_validate(r) for r in rows]
+    return DocumentPage(
+        items=[DocumentRead.model_validate(r) for r in items], page=page
+    )
 
 
 @router.get("/{document_id}", response_model=DocumentRead)

@@ -154,16 +154,16 @@ def test_query_lifecycle_qualification_convert_and_sla(client: TestClient) -> No
 
     listed = client.get("/api/v1/queries", headers=headers)
     assert listed.status_code == 200, listed.text
-    assert any(row["id"] == query_id for row in listed.json())
+    assert any(row["id"] == query_id for row in listed.json()["items"])
 
     filtered = client.get("/api/v1/queries", headers=headers, params={"status": "converted"})
     assert filtered.status_code == 200
-    assert all(row["status"] == "converted" for row in filtered.json())
-    assert any(row["id"] == query_id for row in filtered.json())
+    assert all(row["status"] == "converted" for row in filtered.json()["items"])
+    assert any(row["id"] == query_id for row in filtered.json()["items"])
 
     searched = client.get("/api/v1/queries", headers=headers, params={"q": "portal"})
     assert searched.status_code == 200
-    assert any(row["id"] == query_id for row in searched.json())
+    assert any(row["id"] == query_id for row in searched.json()["items"])
 
     got = client.get(f"/api/v1/queries/{query_id}", headers=headers)
     assert got.status_code == 200

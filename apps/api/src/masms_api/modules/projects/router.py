@@ -5,10 +5,12 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.projects.schemas import (
     AcceptanceCriterionCreate,
     AcceptanceCriterionRead,
@@ -32,6 +34,11 @@ from masms_api.modules.projects.service import ProjectsService
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
+class ProjectPage(BaseModel):
+    items: list[ProjectRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -46,19 +53,19 @@ def create_project(
     return ProjectRead.model_validate(service.create_project(body))
 
 
-@router.get("", response_model=list[ProjectRead])
+@router.get("", response_model=ProjectPage)
 def list_projects(
     status: str | None = Query(default=None),
     q: str | None = Query(default=None),
     client_id: UUID | None = Query(default=None),
-    limit: int = Query(default=50, ge=1, le=200),
+    limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: ProjectsService = Depends(_service),
-) -> list[ProjectRead]:
-    rows = service.list_projects(
+) -> ProjectPage:
+    items, page = service.list_projects(
         status=status, q=q, client_id=client_id, limit=limit, offset=offset
     )
-    return [ProjectRead.model_validate(r) for r in rows]
+    return ProjectPage(items=[ProjectRead.model_validate(r) for r in items], page=page)
 
 
 @router.get("/{project_id}", response_model=ProjectRead)

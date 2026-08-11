@@ -1,9 +1,10 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { Field, Input, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   addApprovalEvidence,
   createApproval,
   decideApproval,
@@ -21,6 +23,7 @@ import {
   type ApprovalDecision,
   type ApprovalRequest,
   type ApprovalStep,
+  type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
@@ -40,7 +43,11 @@ export function ApprovalsDeskPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [activeTab, setActiveTab] = useState("pending");
+  const [search, setSearch] = useState("");
   const [items, setItems] = useState<ApprovalRequest[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [steps, setSteps] = useState<ApprovalStep[]>([]);
   const [decisions, setDecisions] = useState<ApprovalDecision[]>([]);
@@ -57,8 +64,15 @@ export function ApprovalsDeskPage() {
     setLoading(true);
     try {
       const tab = FILTER_TABS.find((t) => t.id === activeTab) ?? FILTER_TABS[0];
-      const rows = await listApprovals(session, { status: tab.status });
-      setItems(rows);
+      const result = await listApprovals(session, {
+        status: tab.status,
+        q: search.trim() || undefined,
+        limit,
+        offset,
+      });
+      setItems(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       setCurrentId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
         return rows[0]?.id ?? null;
@@ -66,10 +80,11 @@ export function ApprovalsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load approvals", err);
       setItems([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, activeTab]);
+  }, [session, activeTab, search, limit, offset]);
 
   useEffect(() => {
     void load();
@@ -125,6 +140,7 @@ export function ApprovalsDeskPage() {
       setTitle("");
       setTargetId("");
       setActiveTab("pending");
+      setOffset(0);
       await load();
     } catch (err) {
       notifyApiError("Could not create approval", err);
@@ -239,16 +255,32 @@ export function ApprovalsDeskPage() {
         </Card>
       ) : null}
 
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
         {FILTER_TABS.map((tab) => (
           <Button
             key={tab.id}
             variant={activeTab === tab.id ? "primary" : "outline"}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              setOffset(0);
+            }}
           >
             {tab.label}
           </Button>
         ))}
+        <div className="relative ml-auto min-w-[12rem] flex-1 max-w-xs">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+          <Input
+            className="pl-9"
+            placeholder="Search title or action"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setOffset(0);
+            }}
+            aria-label="Search approvals"
+          />
+        </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(280px,360px)_1fr]">
@@ -262,10 +294,15 @@ export function ApprovalsDeskPage() {
           ) : items.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No approvals"
-                body="Submit an approval for an entity version that needs a human gate."
+                title={search.trim() ? "No matching approvals" : "No approvals"}
+                body={
+                  search.trim()
+                    ? "Try a different search or status tab."
+                    : "Submit an approval for an entity version that needs a human gate."
+                }
                 action={
-                  can(session.variant, "create") || can(session.variant, "submit") ? (
+                  !search.trim() &&
+                  (can(session.variant, "create") || can(session.variant, "submit")) ? (
                     <Button onClick={() => setShowCreate(true)}>New approval</Button>
                   ) : null
                 }
@@ -295,6 +332,14 @@ export function ApprovalsDeskPage() {
               ))}
             </ul>
           )}
+          {!loading && (items.length > 0 || pageMeta.total > 0) ? (
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="approvals"
+            />
+          ) : null}
         </Card>
 
         {current ? (

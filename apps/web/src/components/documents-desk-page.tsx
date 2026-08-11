@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { FileUp, Plus, Search, ShieldCheck } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { Field, Input, Select } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   createDocument,
   createDocumentVersion,
   formatUtc,
@@ -19,6 +21,7 @@ import {
   recordDocumentScan,
   type DocumentRecord,
   type DocumentVersion,
+  type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
@@ -40,8 +43,14 @@ export function DocumentsDeskPage() {
   const [showVersion, setShowVersion] = useState(false);
   const [title, setTitle] = useState("");
   const [documents, setDocuments] = useState<DocumentRecord[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
   const [documentId, setDocumentId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [classification, setClassification] = useState("");
+  const [scopeToWorkspace, setScopeToWorkspace] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [filename, setFilename] = useState("");
   const [version, setVersion] = useState<DocumentVersion | null>(null);
   const [verdict, setVerdict] = useState("clean");
@@ -50,11 +59,17 @@ export function DocumentsDeskPage() {
   const loadDocuments = useCallback(async () => {
     setLoading(true);
     try {
-      const rows = await listDocuments(session, {
+      const result = await listDocuments(session, {
         q: search.trim() || undefined,
-        limit: 100,
+        status: status || undefined,
+        classification: classification || undefined,
+        project_id: scopeToWorkspace && workspaceProject ? workspaceProject : undefined,
+        limit,
+        offset,
       });
-      setDocuments(rows);
+      setDocuments(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       const workspaceId = getWorkspaceDocumentId();
       setDocumentId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
@@ -64,10 +79,20 @@ export function DocumentsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load documents", err);
       setDocuments([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, search]);
+  }, [
+    session,
+    search,
+    status,
+    classification,
+    scopeToWorkspace,
+    workspaceProject,
+    limit,
+    offset,
+  ]);
 
   useEffect(() => {
     void loadDocuments();
@@ -221,20 +246,80 @@ export function DocumentsDeskPage() {
               <Input
                 className="pl-9"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setOffset(0);
+                }}
                 placeholder="Search title"
                 aria-label="Search documents"
               />
             </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <Field label="Status" className="mb-0">
+                <Select
+                  value={status}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    setOffset(0);
+                  }}
+                  aria-label="Filter documents by status"
+                >
+                  <option value="">Any status</option>
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                  <option value="archived">Archived</option>
+                </Select>
+              </Field>
+              <Field label="Classification" className="mb-0">
+                <Select
+                  value={classification}
+                  onChange={(e) => {
+                    setClassification(e.target.value);
+                    setOffset(0);
+                  }}
+                  aria-label="Filter documents by classification"
+                >
+                  <option value="">Any classification</option>
+                  <option value="internal">Internal</option>
+                  <option value="confidential">Confidential</option>
+                  <option value="restricted">Restricted</option>
+                  <option value="public">Public</option>
+                </Select>
+              </Field>
+            </div>
+            {workspaceProject ? (
+              <label className="mt-3 flex items-center gap-2 text-sm text-[var(--muted)]">
+                <input
+                  type="checkbox"
+                  checked={scopeToWorkspace}
+                  onChange={(e) => {
+                    setScopeToWorkspace(e.target.checked);
+                    setOffset(0);
+                  }}
+                />
+                Scope to workspace project
+              </label>
+            ) : null}
           </CardHeader>
           {loading ? (
             <SkeletonRows />
           ) : documents.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No documents yet"
-                body="Create a document to upload versions, run scans, and release files."
+                title={
+                  search.trim() || status || classification
+                    ? "No matching documents"
+                    : "No documents yet"
+                }
+                body={
+                  search.trim() || status || classification
+                    ? "Try a different search or filter."
+                    : "Create a document to upload versions, run scans, and release files."
+                }
                 action={
+                  !search.trim() &&
+                  !status &&
+                  !classification &&
                   can(session.variant, "create") ? (
                     <Button onClick={() => setShowCreate(true)}>
                       <Plus className="h-4 w-4" />
@@ -270,6 +355,14 @@ export function DocumentsDeskPage() {
               ))}
             </ul>
           )}
+          {!loading && (documents.length > 0 || pageMeta.total > 0) ? (
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="documents"
+            />
+          ) : null}
         </Card>
 
         {documentId && current ? (

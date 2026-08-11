@@ -245,7 +245,7 @@ def test_ready_gate_links_and_reopen(client: TestClient) -> None:
 
     listed = client.get(f"/api/v1/tickets/projects/{project_id}", headers=headers)
     assert listed.status_code == 200
-    assert len(listed.json()) == 1
+    assert len(listed.json()["items"]) == 1
 
 
 def test_dependency_and_self_link_rejected(client: TestClient) -> None:

@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from masms_api.errors import ForbiddenError, NotFoundError, ValidationAppError
 from masms_api.kernel.context import RequestContext
 from masms_api.kernel.outbox import enqueue_outbox
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.projects import domain
@@ -86,26 +87,32 @@ class ProjectsService:
         status: str | None = None,
         q: str | None = None,
         client_id: UUID | None = None,
-        limit: int = 50,
+        limit: int = 20,
         offset: int = 0,
-    ) -> list[Project]:
-        stmt = select(Project).where(Project.organization_id == self.ctx.organization_id)
+    ) -> tuple[list[Project], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [Project.organization_id == self.ctx.organization_id]
         ctx_client = self.ctx.tenant.client_id
         if ctx_client is not None:
-            stmt = stmt.where(Project.client_id == ctx_client)
+            filters.append(Project.client_id == ctx_client)
         elif client_id is not None:
-            stmt = stmt.where(Project.client_id == client_id)
+            filters.append(Project.client_id == client_id)
         if status:
-            stmt = stmt.where(Project.status == status)
+            filters.append(Project.status == status)
         if q and q.strip():
             like = f"%{q.strip()}%"
-            stmt = stmt.where(or_(Project.code.ilike(like), Project.title.ilike(like)))
-        stmt = (
-            stmt.order_by(Project.created_at.desc())
-            .offset(max(0, offset))
-            .limit(max(1, min(limit, 200)))
+            filters.append(or_(Project.code.ilike(like), Project.title.ilike(like)))
+        total = self.db.scalar(select(func.count()).select_from(Project).where(*filters)) or 0
+        rows = list(
+            self.db.scalars(
+                select(Project)
+                .where(*filters)
+                .order_by(Project.created_at.desc())
+                .offset(offset)
+                .limit(limit)
+            )
         )
-        return list(self.db.scalars(stmt).all())
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def get_project(self, project_id: UUID) -> Project:
         return self._get_project(project_id)

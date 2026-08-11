@@ -5,10 +5,12 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.comms.schemas import (
     AttachmentLinkCreate,
     AttachmentLinkRead,
@@ -28,6 +30,11 @@ from masms_api.modules.comms.service import CommsService
 router = APIRouter(prefix="/comms", tags=["comms"])
 
 
+class ConversationPage(BaseModel):
+    items: list[ConversationRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -42,17 +49,17 @@ def create_conversation(
     return ConversationRead.model_validate(service.create_conversation(body))
 
 
-@router.get("/conversations", response_model=list[ConversationRead])
+@router.get("/conversations", response_model=ConversationPage)
 def list_conversations(
     status: str | None = Query(default=None),
     q: str | None = Query(default=None),
     project_id: UUID | None = Query(default=None),
     classification: str | None = Query(default=None),
-    limit: int = Query(default=50, ge=1, le=200),
+    limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: CommsService = Depends(_service),
-) -> list[ConversationRead]:
-    rows = service.list_conversations(
+) -> ConversationPage:
+    items, page = service.list_conversations(
         status=status,
         q=q,
         project_id=project_id,
@@ -60,7 +67,9 @@ def list_conversations(
         limit=limit,
         offset=offset,
     )
-    return [ConversationRead.model_validate(r) for r in rows]
+    return ConversationPage(
+        items=[ConversationRead.model_validate(r) for r in items], page=page
+    )
 
 
 @router.post("/messages", response_model=MessageRead, status_code=201)

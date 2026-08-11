@@ -21,6 +21,18 @@ export type PageMeta = {
   has_more: boolean;
 };
 
+export type ListPage<T> = {
+  items: T[];
+  page: PageMeta;
+};
+
+export const EMPTY_PAGE_META: PageMeta = {
+  limit: 20,
+  offset: 0,
+  total: 0,
+  has_more: false,
+};
+
 export type Baseline = {
   id: string;
   organization_id: string;
@@ -273,18 +285,18 @@ export async function listQueries(
     limit?: number;
     offset?: number;
   } = {},
-): Promise<ClientQuery[]> {
+): Promise<ListPage<ClientQuery>> {
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   if (params.sla_status) query.set("sla_status", params.sla_status);
   if (params.q) query.set("q", params.q);
-  query.set("limit", String(params.limit ?? 50));
+  query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await apiFetch(`${apiBase()}/api/v1/queries?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<ClientQuery[]>(response);
+  return parse<ListPage<ClientQuery>>(response);
 }
 
 export async function getQuery(
@@ -460,18 +472,18 @@ export async function listProjects(
     limit?: number;
     offset?: number;
   } = {},
-): Promise<Project[]> {
+): Promise<ListPage<Project>> {
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   if (params.q) query.set("q", params.q);
   if (params.client_id) query.set("client_id", params.client_id);
-  query.set("limit", String(params.limit ?? 50));
+  query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await apiFetch(`${apiBase()}/api/v1/projects?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<Project[]>(response);
+  return parse<ListPage<Project>>(response);
 }
 
 export async function createProject(
@@ -588,19 +600,19 @@ export async function listDocuments(
     limit?: number;
     offset?: number;
   } = {},
-): Promise<DocumentRecord[]> {
+): Promise<ListPage<DocumentRecord>> {
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   if (params.q) query.set("q", params.q);
   if (params.project_id) query.set("project_id", params.project_id);
   if (params.classification) query.set("classification", params.classification);
-  query.set("limit", String(params.limit ?? 50));
+  query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await apiFetch(`${apiBase()}/api/v1/documents?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<DocumentRecord[]>(response);
+  return parse<ListPage<DocumentRecord>>(response);
 }
 
 export async function createDocument(
@@ -879,19 +891,19 @@ export async function listConversations(
     limit?: number;
     offset?: number;
   } = {},
-): Promise<Conversation[]> {
+): Promise<ListPage<Conversation>> {
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   if (params.q) query.set("q", params.q);
   if (params.project_id) query.set("project_id", params.project_id);
   if (params.classification) query.set("classification", params.classification);
-  query.set("limit", String(params.limit ?? 50));
+  query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await apiFetch(`${apiBase()}/api/v1/comms/conversations?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<Conversation[]>(response);
+  return parse<ListPage<Conversation>>(response);
 }
 
 export async function createConversation(
@@ -978,17 +990,17 @@ export async function listQuestionnaires(
     limit?: number;
     offset?: number;
   } = {},
-): Promise<Questionnaire[]> {
+): Promise<ListPage<Questionnaire>> {
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   if (params.q) query.set("q", params.q);
-  query.set("limit", String(params.limit ?? 50));
+  query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await apiFetch(`${apiBase()}/api/v1/requirements/questionnaires?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<Questionnaire[]>(response);
+  return parse<ListPage<Questionnaire>>(response);
 }
 
 export async function getPublishedQuestionnaireVersion(
@@ -1160,19 +1172,19 @@ export async function listRequirementsBriefs(
     limit?: number;
     offset?: number;
   } = {},
-): Promise<RequirementsBrief[]> {
+): Promise<ListPage<RequirementsBrief>> {
   const query = new URLSearchParams();
   if (params.related_entity_type) query.set("related_entity_type", params.related_entity_type);
   if (params.related_entity_id) query.set("related_entity_id", params.related_entity_id);
   if (params.status) query.set("status", params.status);
   if (params.q) query.set("q", params.q);
-  query.set("limit", String(params.limit ?? 50));
+  query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
   const response = await apiFetch(`${apiBase()}/api/v1/requirements/briefs?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<RequirementsBrief[]>(response);
+  return parse<ListPage<RequirementsBrief>>(response);
 }
 
 export async function createTicket(
@@ -1204,12 +1216,26 @@ export async function createTicket(
 export async function listTickets(
   session: SessionState,
   projectId: string,
-): Promise<Ticket[]> {
-  const response = await apiFetch(`${apiBase()}/api/v1/tickets/projects/${projectId}`, {
-    headers: headers(session),
-    cache: "no-store",
-  });
-  return parse<Ticket[]>(response);
+  params: {
+    status?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<Ticket>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/tickets/projects/${projectId}?${query}`,
+    {
+      headers: headers(session),
+      cache: "no-store",
+    },
+  );
+  return parse<ListPage<Ticket>>(response);
 }
 
 export async function updateTicket(
@@ -1429,17 +1455,25 @@ export type FollowUpEscalation = {
 
 export async function listApprovals(
   session: SessionState,
-  params: { status?: string; action_code?: string } = {},
-): Promise<ApprovalRequest[]> {
+  params: {
+    status?: string;
+    action_code?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<ApprovalRequest>> {
   const query = new URLSearchParams();
   if (params.status) query.set("status", params.status);
   if (params.action_code) query.set("action_code", params.action_code);
-  const qs = query.toString();
-  const response = await apiFetch(`${apiBase()}/api/v1/approvals${qs ? `?${qs}` : ""}`, {
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<ApprovalRequest[]>(response);
+  return parse<ListPage<ApprovalRequest>>(response);
 }
 
 export async function getApproval(
@@ -1521,12 +1555,35 @@ export async function addApprovalEvidence(
   return parse<{ id: string }>(response);
 }
 
-export async function listOpenFollowUps(session: SessionState): Promise<FollowUp[]> {
-  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups`, {
+export async function listFollowUps(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    project_id?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<FollowUp>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  if (params.project_id) query.set("project_id", params.project_id);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
-  return parse<FollowUp[]>(response);
+  return parse<ListPage<FollowUp>>(response);
+}
+
+/** Open follow-ups only (API default status=open). Prefer `listFollowUps` for desks. */
+export async function listOpenFollowUps(
+  session: SessionState,
+  params: { limit?: number; offset?: number; q?: string; project_id?: string } = {},
+): Promise<ListPage<FollowUp>> {
+  return listFollowUps(session, { status: "open", ...params });
 }
 
 export async function createFollowUp(

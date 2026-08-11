@@ -5,10 +5,12 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.queries.schemas import (
     ClientQueryCreate,
     ClientQueryRead,
@@ -27,6 +29,11 @@ from masms_api.modules.queries.service import QueriesService
 router = APIRouter(prefix="/queries", tags=["queries"])
 
 
+class ClientQueryPage(BaseModel):
+    items: list[ClientQueryRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -41,19 +48,21 @@ def create_source(
     return QuerySourceRead.model_validate(service.create_source(body))
 
 
-@router.get("", response_model=list[ClientQueryRead])
+@router.get("", response_model=ClientQueryPage)
 def list_queries(
     status: str | None = Query(default=None),
     sla_status: str | None = Query(default=None),
     q: str | None = Query(default=None),
-    limit: int = Query(default=50, ge=1, le=200),
+    limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     service: QueriesService = Depends(_service),
-) -> list[ClientQueryRead]:
-    rows = service.list_queries(
+) -> ClientQueryPage:
+    items, page = service.list_queries(
         status=status, sla_status=sla_status, q=q, limit=limit, offset=offset
     )
-    return [ClientQueryRead.model_validate(r) for r in rows]
+    return ClientQueryPage(
+        items=[ClientQueryRead.model_validate(r) for r in items], page=page
+    )
 
 
 @router.post("", response_model=ClientQueryRead, status_code=201)

@@ -4,6 +4,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { MessageSquarePlus, Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   addMessageRecipient,
   approveCommsMessage,
   createCommsMessage,
@@ -21,6 +23,7 @@ import {
   sendCommsMessage,
   type CommsMessage,
   type Conversation,
+  type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
@@ -38,8 +41,12 @@ export function CommsDeskPage() {
   const [subject, setSubject] = useState("");
   const [classification, setClassification] = useState("internal");
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [messageBody, setMessageBody] = useState("");
   const [recipient, setRecipient] = useState("");
   const [activeMessage, setActiveMessage] = useState<CommsMessage | null>(null);
@@ -48,11 +55,15 @@ export function CommsDeskPage() {
   const loadConversations = useCallback(async () => {
     setLoading(true);
     try {
-      const rows = await listConversations(session, {
+      const result = await listConversations(session, {
         q: search.trim() || undefined,
-        limit: 100,
+        status: status || undefined,
+        limit,
+        offset,
       });
-      setConversations(rows);
+      setConversations(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       const workspaceId = getWorkspaceConversationId();
       setConversationId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
@@ -62,10 +73,11 @@ export function CommsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load conversations", err);
       setConversations([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session, search]);
+  }, [session, search, status, limit, offset]);
 
   useEffect(() => {
     void loadConversations();
@@ -249,21 +261,43 @@ export function CommsDeskPage() {
               <Input
                 className="pl-9"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setOffset(0);
+                }}
                 placeholder="Search subject"
                 aria-label="Search conversations"
               />
             </div>
+            <Field label="Status" className="mt-3 mb-0">
+              <Select
+                value={status}
+                onChange={(e) => {
+                  setStatus(e.target.value);
+                  setOffset(0);
+                }}
+                aria-label="Filter conversations by status"
+              >
+                <option value="">Any status</option>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+                <option value="archived">Archived</option>
+              </Select>
+            </Field>
           </CardHeader>
           {loading ? (
             <SkeletonRows />
           ) : conversations.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No conversations yet"
-                body="Start a thread for a client inquiry or opportunity."
+                title={search.trim() || status ? "No matching conversations" : "No conversations yet"}
+                body={
+                  search.trim() || status
+                    ? "Try a different search or status filter."
+                    : "Start a thread for a client inquiry or opportunity."
+                }
                 action={
-                  can(session.variant, "create") ? (
+                  !search.trim() && !status && can(session.variant, "create") ? (
                     <Button onClick={() => setShowCreate(true)}>
                       <MessageSquarePlus className="h-4 w-4" />
                       New conversation
@@ -297,6 +331,14 @@ export function CommsDeskPage() {
               ))}
             </ul>
           )}
+          {!loading && (conversations.length > 0 || pageMeta.total > 0) ? (
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="conversations"
+            />
+          ) : null}
         </Card>
 
         {conversationId && current ? (

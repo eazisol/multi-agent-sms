@@ -1,9 +1,10 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ListPagination } from "@/components/list-pagination";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -11,19 +12,21 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
+  EMPTY_PAGE_META,
   addFollowUpClosureEvidence,
   closeFollowUp,
   createFollowUp,
   formatUtc,
   listFollowUpEscalations,
   listFollowUpReminders,
-  listOpenFollowUps,
+  listFollowUps,
   listQueries,
   processFollowUpOverdue,
   type ClientQuery,
   type FollowUp,
   type FollowUpEscalation,
   type FollowUpReminder,
+  type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
@@ -38,6 +41,11 @@ export function FollowUpsDeskPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [items, setItems] = useState<FollowUp[]>([]);
+  const [pageMeta, setPageMeta] = useState<PageMeta>(EMPTY_PAGE_META);
+  const [status, setStatus] = useState("open");
+  const [search, setSearch] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [queries, setQueries] = useState<ClientQuery[]>([]);
   const [reminders, setReminders] = useState<FollowUpReminder[]>([]);
@@ -54,8 +62,15 @@ export function FollowUpsDeskPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const rows = await listOpenFollowUps(session);
-      setItems(rows);
+      const result = await listFollowUps(session, {
+        status,
+        q: search.trim() || undefined,
+        limit,
+        offset,
+      });
+      setItems(result.items);
+      setPageMeta(result.page);
+      const rows = result.items;
       setCurrentId((prev) => {
         if (prev && rows.some((r) => r.id === prev)) return prev;
         return rows[0]?.id ?? null;
@@ -63,10 +78,11 @@ export function FollowUpsDeskPage() {
     } catch (err) {
       notifyApiError("Unable to load follow-ups", err);
       setItems([]);
+      setPageMeta(EMPTY_PAGE_META);
     } finally {
       setLoading(false);
     }
-  }, [session]);
+  }, [session, status, search, limit, offset]);
 
   useEffect(() => {
     void load();
@@ -75,7 +91,8 @@ export function FollowUpsDeskPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const rows = await listQueries(session, { limit: 100 });
+        const result = await listQueries(session, { limit: 100 });
+        const rows = result.items;
         setQueries(rows);
         const workspace = getWorkspaceQueryId();
         setSourceQueryId((prev) => {
@@ -144,6 +161,8 @@ export function FollowUpsDeskPage() {
       notifySuccess("Follow-up opened");
       setShowCreate(false);
       setTitle("");
+      setStatus("open");
+      setOffset(0);
       await load();
     } catch (err) {
       notifyApiError("Could not create follow-up", err);
@@ -189,6 +208,9 @@ export function FollowUpsDeskPage() {
       notifyApiError("Could not process overdue", err);
     }
   }
+
+  const listTitle =
+    status === "open" ? "Open follow-ups" : status === "closed" ? "Closed follow-ups" : "Follow-ups";
 
   return (
     <AppShell title="Follow-ups" breadcrumbs={["Coordination", "Follow-ups"]}>
@@ -271,21 +293,55 @@ export function FollowUpsDeskPage() {
         </Card>
       ) : null}
 
+      <div className="mb-4 flex flex-wrap items-end gap-3">
+        <Field label="Status" className="mb-0 min-w-[10rem]">
+          <Select
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value);
+              setOffset(0);
+            }}
+            aria-label="Filter follow-ups by status"
+          >
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+            <option value="all">All</option>
+          </Select>
+        </Field>
+        <div className="relative min-w-[12rem] flex-1 max-w-xs">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+          <Input
+            className="pl-9"
+            placeholder="Search title"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setOffset(0);
+            }}
+            aria-label="Search follow-ups"
+          />
+        </div>
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-[minmax(280px,360px)_1fr]">
         <Card>
           <CardHeader>
-            <h2 className="font-display text-lg">Open follow-ups</h2>
-            <p className="text-sm text-[var(--muted)]">From `/api/v1/follow-ups` (open only).</p>
+            <h2 className="font-display text-lg">{listTitle}</h2>
+            <p className="text-sm text-[var(--muted)]">From `/api/v1/follow-ups`.</p>
           </CardHeader>
           {loading ? (
             <SkeletonRows />
           ) : items.length === 0 ? (
             <CardBody>
               <EmptyState
-                title="No open follow-ups"
-                body="Create a follow-up with an owner, due date, required response, and closure condition."
+                title={search.trim() || status !== "open" ? "No matching follow-ups" : "No open follow-ups"}
+                body={
+                  search.trim() || status !== "open"
+                    ? "Try a different search or status filter."
+                    : "Create a follow-up with an owner, due date, required response, and closure condition."
+                }
                 action={
-                  can(session.variant, "create") ? (
+                  status === "open" && !search.trim() && can(session.variant, "create") ? (
                     <Button onClick={() => setShowCreate(true)}>New follow-up</Button>
                   ) : null
                 }
@@ -312,6 +368,14 @@ export function FollowUpsDeskPage() {
               ))}
             </ul>
           )}
+          {!loading && (items.length > 0 || pageMeta.total > 0) ? (
+            <ListPagination
+              page={pageMeta}
+              onOffsetChange={setOffset}
+              onLimitChange={setLimit}
+              label="follow-ups"
+            />
+          ) : null}
         </Card>
 
         {current ? (
@@ -412,7 +476,7 @@ export function FollowUpsDeskPage() {
             </Card>
           </div>
         ) : !loading ? (
-          <EmptyState title="Select a follow-up" body="Choose an open item from the list." />
+          <EmptyState title="Select a follow-up" body="Choose an item from the list." />
         ) : null}
       </div>
     </AppShell>

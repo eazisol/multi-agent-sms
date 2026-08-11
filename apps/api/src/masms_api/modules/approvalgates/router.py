@@ -5,10 +5,12 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
 from masms_api.deps import RequestContext, get_request_context
+from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.approvalgates.schemas import (
     ApprovalCreate,
     ApprovalRead,
@@ -30,6 +32,11 @@ from masms_api.modules.approvalgates.service import ApprovalGatesService
 router = APIRouter(prefix="/approvals", tags=["approvals"])
 
 
+class ApprovalPage(BaseModel):
+    items: list[ApprovalRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -44,14 +51,21 @@ def create_approval(
     return ApprovalRead.model_validate(service.create_approval(body))
 
 
-@router.get("", response_model=list[ApprovalRead])
+@router.get("", response_model=ApprovalPage)
 def list_approvals(
     status: str | None = Query(default=None),
     action_code: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
     service: ApprovalGatesService = Depends(_service),
-) -> list[ApprovalRead]:
-    rows = service.list_approvals(status=status, action_code=action_code)
-    return [ApprovalRead.model_validate(r) for r in rows]
+) -> ApprovalPage:
+    items, page = service.list_approvals(
+        status=status, action_code=action_code, q=q, limit=limit, offset=offset
+    )
+    return ApprovalPage(
+        items=[ApprovalRead.model_validate(r) for r in items], page=page
+    )
 
 
 @router.post("/gate-check", response_model=GateCheckResponse)
