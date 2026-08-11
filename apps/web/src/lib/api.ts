@@ -1668,3 +1668,82 @@ export async function listFollowUpEscalations(
   });
   return parse<FollowUpEscalation[]>(response);
 }
+
+export const ORCHESTRATOR_WORKFLOW_CODES = [
+  "query_intake",
+  "requirement_clarification",
+  "project_handover",
+  "assignment_ack",
+  "blocker_resolution",
+  "qa_rejection_loop",
+  "client_status_report",
+  "change_request_flow",
+  "deployment_approval",
+  "project_closure",
+  "approval_gate_wait",
+  "followup_escalation",
+] as const;
+
+export type WorkflowInstance = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  workflow_code: string;
+  workflow_version_id: string;
+  related_entity_type: string;
+  related_entity_id: string;
+  status: string;
+  temporal_run_id: string | null;
+  temporal_workflow_id: string | null;
+  owner_actor_id: string;
+  correlation_id: string;
+  version: number;
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+};
+
+export async function listWorkflowInstances(
+  session: SessionState,
+  params: {
+    status?: string;
+    q?: string;
+    workflow_code?: string;
+    project_id?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<WorkflowInstance>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  if (params.workflow_code) query.set("workflow_code", params.workflow_code);
+  if (params.project_id) query.set("project_id", params.project_id);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/orchestrator/instances?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<WorkflowInstance>>(response);
+}
+
+export async function startWorkflowInstance(
+  session: SessionState,
+  body: {
+    workflow_code: string;
+    related_entity_type: string;
+    related_entity_id: string;
+    project_id?: string;
+    owner_actor_id?: string;
+    input_json?: Record<string, unknown>;
+    workflow_version_id?: string;
+  },
+): Promise<WorkflowInstance> {
+  const response = await apiFetch(`${apiBase()}/api/v1/orchestrator/instances`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<WorkflowInstance>(response);
+}

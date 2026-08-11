@@ -93,7 +93,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/users", label: "Users & Teams", ready: false },
       { href: "/roles", label: "Roles & Permissions", ready: false },
       { href: "/capacity", label: "Skills & Capacity", ready: false },
-      { href: "/workflows", label: "Workflows", ready: false },
+      { href: "/workflows", label: "Workflows", ready: true },
       { href: "/integrations", label: "Integrations", ready: false },
       { href: "/notifications", label: "Notifications", ready: false },
       { href: "/security", label: "Security", ready: false },

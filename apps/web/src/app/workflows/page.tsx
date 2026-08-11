@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { WorkflowsDeskPage } from "@/components/workflows-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Workflows"
-      description="Configurable status transitions and automations."
-    />
-  );
+  return <WorkflowsDeskPage />;
 }

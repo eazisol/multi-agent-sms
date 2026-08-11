@@ -29,6 +29,7 @@ from masms_api.modules.assignments.router import router as assignments_router
 from masms_api.modules.statusengine.router import router as statusengine_router
 from masms_api.modules.approvalgates.router import router as approvalgates_router
 from masms_api.modules.followups.router import router as followups_router
+from masms_api.modules.orchestrator.router import router as orchestrator_router
 from masms_api.observability.health import build_readiness
 from masms_api.observability.router import router as observability_router
 
@@ -94,6 +95,7 @@ def create_app() -> FastAPI:
                 "MOD-320",
                 "MOD-330",
                 "MOD-340",
+                "MOD-350",
             ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
@@ -121,6 +123,7 @@ def create_app() -> FastAPI:
     app.include_router(statusengine_router, prefix="/api/v1")
     app.include_router(approvalgates_router, prefix="/api/v1")
     app.include_router(followups_router, prefix="/api/v1")
+    app.include_router(orchestrator_router, prefix="/api/v1")
     return app
 
 
