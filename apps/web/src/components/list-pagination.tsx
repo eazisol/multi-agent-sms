@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Field, Select } from "@/components/ui/field";
+import { Select } from "@/components/ui/field";
 import type { PageMeta } from "@/lib/api";
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50] as const;
@@ -28,15 +28,17 @@ export function ListPagination({
   const canNext = has_more;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] px-5 py-3 text-sm text-[var(--muted)]">
-      <p>
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-[var(--line)] px-5 py-3 text-sm text-[var(--muted)]">
+      <p className="m-0 leading-8">
         Showing {from}–{to} of {total} {label}
       </p>
       <div className="flex flex-wrap items-center gap-2">
         {onLimitChange ? (
-          <Field label="Page size" className="mb-0 min-w-[7rem]">
+          <label className="flex h-8 items-center gap-2 whitespace-nowrap">
+            <span className="text-xs text-[var(--muted)]">Page size</span>
             <Select
               aria-label="Page size"
+              className="h-8 w-[4.5rem] py-0"
               value={String(limit)}
               onChange={(event) => {
                 onLimitChange(Number(event.target.value));
@@ -52,7 +54,7 @@ export function ListPagination({
                 <option value={limit}>{limit}</option>
               ) : null}
             </Select>
-          </Field>
+          </label>
         ) : null}
         <Button
           type="button"
