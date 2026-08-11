@@ -55,7 +55,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 24 | MOD-360 | Done (M1) | 35 | 2 | 0 |
 | 25 | MOD-370 | Blocked (AC-901) | 34 | 2 | 0 |
 | 26 | MOD-400 | Blocked (AC-901) | 34 | 2 | 0 |
-| 27 | MOD-410 | Blocked (AC-901) | 34 | 2 | 0 |
+| 27 | MOD-410 | Done (M1) | 35 | 2 | 0 |
 | 28 | MOD-420 | Not started | 0 | 0 | 43 |
 | 29 | MOD-430 | Not started | 0 | 0 | 47 |
 | 30 | MOD-440 | Not started | 0 | 0 | 45 |
@@ -1815,7 +1815,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (MOD-400-AC-900)
   - [!] The responsible human owner reviews and approves the completion evidence. (MOD-400-AC-901)
 
-### Module 27: [!] MOD-410 — Bug Lifecycle, QA Rejection, Development Reopen, and Retesting
+### Module 27: [x] MOD-410 — Bug Lifecycle, QA Rejection, Development Reopen, and Retesting
 
 - [x] **Main goals**
   - [x] Build and verify: bugs (MOD-410-MP-001)
@@ -1875,12 +1875,12 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (MOD-410-DOC-001)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (MOD-410-DOC-002)
 
-- [!] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] QA can reject and reopen work with evidence. (MOD-410-AC-001)
   - [x] Blocking defects prevent release. (MOD-410-AC-002)
   - [x] Bug history links requirement, ticket, test, fix, retest, and release. (MOD-410-AC-003)
   - [x] All Critical and High defects for this module are resolved. (MOD-410-AC-900)
-  - [!] The responsible human owner reviews and approves the completion evidence. (MOD-410-AC-901)
+  - [x] The responsible human owner reviews and approves the completion evidence. (MOD-410-AC-901)
 
 ### Module 28: [ ] MOD-420 — Risks, Issues, Change Requests, Impact Analysis, and Baseline Updates
 

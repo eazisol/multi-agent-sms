@@ -45,7 +45,7 @@
 | MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
-| MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
+| MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -3540,7 +3540,7 @@
 **Purpose:** Allow QA to reject work, create defects, route fixes, reopen tickets, retest, and prevent release while blocking defects remain.  
 **Requirements:** MVP-FR-009  
 **Dependencies:** MOD-300, MOD-320, MOD-340, MOD-400  
-**Status:** M1 Done — AC-901 blocked pending human approval
+**Status:** M1 Done — human AC-901 approved 2026-08-11
 
 #### Main points
 
@@ -3659,12 +3659,12 @@
   - Evidence/note: /bugs/{id}/history
 - [x] **MOD-410-AC-900:** Crit/High cleared.  
   - Evidence/note: none filed
-- [!] **MOD-410-AC-901:** Human owner approval.  
-  - Evidence/note: Human owner approval required
+- [x] **MOD-410-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approved 2026-08-11
 
 #### Module completion
 
-- [ ] **MOD-410-DONE:** Module marked Done before dependents
+- [x] **MOD-410-DONE:** Module marked Done before dependents
 
 ### MOD-420
 

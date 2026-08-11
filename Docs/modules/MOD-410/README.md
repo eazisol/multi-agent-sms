@@ -1,7 +1,7 @@
 # MOD-410 — Bug Lifecycle, QA Rejection, Development Reopen, and Retesting
 
-**Status:** Implementation draft (M1 registry + release gate + `/bugs` desk)  
-**Human Done (AC-901):** NOT obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-11)  
+**Human Done (AC-901):** Obtained 2026-08-11
 
 ## Purpose
 
@@ -12,7 +12,6 @@ Track defects through reject/reopen, assignment, fix, retest, known-issue except
 - No live CI/deployer integration; release gate is advisory API for MOD-430+.
 - FE is list + create + reject/reopen + release-gate snapshot — not a full defect studio.
 - Notifications / Temporal / LangGraph wiring deferred.
-- AC-901 remains blocked pending human review.
 
 ## M1 delivered
 
