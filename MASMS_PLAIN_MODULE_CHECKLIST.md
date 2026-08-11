@@ -38,13 +38,13 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 8 | MOD-120 | Blocked | 30 | 6 | 0 |
 | 9 | MOD-130 | Blocked | 30 | 6 | 0 |
 | 10 | MOD-140 | Blocked | 31 | 8 | 0 |
-| 11 | MOD-200 | Blocked | 27 | 7 | 0 |
-| 12 | MOD-210 | Blocked | 27 | 8 | 0 |
+| 11 | MOD-200 | Blocked | 31 | 7 | 0 |
+| 12 | MOD-210 | Blocked | 31 | 8 | 0 |
 | 13 | MOD-220 | Blocked | 27 | 8 | 0 |
 | 14 | MOD-230 | Blocked | 27 | 8 | 0 |
-| 15 | MOD-240 | Blocked | 31 | 8 | 0 |
-| 16 | MOD-250 | Blocked | 29 | 9 | 0 |
-| 17 | MOD-260 | Blocked | 27 | 8 | 0 |
+| 15 | MOD-240 | Blocked | 35 | 8 | 0 |
+| 16 | MOD-250 | Blocked | 33 | 9 | 0 |
+| 17 | MOD-260 | Blocked | 31 | 8 | 0 |
 | 18 | MOD-300 | Not started | 0 | 0 | 45 |
 | 19 | MOD-310 | Not started | 0 | 0 | 41 |
 | 20 | MOD-320 | Not started | 0 | 0 | 43 |
@@ -68,7 +68,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 446 · partial 128 · n/a 168 · blocked 17 · open 990
+**All tasks:** 1749 · done 466 · partial 128 · n/a 148 · blocked 17 · open 990
 
 ## Phase 0 - Governance and Foundation
 
@@ -785,11 +785,11 @@ M4: [~] API
      M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-200-API-002)
      M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-200-API-003)
 
-M5: [~] Frontend
-     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-200-FE-001)
-     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-200-FE-002)
-     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-200-FE-003)
-     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-200-FE-004)
+M5: [x] Frontend
+     M5-1: [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-200-FE-001)
+     M5-2: [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-200-FE-002)
+     M5-3: [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-200-FE-003)
+     M5-4: [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-200-FE-004)
 
 M6: [~] Workflow / agents / events
      M6-1: [-] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-200-WF-001)
@@ -850,11 +850,11 @@ M4: [~] API
      M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-210-API-002)
      M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-210-API-003)
 
-M5: [~] Frontend
-     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-210-FE-001)
-     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-210-FE-002)
-     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-210-FE-003)
-     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-210-FE-004)
+M5: [x] Frontend
+     M5-1: [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-210-FE-001)
+     M5-2: [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-210-FE-002)
+     M5-3: [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-210-FE-003)
+     M5-4: [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-210-FE-004)
 
 M6: [~] Workflow / agents / events
      M6-1: [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-210-WF-001)
@@ -1049,11 +1049,11 @@ M4: [~] API
      M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-240-API-002)
      M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-240-API-003)
 
-M5: [~] Frontend
-     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-240-FE-001)
-     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-240-FE-002)
-     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-240-FE-003)
-     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-240-FE-004)
+M5: [x] Frontend
+     M5-1: [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-240-FE-001)
+     M5-2: [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-240-FE-002)
+     M5-3: [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-240-FE-003)
+     M5-4: [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-240-FE-004)
 
 M6: [~] Workflow / agents / events
      M6-1: [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-240-WF-001)
@@ -1116,11 +1116,11 @@ M4: [~] API
      M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-250-API-002)
      M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-250-API-003)
 
-M5: [~] Frontend
-     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-250-FE-001)
-     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-250-FE-002)
-     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-250-FE-003)
-     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-250-FE-004)
+M5: [x] Frontend
+     M5-1: [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-250-FE-001)
+     M5-2: [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-250-FE-002)
+     M5-3: [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-250-FE-003)
+     M5-4: [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-250-FE-004)
 
 M6: [~] Workflow / agents / events
      M6-1: [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-250-WF-001)
@@ -1181,11 +1181,11 @@ M4: [~] API
      M4-2: [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  (MOD-260-API-002)
      M4-3: [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  (MOD-260-API-003)
 
-M5: [~] Frontend
-     M5-1: [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-260-FE-001)
-     M5-2: [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-260-FE-002)
-     M5-3: [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-260-FE-003)
-     M5-4: [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-260-FE-004)
+M5: [x] Frontend
+     M5-1: [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  (MOD-260-FE-001)
+     M5-2: [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  (MOD-260-FE-002)
+     M5-3: [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  (MOD-260-FE-003)
+     M5-4: [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  (MOD-260-FE-004)
 
 M6: [~] Workflow / agents / events
      M6-1: [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  (MOD-260-WF-001)

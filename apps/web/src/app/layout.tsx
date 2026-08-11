@@ -4,8 +4,8 @@ import { SessionProvider } from "@/components/session-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MASMS Governance",
-  description: "MOD-000 source baseline governance UI",
+  title: "MASMS",
+  description: "Multi-Agent Software House Management System",
 };
 
 export default function RootLayout({
