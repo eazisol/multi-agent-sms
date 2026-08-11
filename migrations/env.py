@@ -18,6 +18,7 @@ from masms_api.modules.capacity import models as _capacity_models  # noqa: F401
 from masms_api.modules.configadmin import models as _config_models  # noqa: F401
 from masms_api.modules.clients import models as _clients_models  # noqa: F401
 from masms_api.modules.queries import models as _queries_models  # noqa: F401
+from masms_api.modules.comms import models as _comms_models  # noqa: F401
 from masms_api.observability import models as _observability_models  # noqa: F401
 
 config = context.config

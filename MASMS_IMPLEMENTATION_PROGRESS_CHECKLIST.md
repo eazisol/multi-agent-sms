@@ -31,7 +31,7 @@
 | MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 7 | 8 | 1 | 0 | Blocked |
 | MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 305, partial 87, n/a 134, blocked 12, open 1211
+**Totals:** 1749 tasks — done 332, partial 95, n/a 141, blocked 13, open 1168
 
 ## Module index (plan order)
 
@@ -1695,76 +1695,119 @@
 
 #### Main points
 
-- [ ] **MOD-220-MP-001:** Implement and verify conversations.
-- [ ] **MOD-220-MP-002:** Implement and verify messages.
-- [ ] **MOD-220-MP-003:** Implement and verify message revisions.
-- [ ] **MOD-220-MP-004:** Implement and verify recipients.
-- [ ] **MOD-220-MP-005:** Implement and verify delivery receipts.
-- [ ] **MOD-220-MP-006:** Implement and verify attachment links.
+- [x] **MOD-220-MP-001:** Implement and verify conversations.  
+  - Evidence/note: com_conversations
+- [x] **MOD-220-MP-002:** Implement and verify messages.  
+  - Evidence/note: com_messages
+- [x] **MOD-220-MP-003:** Implement and verify message revisions.  
+  - Evidence/note: com_message_revisions
+- [x] **MOD-220-MP-004:** Implement and verify recipients.  
+  - Evidence/note: com_message_recipients
+- [x] **MOD-220-MP-005:** Implement and verify delivery receipts.  
+  - Evidence/note: com_delivery_receipts
+- [x] **MOD-220-MP-006:** Implement and verify attachment links.  
+  - Evidence/note: com_attachment_links
 
 #### Database / data design
 
-- [ ] **MOD-220-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **conversations**.
-- [ ] **MOD-220-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **messages**.
-- [ ] **MOD-220-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **message revisions**.
-- [ ] **MOD-220-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **recipients**.
-- [ ] **MOD-220-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **delivery receipts**.
-- [ ] **MOD-220-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **attachment links**.
+- [x] **MOD-220-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **conversations**.  
+  - Evidence/note: migration 20260811_0011 com_conversations
+- [x] **MOD-220-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **messages**.  
+  - Evidence/note: com_messages
+- [x] **MOD-220-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **message revisions**.  
+  - Evidence/note: com_message_revisions
+- [x] **MOD-220-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **recipients**.  
+  - Evidence/note: com_message_recipients
+- [x] **MOD-220-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **delivery receipts**.  
+  - Evidence/note: com_delivery_receipts
+- [x] **MOD-220-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **attachment links**.  
+  - Evidence/note: com_attachment_links
 
 #### Backend
 
-- [ ] **MOD-220-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-220-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-220-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-220-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-220-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: CommsService
+- [x] **MOD-220-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: immutable sent + sensitive approval
+- [~] **MOD-220-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on message send
+- [x] **MOD-220-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-220-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-220-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-220-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-220-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/comms endpoints
+- [~] **MOD-220-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite actions
+- [~] **MOD-220-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-220-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-220-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-220-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-220-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-220-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-220-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-220-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-220-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-220-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-220-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-220-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-220-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-220-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: draft/approve/send statuses
+- [-] **MOD-220-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-220-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on send
+- [-] **MOD-220-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-220-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-220-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-220-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-220-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-220-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client scope
+- [x] **MOD-220-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on com_* tables
+- [~] **MOD-220-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit omits body text
+- [x] **MOD-220-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/approve/send
 
 #### Testing / verification
 
-- [ ] **MOD-220-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-220-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-220-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-220-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-220-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-220-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/comms
+- [x] **MOD-220-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/comms
+- [~] **MOD-220-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: client scope checks in service
+- [-] **MOD-220-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal/provider suite
+- [x] **MOD-220-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-220-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-220-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-220-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-220/README.md
+- [x] **MOD-220-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-220-AC-001:** Material communication is linked to the correct entity.
-- [ ] **MOD-220-AC-002:** Sensitive messages follow approval and recipient rules.
-- [ ] **MOD-220-AC-003:** Sent-message history is immutable.
-- [ ] **MOD-220-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-220-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-220-AC-001:** Material communication is linked to the correct entity.  
+  - Evidence/note: related_entity_type/id on conversation
+- [x] **MOD-220-AC-002:** Sensitive messages follow approval and recipient rules.  
+  - Evidence/note: restricted/confidential require approval
+- [x] **MOD-220-AC-003:** Sent-message history is immutable.  
+  - Evidence/note: sent body/recipients/attachments immutable
+- [x] **MOD-220-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-220 defects filed
+- [!] **MOD-220-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
