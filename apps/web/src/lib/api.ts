@@ -72,15 +72,19 @@ export class ApiError extends Error {
 }
 
 function apiBase(): string {
-  const configured = process.env.NEXT_PUBLIC_API_BASE_URL;
-  if (configured != null && configured.trim() !== "") {
+  // Browser default: same-origin Next rewrite → FastAPI (avoids CORS).
+  // Opt into cross-origin only with NEXT_PUBLIC_API_USE_DIRECT=true.
+  if (typeof window !== "undefined") {
+    const useDirect = process.env.NEXT_PUBLIC_API_USE_DIRECT === "true";
+    if (!useDirect) {
+      return "";
+    }
+  }
+  const configured = process.env.NEXT_PUBLIC_API_BASE_URL?.trim();
+  if (configured) {
     return configured.replace(/\/$/, "");
   }
-  // Browser: use Next.js rewrite proxy (same origin) to avoid CORS.
-  if (typeof window !== "undefined") {
-    return "";
-  }
-  // Server components / SSR: call API directly.
+  // Server components / SSR (or explicit browser direct mode).
   return (
     process.env.MASMS_API_ORIGIN?.replace(/\/$/, "") ||
     process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "") ||
