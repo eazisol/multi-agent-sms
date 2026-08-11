@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
@@ -41,11 +41,33 @@ def create_source(
     return QuerySourceRead.model_validate(service.create_source(body))
 
 
+@router.get("", response_model=list[ClientQueryRead])
+def list_queries(
+    status: str | None = Query(default=None),
+    sla_status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    service: QueriesService = Depends(_service),
+) -> list[ClientQueryRead]:
+    rows = service.list_queries(
+        status=status, sla_status=sla_status, q=q, limit=limit, offset=offset
+    )
+    return [ClientQueryRead.model_validate(r) for r in rows]
+
+
 @router.post("", response_model=ClientQueryRead, status_code=201)
 def create_query(
     body: ClientQueryCreate, service: QueriesService = Depends(_service)
 ) -> ClientQueryRead:
     return ClientQueryRead.model_validate(service.create_query(body))
+
+
+@router.get("/{query_id}", response_model=ClientQueryRead)
+def get_query(
+    query_id: UUID, service: QueriesService = Depends(_service)
+) -> ClientQueryRead:
+    return ClientQueryRead.model_validate(service.get_query(query_id))
 
 
 @router.post("/{query_id}/transitions", response_model=ClientQueryRead)

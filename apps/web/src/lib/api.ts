@@ -235,6 +235,40 @@ export type ClientQuery = {
   created_at: string;
 };
 
+export async function listQueries(
+  session: SessionState,
+  params: {
+    status?: string;
+    sla_status?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ClientQuery[]> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.sla_status) query.set("sla_status", params.sla_status);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 50));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await fetch(`${apiBase()}/api/v1/queries?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ClientQuery[]>(response);
+}
+
+export async function getQuery(
+  session: SessionState,
+  queryId: string,
+): Promise<ClientQuery> {
+  const response = await fetch(`${apiBase()}/api/v1/queries/${queryId}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ClientQuery>(response);
+}
+
 export type Project = {
   id: string;
   code: string;

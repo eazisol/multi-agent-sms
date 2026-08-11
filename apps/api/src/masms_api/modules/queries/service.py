@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ConflictError, ForbiddenError, NotFoundError, ValidationAppError
@@ -271,6 +271,40 @@ class QueriesService:
         self.uow.commit()
         self.uow.refresh(opportunity)
         return opportunity
+
+    def list_queries(
+        self,
+        *,
+        status: str | None = None,
+        sla_status: str | None = None,
+        q: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[ClientQuery]:
+        stmt = select(ClientQuery).where(
+            ClientQuery.organization_id == self.ctx.organization_id
+        )
+        ctx_client = self.ctx.tenant.client_id
+        if ctx_client is not None:
+            stmt = stmt.where(ClientQuery.client_id == ctx_client)
+        if status:
+            stmt = stmt.where(ClientQuery.status == status)
+        if sla_status:
+            stmt = stmt.where(ClientQuery.sla_status == sla_status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            stmt = stmt.where(
+                or_(ClientQuery.subject.ilike(like), ClientQuery.summary.ilike(like))
+            )
+        stmt = (
+            stmt.order_by(ClientQuery.created_at.desc())
+            .offset(max(0, offset))
+            .limit(max(1, min(limit, 200)))
+        )
+        return list(self.db.scalars(stmt).all())
+
+    def get_query(self, query_id: UUID) -> ClientQuery:
+        return self._get_query(query_id)
 
     def list_history(self, query_id: UUID) -> list[QueryStatusHistory]:
         self._get_query(query_id)
