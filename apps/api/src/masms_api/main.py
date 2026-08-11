@@ -23,6 +23,7 @@ from masms_api.modules.identity.router import router as identity_router
 from masms_api.modules.projects.router import router as projects_router
 from masms_api.modules.queries.router import router as queries_router
 from masms_api.modules.requirements.router import router as requirements_router
+from masms_api.modules.roadmap.router import router as roadmap_router
 from masms_api.observability.health import build_readiness
 from masms_api.observability.router import router as observability_router
 
@@ -80,6 +81,7 @@ def create_app() -> FastAPI:
                 "MOD-230",
                 "MOD-240",
                 "MOD-250",
+                "MOD-260",
             ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
@@ -101,6 +103,7 @@ def create_app() -> FastAPI:
     app.include_router(requirements_router, prefix="/api/v1")
     app.include_router(projects_router, prefix="/api/v1")
     app.include_router(documents_router, prefix="/api/v1")
+    app.include_router(roadmap_router, prefix="/api/v1")
     return app
 
 

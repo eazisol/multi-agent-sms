@@ -22,6 +22,7 @@ from masms_api.modules.comms import models as _comms_models  # noqa: F401
 from masms_api.modules.requirements import models as _requirements_models  # noqa: F401
 from masms_api.modules.projects import models as _projects_models  # noqa: F401
 from masms_api.modules.documents import models as _documents_models  # noqa: F401
+from masms_api.modules.roadmap import models as _roadmap_models  # noqa: F401
 from masms_api.observability import models as _observability_models  # noqa: F401
 
 config = context.config

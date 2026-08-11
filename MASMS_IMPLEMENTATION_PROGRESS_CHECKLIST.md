@@ -35,7 +35,7 @@
 | MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 29 | 9 | 6 | 1 | 0 | Blocked |
-| MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 0 | 0 | 0 | 0 | 41 | Not started |
 | MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 419, partial 120, n/a 161, blocked 16, open 1033
+**Totals:** 1749 tasks — done 446, partial 128, n/a 168, blocked 17, open 990
 
 ## Module index (plan order)
 
@@ -2215,76 +2215,119 @@
 
 #### Main points
 
-- [ ] **MOD-260-MP-001:** Implement and verify phases.
-- [ ] **MOD-260-MP-002:** Implement and verify milestones.
-- [ ] **MOD-260-MP-003:** Implement and verify deliverables.
-- [ ] **MOD-260-MP-004:** Implement and verify phase dependencies.
-- [ ] **MOD-260-MP-005:** Implement and verify project baselines.
-- [ ] **MOD-260-MP-006:** Implement and verify forecasts.
+- [x] **MOD-260-MP-001:** Implement and verify phases.  
+  - Evidence/note: pm_phases
+- [x] **MOD-260-MP-002:** Implement and verify milestones.  
+  - Evidence/note: pm_milestones
+- [x] **MOD-260-MP-003:** Implement and verify deliverables.  
+  - Evidence/note: pm_deliverables
+- [x] **MOD-260-MP-004:** Implement and verify phase dependencies.  
+  - Evidence/note: pm_phase_dependencies
+- [x] **MOD-260-MP-005:** Implement and verify project baselines.  
+  - Evidence/note: pm_project_baselines + requirement maps
+- [x] **MOD-260-MP-006:** Implement and verify forecasts.  
+  - Evidence/note: pm_forecasts
 
 #### Database / data design
 
-- [ ] **MOD-260-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **phases**.
-- [ ] **MOD-260-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **milestones**.
-- [ ] **MOD-260-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deliverables**.
-- [ ] **MOD-260-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **phase dependencies**.
-- [ ] **MOD-260-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **project baselines**.
-- [ ] **MOD-260-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **forecasts**.
+- [x] **MOD-260-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **phases**.  
+  - Evidence/note: migration 20260811_0015 pm_phases
+- [x] **MOD-260-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **milestones**.  
+  - Evidence/note: pm_milestones
+- [x] **MOD-260-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deliverables**.  
+  - Evidence/note: pm_deliverables
+- [x] **MOD-260-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **phase dependencies**.  
+  - Evidence/note: pm_phase_dependencies
+- [x] **MOD-260-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **project baselines**.  
+  - Evidence/note: pm_project_baselines
+- [x] **MOD-260-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **forecasts**.  
+  - Evidence/note: pm_forecasts
 
 #### Backend
 
-- [ ] **MOD-260-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-260-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-260-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-260-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-260-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: RoadmapService
+- [x] **MOD-260-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: mapping/milestone approval/independent completion
+- [~] **MOD-260-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on phase complete
+- [x] **MOD-260-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-260-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-260-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-260-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-260-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/roadmap endpoints
+- [~] **MOD-260-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite actions
+- [~] **MOD-260-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-260-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-260-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-260-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-260-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-260-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-260-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-260-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-260-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-260-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-260-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-260-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-260-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-260-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: phase/milestone complete flow
+- [-] **MOD-260-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-260-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on phase complete
+- [-] **MOD-260-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-260-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-260-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-260-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-260-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-260-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client/project scope
+- [x] **MOD-260-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on pm_* tables
+- [~] **MOD-260-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit omits verbose snapshots
+- [x] **MOD-260-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/approve/complete/map
 
 #### Testing / verification
 
-- [ ] **MOD-260-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-260-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-260-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-260-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-260-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-260-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/roadmap
+- [x] **MOD-260-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/roadmap
+- [~] **MOD-260-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: project scope checks in service
+- [-] **MOD-260-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-260-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-260-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-260-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-260-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-260/README.md
+- [x] **MOD-260-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-260-AC-001:** Every approved requirement maps to a phase.
-- [ ] **MOD-260-AC-002:** Every milestone has owner, date, status, and approval rules.
-- [ ] **MOD-260-AC-003:** Multi-phase projects support independent phase completion.
-- [ ] **MOD-260-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-260-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-260-AC-001:** Every approved requirement maps to a phase.  
+  - Evidence/note: approved requirements must map to phases
+- [x] **MOD-260-AC-002:** Every milestone has owner, date, status, and approval rules.  
+  - Evidence/note: milestones require owner/date/status/approval
+- [x] **MOD-260-AC-003:** Multi-phase projects support independent phase completion.  
+  - Evidence/note: independent phase completion except deps
+- [x] **MOD-260-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-260 defects filed
+- [!] **MOD-260-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
