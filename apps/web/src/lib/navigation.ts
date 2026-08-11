@@ -56,7 +56,7 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Quality",
     items: [
       { href: "/test-cases", label: "Test Cases", ready: true },
-      { href: "/bugs", label: "Bugs", ready: false },
+      { href: "/bugs", label: "Bugs", ready: true },
     ],
   },
   {

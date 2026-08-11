@@ -45,7 +45,7 @@
 | MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-400 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
-| MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 34 | 2 | 8 | 1 | 0 | Blocked |
 | MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -3539,82 +3539,128 @@
 **Title:** Bug Lifecycle, QA Rejection, Development Reopen, and Retesting  
 **Purpose:** Allow QA to reject work, create defects, route fixes, reopen tickets, retest, and prevent release while blocking defects remain.  
 **Requirements:** MVP-FR-009  
-**Dependencies:** MOD-300, MOD-320, MOD-340, MOD-400
+**Dependencies:** MOD-300, MOD-320, MOD-340, MOD-400  
+**Status:** M1 Done — AC-901 blocked pending human approval
 
 #### Main points
 
-- [ ] **MOD-410-MP-001:** Implement and verify bugs.
-- [ ] **MOD-410-MP-002:** Implement and verify bug links.
-- [ ] **MOD-410-MP-003:** Implement and verify bug assignments.
-- [ ] **MOD-410-MP-004:** Implement and verify fix submissions.
-- [ ] **MOD-410-MP-005:** Implement and verify retests.
-- [ ] **MOD-410-MP-006:** Implement and verify known issue approvals.
-- [ ] **MOD-410-MP-007:** Implement and verify severity SLA.
+- [x] **MOD-410-MP-001:** Implement and verify bugs.  
+  - Evidence/note: bg_bugs
+- [x] **MOD-410-MP-002:** Implement and verify bug links.  
+  - Evidence/note: bg_links
+- [x] **MOD-410-MP-003:** Implement and verify bug assignments.  
+  - Evidence/note: bg_assignments
+- [x] **MOD-410-MP-004:** Implement and verify fix submissions.  
+  - Evidence/note: bg_fix_submissions
+- [x] **MOD-410-MP-005:** Implement and verify retests.  
+  - Evidence/note: bg_retests
+- [x] **MOD-410-MP-006:** Implement and verify known issue approvals.  
+  - Evidence/note: bg_known_issue_approvals
+- [x] **MOD-410-MP-007:** Implement and verify severity SLA.  
+  - Evidence/note: bg_severity_slas
 
 #### Database / data design
 
-- [ ] **MOD-410-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **bugs**.
-- [ ] **MOD-410-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **bug links**.
-- [ ] **MOD-410-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **bug assignments**.
-- [ ] **MOD-410-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **fix submissions**.
-- [ ] **MOD-410-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **retests**.
-- [ ] **MOD-410-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **known issue approvals**.
-- [ ] **MOD-410-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **severity SLA**.
+- [x] **MOD-410-DB-001:** Bugs model + RLS.  
+  - Evidence/note: migration 20260811_0025
+- [x] **MOD-410-DB-002:** Bug links.  
+  - Evidence/note: bg_links
+- [x] **MOD-410-DB-003:** Bug assignments.  
+  - Evidence/note: bg_assignments
+- [x] **MOD-410-DB-004:** Fix submissions.  
+  - Evidence/note: bg_fix_submissions
+- [x] **MOD-410-DB-005:** Retests.  
+  - Evidence/note: bg_retests
+- [x] **MOD-410-DB-006:** Known issue approvals.  
+  - Evidence/note: bg_known_issue_approvals
+- [x] **MOD-410-DB-007:** Severity SLA.  
+  - Evidence/note: bg_severity_slas
 
 #### Backend
 
-- [ ] **MOD-410-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-410-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-410-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-410-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-410-BE-001:** Typed domain/services.  
+  - Evidence/note: modules/bugs
+- [x] **MOD-410-BE-002:** Authz/transition/idempotency.  
+  - Evidence/note: reject/reopen/fix/retest + version checks
+- [x] **MOD-410-BE-003:** Outbox events.  
+  - Evidence/note: bug.* outbox events
+- [x] **MOD-410-BE-004:** Structured errors.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-410-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-410-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-410-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-410-API-001:** Versioned endpoints.  
+  - Evidence/note: /api/v1/bugs (+14 OpenAPI paths)
+- [x] **MOD-410-API-002:** Pagination/filter/search.  
+  - Evidence/note: bugs list page + release-gate
+- [x] **MOD-410-API-003:** OpenAPI schemas.  
+  - Evidence/note: Pydantic schemas
 
 #### Frontend
 
-- [ ] **MOD-410-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-410-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-410-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-410-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-410-FE-001:** List/dashboard.  
+  - Evidence/note: /bugs desk
+- [-] **MOD-410-FE-002:** Detail tabs.  
+  - Evidence/note: deferred
+- [~] **MOD-410-FE-003:** Create/edit forms.  
+  - Evidence/note: create/reject/reopen
+- [-] **MOD-410-FE-004:** a11y pass.  
+  - Evidence/note: deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-410-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-410-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-410-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-410-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-410-WF-001:** Triggers/statuses/rules.  
+  - Evidence/note: bug status machine + release gate
+- [-] **MOD-410-WF-002:** Temporal/LangGraph routing.  
+  - Evidence/note: N/A for bugs module core
+- [x] **MOD-410-WF-003:** Outbox/events.  
+  - Evidence/note: bug.* events
+- [-] **MOD-410-WF-004:** Notifications.  
+  - Evidence/note: deferred MOD-440
 
 #### Security / privacy / audit
 
-- [ ] **MOD-410-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-410-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-410-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-410-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-410-SEC-001:** Scope authorization.  
+  - Evidence/note: org request context
+- [x] **MOD-410-SEC-002:** Tenant RLS.  
+  - Evidence/note: RLS on bg_* tables
+- [x] **MOD-410-SEC-003:** Redaction.  
+  - Evidence/note: outbox redact via kernel
+- [x] **MOD-410-SEC-004:** Audit actions.  
+  - Evidence/note: bg_* audits
 
 #### Testing / verification
 
-- [ ] **MOD-410-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-410-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-410-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-410-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-410-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-410-QA-001:** Domain rules via integration.  
+  - Evidence/note: reject/reopen/gate/known-issue
+- [x] **MOD-410-QA-002:** Integration API tests.  
+  - Evidence/note: tests/integration/bugs
+- [-] **MOD-410-QA-003:** Dedicated RBAC negative suite.  
+  - Evidence/note: deferred
+- [-] **MOD-410-QA-004:** CI runner suite.  
+  - Evidence/note: N/A M1
+- [x] **MOD-410-QA-005:** Verification commands.  
+  - Evidence/note: Docs/modules/MOD-410/VERIFICATION.md
 
 #### Documentation
 
-- [ ] **MOD-410-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-410-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-410-DOC-001:** Module README.  
+  - Evidence/note: Docs/modules/MOD-410/README.md
+- [x] **MOD-410-DOC-002:** Verification evidence.  
+  - Evidence/note: Docs/modules/MOD-410/VERIFICATION.md
 
 #### Acceptance gate
 
-- [ ] **MOD-410-AC-001:** QA can reject and reopen work with evidence.
-- [ ] **MOD-410-AC-002:** Blocking defects prevent release.
-- [ ] **MOD-410-AC-003:** Bug history links requirement, ticket, test, fix, retest, and release.
-- [ ] **MOD-410-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-410-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-410-AC-001:** QA reject/reopen with evidence.  
+  - Evidence/note: reject + reopen endpoints + test
+- [x] **MOD-410-AC-002:** Blocking defects prevent release.  
+  - Evidence/note: /bugs/release-gate
+- [x] **MOD-410-AC-003:** History links requirement/ticket/test/fix/retest/release.  
+  - Evidence/note: /bugs/{id}/history
+- [x] **MOD-410-AC-900:** Crit/High cleared.  
+  - Evidence/note: none filed
+- [!] **MOD-410-AC-901:** Human owner approval.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

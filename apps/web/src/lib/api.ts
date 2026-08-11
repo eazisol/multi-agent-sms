@@ -2129,3 +2129,115 @@ export async function summarizeTestCoverage(
   });
   return parse<CoverageSummary>(response);
 }
+
+export type Bug = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  code: string;
+  title: string;
+  description: string | null;
+  severity: string;
+  status: string;
+  blocks_release: boolean;
+  rejection_reason: string | null;
+  rejection_evidence: string | null;
+  reopen_reason: string | null;
+  owner_actor_id: string;
+  assignee_actor_id: string | null;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ReleaseGate = {
+  project_id: string | null;
+  release_allowed: boolean;
+  blocking_bug_ids: string[];
+  blocking_codes: string[];
+};
+
+export async function listBugs(
+  session: SessionState,
+  params: {
+    status?: string;
+    severity?: string;
+    project_id?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<Bug>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.severity) query.set("severity", params.severity);
+  if (params.project_id) query.set("project_id", params.project_id);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/bugs?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<Bug>>(response);
+}
+
+export async function createBug(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    description?: string;
+    project_id?: string;
+    severity?: string;
+    blocks_release?: boolean;
+    links?: { link_type: string; linked_entity_id: string; notes?: string }[];
+  },
+): Promise<Bug> {
+  const response = await apiFetch(`${apiBase()}/api/v1/bugs`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Bug>(response);
+}
+
+export async function rejectBug(
+  session: SessionState,
+  bugId: string,
+  body: { reason: string; evidence: string; expected_version?: number },
+): Promise<Bug> {
+  const response = await apiFetch(`${apiBase()}/api/v1/bugs/${bugId}/reject`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Bug>(response);
+}
+
+export async function reopenBug(
+  session: SessionState,
+  bugId: string,
+  body: { reason: string; expected_version?: number },
+): Promise<Bug> {
+  const response = await apiFetch(`${apiBase()}/api/v1/bugs/${bugId}/reopen`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Bug>(response);
+}
+
+export async function getBugReleaseGate(
+  session: SessionState,
+  projectId?: string,
+): Promise<ReleaseGate> {
+  const query = new URLSearchParams();
+  if (projectId) query.set("project_id", projectId);
+  const suffix = query.toString() ? `?${query}` : "";
+  const response = await apiFetch(`${apiBase()}/api/v1/bugs/release-gate${suffix}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ReleaseGate>(response);
+}

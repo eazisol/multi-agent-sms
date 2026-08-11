@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { BugsDeskPage } from "@/components/bugs-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Bugs"
-      description="Defects, severity, and controlled reopen loops."
-    />
-  );
+  return <BugsDeskPage />;
 }
