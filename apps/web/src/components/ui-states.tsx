@@ -77,13 +77,22 @@ export function PageHeader({
   title,
   description,
   actions,
+  sticky = false,
 }: {
   title: string;
   description?: string;
   actions?: React.ReactNode;
+  /** Stick under the app header inside the main scroll region. */
+  sticky?: boolean;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+    <div
+      className={cn(
+        "mb-6 flex flex-wrap items-start justify-between gap-4",
+        sticky &&
+          "sticky top-0 z-20 -mx-4 mb-6 border-b border-[var(--line)] bg-[var(--background)]/95 px-4 py-4 backdrop-blur md:-mx-6 md:px-6",
+      )}
+    >
       <div>
         <h1 className="font-display text-[28px] leading-tight tracking-tight md:text-[32px]">
           {title}

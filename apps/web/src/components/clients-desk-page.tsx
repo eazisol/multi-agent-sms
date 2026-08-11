@@ -5,6 +5,7 @@ import { Plus, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ListPagination } from "@/components/list-pagination";
+import { TableScroll } from "@/components/page-shell";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -214,9 +215,9 @@ export function ClientsDeskPage() {
           </CardBody>
         ) : (
           <>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-left text-sm">
-                <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+            <TableScroll>
+              <table className="min-w-[720px] text-left text-sm">
+                <thead className="sticky top-0 z-10 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
                   <tr>
                     <th className="px-5 py-3 font-medium">Client</th>
                     <th className="px-5 py-3 font-medium">Industry</th>
@@ -247,7 +248,7 @@ export function ClientsDeskPage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </TableScroll>
             <ListPagination
               page={pageMeta}
               onOffsetChange={setOffset}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Bell,
   Menu,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { CommandPalette } from "@/components/command-palette";
+import { PageShell } from "@/components/page-shell";
 import { useSession } from "@/components/session-provider";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -29,10 +30,13 @@ export function AppShell({
   title,
   breadcrumbs,
   children,
+  fill = false,
 }: {
   title?: string;
   breadcrumbs?: string[];
   children: React.ReactNode;
+  /** Page fills the main pane and manages its own nested scrolling (split desks). */
+  fill?: boolean;
 }) {
   const { session, setVariant } = useSession();
   const { theme, toggle } = useTheme();
@@ -40,6 +44,7 @@ export function AppShell({
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     function onOpen() {
@@ -51,6 +56,7 @@ export function AppShell({
 
   useEffect(() => {
     setMobileOpen(false);
+    mainRef.current?.scrollTo({ top: 0 });
   }, [pathname]);
 
   const pageTitle = title ?? findNavLabel(pathname);
@@ -59,11 +65,11 @@ export function AppShell({
   const sidebar = (
     <aside
       className={cn(
-        "flex h-full flex-col bg-[var(--sidebar)] text-[var(--sidebar-ink)] transition-[width]",
+        "flex h-full min-h-0 flex-col bg-[var(--sidebar)] text-[var(--sidebar-ink)] transition-[width]",
         collapsed ? "w-[72px]" : "w-[260px]",
       )}
     >
-      <div className="flex h-14 items-center justify-between border-b border-white/10 px-4">
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-white/10 px-4">
         {!collapsed ? (
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--sidebar-muted)]">
@@ -83,7 +89,7 @@ export function AppShell({
           {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
         </button>
       </div>
-      <nav className="flex-1 overflow-y-auto px-2 py-3" aria-label="Primary">
+      <nav className="min-h-0 flex-1 overflow-y-auto px-2 py-3" aria-label="Primary">
         {NAV_SECTIONS.map((section) => (
           <div key={section.id} className="mb-4">
             {!collapsed ? (
@@ -135,7 +141,7 @@ export function AppShell({
   );
 
   return (
-    <div className="flex min-h-screen bg-[var(--background)] text-[var(--ink)]">
+    <div className="flex h-dvh overflow-hidden bg-[var(--background)] text-[var(--ink)]">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2"
@@ -143,7 +149,7 @@ export function AppShell({
         Skip to content
       </a>
 
-      <div className="hidden lg:block">{sidebar}</div>
+      <div className="hidden h-full min-h-0 shrink-0 lg:block">{sidebar}</div>
 
       {mobileOpen ? (
         <div className="fixed inset-0 z-40 flex lg:hidden">
@@ -157,8 +163,8 @@ export function AppShell({
         </div>
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--surface)]/90 backdrop-blur">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <header className="z-30 shrink-0 border-b border-[var(--line)] bg-[var(--surface)]/95 backdrop-blur">
           <div className="flex h-14 items-center gap-3 px-4">
             <button
               type="button"
@@ -227,8 +233,15 @@ export function AppShell({
             ) : null}
           </div>
         </header>
-        <main id="main" className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6">
-          {children}
+        <main
+          id="main"
+          ref={mainRef}
+          className={cn(
+            "min-h-0 flex-1",
+            fill ? "overflow-hidden" : "overflow-y-auto",
+          )}
+        >
+          <PageShell fill={fill}>{children}</PageShell>
         </main>
       </div>
 
