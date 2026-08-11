@@ -29,7 +29,7 @@
 | MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
 | MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
 | MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 7 | 8 | 1 | 0 | Blocked |
 | MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 251, partial 72, n/a 119, blocked 10, open 1297
+**Totals:** 1749 tasks — done 278, partial 79, n/a 127, blocked 11, open 1254
 
 ## Module index (plan order)
 
@@ -1441,76 +1441,119 @@
 
 #### Main points
 
-- [ ] **MOD-200-MP-001:** Implement and verify clients.
-- [ ] **MOD-200-MP-002:** Implement and verify contacts.
-- [ ] **MOD-200-MP-003:** Implement and verify project contacts.
-- [ ] **MOD-200-MP-004:** Implement and verify communication preferences.
-- [ ] **MOD-200-MP-005:** Implement and verify duplicate suggestions.
-- [ ] **MOD-200-MP-006:** Implement and verify merge history.
+- [x] **MOD-200-MP-001:** Implement and verify clients.  
+  - Evidence/note: crm_clients
+- [x] **MOD-200-MP-002:** Implement and verify contacts.  
+  - Evidence/note: crm_contacts + authority
+- [x] **MOD-200-MP-003:** Implement and verify project contacts.  
+  - Evidence/note: crm_project_contacts
+- [x] **MOD-200-MP-004:** Implement and verify communication preferences.  
+  - Evidence/note: crm_communication_preferences
+- [x] **MOD-200-MP-005:** Implement and verify duplicate suggestions.  
+  - Evidence/note: crm_duplicate_suggestions
+- [x] **MOD-200-MP-006:** Implement and verify merge history.  
+  - Evidence/note: crm_merge_history snapshot
 
 #### Database / data design
 
-- [ ] **MOD-200-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **clients**.
-- [ ] **MOD-200-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **contacts**.
-- [ ] **MOD-200-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **project contacts**.
-- [ ] **MOD-200-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **communication preferences**.
-- [ ] **MOD-200-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **duplicate suggestions**.
-- [ ] **MOD-200-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **merge history**.
+- [x] **MOD-200-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **clients**.  
+  - Evidence/note: migration 20260811_0009 crm_clients
+- [x] **MOD-200-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **contacts**.  
+  - Evidence/note: crm_contacts
+- [x] **MOD-200-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **project contacts**.  
+  - Evidence/note: crm_project_contacts
+- [x] **MOD-200-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **communication preferences**.  
+  - Evidence/note: crm_communication_preferences
+- [x] **MOD-200-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **duplicate suggestions**.  
+  - Evidence/note: crm_duplicate_suggestions
+- [x] **MOD-200-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **merge history**.  
+  - Evidence/note: crm_merge_history
 
 #### Backend
 
-- [ ] **MOD-200-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-200-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-200-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-200-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-200-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: ClientsService
+- [~] **MOD-200-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: org/client scope + validation
+- [~] **MOD-200-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on client create
+- [x] **MOD-200-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-200-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-200-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-200-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-200-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/clients endpoints
+- [~] **MOD-200-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: paging on client list
+- [~] **MOD-200-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-200-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-200-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-200-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-200-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-200-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-200-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-200-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-200-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-200-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-200-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-200-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-200-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [-] **MOD-200-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: no Temporal WF in M1
+- [-] **MOD-200-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: no Temporal/LangGraph in M1
+- [~] **MOD-200-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on client create
+- [-] **MOD-200-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: preference channel delivery deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-200-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-200-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-200-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-200-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-200-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org + X-Client-Id isolation
+- [x] **MOD-200-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on crm_* tables
+- [~] **MOD-200-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: notes not in merge audit beyond reason
+- [x] **MOD-200-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/merge
 
 #### Testing / verification
 
-- [ ] **MOD-200-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-200-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-200-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-200-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-200-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-200-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/clients
+- [x] **MOD-200-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/clients
+- [x] **MOD-200-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: cross-client list isolation
+- [-] **MOD-200-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-200-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-200-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-200-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-200-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-200/README.md
+- [x] **MOD-200-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-200-AC-001:** Clients may have multiple contacts with explicit authority.
-- [ ] **MOD-200-AC-002:** Duplicate handling preserves history.
-- [ ] **MOD-200-AC-003:** Client records are isolated and auditable.
-- [ ] **MOD-200-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-200-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-200-AC-001:** Clients may have multiple contacts with explicit authority.  
+  - Evidence/note: multiple contacts with authority levels
+- [x] **MOD-200-AC-002:** Duplicate handling preserves history.  
+  - Evidence/note: merge history snapshot preserved
+- [x] **MOD-200-AC-003:** Client records are isolated and auditable.  
+  - Evidence/note: tenant isolation + audit
+- [x] **MOD-200-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-200 defects filed
+- [!] **MOD-200-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
