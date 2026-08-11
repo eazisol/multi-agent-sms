@@ -58,7 +58,7 @@ Treat checklist `done` as **M1 implementation claimed**, not “production-compl
 
 | Ready desk | Loads org collection from API? | Notes |
 |---|---|---|
-| `/` Dashboard | **No** | Mock KPIs |
+| `/` Dashboard | **Yes** | Live KPIs from projects/approvals/follow-ups/queries |
 | `/clients` | **Yes** | Search is client-side on first 50 |
 | `/queries` | **Yes** | Fixed list+filters (`eb95c1a`) |
 | `/comms` | **Yes** | Inbox list + thread |
@@ -104,7 +104,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 2. ~~**P0** Missing `GET /projects`~~ **fixed** — list + get + Projects desk inventory  
 3. ~~**P0** Missing `GET /comms/conversations`~~ **fixed** — list + Messages inbox  
 4. ~~**P0** Missing `GET /documents`~~ **fixed** — list + get + Documents library  
-5. **P0** Dashboard ready with mock data  
+5. ~~**P0** Dashboard ready with mock data~~ **fixed** — live org counts + attention feed  
 6. **P1** Clients search not server-backed  
 7. ~~**P1** Requirements desk localStorage entity/version loss~~ **fixed** — questionnaire inventory, published version, answers, briefs reload from API; discovery links to `crm_query` / project  
 8. ~~**P1** Approvals & Follow-ups APIs unused by FE~~ **fixed** — desks wired; nav `ready: true`  
