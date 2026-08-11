@@ -37,7 +37,7 @@
 | MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 33 | 9 | 2 | 1 | 0 | Blocked |
 | MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
 | MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 33 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 0 | 0 | 0 | 0 | 41 | Not started |
+| MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 25 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 507, partial 136, n/a 143, blocked 18, open 945
+**Totals:** 1749 tasks — done 532, partial 144, n/a 150, blocked 19, open 904
 
 ## Module index (plan order)
 
@@ -2475,74 +2475,115 @@
 
 #### Main points
 
-- [ ] **MOD-310-MP-001:** Implement and verify assignments.
-- [ ] **MOD-310-MP-002:** Implement and verify assignment recommendations.
-- [ ] **MOD-310-MP-003:** Implement and verify allocation history.
-- [ ] **MOD-310-MP-004:** Implement and verify acknowledgments.
-- [ ] **MOD-310-MP-005:** Implement and verify reassignment history.
+- [x] **MOD-310-MP-001:** Implement and verify assignments.  
+  - Evidence/note: asg_assignments
+- [x] **MOD-310-MP-002:** Implement and verify assignment recommendations.  
+  - Evidence/note: asg_assignment_recommendations
+- [x] **MOD-310-MP-003:** Implement and verify allocation history.  
+  - Evidence/note: asg_allocation_history
+- [x] **MOD-310-MP-004:** Implement and verify acknowledgments.  
+  - Evidence/note: asg_acknowledgments
+- [x] **MOD-310-MP-005:** Implement and verify reassignment history.  
+  - Evidence/note: asg_reassignment_history
 
 #### Database / data design
 
-- [ ] **MOD-310-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **assignments**.
-- [ ] **MOD-310-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **assignment recommendations**.
-- [ ] **MOD-310-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **allocation history**.
-- [ ] **MOD-310-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **acknowledgments**.
-- [ ] **MOD-310-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reassignment history**.
+- [x] **MOD-310-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **assignments**.  
+  - Evidence/note: migration 20260811_0017 asg_assignments
+- [x] **MOD-310-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **assignment recommendations**.  
+  - Evidence/note: asg_assignment_recommendations
+- [x] **MOD-310-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **allocation history**.  
+  - Evidence/note: asg_allocation_history
+- [x] **MOD-310-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **acknowledgments**.  
+  - Evidence/note: asg_acknowledgments
+- [x] **MOD-310-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reassignment history**.  
+  - Evidence/note: asg_reassignment_history
 
 #### Backend
 
-- [ ] **MOD-310-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-310-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-310-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-310-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-310-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: AssignmentService
+- [x] **MOD-310-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: member/availability/override/version guards
+- [~] **MOD-310-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on create/reassign
+- [x] **MOD-310-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-310-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-310-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-310-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-310-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/assignments endpoints
+- [~] **MOD-310-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: ticket-scoped lists
+- [~] **MOD-310-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-310-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-310-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-310-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-310-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-310-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: assignment desk deferred
+- [-] **MOD-310-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: assignment desk deferred
+- [-] **MOD-310-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: assignment desk deferred
+- [-] **MOD-310-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: assignment desk deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-310-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-310-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-310-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-310-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-310-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: assign/ack/reassign flow
+- [-] **MOD-310-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-310-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on create/reassign
+- [-] **MOD-310-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-310-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-310-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-310-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-310-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-310-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client/project scope
+- [x] **MOD-310-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on asg_* tables
+- [~] **MOD-310-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit omits sensitive payload
+- [x] **MOD-310-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/recommend/ack/reassign
 
 #### Testing / verification
 
-- [ ] **MOD-310-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-310-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-310-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-310-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-310-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-310-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/assignments
+- [x] **MOD-310-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/assignments
+- [~] **MOD-310-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: membership negative tests
+- [-] **MOD-310-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-310-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-310-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-310-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-310-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: Docs/modules/MOD-310/README.md
+- [x] **MOD-310-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-310-AC-001:** No assignment is made to an unauthorized or unavailable actor.
-- [ ] **MOD-310-AC-002:** Overrides require a reason.
-- [ ] **MOD-310-AC-003:** Assignment history is immutable.
-- [ ] **MOD-310-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-310-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-310-AC-001:** No assignment is made to an unauthorized or unavailable actor.  
+  - Evidence/note: unauthorized/unavailable blocked
+- [x] **MOD-310-AC-002:** Overrides require a reason.  
+  - Evidence/note: override requires reason
+- [x] **MOD-310-AC-003:** Assignment history is immutable.  
+  - Evidence/note: allocation/reassignment history append-only
+- [x] **MOD-310-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-310 defects filed
+- [!] **MOD-310-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
