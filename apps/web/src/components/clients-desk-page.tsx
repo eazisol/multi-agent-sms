@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   createClient,
   formatUtc,
   listClients,
   type Client,
 } from "@/lib/api";
+import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 
 export function ClientsDeskPage() {
@@ -24,8 +24,6 @@ export function ClientsDeskPage() {
   const [items, setItems] = useState<Client[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [q, setQ] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [legalName, setLegalName] = useState("");
@@ -34,7 +32,6 @@ export function ClientsDeskPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const page = await listClients(session, {
         q: q.trim() || undefined,
@@ -44,7 +41,7 @@ export function ClientsDeskPage() {
       setItems(page.items);
       setTotal(page.page.total);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load clients");
+      notifyApiError("Unable to load clients", err);
       setItems([]);
       setTotal(0);
     } finally {
@@ -58,22 +55,20 @@ export function ClientsDeskPage() {
 
   async function onCreate(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const created = await createClient(session, {
         code: (code || legalName).trim().toLowerCase().replace(/\s+/g, "-"),
         legal_name: legalName.trim(),
         industry: industry.trim() || undefined,
       });
-      setOk(`${created.legal_name} added`);
+      notifySuccess(`${created.legal_name} added`);
       setLegalName("");
       setCode("");
       setIndustry("");
       setShowCreate(false);
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create client");
+      notifyApiError("Could not create client", err);
     }
   }
 
@@ -91,9 +86,6 @@ export function ClientsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {showCreate ? (
         <Card className="mb-6">

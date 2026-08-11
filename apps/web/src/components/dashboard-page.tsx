@@ -14,9 +14,8 @@ import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   formatUtc,
   listApprovals,
   listOpenFollowUps,
@@ -27,6 +26,7 @@ import {
   type Project,
   type ClientQuery,
 } from "@/lib/api";
+import { notifyApiError } from "@/lib/toast";
 
 type AttentionItem = {
   title: string;
@@ -36,7 +36,6 @@ type AttentionItem = {
 
 export function DashboardPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
   const [approvals, setApprovals] = useState<ApprovalRequest[]>([]);
@@ -45,20 +44,42 @@ export function DashboardPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
-      const [projectRows, approvalRows, followUpRows, queryRows] = await Promise.all([
-        listProjects(session, { limit: 100 }),
-        listApprovals(session, { status: "pending" }),
-        listOpenFollowUps(session),
-        listQueries(session, { limit: 100 }),
-      ]);
-      setProjects(projectRows);
-      setApprovals(approvalRows);
-      setFollowUps(followUpRows);
-      setQueries(queryRows);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load dashboard");
+      const [projectsResult, approvalsResult, followUpsResult, queriesResult] =
+        await Promise.allSettled([
+          listProjects(session, { limit: 100 }),
+          listApprovals(session, { status: "pending" }),
+          listOpenFollowUps(session),
+          listQueries(session, { limit: 100 }),
+        ]);
+
+      if (projectsResult.status === "fulfilled") {
+        setProjects(projectsResult.value);
+      } else {
+        setProjects([]);
+        notifyApiError("Unable to load projects", projectsResult.reason);
+      }
+
+      if (approvalsResult.status === "fulfilled") {
+        setApprovals(approvalsResult.value);
+      } else {
+        setApprovals([]);
+        notifyApiError("Unable to load approvals", approvalsResult.reason);
+      }
+
+      if (followUpsResult.status === "fulfilled") {
+        setFollowUps(followUpsResult.value);
+      } else {
+        setFollowUps([]);
+        notifyApiError("Unable to load follow-ups", followUpsResult.reason);
+      }
+
+      if (queriesResult.status === "fulfilled") {
+        setQueries(queriesResult.value);
+      } else {
+        setQueries([]);
+        notifyApiError("Unable to load queries", queriesResult.reason);
+      }
     } finally {
       setLoading(false);
     }
@@ -203,8 +224,6 @@ export function DashboardPage() {
           </>
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {loading

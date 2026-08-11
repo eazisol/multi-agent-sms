@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
 import { PageHeader, StatusBanner } from "@/components/ui-states";
-import { ApiError, createBaseline } from "@/lib/api";
+import { createBaseline } from "@/lib/api";
+import { notifyApiError } from "@/lib/toast";
 import { can } from "@/lib/roles";
 
 export function BaselineCreatePage() {
   const { session } = useSession();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   if (!can(session.variant, "create")) {
@@ -29,7 +29,6 @@ export function BaselineCreatePage() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
-    setError(null);
     const form = new FormData(event.currentTarget);
     try {
       const created = await createBaseline(session, {
@@ -41,7 +40,7 @@ export function BaselineCreatePage() {
       });
       router.push(`/governance/baselines/${created.id}`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create failed");
+      notifyApiError("Create failed", err);
       setSubmitting(false);
     }
   }
@@ -60,8 +59,6 @@ export function BaselineCreatePage() {
           description="Register a draft source of truth. Submit it for review when the artifact is ready."
         />
       </div>
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
 
       <Card>
         <CardHeader>

@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   addFollowUpClosureEvidence,
   closeFollowUp,
   createFollowUp,
@@ -26,6 +25,7 @@ import {
   type FollowUpEscalation,
   type FollowUpReminder,
 } from "@/lib/api";
+import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceProjectId,
@@ -35,8 +35,6 @@ import {
 
 export function FollowUpsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [items, setItems] = useState<FollowUp[]>([]);
@@ -55,7 +53,6 @@ export function FollowUpsDeskPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const rows = await listOpenFollowUps(session);
       setItems(rows);
@@ -64,7 +61,7 @@ export function FollowUpsDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load follow-ups");
+      notifyApiError("Unable to load follow-ups", err);
       setItems([]);
     } finally {
       setLoading(false);
@@ -122,14 +119,12 @@ export function FollowUpsDeskPage() {
 
   async function onCreate(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const queryId = sourceQueryId || getWorkspaceQueryId();
       const projectId = getWorkspaceProjectId();
       const sourceEntityId = queryId || projectId;
       if (!sourceEntityId) {
-        setError("Select a linked inquiry, or set a workspace project on Projects");
+        notifyError("Select a linked inquiry, or set a workspace project on Projects");
         return;
       }
       if (queryId) setWorkspaceQueryId(queryId);
@@ -146,58 +141,52 @@ export function FollowUpsDeskPage() {
         rule_version_id: crypto.randomUUID(),
       });
       setCurrentId(created.id);
-      setOk("Follow-up opened");
+      notifySuccess("Follow-up opened");
       setShowCreate(false);
       setTitle("");
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create follow-up");
+      notifyApiError("Could not create follow-up", err);
     }
   }
 
   async function onAddEvidence() {
     if (!current || !evidenceRef.trim()) return;
-    setError(null);
-    setOk(null);
     try {
       await addFollowUpClosureEvidence(session, current.id, {
         evidence_ref: evidenceRef.trim(),
         evidence_type: "response",
         note: evidenceNote.trim() || undefined,
       });
-      setOk("Closure evidence recorded");
+      notifySuccess("Closure evidence recorded");
       setEvidenceRef("");
       setEvidenceNote("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not add evidence");
+      notifyApiError("Could not add evidence", err);
     }
   }
 
   async function onClose() {
     if (!current) return;
-    setError(null);
-    setOk(null);
     try {
       await closeFollowUp(session, current.id);
-      setOk("Follow-up closed");
+      notifySuccess("Follow-up closed");
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not close follow-up");
+      notifyApiError("Could not close follow-up", err);
     }
   }
 
   async function onProcessOverdue() {
     if (!current) return;
-    setError(null);
-    setOk(null);
     try {
       const result = await processFollowUpOverdue(session, current.id);
-      setOk(
+      notifySuccess(
         `Overdue processed — reminders ${result.reminders_created}, escalations ${result.escalations_created}`,
       );
       await refreshDetail();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not process overdue");
+      notifyApiError("Could not process overdue", err);
     }
   }
 
@@ -215,9 +204,6 @@ export function FollowUpsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {showCreate && can(session.variant, "create") ? (
         <Card className="mb-6">

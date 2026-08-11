@@ -11,7 +11,6 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
-  ApiError,
   addMessageRecipient,
   approveCommsMessage,
   createCommsMessage,
@@ -23,6 +22,7 @@ import {
   type CommsMessage,
   type Conversation,
 } from "@/lib/api";
+import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceConversationId,
@@ -33,8 +33,6 @@ import {
 
 export function CommsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [subject, setSubject] = useState("");
@@ -49,7 +47,6 @@ export function CommsDeskPage() {
 
   const loadConversations = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const rows = await listConversations(session, {
         q: search.trim() || undefined,
@@ -63,7 +60,7 @@ export function CommsDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load conversations");
+      notifyApiError("Unable to load conversations", err);
       setConversations([]);
     } finally {
       setLoading(false);
@@ -87,7 +84,7 @@ export function CommsDeskPage() {
     try {
       setMessages(await listConversationMessages(session, conversationId));
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load messages");
+      notifyApiError("Unable to load messages", err);
     }
   }, [conversationId, session]);
 
@@ -103,8 +100,6 @@ export function CommsDeskPage() {
 
   async function onCreateConversation(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const projectId = getWorkspaceProjectId();
       const linkedQuery = getWorkspaceQueryId();
@@ -118,7 +113,7 @@ export function CommsDeskPage() {
       });
       setWorkspaceConversationId(created.id);
       setConversationId(created.id);
-      setOk(
+      notifySuccess(
         created.classification === "confidential" || created.classification === "restricted"
           ? "Conversation opened — sensitive messages will need approval before send"
           : "Conversation opened",
@@ -127,15 +122,13 @@ export function CommsDeskPage() {
       setShowCreate(false);
       await loadConversations();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not open conversation");
+      notifyApiError("Could not open conversation", err);
     }
   }
 
   async function onCreateMessage(event: FormEvent) {
     event.preventDefault();
     if (!conversationId) return;
-    setError(null);
-    setOk(null);
     try {
       const message = await createCommsMessage(session, {
         conversation_id: conversationId,
@@ -149,42 +142,38 @@ export function CommsDeskPage() {
       });
       setActiveMessage(message);
       setMessageBody("");
-      setOk(
+      notifySuccess(
         message.requires_approval
           ? "Draft saved — approval required before send"
           : "Draft saved with recipient",
       );
       await refreshMessages();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not draft message");
+      notifyApiError("Could not draft message", err);
     }
   }
 
   async function onApprove() {
     if (!activeMessage) return;
-    setError(null);
-    setOk(null);
     try {
       const approved = await approveCommsMessage(session, activeMessage.id);
       setActiveMessage(approved);
-      setOk("Message approved");
+      notifySuccess("Message approved");
       await refreshMessages();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Approval failed");
+      notifyApiError("Approval failed", err);
     }
   }
 
   async function onSend() {
     if (!activeMessage) return;
-    setError(null);
-    setOk(null);
     try {
       const sent = await sendCommsMessage(session, activeMessage.id);
       setActiveMessage(sent);
-      setOk("Message sent");
+      notifySuccess("Message sent");
       await refreshMessages();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Send failed");
+      notifyApiError("Send failed", err);
     }
   }
 
@@ -202,9 +191,6 @@ export function CommsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {showCreate && can(session.variant, "create") ? (
         <Card className="mb-6">

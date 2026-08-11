@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   approveMilestone,
   completeMilestone,
   completePhase,
@@ -24,6 +23,7 @@ import {
   type Phase,
   type Project,
 } from "@/lib/api";
+import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import { getWorkspaceProjectId, setWorkspaceProjectId } from "@/lib/workspace";
 
@@ -35,8 +35,6 @@ export function RoadmapDeskPage() {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [phaseCode, setPhaseCode] = useState("DISCOVER");
   const [phaseTitle, setPhaseTitle] = useState("Discovery");
@@ -66,7 +64,6 @@ export function RoadmapDeskPage() {
       return;
     }
     setLoading(true);
-    setError(null);
     try {
       const [phaseRows, milestoneRows] = await Promise.all([
         listPhases(session, projectId),
@@ -79,7 +76,7 @@ export function RoadmapDeskPage() {
         return milestoneRows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load roadmap");
+      notifyApiError("Unable to load roadmap", err);
       setPhases([]);
       setMilestones([]);
     } finally {
@@ -105,8 +102,6 @@ export function RoadmapDeskPage() {
   async function onCreatePhase(event: FormEvent) {
     event.preventDefault();
     if (!projectId) return;
-    setError(null);
-    setOk(null);
     try {
       const phase = await createPhase(session, {
         project_id: projectId,
@@ -114,17 +109,15 @@ export function RoadmapDeskPage() {
         title: phaseTitle.trim(),
         sequence: phases.length + 1,
       });
-      setOk(`${phase.title} phase added`);
+      notifySuccess(`${phase.title} phase added`);
       setShowCreate(false);
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create phase");
+      notifyApiError("Could not create phase", err);
     }
   }
 
   async function onAddMilestone(phaseId: string) {
-    setError(null);
-    setOk(null);
     try {
       const created = await createMilestone(session, {
         phase_id: phaseId,
@@ -135,10 +128,10 @@ export function RoadmapDeskPage() {
         requires_approval: true,
       });
       setSelectedMilestoneId(created.id);
-      setOk(`Milestone ${created.title} created`);
+      notifySuccess(`Milestone ${created.title} created`);
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create milestone");
+      notifyApiError("Could not create milestone", err);
     }
   }
 
@@ -147,10 +140,10 @@ export function RoadmapDeskPage() {
     try {
       const approved = await approveMilestone(session, selectedMilestone.id);
       setSelectedMilestoneId(approved.id);
-      setOk("Milestone approved");
+      notifySuccess("Milestone approved");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Approval failed");
+      notifyApiError("Approval failed", err);
     }
   }
 
@@ -159,22 +152,20 @@ export function RoadmapDeskPage() {
     try {
       const done = await completeMilestone(session, selectedMilestone.id);
       setSelectedMilestoneId(done.id);
-      setOk("Milestone completed");
+      notifySuccess("Milestone completed");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not complete milestone");
+      notifyApiError("Could not complete milestone", err);
     }
   }
 
   async function onCompletePhase(phaseId: string) {
-    setError(null);
-    setOk(null);
     try {
       await completePhase(session, phaseId);
-      setOk("Phase completed");
+      notifySuccess("Phase completed");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not complete phase");
+      notifyApiError("Could not complete phase", err);
     }
   }
 
@@ -192,9 +183,6 @@ export function RoadmapDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       <Card className="mb-6">
         <CardBody>

@@ -11,7 +11,6 @@ import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
-  ApiError,
   approveRequirementsBrief,
   computeCompleteness,
   createClarification,
@@ -32,6 +31,7 @@ import {
   type QuestionnaireVersion,
   type RequirementsBrief,
 } from "@/lib/api";
+import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceProjectId,
@@ -49,8 +49,6 @@ const DEFAULT_QUESTIONS = [
 
 export function RequirementsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showBootstrap, setShowBootstrap] = useState(false);
   const [code, setCode] = useState("intake");
@@ -72,7 +70,6 @@ export function RequirementsDeskPage() {
 
   const loadQuestionnaires = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const rows = await listQuestionnaires(session, {
         q: search.trim() || undefined,
@@ -86,7 +83,7 @@ export function RequirementsDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load questionnaires");
+      notifyApiError("Unable to load questionnaires", err);
       setQuestionnaires([]);
     } finally {
       setLoading(false);
@@ -205,8 +202,6 @@ export function RequirementsDeskPage() {
 
   async function onBootstrap(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const questionnaire = await createQuestionnaire(session, {
         code: code.trim().toLowerCase(),
@@ -220,22 +215,20 @@ export function RequirementsDeskPage() {
       setWorkspaceQuestionnaireId(questionnaire.id);
       setQuestionnaireId(questionnaire.id);
       setVersion(published);
-      setOk(`“${questionnaire.title}” is ready for answers`);
+      notifySuccess(`“${questionnaire.title}” is ready for answers`);
       setShowBootstrap(false);
       await loadQuestionnaires();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not publish questionnaire");
+      notifyApiError("Could not publish questionnaire", err);
     }
   }
 
   async function onSaveAnswers(event: FormEvent) {
     event.preventDefault();
     if (!version || !entityId || !relatedEntityType) {
-      setError("Select a linked inquiry (or project) before saving answers");
+      notifyError("Select a linked inquiry (or project) before saving answers");
       return;
     }
-    setError(null);
-    setOk(null);
     try {
       const projectId = getWorkspaceProjectId();
       for (const q of questions) {
@@ -256,20 +249,18 @@ export function RequirementsDeskPage() {
         related_entity_id: entityId,
       });
       setScore(computed);
-      setOk(
+      notifySuccess(
         computed.meets_threshold
           ? `Completeness ${computed.percentage}% — ready for a brief`
           : `Completeness ${computed.percentage}% — fill remaining gaps`,
       );
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not save answers");
+      notifyApiError("Could not save answers", err);
     }
   }
 
   async function onCreateGaps() {
     if (!version || !entityId || !relatedEntityType || !score) return;
-    setError(null);
-    setOk(null);
     try {
       for (const key of score.gap_question_keys) {
         const q = questions.find((item) => item.key === key);
@@ -282,20 +273,18 @@ export function RequirementsDeskPage() {
           owner_actor_id: session.actorId,
         });
       }
-      setOk(
+      notifySuccess(
         score.gap_question_keys.length === 1
           ? "1 clarification created"
           : `${score.gap_question_keys.length} clarifications created`,
       );
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create clarifications");
+      notifyApiError("Could not create clarifications", err);
     }
   }
 
   async function onBrief() {
     if (!version || !entityId || !relatedEntityType) return;
-    setError(null);
-    setOk(null);
     try {
       const brief = await createRequirementsBrief(session, {
         related_entity_type: relatedEntityType,
@@ -307,10 +296,10 @@ export function RequirementsDeskPage() {
         project_id: getWorkspaceProjectId() || undefined,
       });
       const approved = await approveRequirementsBrief(session, brief.id);
-      setOk(`Brief version ${approved.version_number} approved`);
+      notifySuccess(`Brief version ${approved.version_number} approved`);
       await refreshBriefs();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create brief");
+      notifyApiError("Could not create brief", err);
     }
   }
 
@@ -328,9 +317,6 @@ export function RequirementsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {showBootstrap && can(session.variant, "create") ? (
         <Card className="mb-6">

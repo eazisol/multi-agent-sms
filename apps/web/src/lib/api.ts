@@ -72,7 +72,20 @@ export class ApiError extends Error {
 }
 
 function apiBase(): string {
-  return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+  const configured = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (configured != null && configured.trim() !== "") {
+    return configured.replace(/\/$/, "");
+  }
+  // Browser: use Next.js rewrite proxy (same origin) to avoid CORS.
+  if (typeof window !== "undefined") {
+    return "";
+  }
+  // Server components / SSR: call API directly.
+  return (
+    process.env.MASMS_API_ORIGIN?.replace(/\/$/, "") ||
+    process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "") ||
+    "http://127.0.0.1:8000"
+  );
 }
 
 function headers(session: SessionState): HeadersInit {
@@ -84,6 +97,18 @@ function headers(session: SessionState): HeadersInit {
     "X-Correlation-Id": crypto.randomUUID(),
     "X-Actor-Name": `web:${session.variant}`,
   };
+}
+
+async function apiFetch(input: string, init?: RequestInit): Promise<Response> {
+  try {
+    return await fetch(input, init);
+  } catch {
+    throw new ApiError(0, {
+      code: "network_error",
+      message:
+        "Cannot reach the MASMS API. Ensure uvicorn is running on port 8000, then refresh.",
+    });
+  }
 }
 
 async function parse<T>(response: Response): Promise<T> {
@@ -115,7 +140,7 @@ export async function listBaselines(
   if (params.q) query.set("q", params.q);
   if (params.status) query.set("status", params.status);
   if (params.sort) query.set("sort", params.sort);
-  const response = await fetch(`${apiBase()}/api/v1/governance/baselines?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/baselines?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -123,7 +148,7 @@ export async function listBaselines(
 }
 
 export async function getBaseline(session: SessionState, id: string): Promise<Baseline> {
-  const response = await fetch(`${apiBase()}/api/v1/governance/baselines/${id}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/baselines/${id}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -140,7 +165,7 @@ export async function createBaseline(
     classification?: string;
   },
 ): Promise<Baseline> {
-  const response = await fetch(`${apiBase()}/api/v1/governance/baselines`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/baselines`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -153,7 +178,7 @@ export async function updateBaseline(
   id: string,
   body: { title: string; expected_version: number },
 ): Promise<Baseline> {
-  const response = await fetch(`${apiBase()}/api/v1/governance/baselines/${id}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/baselines/${id}`, {
     method: "PATCH",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -166,7 +191,7 @@ export async function transitionBaseline(
   id: string,
   body: { target_status: string; expected_version: number; reason?: string },
 ): Promise<Baseline> {
-  const response = await fetch(`${apiBase()}/api/v1/governance/baselines/${id}/transitions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/baselines/${id}/transitions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -178,7 +203,7 @@ export async function listBaselineHistory(
   session: SessionState,
   id: string,
 ): Promise<AuditEventPage> {
-  const response = await fetch(`${apiBase()}/api/v1/governance/baselines/${id}/history`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/baselines/${id}/history`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -251,7 +276,7 @@ export async function listQueries(
   if (params.q) query.set("q", params.q);
   query.set("limit", String(params.limit ?? 50));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/queries?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/queries?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -262,7 +287,7 @@ export async function getQuery(
   session: SessionState,
   queryId: string,
 ): Promise<ClientQuery> {
-  const response = await fetch(`${apiBase()}/api/v1/queries/${queryId}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/queries/${queryId}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -360,7 +385,7 @@ export async function listClients(
   if (params.status) query.set("status", params.status);
   query.set("limit", String(params.limit ?? 20));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/clients?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/clients?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -371,7 +396,7 @@ export async function createClient(
   session: SessionState,
   body: { code: string; legal_name: string; trading_name?: string; industry?: string },
 ): Promise<Client> {
-  const response = await fetch(`${apiBase()}/api/v1/clients`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/clients`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -383,7 +408,7 @@ export async function createQuerySource(
   session: SessionState,
   body: { code: string; title: string; channel?: string },
 ): Promise<QuerySource> {
-  const response = await fetch(`${apiBase()}/api/v1/queries/sources`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/queries/sources`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -401,7 +426,7 @@ export async function createQuery(
     client_id?: string;
   },
 ): Promise<ClientQuery> {
-  const response = await fetch(`${apiBase()}/api/v1/queries`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/queries`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -414,7 +439,7 @@ export async function transitionQuery(
   queryId: string,
   body: { next_status: string; classification?: string; reason?: string },
 ): Promise<ClientQuery> {
-  const response = await fetch(`${apiBase()}/api/v1/queries/${queryId}/transitions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/queries/${queryId}/transitions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -438,7 +463,7 @@ export async function listProjects(
   if (params.client_id) query.set("client_id", params.client_id);
   query.set("limit", String(params.limit ?? 50));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/projects?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -449,7 +474,7 @@ export async function createProject(
   session: SessionState,
   body: { code: string; title: string; client_id?: string },
 ): Promise<Project> {
-  const response = await fetch(`${apiBase()}/api/v1/projects`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -461,7 +486,7 @@ export async function createRequirement(
   session: SessionState,
   body: { project_id: string; requirement_code: string; title: string },
 ): Promise<ProjectRequirement> {
-  const response = await fetch(`${apiBase()}/api/v1/projects/requirements`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects/requirements`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -473,7 +498,7 @@ export async function listRequirements(
   session: SessionState,
   projectId: string,
 ): Promise<ProjectRequirement[]> {
-  const response = await fetch(`${apiBase()}/api/v1/projects/${projectId}/requirements`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects/${projectId}/requirements`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -489,7 +514,7 @@ export async function createRequirementVersion(
     change_reason?: string;
   },
 ): Promise<RequirementVersion> {
-  const response = await fetch(`${apiBase()}/api/v1/projects/requirement-versions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects/requirement-versions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -501,7 +526,7 @@ export async function addAcceptanceCriterion(
   session: SessionState,
   body: { requirement_version_id: string; criterion_code: string; text: string },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/projects/acceptance-criteria`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects/acceptance-criteria`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -513,7 +538,7 @@ export async function approveRequirementVersion(
   session: SessionState,
   versionId: string,
 ): Promise<RequirementVersion> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/projects/requirement-versions/${versionId}/approve`,
     { method: "POST", headers: headers(session) },
   );
@@ -530,7 +555,7 @@ export async function createSrsBaseline(
     change_reason?: string;
   },
 ): Promise<SrsBaseline> {
-  const response = await fetch(`${apiBase()}/api/v1/projects/srs-baselines`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/projects/srs-baselines`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -542,7 +567,7 @@ export async function approveSrsBaseline(
   session: SessionState,
   baselineId: string,
 ): Promise<SrsBaseline> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/projects/srs-baselines/${baselineId}/approve`,
     { method: "POST", headers: headers(session) },
   );
@@ -567,7 +592,7 @@ export async function listDocuments(
   if (params.classification) query.set("classification", params.classification);
   query.set("limit", String(params.limit ?? 50));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/documents?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/documents?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -578,7 +603,7 @@ export async function createDocument(
   session: SessionState,
   body: { title: string; classification?: string; project_id?: string },
 ): Promise<DocumentRecord> {
-  const response = await fetch(`${apiBase()}/api/v1/documents`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/documents`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -596,7 +621,7 @@ export async function createDocumentVersion(
     size_bytes?: number;
   },
 ): Promise<DocumentVersion> {
-  const response = await fetch(`${apiBase()}/api/v1/documents/versions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/documents/versions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -608,7 +633,7 @@ export async function recordDocumentScan(
   session: SessionState,
   body: { document_version_id: string; verdict: string; detail?: string },
 ): Promise<{ id: string; verdict: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/documents/scan-results`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/documents/scan-results`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -621,7 +646,7 @@ export async function markDocumentAvailable(
   versionId: string,
   body: { effective_at: string },
 ): Promise<DocumentVersion> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/documents/versions/${versionId}/available`,
     {
       method: "POST",
@@ -641,7 +666,7 @@ export async function createPhase(
     sequence?: number;
   },
 ): Promise<Phase> {
-  const response = await fetch(`${apiBase()}/api/v1/roadmap/phases`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/roadmap/phases`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -653,7 +678,7 @@ export async function listPhases(
   session: SessionState,
   projectId: string,
 ): Promise<Phase[]> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/roadmap/projects/${projectId}/phases`,
     { headers: headers(session), cache: "no-store" },
   );
@@ -668,7 +693,7 @@ export async function listMilestones(
   const query = new URLSearchParams();
   if (params.phase_id) query.set("phase_id", params.phase_id);
   const qs = query.toString();
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/roadmap/projects/${projectId}/milestones${qs ? `?${qs}` : ""}`,
     { headers: headers(session), cache: "no-store" },
   );
@@ -679,7 +704,7 @@ export async function completePhase(
   session: SessionState,
   phaseId: string,
 ): Promise<Phase> {
-  const response = await fetch(`${apiBase()}/api/v1/roadmap/phases/${phaseId}/complete`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/roadmap/phases/${phaseId}/complete`, {
     method: "POST",
     headers: headers(session),
   });
@@ -697,7 +722,7 @@ export async function createMilestone(
     requires_approval?: boolean;
   },
 ): Promise<Milestone> {
-  const response = await fetch(`${apiBase()}/api/v1/roadmap/milestones`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/roadmap/milestones`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -709,7 +734,7 @@ export async function approveMilestone(
   session: SessionState,
   milestoneId: string,
 ): Promise<Milestone> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/roadmap/milestones/${milestoneId}/approve`,
     { method: "POST", headers: headers(session) },
   );
@@ -720,7 +745,7 @@ export async function completeMilestone(
   session: SessionState,
   milestoneId: string,
 ): Promise<Milestone> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/roadmap/milestones/${milestoneId}/complete`,
     { method: "POST", headers: headers(session) },
   );
@@ -858,7 +883,7 @@ export async function listConversations(
   if (params.classification) query.set("classification", params.classification);
   query.set("limit", String(params.limit ?? 50));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/comms/conversations?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/comms/conversations?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -876,7 +901,7 @@ export async function createConversation(
     project_id?: string;
   },
 ): Promise<Conversation> {
-  const response = await fetch(`${apiBase()}/api/v1/comms/conversations`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/comms/conversations`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -888,7 +913,7 @@ export async function createCommsMessage(
   session: SessionState,
   body: { conversation_id: string; body: string; classification?: string },
 ): Promise<CommsMessage> {
-  const response = await fetch(`${apiBase()}/api/v1/comms/messages`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/comms/messages`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -900,7 +925,7 @@ export async function listConversationMessages(
   session: SessionState,
   conversationId: string,
 ): Promise<CommsMessage[]> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/comms/conversations/${conversationId}/messages`,
     { headers: headers(session), cache: "no-store" },
   );
@@ -911,7 +936,7 @@ export async function addMessageRecipient(
   session: SessionState,
   body: { message_id: string; address: string; role?: string },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/comms/recipients`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/comms/recipients`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -923,7 +948,7 @@ export async function approveCommsMessage(
   session: SessionState,
   messageId: string,
 ): Promise<CommsMessage> {
-  const response = await fetch(`${apiBase()}/api/v1/comms/messages/${messageId}/approve`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/comms/messages/${messageId}/approve`, {
     method: "POST",
     headers: headers(session),
   });
@@ -934,7 +959,7 @@ export async function sendCommsMessage(
   session: SessionState,
   messageId: string,
 ): Promise<CommsMessage> {
-  const response = await fetch(`${apiBase()}/api/v1/comms/messages/${messageId}/send`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/comms/messages/${messageId}/send`, {
     method: "POST",
     headers: headers(session),
   });
@@ -955,7 +980,7 @@ export async function listQuestionnaires(
   if (params.q) query.set("q", params.q);
   query.set("limit", String(params.limit ?? 50));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/requirements/questionnaires?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/questionnaires?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -966,7 +991,7 @@ export async function getPublishedQuestionnaireVersion(
   session: SessionState,
   questionnaireId: string,
 ): Promise<QuestionnaireVersion> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/requirements/questionnaires/${questionnaireId}/published-version`,
     { headers: headers(session), cache: "no-store" },
   );
@@ -986,7 +1011,7 @@ export async function listRequirementAnswers(
     related_entity_type: params.related_entity_type,
     related_entity_id: params.related_entity_id,
   });
-  const response = await fetch(`${apiBase()}/api/v1/requirements/answers?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/answers?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -997,7 +1022,7 @@ export async function createQuestionnaire(
   session: SessionState,
   body: { code: string; title: string },
 ): Promise<Questionnaire> {
-  const response = await fetch(`${apiBase()}/api/v1/requirements/questionnaires`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/questionnaires`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1017,7 +1042,7 @@ export async function createQuestionnaireVersion(
     }>;
   },
 ): Promise<QuestionnaireVersion> {
-  const response = await fetch(`${apiBase()}/api/v1/requirements/questionnaire-versions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/questionnaire-versions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1029,7 +1054,7 @@ export async function publishQuestionnaireVersion(
   session: SessionState,
   versionId: string,
 ): Promise<QuestionnaireVersion> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/requirements/questionnaire-versions/${versionId}/publish`,
     { method: "POST", headers: headers(session) },
   );
@@ -1047,7 +1072,7 @@ export async function upsertRequirementAnswer(
     project_id?: string;
   },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/requirements/answers`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/answers`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1063,7 +1088,7 @@ export async function computeCompleteness(
     related_entity_id: string;
   },
 ): Promise<CompletenessScore> {
-  const response = await fetch(`${apiBase()}/api/v1/requirements/completeness-scores`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/completeness-scores`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1082,7 +1107,7 @@ export async function createClarification(
     owner_actor_id: string;
   },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/requirements/clarifications`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/clarifications`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1102,7 +1127,7 @@ export async function createRequirementsBrief(
     project_id?: string;
   },
 ): Promise<RequirementsBrief> {
-  const response = await fetch(`${apiBase()}/api/v1/requirements/briefs`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/briefs`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1114,7 +1139,7 @@ export async function approveRequirementsBrief(
   session: SessionState,
   briefId: string,
 ): Promise<RequirementsBrief> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/requirements/briefs/${briefId}/approve`,
     { method: "POST", headers: headers(session) },
   );
@@ -1139,7 +1164,7 @@ export async function listRequirementsBriefs(
   if (params.q) query.set("q", params.q);
   query.set("limit", String(params.limit ?? 50));
   query.set("offset", String(params.offset ?? 0));
-  const response = await fetch(`${apiBase()}/api/v1/requirements/briefs?${query}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/requirements/briefs?${query}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1164,7 +1189,7 @@ export async function createTicket(
     requirement_id?: string;
   },
 ): Promise<Ticket> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1176,7 +1201,7 @@ export async function listTickets(
   session: SessionState,
   projectId: string,
 ): Promise<Ticket[]> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/projects/${projectId}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/projects/${projectId}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1199,7 +1224,7 @@ export async function updateTicket(
     expected_version: number;
   },
 ): Promise<Ticket> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/${ticketId}`, {
     method: "PATCH",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1217,7 +1242,7 @@ export async function transitionTicket(
     expected_version: number;
   },
 ): Promise<Ticket> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}/transitions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/${ticketId}/transitions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1235,7 +1260,7 @@ export async function reopenTicket(
     expected_version: number;
   },
 ): Promise<Ticket> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}/reopen`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/${ticketId}/reopen`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1247,7 +1272,7 @@ export async function linkTicketRequirement(
   session: SessionState,
   body: { ticket_id: string; requirement_id: string },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/requirement-links`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/requirement-links`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1264,7 +1289,7 @@ export async function addTicketEvidence(
     summary?: string;
   },
 ): Promise<TicketEvidence> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/evidence`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/evidence`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1276,7 +1301,7 @@ export async function listReadinessChecks(
   session: SessionState,
   ticketId: string,
 ): Promise<TicketCheck[]> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/tickets/${ticketId}/readiness-checks`,
     { headers: headers(session), cache: "no-store" },
   );
@@ -1288,7 +1313,7 @@ export async function satisfyReadinessCheck(
   checkId: string,
   notes?: string,
 ): Promise<TicketCheck> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/tickets/readiness-checks/${checkId}/satisfy`,
     {
       method: "POST",
@@ -1303,7 +1328,7 @@ export async function listDoneChecks(
   session: SessionState,
   ticketId: string,
 ): Promise<TicketCheck[]> {
-  const response = await fetch(`${apiBase()}/api/v1/tickets/${ticketId}/done-checks`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/tickets/${ticketId}/done-checks`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1315,7 +1340,7 @@ export async function satisfyDoneCheck(
   checkId: string,
   notes?: string,
 ): Promise<TicketCheck> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${apiBase()}/api/v1/tickets/done-checks/${checkId}/satisfy`,
     {
       method: "POST",
@@ -1406,7 +1431,7 @@ export async function listApprovals(
   if (params.status) query.set("status", params.status);
   if (params.action_code) query.set("action_code", params.action_code);
   const qs = query.toString();
-  const response = await fetch(`${apiBase()}/api/v1/approvals${qs ? `?${qs}` : ""}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals${qs ? `?${qs}` : ""}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1417,7 +1442,7 @@ export async function getApproval(
   session: SessionState,
   approvalId: string,
 ): Promise<ApprovalRequest> {
-  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals/${approvalId}`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1436,7 +1461,7 @@ export async function createApproval(
     steps?: Array<{ role_code: string; order?: number; assignee_actor_id?: string }>;
   },
 ): Promise<ApprovalRequest> {
-  const response = await fetch(`${apiBase()}/api/v1/approvals`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1448,7 +1473,7 @@ export async function listApprovalSteps(
   session: SessionState,
   approvalId: string,
 ): Promise<ApprovalStep[]> {
-  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/steps`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals/${approvalId}/steps`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1459,7 +1484,7 @@ export async function listApprovalDecisions(
   session: SessionState,
   approvalId: string,
 ): Promise<ApprovalDecision[]> {
-  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/decisions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals/${approvalId}/decisions`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1471,7 +1496,7 @@ export async function decideApproval(
   approvalId: string,
   body: { decision: "approve" | "reject" | "withdraw"; reason?: string; expected_version?: number },
 ): Promise<ApprovalDecision> {
-  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/decisions`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals/${approvalId}/decisions`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1484,7 +1509,7 @@ export async function addApprovalEvidence(
   approvalId: string,
   body: { evidence_ref: string; evidence_type?: string; note?: string },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/approvals/${approvalId}/evidence`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/approvals/${approvalId}/evidence`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1493,7 +1518,7 @@ export async function addApprovalEvidence(
 }
 
 export async function listOpenFollowUps(session: SessionState): Promise<FollowUp[]> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1517,7 +1542,7 @@ export async function createFollowUp(
     escalation_after_hours?: number;
   },
 ): Promise<FollowUp> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1530,7 +1555,7 @@ export async function addFollowUpClosureEvidence(
   followUpId: string,
   body: { evidence_ref: string; evidence_type?: string; note?: string },
 ): Promise<{ id: string }> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/closure-evidence`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/closure-evidence`, {
     method: "POST",
     headers: headers(session),
     body: JSON.stringify(body),
@@ -1542,7 +1567,7 @@ export async function closeFollowUp(
   session: SessionState,
   followUpId: string,
 ): Promise<FollowUp> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/close`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/close`, {
     method: "POST",
     headers: headers(session),
   });
@@ -1553,7 +1578,7 @@ export async function processFollowUpOverdue(
   session: SessionState,
   followUpId: string,
 ): Promise<{ followup_id: string; reminders_created: number; escalations_created: number }> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/process-overdue`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/process-overdue`, {
     method: "POST",
     headers: headers(session),
   });
@@ -1564,7 +1589,7 @@ export async function listFollowUpReminders(
   session: SessionState,
   followUpId: string,
 ): Promise<FollowUpReminder[]> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/reminders`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/reminders`, {
     headers: headers(session),
     cache: "no-store",
   });
@@ -1575,7 +1600,7 @@ export async function listFollowUpEscalations(
   session: SessionState,
   followUpId: string,
 ): Promise<FollowUpEscalation[]> {
-  const response = await fetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/escalations`, {
+  const response = await apiFetch(`${apiBase()}/api/v1/follow-ups/${followUpId}/escalations`, {
     headers: headers(session),
     cache: "no-store",
   });

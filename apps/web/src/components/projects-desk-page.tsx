@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   addAcceptanceCriterion,
   approveRequirementVersion,
   approveSrsBaseline,
@@ -26,13 +25,12 @@ import {
   type ProjectRequirement,
   type RequirementVersion,
 } from "@/lib/api";
+import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import { getWorkspaceProjectId, setWorkspaceProjectId } from "@/lib/workspace";
 
 export function ProjectsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingReqs, setLoadingReqs] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
@@ -50,7 +48,6 @@ export function ProjectsDeskPage() {
 
   const loadProjects = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const rows = await listProjects(session, {
         q: search.trim() || undefined,
@@ -64,7 +61,7 @@ export function ProjectsDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load projects");
+      notifyApiError("Unable to load projects", err);
       setProjects([]);
     } finally {
       setLoading(false);
@@ -89,7 +86,7 @@ export function ProjectsDeskPage() {
     try {
       setRequirements(await listRequirements(session, projectId));
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load requirements");
+      notifyApiError("Unable to load requirements", err);
     } finally {
       setLoadingReqs(false);
     }
@@ -107,8 +104,6 @@ export function ProjectsDeskPage() {
 
   async function onCreateProject(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const project = await createProject(session, {
         code: code.trim().toUpperCase(),
@@ -116,21 +111,19 @@ export function ProjectsDeskPage() {
       });
       setWorkspaceProjectId(project.id);
       setProjectId(project.id);
-      setOk(`${project.code} created and selected as the workspace project`);
+      notifySuccess(`${project.code} created and selected as the workspace project`);
       setCode("");
       setTitle("");
       setShowCreate(false);
       await loadProjects();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create project");
+      notifyApiError("Could not create project", err);
     }
   }
 
   async function onCreateRequirement(event: FormEvent) {
     event.preventDefault();
     if (!projectId) return;
-    setError(null);
-    setOk(null);
     try {
       const requirement = await createRequirement(session, {
         project_id: projectId,
@@ -148,37 +141,33 @@ export function ProjectsDeskPage() {
         text: "Acceptance criterion for first version",
       });
       setLastVersion(version);
-      setOk(`${requirement.requirement_code} draft ready for review`);
+      notifySuccess(`${requirement.requirement_code} draft ready for review`);
       setReqTitle("");
       setStatement("");
       setShowReq(false);
       await refreshRequirements();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not draft requirement");
+      notifyApiError("Could not draft requirement", err);
     }
   }
 
   async function onApproveVersion() {
     if (!lastVersion) return;
-    setError(null);
-    setOk(null);
     try {
       const approved = await approveRequirementVersion(session, lastVersion.id);
       setLastVersion(approved);
-      setOk("Requirement version approved");
+      notifySuccess("Requirement version approved");
       await refreshRequirements();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Approval failed");
+      notifyApiError("Approval failed", err);
     }
   }
 
   async function onApproveSrs() {
     if (!projectId || !lastVersion || lastVersion.status !== "approved") {
-      setError("Approve a requirement version before creating an SRS baseline");
+      notifyError("Approve a requirement version before creating an SRS baseline");
       return;
     }
-    setError(null);
-    setOk(null);
     try {
       const baseline = await createSrsBaseline(session, {
         project_id: projectId,
@@ -187,9 +176,9 @@ export function ProjectsDeskPage() {
         requirement_version_ids: [lastVersion.id],
       });
       const approved = await approveSrsBaseline(session, baseline.id);
-      setOk(`SRS version ${approved.version_number} approved`);
+      notifySuccess(`SRS version ${approved.version_number} approved`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "SRS approval failed");
+      notifyApiError("SRS approval failed", err);
     }
   }
 
@@ -207,9 +196,6 @@ export function ProjectsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {showCreate ? (
         <Card className="mb-6">

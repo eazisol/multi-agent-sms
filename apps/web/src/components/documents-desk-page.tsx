@@ -11,7 +11,6 @@ import { Field, Input, Select } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
-  ApiError,
   createDocument,
   createDocumentVersion,
   formatUtc,
@@ -21,6 +20,7 @@ import {
   type DocumentRecord,
   type DocumentVersion,
 } from "@/lib/api";
+import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceDocumentId,
@@ -35,8 +35,6 @@ function storageKeyFor(filename: string) {
 
 export function DocumentsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [showVersion, setShowVersion] = useState(false);
@@ -51,7 +49,6 @@ export function DocumentsDeskPage() {
 
   const loadDocuments = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const rows = await listDocuments(session, {
         q: search.trim() || undefined,
@@ -65,7 +62,7 @@ export function DocumentsDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load documents");
+      notifyApiError("Unable to load documents", err);
       setDocuments([]);
     } finally {
       setLoading(false);
@@ -89,8 +86,6 @@ export function DocumentsDeskPage() {
 
   async function onCreateDocument(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const projectId = getWorkspaceProjectId() || undefined;
       const doc = await createDocument(session, {
@@ -100,21 +95,19 @@ export function DocumentsDeskPage() {
       });
       setWorkspaceDocumentId(doc.id);
       setDocumentId(doc.id);
-      setOk(`“${doc.title}” added`);
+      notifySuccess(`“${doc.title}” added`);
       setTitle("");
       setShowCreate(false);
       setShowVersion(true);
       await loadDocuments();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create document");
+      notifyApiError("Could not create document", err);
     }
   }
 
   async function onCreateVersion(event: FormEvent) {
     event.preventDefault();
     if (!documentId) return;
-    setError(null);
-    setOk(null);
     try {
       const name = filename.trim() || "document.pdf";
       const created = await createDocumentVersion(session, {
@@ -125,46 +118,42 @@ export function DocumentsDeskPage() {
         size_bytes: 1024,
       });
       setVersion(created);
-      setOk(`Version ${created.version_number} uploaded — ready for security scan`);
+      notifySuccess(`Version ${created.version_number} uploaded — ready for security scan`);
       setFilename("");
       setShowVersion(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not add version");
+      notifyApiError("Could not add version", err);
     }
   }
 
   async function onScan() {
     if (!version) return;
-    setError(null);
-    setOk(null);
     try {
       const scan = await recordDocumentScan(session, {
         document_version_id: version.id,
         verdict,
         detail: verdict === "clean" ? "Scan completed clean" : "Scan flagged content",
       });
-      setOk(`Scan result: ${scan.verdict}`);
+      notifySuccess(`Scan result: ${scan.verdict}`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Scan failed");
+      notifyApiError("Scan failed", err);
     }
   }
 
   async function onAvailable() {
     if (!version) return;
-    setError(null);
-    setOk(null);
     try {
       const available = await markDocumentAvailable(session, version.id, {
         effective_at: new Date().toISOString(),
       });
       setVersion(available);
-      setOk(
+      notifySuccess(
         available.indexing_allowed
           ? "Document available for the team and knowledge indexing"
           : "Document marked available",
       );
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not mark available");
+      notifyApiError("Could not mark available", err);
     }
   }
 
@@ -182,9 +171,6 @@ export function DocumentsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {workspaceProject ? (
         <p className="mb-4 text-sm text-[var(--muted)]">

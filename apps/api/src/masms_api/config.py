@@ -20,7 +20,10 @@ class Settings(BaseSettings):
     api_title: str = "MASMS API"
     api_version: str = "0.1.0"
     database_url: str = "sqlite+pysqlite:///:memory:"
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = (
+        "http://localhost:3000,http://127.0.0.1:3000,"
+        "http://localhost:3001,http://127.0.0.1:3001"
+    )
     default_organization_id: str = "00000000-0000-4000-8000-000000000001"
     secret_backend: str = LOCAL_BACKEND
     aws_region: str | None = None

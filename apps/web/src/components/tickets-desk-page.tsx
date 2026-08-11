@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   addTicketEvidence,
   createTicket,
   formatUtc,
@@ -29,6 +28,7 @@ import {
   type Ticket,
   type TicketCheck,
 } from "@/lib/api";
+import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceProjectId,
@@ -49,8 +49,6 @@ const FLOW_TRANSITIONS = [
 
 export function TicketsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [projectId, setProjectId] = useState("");
@@ -78,7 +76,6 @@ export function TicketsDeskPage() {
       return;
     }
     setLoading(true);
-    setError(null);
     try {
       const rows = await listTickets(session, projectId);
       setTickets(rows);
@@ -95,7 +92,7 @@ export function TicketsDeskPage() {
         setDoneChecks([]);
       }
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load tickets");
+      notifyApiError("Unable to load tickets", err);
       setTickets([]);
     } finally {
       setLoading(false);
@@ -126,11 +123,9 @@ export function TicketsDeskPage() {
   async function onCreate(event: FormEvent) {
     event.preventDefault();
     if (!projectId) {
-      setError("Select a workspace project first (create one on Projects)");
+      notifyError("Select a workspace project first (create one on Projects)");
       return;
     }
-    setError(null);
-    setOk(null);
     try {
       const ticket = await createTicket(session, {
         project_id: projectId,
@@ -148,20 +143,18 @@ export function TicketsDeskPage() {
       setWorkspaceProjectId(projectId);
       setWorkspaceTicketId(ticket.id);
       setActive(ticket);
-      setOk(`${ticket.code} created`);
+      notifySuccess(`${ticket.code} created`);
       setTitle("");
       setDescription("");
       setShowCreate(false);
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create ticket");
+      notifyApiError("Could not create ticket", err);
     }
   }
 
   async function onPrepareReady() {
     if (!active || !projectId) return;
-    setError(null);
-    setOk(null);
     try {
       let ticket = active;
       if (!phaseId) {
@@ -206,17 +199,15 @@ export function TicketsDeskPage() {
         expected_version: ticket.version,
       });
       setActive(ticket);
-      setOk("Ticket prepared and marked Ready");
+      notifySuccess("Ticket prepared and marked Ready");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not prepare Ready");
+      notifyApiError("Could not prepare Ready", err);
     }
   }
 
   async function onTransition(next: string) {
     if (!active) return;
-    setError(null);
-    setOk(null);
     try {
       if (next === "done") {
         const checks = await listDoneChecks(session, active.id);
@@ -232,17 +223,15 @@ export function TicketsDeskPage() {
         blocked_reason: next === "blocked" ? "Blocked from tickets desk" : undefined,
       });
       setActive(updated);
-      setOk(`Moved to ${updated.status.replace(/_/g, " ")}`);
+      notifySuccess(`Moved to ${updated.status.replace(/_/g, " ")}`);
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Transition failed");
+      notifyApiError("Transition failed", err);
     }
   }
 
   async function onReopen() {
     if (!active || !reopenReason.trim()) return;
-    setError(null);
-    setOk(null);
     try {
       const evidence = await addTicketEvidence(session, {
         ticket_id: active.id,
@@ -257,11 +246,11 @@ export function TicketsDeskPage() {
         expected_version: active.version,
       });
       setActive(updated);
-      setOk("Ticket reopened");
+      notifySuccess("Ticket reopened");
       setReopenReason("");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Reopen failed");
+      notifyApiError("Reopen failed", err);
     }
   }
 
@@ -279,9 +268,6 @@ export function TicketsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       <Card className="mb-6">
         <CardBody>

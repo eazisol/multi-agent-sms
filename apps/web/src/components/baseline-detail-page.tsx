@@ -19,6 +19,7 @@ import {
   type AuditEvent,
   type Baseline,
 } from "@/lib/api";
+import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can, isDisabled, isHidden } from "@/lib/roles";
 
 const MUTABLE = new Set(["draft", "more_info_required", "rejected"]);
@@ -31,13 +32,12 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
   const [title, setTitle] = useState("");
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
+    setLoadError(null);
     try {
       const [row, hist] = await Promise.all([
         getBaseline(session, baselineId),
@@ -48,13 +48,13 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
       setHistory(hist.items);
     } catch (err) {
       if (err instanceof ApiError && err.status === 404) {
-        setError("Baseline not found.");
+        setLoadError("Baseline not found.");
       } else if (err instanceof ApiError && err.status === 403) {
-        setError("You don’t have permission to view this baseline.");
+        setLoadError("You don’t have permission to view this baseline.");
       } else if (err instanceof ApiError) {
-        setError(err.problem.message);
+        setLoadError(err.problem.message);
       } else {
-        setError("Unable to load baseline.");
+        setLoadError("Unable to load baseline.");
       }
       setBaseline(null);
     } finally {
@@ -70,18 +70,16 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
     event.preventDefault();
     if (!baseline) return;
     setBusy(true);
-    setError(null);
-    setMessage(null);
     try {
       const updated = await updateBaseline(session, baseline.id, {
         title,
         expected_version: baseline.version,
       });
       setBaseline(updated);
-      setMessage(`Title saved (revision ${updated.version}).`);
+      notifySuccess(`Title saved (revision ${updated.version}).`);
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Update failed");
+      notifyApiError("Update failed", err);
     } finally {
       setBusy(false);
     }
@@ -90,12 +88,10 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
   async function runTransition(target: string) {
     if (!baseline) return;
     if ((target === "rejected" || target === "withdrawn") && !reason.trim()) {
-      setError("A reason is required to reject or withdraw.");
+      notifyError("A reason is required to reject or withdraw.");
       return;
     }
     setBusy(true);
-    setError(null);
-    setMessage(null);
     try {
       const updated = await transitionBaseline(session, baseline.id, {
         target_status: target,
@@ -103,11 +99,11 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
         reason: reason.trim() || undefined,
       });
       setBaseline(updated);
-      setMessage(`Moved to ${updated.approval_status.replace(/_/g, " ")}.`);
+      notifySuccess(`Moved to ${updated.approval_status.replace(/_/g, " ")}.`);
       setReason("");
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Transition failed");
+      notifyApiError("Transition failed", err);
     } finally {
       setBusy(false);
     }
@@ -120,7 +116,7 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
       </Card>
     );
   }
-  if (error && !baseline) return <StatusBanner kind="error">{error}</StatusBanner>;
+  if (loadError && !baseline) return <StatusBanner kind="error">{loadError}</StatusBanner>;
   if (!baseline) return null;
 
   const mutable = MUTABLE.has(baseline.approval_status);
@@ -162,9 +158,6 @@ export function BaselineDetailPage({ baselineId }: { baselineId: string }) {
           actions={<StatusBadge status={baseline.approval_status} />}
         />
       </div>
-
-      {message ? <StatusBanner kind="success">{message}</StatusBanner> : null}
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
 
       <div role="tablist" aria-label="Baseline sections" className="flex gap-2">
         {(["summary", "history"] as const).map((name) => (

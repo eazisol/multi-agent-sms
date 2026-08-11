@@ -11,7 +11,6 @@ import { Field, Input, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
-  ApiError,
   addApprovalEvidence,
   createApproval,
   decideApproval,
@@ -23,6 +22,7 @@ import {
   type ApprovalRequest,
   type ApprovalStep,
 } from "@/lib/api";
+import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import { getWorkspaceProjectId, getWorkspaceQueryId } from "@/lib/workspace";
 
@@ -37,8 +37,6 @@ const FILTER_TABS: FilterTab[] = [
 
 export function ApprovalsDeskPage() {
   const { session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [activeTab, setActiveTab] = useState("pending");
@@ -57,7 +55,6 @@ export function ApprovalsDeskPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const tab = FILTER_TABS.find((t) => t.id === activeTab) ?? FILTER_TABS[0];
       const rows = await listApprovals(session, { status: tab.status });
@@ -67,7 +64,7 @@ export function ApprovalsDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load approvals");
+      notifyApiError("Unable to load approvals", err);
       setItems([]);
     } finally {
       setLoading(false);
@@ -97,7 +94,7 @@ export function ApprovalsDeskPage() {
       setSteps(stepRows);
       setDecisions(decisionRows);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load approval detail");
+      notifyApiError("Unable to load approval detail", err);
     }
   }, [currentId, session]);
 
@@ -107,12 +104,10 @@ export function ApprovalsDeskPage() {
 
   async function onCreate(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const entityId = targetId.trim() || getWorkspaceQueryId() || getWorkspaceProjectId();
       if (!entityId) {
-        setError("Provide a target entity id, or select a query/project on those desks first");
+        notifyError("Provide a target entity id, or select a query/project on those desks first");
         return;
       }
       const created = await createApproval(session, {
@@ -125,49 +120,45 @@ export function ApprovalsDeskPage() {
         steps: [{ role_code: "approver", order: 1, assignee_actor_id: session.actorId }],
       });
       setCurrentId(created.id);
-      setOk("Approval request submitted");
+      notifySuccess("Approval request submitted");
       setShowCreate(false);
       setTitle("");
       setTargetId("");
       setActiveTab("pending");
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create approval");
+      notifyApiError("Could not create approval", err);
     }
   }
 
   async function onDecide(decision: "approve" | "reject" | "withdraw") {
     if (!current) return;
-    setError(null);
-    setOk(null);
     try {
       await decideApproval(session, current.id, {
         decision,
         reason: reason.trim() || undefined,
         expected_version: current.version,
       });
-      setOk(`Decision recorded: ${decision}`);
+      notifySuccess(`Decision recorded: ${decision}`);
       setReason("");
       await load();
       await refreshDetails();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Decision failed");
+      notifyApiError("Decision failed", err);
     }
   }
 
   async function onEvidence() {
     if (!current || !evidenceRef.trim()) return;
-    setError(null);
-    setOk(null);
     try {
       await addApprovalEvidence(session, current.id, {
         evidence_ref: evidenceRef.trim(),
         evidence_type: "reference",
       });
-      setOk("Evidence attached");
+      notifySuccess("Evidence attached");
       setEvidenceRef("");
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not attach evidence");
+      notifyApiError("Could not attach evidence", err);
     }
   }
 
@@ -185,9 +176,6 @@ export function ApprovalsDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       {showCreate ? (
         <Card className="mb-6">

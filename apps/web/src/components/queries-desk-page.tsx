@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
+import { EmptyState, PageHeader, SkeletonRows } from "@/components/ui-states";
 import {
-  ApiError,
   createQuery,
   createQuerySource,
   formatUtc,
@@ -19,6 +18,7 @@ import {
   transitionQuery,
   type ClientQuery,
 } from "@/lib/api";
+import { notifyApiError, notifySuccess } from "@/lib/toast";
 import { can } from "@/lib/roles";
 import { getWorkspaceQueryId, setWorkspaceQueryId } from "@/lib/workspace";
 
@@ -48,8 +48,6 @@ export function QueriesDeskPage() {
   const { session } = useSession();
   const [items, setItems] = useState<ClientQuery[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
   const [sourceId, setSourceId] = useState("");
   const [subject, setSubject] = useState("");
   const [summary, setSummary] = useState("");
@@ -60,7 +58,6 @@ export function QueriesDeskPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const tab = FILTER_TABS.find((t) => t.id === activeTab) ?? FILTER_TABS[0];
       const rows = await listQueries(session, {
@@ -77,7 +74,7 @@ export function QueriesDeskPage() {
         return rows[0]?.id ?? null;
       });
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Unable to load inquiries");
+      notifyApiError("Unable to load inquiries", err);
       setItems([]);
     } finally {
       setLoading(false);
@@ -106,8 +103,6 @@ export function QueriesDeskPage() {
 
   async function onCreate(event: FormEvent) {
     event.preventDefault();
-    setError(null);
-    setOk(null);
     try {
       const sid = await ensureSource();
       const created = await createQuery(session, {
@@ -117,30 +112,28 @@ export function QueriesDeskPage() {
       });
       setWorkspaceQueryId(created.id);
       setCurrentId(created.id);
-      setOk("Inquiry captured");
+      notifySuccess("Inquiry captured");
       setSubject("");
       setSummary("");
       setShowCreate(false);
       setActiveTab("all");
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Could not create inquiry");
+      notifyApiError("Could not create inquiry", err);
     }
   }
 
   async function onTransition(next: string, classification?: string) {
     if (!current) return;
-    setError(null);
-    setOk(null);
     try {
       const updated = await transitionQuery(session, current.id, {
         next_status: next,
         classification,
       });
-      setOk(`Moved to ${updated.status.replace(/_/g, " ")}`);
+      notifySuccess(`Moved to ${updated.status.replace(/_/g, " ")}`);
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Transition failed");
+      notifyApiError("Transition failed", err);
     }
   }
 
@@ -165,9 +158,6 @@ export function QueriesDeskPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {FILTER_TABS.map((tab) => (

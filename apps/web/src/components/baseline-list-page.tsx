@@ -10,7 +10,8 @@ import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
-import { ApiError, formatUtc, listBaselines, type Baseline } from "@/lib/api";
+import { formatUtc, listBaselines, type Baseline } from "@/lib/api";
+import { notifyApiError } from "@/lib/toast";
 import { can } from "@/lib/roles";
 
 export function BaselineListPage() {
@@ -21,12 +22,10 @@ export function BaselineListPage() {
   const [status, setStatus] = useState("");
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const limit = 10;
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const page = await listBaselines(session, {
         limit,
@@ -38,13 +37,7 @@ export function BaselineListPage() {
       setItems(page.items);
       setTotal(page.page.total);
     } catch (err) {
-      if (err instanceof ApiError && err.status === 403) {
-        setError("You don’t have permission to list source baselines.");
-      } else if (err instanceof ApiError) {
-        setError(err.problem.message);
-      } else {
-        setError("Unable to load baselines. Check that the API is reachable.");
-      }
+      notifyApiError("Unable to load baselines", err);
       setItems([]);
       setTotal(0);
     } finally {
@@ -84,8 +77,6 @@ export function BaselineListPage() {
           ) : null
         }
       />
-
-      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
 
       <Card>
         <CardHeader>
