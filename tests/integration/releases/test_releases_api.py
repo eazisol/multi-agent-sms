@@ -26,6 +26,7 @@ from masms_api.modules.followups import models as _flu  # noqa: F401
 from masms_api.modules.governance import models as _gov  # noqa: F401
 from masms_api.modules.identity import models as _identity  # noqa: F401
 from masms_api.modules.knowledge import models as _kn  # noqa: F401
+from masms_api.modules.notifications import models as _ntf  # noqa: F401
 from masms_api.modules.orchestrator import models as _orf  # noqa: F401
 from masms_api.modules.projects import models as _projects  # noqa: F401
 from masms_api.modules.queries import models as _queries  # noqa: F401

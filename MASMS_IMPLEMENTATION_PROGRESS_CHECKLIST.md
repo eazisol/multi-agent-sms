@@ -48,7 +48,7 @@
 | MOD-410 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 35 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 34 | 2 | 7 | 0 | 0 | Done (M1) |
 | MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 37 | 2 | 8 | 0 | 0 | Done (M1) |
-| MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 37 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
 | MOD-450 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-460 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-500 | Phase 5 - MVP Integrations | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -3935,82 +3935,128 @@
 **Title:** Notifications, Preferences, Digests, Delivery, and Failure Handling  
 **Purpose:** Deliver permission-safe in-app and email notifications for assignments, reminders, escalations, approvals, blockers, bugs, releases, client responses, and system alerts.  
 **Requirements:** MVP-FR-011  
-**Dependencies:** MOD-100, MOD-130, MOD-040
+**Dependencies:** MOD-100, MOD-130, MOD-040  
+**Status:** M1 Done — AC-901 blocked
 
 #### Main points
 
-- [ ] **MOD-440-MP-001:** Implement and verify notifications.
-- [ ] **MOD-440-MP-002:** Implement and verify preferences.
-- [ ] **MOD-440-MP-003:** Implement and verify templates.
-- [ ] **MOD-440-MP-004:** Implement and verify deliveries.
-- [ ] **MOD-440-MP-005:** Implement and verify retries.
-- [ ] **MOD-440-MP-006:** Implement and verify dead letters.
-- [ ] **MOD-440-MP-007:** Implement and verify digests.
+- [x] **MOD-440-MP-001:** Implement and verify notifications.  
+  - Evidence/note: ntf_notifications
+- [x] **MOD-440-MP-002:** Implement and verify preferences.  
+  - Evidence/note: ntf_preferences
+- [x] **MOD-440-MP-003:** Implement and verify templates.  
+  - Evidence/note: ntf_templates
+- [x] **MOD-440-MP-004:** Implement and verify deliveries.  
+  - Evidence/note: ntf_deliveries
+- [x] **MOD-440-MP-005:** Implement and verify retries.  
+  - Evidence/note: ntf_retries
+- [x] **MOD-440-MP-006:** Implement and verify dead letters.  
+  - Evidence/note: ntf_dead_letters
+- [x] **MOD-440-MP-007:** Implement and verify digests.  
+  - Evidence/note: ntf_digests (stub process)
 
 #### Database / data design
 
-- [ ] **MOD-440-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **notifications**.
-- [ ] **MOD-440-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **preferences**.
-- [ ] **MOD-440-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **templates**.
-- [ ] **MOD-440-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deliveries**.
-- [ ] **MOD-440-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **retries**.
-- [ ] **MOD-440-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **dead letters**.
-- [ ] **MOD-440-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **digests**.
+- [x] **MOD-440-DB-001:** Notifications model + RLS.  
+  - Evidence/note: migration 20260811_0028
+- [x] **MOD-440-DB-002:** Preferences.  
+  - Evidence/note: ntf_preferences
+- [x] **MOD-440-DB-003:** Templates.  
+  - Evidence/note: ntf_templates
+- [x] **MOD-440-DB-004:** Deliveries.  
+  - Evidence/note: ntf_deliveries
+- [x] **MOD-440-DB-005:** Retries.  
+  - Evidence/note: ntf_retries
+- [x] **MOD-440-DB-006:** Dead letters.  
+  - Evidence/note: ntf_dead_letters
+- [x] **MOD-440-DB-007:** Digests.  
+  - Evidence/note: ntf_digests
 
 #### Backend
 
-- [ ] **MOD-440-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-440-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-440-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-440-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-440-BE-001:** Typed domain/services.  
+  - Evidence/note: modules/notifications
+- [x] **MOD-440-BE-002:** Authz/transition/idempotency.  
+  - Evidence/note: idempotency_key + preference mute rules
+- [x] **MOD-440-BE-003:** Outbox events.  
+  - Evidence/note: notification.* events
+- [x] **MOD-440-BE-004:** Structured errors.  
+  - Evidence/note: 409/422/404 via AppError
 
 #### API
 
-- [ ] **MOD-440-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-440-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-440-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-440-API-001:** Versioned endpoints.  
+  - Evidence/note: /api/v1/notifications
+- [x] **MOD-440-API-002:** Pagination/filter/search.  
+  - Evidence/note: status/channel/recipient/q
+- [x] **MOD-440-API-003:** OpenAPI schemas.  
+  - Evidence/note: Pydantic schemas
 
 #### Frontend
 
-- [ ] **MOD-440-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-440-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-440-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-440-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-440-FE-001:** List/dashboard.  
+  - Evidence/note: /notifications desk
+- [-] **MOD-440-FE-002:** Detail tabs.  
+  - Evidence/note: deferred
+- [~] **MOD-440-FE-003:** Create/edit forms.  
+  - Evidence/note: create + deliver/mark-read
+- [-] **MOD-440-FE-004:** a11y pass.  
+  - Evidence/note: deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-440-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-440-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-440-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-440-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-440-WF-001:** Triggers/statuses/rules.  
+  - Evidence/note: notification status machine + MAX attempts
+- [-] **MOD-440-WF-002:** Temporal/LangGraph routing.  
+  - Evidence/note: Temporal digests deferred
+- [x] **MOD-440-WF-003:** Outbox/events.  
+  - Evidence/note: create/deliver/DLQ/replay events
+- [x] **MOD-440-WF-004:** Notifications.  
+  - Evidence/note: prefs + channels + critical override
 
 #### Security / privacy / audit
 
-- [ ] **MOD-440-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-440-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-440-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-440-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-440-SEC-001:** Scope authorization.  
+  - Evidence/note: org request context
+- [x] **MOD-440-SEC-002:** Tenant RLS.  
+  - Evidence/note: RLS on ntf_* tables
+- [x] **MOD-440-SEC-003:** Redaction.  
+  - Evidence/note: outbox redact via kernel
+- [x] **MOD-440-SEC-004:** Audit actions.  
+  - Evidence/note: ntf_* audits
 
 #### Testing / verification
 
-- [ ] **MOD-440-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-440-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-440-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-440-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-440-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-440-QA-001:** Domain rules via integration.  
+  - Evidence/note: idempotency/mute/DLQ
+- [x] **MOD-440-QA-002:** Integration API tests.  
+  - Evidence/note: tests/integration/notifications
+- [-] **MOD-440-QA-003:** Dedicated RBAC negative suite.  
+  - Evidence/note: deferred
+- [-] **MOD-440-QA-004:** Live email provider suite.  
+  - Evidence/note: N/A M1 (local-sim only)
+- [x] **MOD-440-QA-005:** Verification commands.  
+  - Evidence/note: Docs/modules/MOD-440/VERIFICATION.md
 
 #### Documentation
 
-- [ ] **MOD-440-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-440-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-440-DOC-001:** Module README.  
+  - Evidence/note: Docs/modules/MOD-440/README.md
+- [x] **MOD-440-DOC-002:** Verification evidence.  
+  - Evidence/note: Docs/modules/MOD-440/VERIFICATION.md
 
 #### Acceptance gate
 
-- [ ] **MOD-440-AC-001:** Notifications are timely, idempotent, auditable, and permission-safe.
-- [ ] **MOD-440-AC-002:** Users can configure preferences without disabling mandatory critical alerts.
-- [ ] **MOD-440-AC-003:** Delivery failures are visible and recoverable.
-- [ ] **MOD-440-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-440-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-440-AC-001:** Notifications are timely, idempotent, auditable, and permission-safe.  
+  - Evidence/note: create + outbox + org scope + idempotency 409
+- [x] **MOD-440-AC-002:** Users can configure preferences without disabling mandatory critical alerts.  
+  - Evidence/note: system_alert mute → 422; critical never suppressed
+- [x] **MOD-440-AC-003:** Delivery failures are visible and recoverable.  
+  - Evidence/note: fail×3 → DLQ → replay → pending
+- [x] **MOD-440-AC-900:** Crit/High cleared.  
+  - Evidence/note: none filed
+- [!] **MOD-440-AC-901:** Human owner approval.  
+  - Evidence/note: NOT obtained — blocked pending human review
 
 #### Module completion
 

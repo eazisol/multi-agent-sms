@@ -2459,3 +2459,170 @@ export async function approveRelease(
   });
   return parse<Release>(response);
 }
+
+export type Notification = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  recipient_actor_id: string;
+  notification_type: string;
+  channel: string;
+  title: string;
+  body: string;
+  related_entity_type: string | null;
+  related_entity_id: string | null;
+  priority: string;
+  status: string;
+  scheduled_at: string | null;
+  sent_at: string | null;
+  delivered_at: string | null;
+  read_at: string | null;
+  failure_reason: string | null;
+  retry_count: number;
+  idempotency_key: string | null;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type NotificationPreference = {
+  id: string;
+  organization_id: string;
+  actor_id: string;
+  channel: string;
+  notification_type: string;
+  enabled: boolean;
+  quiet_hours_start: string | null;
+  quiet_hours_end: string | null;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function listNotifications(
+  session: SessionState,
+  params: {
+    status?: string;
+    channel?: string;
+    recipient_actor_id?: string;
+    q?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<Notification>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.channel) query.set("channel", params.channel);
+  if (params.recipient_actor_id) query.set("recipient_actor_id", params.recipient_actor_id);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/notifications?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<Notification>>(response);
+}
+
+export async function createNotification(
+  session: SessionState,
+  body: {
+    title: string;
+    body: string;
+    recipient_actor_id: string;
+    notification_type: string;
+    channel?: string;
+    priority?: string;
+    project_id?: string;
+    related_entity_type?: string;
+    related_entity_id?: string;
+    idempotency_key?: string;
+  },
+): Promise<Notification> {
+  const response = await apiFetch(`${apiBase()}/api/v1/notifications`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Notification>(response);
+}
+
+export async function markNotificationRead(
+  session: SessionState,
+  notificationId: string,
+  expectedVersion?: number,
+): Promise<Notification> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/notifications/${notificationId}/mark-read`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify({ expected_version: expectedVersion }),
+    },
+  );
+  return parse<Notification>(response);
+}
+
+export async function deliverNotification(
+  session: SessionState,
+  notificationId: string,
+  body: { succeed: boolean; error_message?: string },
+): Promise<Notification> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/notifications/${notificationId}/deliver`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse<Notification>(response);
+}
+
+export async function retryNotification(
+  session: SessionState,
+  notificationId: string,
+): Promise<Notification> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/notifications/${notificationId}/retry`,
+    {
+      method: "POST",
+      headers: headers(session),
+    },
+  );
+  return parse<Notification>(response);
+}
+
+export async function listNotificationPreferences(
+  session: SessionState,
+  actorId?: string,
+): Promise<NotificationPreference[]> {
+  const query = new URLSearchParams();
+  if (actorId) query.set("actor_id", actorId);
+  const suffix = query.toString() ? `?${query}` : "";
+  const response = await apiFetch(`${apiBase()}/api/v1/notifications/preferences${suffix}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<NotificationPreference[]>(response);
+}
+
+export async function upsertNotificationPreference(
+  session: SessionState,
+  body: {
+    actor_id: string;
+    channel: string;
+    notification_type: string;
+    enabled: boolean;
+    quiet_hours_start?: string;
+    quiet_hours_end?: string;
+    expected_version?: number;
+  },
+): Promise<NotificationPreference> {
+  const response = await apiFetch(`${apiBase()}/api/v1/notifications/preferences`, {
+    method: "PUT",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<NotificationPreference>(response);
+}
