@@ -36,7 +36,7 @@
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 35 | 8 | 3 | 1 | 0 | Blocked |
 | MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 33 | 9 | 2 | 1 | 0 | Blocked |
 | MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 29 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 0 | 0 | 0 | 0 | 41 | Not started |
 | MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 466, partial 128, n/a 148, blocked 17, open 990
+**Totals:** 1749 tasks — done 495, partial 136, n/a 155, blocked 18, open 945
 
 ## Module index (plan order)
 
@@ -2344,78 +2344,123 @@
 
 #### Main points
 
-- [ ] **MOD-300-MP-001:** Implement and verify tickets.
-- [ ] **MOD-300-MP-002:** Implement and verify subtasks.
-- [ ] **MOD-300-MP-003:** Implement and verify ticket dependencies.
-- [ ] **MOD-300-MP-004:** Implement and verify requirement links.
-- [ ] **MOD-300-MP-005:** Implement and verify ticket evidence.
-- [ ] **MOD-300-MP-006:** Implement and verify readiness checks.
-- [ ] **MOD-300-MP-007:** Implement and verify done checks.
+- [x] **MOD-300-MP-001:** Implement and verify tickets.  
+  - Evidence/note: tkt_tickets
+- [x] **MOD-300-MP-002:** Implement and verify subtasks.  
+  - Evidence/note: tkt_subtasks
+- [x] **MOD-300-MP-003:** Implement and verify ticket dependencies.  
+  - Evidence/note: tkt_ticket_dependencies
+- [x] **MOD-300-MP-004:** Implement and verify requirement links.  
+  - Evidence/note: tkt_requirement_links
+- [x] **MOD-300-MP-005:** Implement and verify ticket evidence.  
+  - Evidence/note: tkt_ticket_evidence
+- [x] **MOD-300-MP-006:** Implement and verify readiness checks.  
+  - Evidence/note: tkt_readiness_checks
+- [x] **MOD-300-MP-007:** Implement and verify done checks.  
+  - Evidence/note: tkt_done_checks
 
 #### Database / data design
 
-- [ ] **MOD-300-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **tickets**.
-- [ ] **MOD-300-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **subtasks**.
-- [ ] **MOD-300-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **ticket dependencies**.
-- [ ] **MOD-300-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **requirement links**.
-- [ ] **MOD-300-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **ticket evidence**.
-- [ ] **MOD-300-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **readiness checks**.
-- [ ] **MOD-300-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **done checks**.
+- [x] **MOD-300-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **tickets**.  
+  - Evidence/note: migration 20260811_0016 tkt_tickets
+- [x] **MOD-300-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **subtasks**.  
+  - Evidence/note: tkt_subtasks
+- [x] **MOD-300-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **ticket dependencies**.  
+  - Evidence/note: tkt_ticket_dependencies
+- [x] **MOD-300-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **requirement links**.  
+  - Evidence/note: tkt_requirement_links
+- [x] **MOD-300-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **ticket evidence**.  
+  - Evidence/note: tkt_ticket_evidence
+- [x] **MOD-300-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **readiness checks**.  
+  - Evidence/note: tkt_readiness_checks
+- [x] **MOD-300-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **done checks**.  
+  - Evidence/note: tkt_done_checks
 
 #### Backend
 
-- [ ] **MOD-300-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-300-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-300-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-300-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-300-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: TicketService
+- [x] **MOD-300-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: ready/done/reopen/version guards
+- [~] **MOD-300-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on ready/done/reopen/transition
+- [x] **MOD-300-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-300-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-300-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-300-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-300-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/tickets endpoints
+- [~] **MOD-300-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite + project list
+- [~] **MOD-300-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-300-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-300-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-300-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-300-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-300-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: tickets desk deferred
+- [-] **MOD-300-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: tickets desk deferred
+- [-] **MOD-300-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: tickets desk deferred
+- [-] **MOD-300-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: tickets desk deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-300-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-300-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-300-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-300-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-300-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: status transition matrix + Ready/Done gates
+- [-] **MOD-300-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-300-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on key transitions
+- [-] **MOD-300-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-300-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-300-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-300-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-300-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-300-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client/project scope
+- [x] **MOD-300-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on tkt_* tables
+- [~] **MOD-300-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit omits sensitive payloads
+- [x] **MOD-300-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/update/transition/reopen/evidence
 
 #### Testing / verification
 
-- [ ] **MOD-300-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-300-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-300-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-300-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-300-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-300-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/tickets
+- [x] **MOD-300-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/tickets
+- [~] **MOD-300-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: project scope checks in service
+- [-] **MOD-300-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal suite
+- [x] **MOD-300-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-300-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-300-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-300-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: Docs/modules/MOD-300/README.md
+- [x] **MOD-300-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-300-AC-001:** No ticket becomes Ready without required information.
-- [ ] **MOD-300-AC-002:** Tickets link to project, phase, owner or queue, and requirement.
-- [ ] **MOD-300-AC-003:** Done tickets reopen only with authority and evidence.
-- [ ] **MOD-300-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-300-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-300-AC-001:** No ticket becomes Ready without required information.  
+  - Evidence/note: Ready requires DoR fields + readiness checks
+- [x] **MOD-300-AC-002:** Tickets link to project, phase, owner or queue, and requirement.  
+  - Evidence/note: project/phase/owner-or-queue/requirement links
+- [x] **MOD-300-AC-003:** Done tickets reopen only with authority and evidence.  
+  - Evidence/note: Done reopen needs human + reason + evidence
+- [x] **MOD-300-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-300 defects filed
+- [!] **MOD-300-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 

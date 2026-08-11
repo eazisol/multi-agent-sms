@@ -46,7 +46,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 15 | MOD-240 | Blocked | 35 | 8 | 0 |
 | 16 | MOD-250 | Blocked | 33 | 9 | 0 |
 | 17 | MOD-260 | Blocked | 31 | 8 | 0 |
-| 18 | MOD-300 | Not started | 0 | 0 | 45 |
+| 18 | MOD-300 | Blocked | 29 | 8 | 0 |
 | 19 | MOD-310 | Not started | 0 | 0 | 41 |
 | 20 | MOD-320 | Not started | 0 | 0 | 43 |
 | 21 | MOD-330 | Not started | 0 | 0 | 45 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 466 · partial 128 · n/a 148 · blocked 17 · open 990
+**All tasks:** 1749 · done 495 · partial 136 · n/a 155 · blocked 18 · open 945
 
 ## Phase 0 - Governance and Foundation
 
@@ -1220,72 +1220,72 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 
 ## Phase 3 - Work Management and Agent Orchestration
 
-### Module 18: [ ] MOD-300 — Tickets, User Stories, Subtasks, Dependencies, Readiness, and Completion
+### Module 18: [!] MOD-300 — Tickets, User Stories, Subtasks, Dependencies, Readiness, and Completion
 
-- [ ] **Main goals**
-  - [ ] Build and verify: tickets (`MOD-300-MP-001`)
-  - [ ] Build and verify: subtasks (`MOD-300-MP-002`)
-  - [ ] Build and verify: ticket dependencies (`MOD-300-MP-003`)
-  - [ ] Build and verify: requirement links (`MOD-300-MP-004`)
-  - [ ] Build and verify: ticket evidence (`MOD-300-MP-005`)
-  - [ ] Build and verify: readiness checks (`MOD-300-MP-006`)
-  - [ ] Build and verify: done checks (`MOD-300-MP-007`)
+- [x] **Main goals**
+  - [x] Build and verify: tickets (`MOD-300-MP-001`)
+  - [x] Build and verify: subtasks (`MOD-300-MP-002`)
+  - [x] Build and verify: ticket dependencies (`MOD-300-MP-003`)
+  - [x] Build and verify: requirement links (`MOD-300-MP-004`)
+  - [x] Build and verify: ticket evidence (`MOD-300-MP-005`)
+  - [x] Build and verify: readiness checks (`MOD-300-MP-006`)
+  - [x] Build and verify: done checks (`MOD-300-MP-007`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: tickets (`MOD-300-DB-001`)
-  - [ ] Design and migrate data for: subtasks (`MOD-300-DB-002`)
-  - [ ] Design and migrate data for: ticket dependencies (`MOD-300-DB-003`)
-  - [ ] Design and migrate data for: requirement links (`MOD-300-DB-004`)
-  - [ ] Design and migrate data for: ticket evidence (`MOD-300-DB-005`)
-  - [ ] Design and migrate data for: readiness checks (`MOD-300-DB-006`)
-  - [ ] Design and migrate data for: done checks (`MOD-300-DB-007`)
+- [x] **Database**
+  - [x] Design and migrate data for: tickets (`MOD-300-DB-001`)
+  - [x] Design and migrate data for: subtasks (`MOD-300-DB-002`)
+  - [x] Design and migrate data for: ticket dependencies (`MOD-300-DB-003`)
+  - [x] Design and migrate data for: requirement links (`MOD-300-DB-004`)
+  - [x] Design and migrate data for: ticket evidence (`MOD-300-DB-005`)
+  - [x] Design and migrate data for: readiness checks (`MOD-300-DB-006`)
+  - [x] Design and migrate data for: done checks (`MOD-300-DB-007`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-300-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-300-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-300-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-300-BE-004`)
+- [~] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-300-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-300-BE-002`)
+  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-300-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-300-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-300-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-300-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-300-API-003`)
+- [~] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-300-API-001`)
+  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-300-API-002`)
+  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-300-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-300-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-300-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-300-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-300-FE-004`)
+- [~] **Frontend**
+  - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-300-FE-001`)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-300-FE-002`)
+  - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-300-FE-003`)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-300-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-300-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-300-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-300-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-300-WF-004`)
+- [~] **Workflow / agents / events**
+  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-300-WF-001`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-300-WF-002`)
+  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-300-WF-003`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-300-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-300-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-300-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-300-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-300-SEC-004`)
+- [~] **Security / audit**
+  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-300-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-300-SEC-002`)
+  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-300-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-300-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-300-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-300-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-300-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-300-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-300-QA-005`)
+- [~] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-300-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-300-QA-002`)
+  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-300-QA-003`)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-300-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-300-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-300-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-300-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-300-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-300-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] No ticket becomes Ready without required information. (`MOD-300-AC-001`)
-  - [ ] Tickets link to project, phase, owner or queue, and requirement. (`MOD-300-AC-002`)
-  - [ ] Done tickets reopen only with authority and evidence. (`MOD-300-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-300-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-300-AC-901`)
+- [!] **Acceptance / Done gate**
+  - [x] No ticket becomes Ready without required information. (`MOD-300-AC-001`)
+  - [x] Tickets link to project, phase, owner or queue, and requirement. (`MOD-300-AC-002`)
+  - [x] Done tickets reopen only with authority and evidence. (`MOD-300-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-300-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-300-AC-901`)
 
 ### Module 19: [ ] MOD-310 — Skill- and Capacity-Based Assignment and Ownership History
 
