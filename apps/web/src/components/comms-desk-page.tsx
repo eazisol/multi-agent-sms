@@ -26,6 +26,7 @@ import {
   type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifySuccess } from "@/lib/toast";
+import { newId } from "@/lib/id";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceConversationId,
@@ -115,7 +116,7 @@ export function CommsDeskPage() {
     try {
       const projectId = getWorkspaceProjectId();
       const linkedQuery = getWorkspaceQueryId();
-      const relatedEntityId = linkedQuery || crypto.randomUUID();
+      const relatedEntityId = linkedQuery || newId();
       const created = await createConversation(session, {
         subject: subject.trim(),
         related_entity_type: linkedQuery ? "client_query" : "opportunity",

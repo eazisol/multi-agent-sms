@@ -29,6 +29,7 @@ import {
   type PageMeta,
 } from "@/lib/api";
 import { notifyApiError, notifyError, notifySuccess } from "@/lib/toast";
+import { newId } from "@/lib/id";
 import { can } from "@/lib/roles";
 import {
   getWorkspaceProjectId,
@@ -155,7 +156,7 @@ export function FollowUpsDeskPage() {
         closure_condition: closureCondition.trim(),
         due_offset_hours: Number(dueOffset) || 24,
         project_id: projectId || undefined,
-        rule_version_id: crypto.randomUUID(),
+        rule_version_id: newId(),
       });
       setCurrentId(created.id);
       notifySuccess("Follow-up opened");

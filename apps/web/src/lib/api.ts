@@ -1,4 +1,5 @@
 import type { ActorKind, GovVariant } from "@/lib/roles";
+import { newId } from "@/lib/id";
 
 export type SessionState = {
   organizationId: string;
@@ -110,7 +111,7 @@ function headers(session: SessionState): HeadersInit {
     "X-Organization-Id": session.organizationId,
     "X-Actor-Id": session.actorId,
     "X-Actor-Kind": session.actorKind,
-    "X-Correlation-Id": crypto.randomUUID(),
+    "X-Correlation-Id": newId(),
     "X-Actor-Name": `web:${session.variant}`,
   };
 }
