@@ -1,82 +1,89 @@
-# Deep Audit — MOD-000 through MOD-340
+# Deep Audit (refresh) — MOD-000 through MOD-340
 
-**Date:** 2026-08-11  
-**Question:** Are all modules fully working (backend, APIs, database, frontend)?  
-**Answer:** **No — not end-to-end.** Backend M1 packages + migrations + tests are largely present; frontend “ready” desks are only partially wired to list APIs; Postgres/RLS and Auth0 are not verified in CI; every module AC-901 remains blocked.
+**Date:** 2026-08-11 (post desk/list hardening)  
+**Question:** Are MOD-000…340 all working fine (backend, APIs, DB, frontend)?  
+**Answer:** **Backend M1 is largely green; product is not “all working fine” end-to-end.** Ready UI desks now sync collections from APIs. Auth is still a header stub; Postgres/RLS/`alembic upgrade` are not proven in CI; every module **AC-901** remains **blocked** (human Done).
 
-## Verification commands run
+## Verification commands run (this refresh)
 
 | Check | Result |
 |---|---|
-| `pytest -q` | **119 passed** (after P0 list APIs) |
-| OpenAPI paths | **195** |
+| `pytest -q` | **119 passed** |
+| OpenAPI paths | **200** |
 | `npm run build` (apps/web) | **passed** |
-| Live Postgres `alembic upgrade` + RLS | **not run** |
+| Live Postgres `alembic upgrade head` + RLS | **not run** |
 | Auth0 / bearer production auth | **not wired** (header stub) |
 
-## Checklist hygiene vs reality
+## Progress since first audit
 
-Checklist through MOD-340 shows **0 partials** after hygiene pass, but modules still roll up **Blocked** because **AC-901** (human Done) is blocked everywhere.
+Closed previously P0/P1 desk gaps:
 
-Treat checklist `done` as **M1 implementation claimed**, not “production-complete” or “human signed-off.”
-
----
+| Gap | Status |
+|---|---|
+| Queries list + filters | fixed earlier |
+| `GET /projects` + Projects desk inventory | fixed |
+| `GET /comms/conversations` + Messages inbox | fixed |
+| `GET /documents` + Documents library | fixed |
+| Requirements questionnaires/answers/briefs reload | fixed |
+| Approvals + Follow-ups FE desks | fixed (nav `ready: true`) |
+| Dashboard live KPIs | fixed |
+| Roadmap milestones reload | fixed (`GET …/milestones`) |
+| Clients server-side `q` search | fixed |
 
 ## Layer verdict
 
-### Backend (FastAPI domain services)
+### Backend (FastAPI)
 
 | Verdict | Detail |
 |---|---|
-| **Mostly working** | Packages exist for governance, identity, auth, access, capacity, configadmin, clients, queries, comms, requirements, projects, documents, roadmap, tickets, assignments, statusengine, approvalgates, followups + observability/kernel |
-| Wired in `main.py` | MOD-000,020,030,040,100–140,200–260,300–340 |
-| Meta omission | MOD-010 (toolchain) not listed |
-| Platform | MOD-030 has no HTTP/DB package (secrets/env helpers only) |
+| **Mostly working (M1)** | Modules wired in `main.py`: MOD-000,020,030,040,100–140,200–260,300–340 |
+| Meta omission | MOD-010 toolchain not listed |
+| Platform | MOD-030 helpers only (no business tables/HTTP desk) |
+| Kernel | Outbox enqueue + relay stub; SNS/SQS bridge deferred (MOD-500) |
 
 ### APIs
 
 | Verdict | Detail |
 |---|---|
-| **Create/action APIs strong** | CRUD-lite + transitions dominate; OpenAPI builds (193 paths) |
-| **Collection GETs uneven** | Strong: clients, queries, baselines, approvals, follow-ups, nested project reqs/phases/tickets |
-| **Missing primary list GETs** | **projects**, **documents**, **comms conversations** (messages nested only) |
+| **Strong create/action + collection GETs for ready desks** | OpenAPI builds (**200** paths) |
+| Collection lists in play | clients (`q`/`status`), queries, projects, documents, conversations, questionnaires, briefs, approvals, follow-ups (open), phases, milestones, tickets-by-project, baselines |
+| API-first / no ready desk | Identity, Auth, Access, Capacity, Config, Assignments, Status engine (and later-phase modules) |
 
 ### Database
 
-| Prefix | Present in models/migrations |
+| Fact | Detail |
 |---|---|
-| `gov_`, `sys_`, `ops_`, `org_`, `auth_`, `cfg_` | yes |
-| `crm_`, `com_`, `req_`, `prj_`, `doc_`, `pm_` | yes |
-| `tkt_`, `asg_`, `wfe_`, `apr_`, `flu_` | yes |
+| Alembic chain | `20260810_0001` … `20260811_0020` (20 revisions covering MOD-000…340 table sets) |
+| Test strategy | **SQLite memory + `create_all`** in integration fixtures — not Alembic-against-Postgres |
+| Risk | **RLS and Postgres-specific behavior unproven in CI** |
+| Web visibility | Hardcoded default org/actor headers — data in other orgs will not appear |
 
-| Risk | Detail |
-|---|---|
-| Tests use **SQLite memory + create_all** | Alembic path + **Postgres RLS not exercised** |
-| Local data visibility | Web uses hardcoded org `…0001` / actor `…0101` — data in other orgs won’t show |
+### Frontend (ready desks)
 
-### Frontend
-
-| Ready desk | Loads org collection from API? | Notes |
+| Ready desk | Org collection from API? | Notes |
 |---|---|---|
-| `/` Dashboard | **Yes** | Live KPIs from projects/approvals/follow-ups/queries |
-| `/clients` | **Yes** | Search is client-side on first 50 |
-| `/queries` | **Yes** | Fixed list+filters (`eb95c1a`) |
-| `/comms` | **Yes** | Inbox list + thread |
-| `/requirements` | **Yes** | Questionnaires + briefs from API; links to crm_query |
-| `/projects` | **Yes** | Inventory + search; sets workspace project |
-| `/documents` | **Yes** | Library + search; reload keeps selection |
+| `/` Dashboard | **Yes** | Live counts from projects/approvals/follow-ups/queries |
+| `/clients` | **Yes** | Server `q` search + paging meta |
+| `/queries` | **Yes** | Status / SLA filters |
+| `/comms` | **Yes** | Conversation inbox |
+| `/projects` | **Yes** | Inventory + workspace selection |
+| `/requirements` | **Yes** | Questionnaires + briefs; links to `crm_query`/project |
+| `/roadmap` | **Yes** | Phases + milestones; project picker |
+| `/tickets` | **Yes** | Scoped by workspace/project |
+| `/documents` | **Yes** | Library reload |
+| `/follow-ups` | **Yes** | Open list + evidence/close |
+| `/approvals` | **Yes** | Queue + decide (needs Approver/Admin role for approve) |
+| `/governance/baselines` | **Yes** | List/filter strong |
 
-FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 4+ placeholders.
-
----
+FE still `ready: false` (placeholders): My Work, Inbox, Opportunities, Quality, AI Ops, Release, most Admin, ADRs, CRs, audit logs UI, etc.
 
 ## Module scorecard (honest)
 
-| Module | Backend M1 | DB/migrate | API tests | FE desk | E2E “works fine”? |
+| Module | Backend M1 | Migrate | API tests | FE desk | E2E “works fine”? |
 |---|---|---|---|---|---|
-| MOD-000 Governance | yes | yes | yes | baselines yes | **partial** (AC-901 blocked) |
-| MOD-020 Kernel | yes | outbox yes | unit yes | n/a | **partial** (broker bridge deferred) |
-| MOD-030 Platform | helpers only | no tables | unit only | n/a | **partial** |
+| MOD-000 Governance | yes | yes | yes | baselines | **partial** (AC-901 blocked) |
+| MOD-020 Kernel | yes | outbox | unit + relay | n/a | **partial** (broker deferred) |
+| MOD-030 Platform | helpers | no tables | unit | n/a | **partial** |
 | MOD-040 Observability | yes | yes | yes | no dedicated ready desk | **partial** |
 | MOD-100 Identity | yes | yes | yes | soon | **API-only in UI** |
 | MOD-110 Auth | yes | yes | yes | soon | **header stub, not Auth0** |
@@ -84,39 +91,32 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 | MOD-130 Capacity | yes | yes | yes | soon | **API-only in UI** |
 | MOD-140 Config | yes | yes | yes | soon | **API-only in UI** |
 | MOD-200 Clients | yes | yes | yes | ready | **mostly** |
-| MOD-210 Queries | yes | yes | yes | ready | **mostly** (post list fix) |
-| MOD-220 Comms | yes | yes | yes | ready | **mostly** (inbox list wired) |
-| MOD-230 Requirements | yes | yes | yes | ready | **mostly** (questionnaire/brief lists wired) |
-| MOD-240 Projects | yes | yes | yes | ready | **mostly** (inventory list wired) |
-| MOD-250 Documents | yes | yes | yes | ready | **mostly** (library list wired) |
-| MOD-260 Roadmap | yes | yes | yes | ready | **mostly** (phases + milestones list wired) |
-| MOD-300 Tickets | yes | yes | yes | ready | **partial** (project UUID gate) |
+| MOD-210 Queries | yes | yes | yes | ready | **mostly** |
+| MOD-220 Comms | yes | yes | yes | ready | **mostly** |
+| MOD-230 Requirements | yes | yes | yes | ready | **mostly** |
+| MOD-240 Projects | yes | yes | yes | ready | **mostly** |
+| MOD-250 Documents | yes | yes | yes | ready | **mostly** |
+| MOD-260 Roadmap | yes | yes | yes | ready | **mostly** |
+| MOD-300 Tickets | yes | yes | yes | ready | **mostly** (project-scoped) |
 | MOD-310 Assignments | yes | yes | yes | n/a | **API-only** |
 | MOD-320 Status engine | yes | yes | yes | n/a | **API-only** |
-| MOD-330 Approvals | yes | yes | yes | ready | **mostly** (queue + decide wired) |
-| MOD-340 Follow-ups | yes | yes | yes | ready | **mostly** (open list + close wired) |
+| MOD-330 Approvals | yes | yes | yes | ready | **mostly** |
+| MOD-340 Follow-ups | yes | yes | yes | ready | **mostly** (open list; rule_version demo UUID on create) |
 
----
+## Remaining gaps (priority)
 
-## Top gaps (severity)
-
-1. **P0** Header-only auth / hardcoded org-actor (spoofable locally)  
-2. ~~**P0** Missing `GET /projects`~~ **fixed** — list + get + Projects desk inventory  
-3. ~~**P0** Missing `GET /comms/conversations`~~ **fixed** — list + Messages inbox  
-4. ~~**P0** Missing `GET /documents`~~ **fixed** — list + get + Documents library  
-5. ~~**P0** Dashboard ready with mock data~~ **fixed** — live org counts + attention feed  
-6. ~~**P1** Clients search not server-backed~~ **fixed** — `GET /clients?q=` filters legal_name/code/trading_name/industry  
-7. ~~**P1** Requirements desk localStorage entity/version loss~~ **fixed** — questionnaire inventory, published version, answers, briefs reload from API; discovery links to `crm_query` / project  
-8. ~~**P1** Approvals & Follow-ups APIs unused by FE~~ **fixed** — desks wired; nav `ready: true`  
-9. ~~**P2** Milestone list not reloadable~~ **fixed** — `GET /roadmap/projects/{id}/milestones` + Roadmap desk inventory  
-10. **P2** Postgres RLS / Alembic never proven in CI  
-
-**P0 list follow-up (2026-08-11):** `list_projects`, `list_conversations`, `list_documents` (+ `get_project` / `get_document`) wired; desks load org collections with search; integration tests extended.
----
+1. **P0** Header-only auth / hardcoded org-actor (spoofable; not Auth0)  
+2. **P0** Postgres RLS + `alembic upgrade head` not proven in CI  
+3. **P1** AC-901 human Done blocked on every module (intentional)  
+4. **P1** No dedicated FE for Identity/Auth/Access/Capacity/Config/Assignments/Status engine  
+5. **P1** Follow-ups create uses synthetic `rule_version_id` when no effective config  
+6. **P2** Outbox SNS/SQS consumer (MOD-500)  
+7. **P2** Temporal / notifications platform items still deferred/n/a by design  
+8. **P2** Admin/Quality/AI/Release nav placeholders ahead of their modules  
 
 ## Conclusion
 
-**Backend + migrations + automated tests for MOD-000…340 M1 are largely in place and currently green (119 pytest).**  
-**They are not all “working fine” as a product**—especially frontend readiness claims for Projects/Comms/Documents/Dashboard, auth stub, and unproven Postgres RLS.
+**Yes for “M1 backend + SQLite tests + OpenAPI + ready desk wiring are largely sound.”**  
+**No for “all MOD-000…340 fully working in production sense.”**
 
-Human **AC-901** remains blocked on every module.
+Treat checklist `done` as **M1 implementation claimed**, not production sign-off. Human **AC-901** remains blocked everywhere.
