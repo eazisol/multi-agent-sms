@@ -32,7 +32,7 @@
 | MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 7 | 8 | 1 | 0 | Blocked |
 | MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
+| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
 | MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 | MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 332, partial 95, n/a 141, blocked 13, open 1168
+**Totals:** 1749 tasks — done 359, partial 103, n/a 148, blocked 14, open 1125
 
 ## Module index (plan order)
 
@@ -1822,76 +1822,119 @@
 
 #### Main points
 
-- [ ] **MOD-230-MP-001:** Implement and verify questionnaires.
-- [ ] **MOD-230-MP-002:** Implement and verify questionnaire versions.
-- [ ] **MOD-230-MP-003:** Implement and verify answers.
-- [ ] **MOD-230-MP-004:** Implement and verify requirement briefs.
-- [ ] **MOD-230-MP-005:** Implement and verify clarification requests.
-- [ ] **MOD-230-MP-006:** Implement and verify completeness scoring.
+- [x] **MOD-230-MP-001:** Implement and verify questionnaires.  
+  - Evidence/note: req_questionnaires
+- [x] **MOD-230-MP-002:** Implement and verify questionnaire versions.  
+  - Evidence/note: req_questionnaire_versions
+- [x] **MOD-230-MP-003:** Implement and verify answers.  
+  - Evidence/note: req_answers
+- [x] **MOD-230-MP-004:** Implement and verify requirement briefs.  
+  - Evidence/note: req_requirement_briefs
+- [x] **MOD-230-MP-005:** Implement and verify clarification requests.  
+  - Evidence/note: req_clarification_requests
+- [x] **MOD-230-MP-006:** Implement and verify completeness scoring.  
+  - Evidence/note: req_completeness_scores
 
 #### Database / data design
 
-- [ ] **MOD-230-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **questionnaires**.
-- [ ] **MOD-230-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **questionnaire versions**.
-- [ ] **MOD-230-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **answers**.
-- [ ] **MOD-230-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **requirement briefs**.
-- [ ] **MOD-230-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **clarification requests**.
-- [ ] **MOD-230-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **completeness scoring**.
+- [x] **MOD-230-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **questionnaires**.  
+  - Evidence/note: migration 20260811_0012 req_questionnaires
+- [x] **MOD-230-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **questionnaire versions**.  
+  - Evidence/note: req_questionnaire_versions
+- [x] **MOD-230-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **answers**.  
+  - Evidence/note: req_answers
+- [x] **MOD-230-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **requirement briefs**.  
+  - Evidence/note: req_requirement_briefs
+- [x] **MOD-230-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **clarification requests**.  
+  - Evidence/note: req_clarification_requests
+- [x] **MOD-230-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **completeness scoring**.  
+  - Evidence/note: req_completeness_scores
 
 #### Backend
 
-- [ ] **MOD-230-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-230-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-230-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-230-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-230-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: RequirementsService
+- [x] **MOD-230-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: 95% completeness + gap owners + brief approve
+- [~] **MOD-230-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox on brief approve
+- [x] **MOD-230-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
+  - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [ ] **MOD-230-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-230-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-230-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-230-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: /api/v1/requirements endpoints
+- [~] **MOD-230-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: CRUD-lite actions
+- [~] **MOD-230-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: schemas present
 
 #### Frontend
 
-- [ ] **MOD-230-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-230-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-230-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-230-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [-] **MOD-230-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: FE deferred
+- [-] **MOD-230-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: FE deferred
+- [-] **MOD-230-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
+  - Evidence/note: FE deferred
+- [-] **MOD-230-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: FE deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-230-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-230-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-230-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-230-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [~] **MOD-230-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: publish/answer/score/approve flow
+- [-] **MOD-230-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal deferred
+- [~] **MOD-230-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox on brief approve
+- [-] **MOD-230-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
+  - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [ ] **MOD-230-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-230-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-230-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-230-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [~] **MOD-230-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org/client scope
+- [x] **MOD-230-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: RLS on req_* tables
+- [~] **MOD-230-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit omits answer body text
+- [x] **MOD-230-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit on create/publish/score/approve
 
 #### Testing / verification
 
-- [ ] **MOD-230-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-230-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-230-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-230-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-230-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-230-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
+  - Evidence/note: tests/unit/requirements
+- [x] **MOD-230-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: tests/integration/requirements
+- [~] **MOD-230-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: client scope checks in service
+- [-] **MOD-230-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+  - Evidence/note: no Temporal/LangGraph suite
+- [x] **MOD-230-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: ruff/mypy/pytest
 
 #### Documentation
 
-- [ ] **MOD-230-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-230-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-230-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: docs/modules/MOD-230/README.md
+- [x] **MOD-230-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
+  - Evidence/note: VERIFICATION + TEMPLATE_TASK_RATIONALE
 
 #### Acceptance gate
 
-- [ ] **MOD-230-AC-001:** At least 95% of mandatory fields are answered or explicitly unavailable.
-- [ ] **MOD-230-AC-002:** Unanswered mandatory items have an owner or follow-up.
-- [ ] **MOD-230-AC-003:** The brief is versioned and human-approved.
-- [ ] **MOD-230-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-230-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-230-AC-001:** At least 95% of mandatory fields are answered or explicitly unavailable.  
+  - Evidence/note: 95% mandatory covered or unavailable
+- [x] **MOD-230-AC-002:** Unanswered mandatory items have an owner or follow-up.  
+  - Evidence/note: gap clarifications require owner
+- [x] **MOD-230-AC-003:** The brief is versioned and human-approved.  
+  - Evidence/note: versioned brief + human approve
+- [x] **MOD-230-AC-900:** All Critical and High defects for this module are resolved.  
+  - Evidence/note: No Critical/High MOD-230 defects filed
+- [!] **MOD-230-AC-901:** The responsible human owner reviews and approves the completion evidence.  
+  - Evidence/note: Human owner approval required
 
 #### Module completion
 
