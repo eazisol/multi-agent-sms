@@ -884,10 +884,11 @@ def main() -> None:
     lines.append("## How to read this")
     lines.append("")
     lines.append("```")
-    lines.append("Module N: MOD-xxx Title")
-    lines.append("  M1: [ ] Main task group (example: API)")
-    lines.append("       M1-1: [ ] First sub-task")
-    lines.append("       M1-2: [ ] Second sub-task")
+    lines.append("### Module N: [ ] MOD-xxx — Title")
+    lines.append("")
+    lines.append("- Main task group (example: API)")
+    lines.append("  - [ ] First sub-task (`MOD-xxx-API-001`)")
+    lines.append("  - [ ] Second sub-task (`MOD-xxx-API-002`)")
     lines.append("```")
     lines.append("")
     lines.append("| Mark | Meaning |")
@@ -898,7 +899,7 @@ def main() -> None:
     lines.append("| `[!]` | Blocked (needs human or external dependency) |")
     lines.append("| `[ ]` | Not started |")
     lines.append("")
-    lines.append("Plan IDs (like `MOD-000-API-001`) are shown in parentheses for traceability.")
+    lines.append("Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.")
     lines.append("")
 
     # Quick scoreboard
@@ -956,21 +957,16 @@ def main() -> None:
         lines.append(f"### Module {mod_num}: {mod_box} {mod['id']} — {mod['title']}")
         lines.append("")
 
-        m_idx = 0
         for cat in CAT_ORDER:
             items = groups.get(cat)
             if not items:
                 continue
-            m_idx += 1
             sub_statuses = [STATUS.get(tid, ("", ""))[0] for tid, _ in items]
             main_box = box(group_status(sub_statuses))
-            lines.append(f"M{m_idx}: {main_box} {CAT_LABELS[cat]}")
-            for sub_i, (tid, desc) in enumerate(items, start=1):
+            lines.append(f"- {main_box} **{CAT_LABELS[cat]}**")
+            for tid, desc in items:
                 st = STATUS.get(tid, ("", ""))[0]
-                lines.append(
-                    f"     M{m_idx}-{sub_i}: {box(st)} {clean_desc(desc)}  "
-                    f"({tid})"
-                )
+                lines.append(f"  - {box(st)} {clean_desc(desc)} (`{tid}`)")
             lines.append("")
 
     lines.append("---")
