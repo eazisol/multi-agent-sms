@@ -256,3 +256,18 @@ def test_phases_milestones_mapping_independent_completion(client: TestClient) ->
     )
     assert phases.status_code == 200
     assert len(phases.json()) == 2
+
+    milestones = client.get(
+        f"/api/v1/roadmap/projects/{project_id}/milestones", headers=headers
+    )
+    assert milestones.status_code == 200, milestones.text
+    assert any(row["id"] == ms_id for row in milestones.json())
+
+    by_phase = client.get(
+        f"/api/v1/roadmap/projects/{project_id}/milestones",
+        headers=headers,
+        params={"phase_id": discover_id},
+    )
+    assert by_phase.status_code == 200
+    assert all(row["phase_id"] == discover_id for row in by_phase.json())
+    assert any(row["id"] == ms_id for row in by_phase.json())

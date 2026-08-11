@@ -386,6 +386,20 @@ class RoadmapService:
             )
         )
 
+    def list_milestones(
+        self, project_id: UUID, *, phase_id: UUID | None = None
+    ) -> list[Milestone]:
+        self._get_project(project_id)
+        stmt = select(Milestone).where(
+            Milestone.organization_id == self.ctx.organization_id,
+            Milestone.project_id == project_id,
+        )
+        if phase_id is not None:
+            self._get_phase(phase_id)
+            stmt = stmt.where(Milestone.phase_id == phase_id)
+        stmt = stmt.order_by(Milestone.target_date.asc(), Milestone.code.asc())
+        return list(self.db.scalars(stmt).all())
+
     def _get_project(self, project_id: UUID) -> Project:
         row = self.db.scalar(select(Project).where(Project.id == project_id))
         if row is None or row.organization_id != self.ctx.organization_id:

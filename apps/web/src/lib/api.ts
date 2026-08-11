@@ -658,6 +658,21 @@ export async function listPhases(
   return parse<Phase[]>(response);
 }
 
+export async function listMilestones(
+  session: SessionState,
+  projectId: string,
+  params: { phase_id?: string } = {},
+): Promise<Milestone[]> {
+  const query = new URLSearchParams();
+  if (params.phase_id) query.set("phase_id", params.phase_id);
+  const qs = query.toString();
+  const response = await fetch(
+    `${apiBase()}/api/v1/roadmap/projects/${projectId}/milestones${qs ? `?${qs}` : ""}`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<Milestone[]>(response);
+}
+
 export async function completePhase(
   session: SessionState,
   phaseId: string,

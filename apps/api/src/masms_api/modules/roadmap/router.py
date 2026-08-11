@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
@@ -49,6 +49,18 @@ def list_phases(
     project_id: UUID, service: RoadmapService = Depends(_service)
 ) -> list[PhaseRead]:
     return [PhaseRead.model_validate(p) for p in service.list_phases(project_id)]
+
+
+@router.get("/projects/{project_id}/milestones", response_model=list[MilestoneRead])
+def list_milestones(
+    project_id: UUID,
+    phase_id: UUID | None = Query(default=None),
+    service: RoadmapService = Depends(_service),
+) -> list[MilestoneRead]:
+    return [
+        MilestoneRead.model_validate(m)
+        for m in service.list_milestones(project_id, phase_id=phase_id)
+    ]
 
 
 @router.post("/phases/{phase_id}/complete", response_model=PhaseRead)

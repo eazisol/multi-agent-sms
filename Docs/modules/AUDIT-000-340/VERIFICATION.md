@@ -89,7 +89,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 | MOD-230 Requirements | yes | yes | yes | ready | **mostly** (questionnaire/brief lists wired) |
 | MOD-240 Projects | yes | yes | yes | ready | **mostly** (inventory list wired) |
 | MOD-250 Documents | yes | yes | yes | ready | **mostly** (library list wired) |
-| MOD-260 Roadmap | yes | yes | yes | ready | **partial** (project UUID gate) |
+| MOD-260 Roadmap | yes | yes | yes | ready | **mostly** (phases + milestones list wired) |
 | MOD-300 Tickets | yes | yes | yes | ready | **partial** (project UUID gate) |
 | MOD-310 Assignments | yes | yes | yes | n/a | **API-only** |
 | MOD-320 Status engine | yes | yes | yes | n/a | **API-only** |
@@ -108,7 +108,7 @@ FE `ready: false` while APIs exist: `/approvals`, `/follow-ups`, and many Phase 
 6. **P1** Clients search not server-backed  
 7. ~~**P1** Requirements desk localStorage entity/version loss~~ **fixed** — questionnaire inventory, published version, answers, briefs reload from API; discovery links to `crm_query` / project  
 8. ~~**P1** Approvals & Follow-ups APIs unused by FE~~ **fixed** — desks wired; nav `ready: true`  
-9. **P2** Milestone list not reloadable  
+9. ~~**P2** Milestone list not reloadable~~ **fixed** — `GET /roadmap/projects/{id}/milestones` + Roadmap desk inventory  
 10. **P2** Postgres RLS / Alembic never proven in CI  
 
 **P0 list follow-up (2026-08-11):** `list_projects`, `list_conversations`, `list_documents` (+ `get_project` / `get_document`) wired; desks load org collections with search; integration tests extended.
