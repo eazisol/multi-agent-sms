@@ -6,6 +6,10 @@ const apiOrigin =
   "http://127.0.0.1:8000";
 
 const nextConfig: NextConfig = {
+  // Keep prod build output (`.next`) separate from `next dev` (`.next-dev`)
+  // so `npm run build` cannot invalidate an active local session and cause
+  // `/_next/static/...` 404s in the browser.
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   async rewrites() {
     // Same-origin /api/* → FastAPI. Avoids browser CORS during local/dev UI work.
     return [

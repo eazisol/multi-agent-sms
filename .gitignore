@@ -14,6 +14,7 @@ build/
 # Node
 node_modules/
 .next/
+.next-dev/
 out/
 *.tsbuildinfo
 apps/web/.env.local
