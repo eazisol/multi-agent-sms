@@ -27,6 +27,7 @@ from masms_api.modules.tickets import models as _tickets_models  # noqa: F401
 from masms_api.modules.assignments import models as _assignments_models  # noqa: F401
 from masms_api.modules.statusengine import models as _statusengine_models  # noqa: F401
 from masms_api.modules.approvalgates import models as _approvalgates_models  # noqa: F401
+from masms_api.modules.followups import models as _followups_models  # noqa: F401
 from masms_api.observability import models as _observability_models  # noqa: F401
 
 config = context.config

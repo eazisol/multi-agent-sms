@@ -50,7 +50,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 19 | MOD-310 | Blocked | 25 | 8 | 0 |
 | 20 | MOD-320 | Blocked | 27 | 8 | 0 |
 | 21 | MOD-330 | Blocked | 29 | 8 | 0 |
-| 22 | MOD-340 | Not started | 0 | 0 | 45 |
+| 22 | MOD-340 | Blocked | 29 | 8 | 0 |
 | 23 | MOD-350 | Not started | 0 | 0 | 43 |
 | 24 | MOD-360 | Not started | 0 | 0 | 45 |
 | 25 | MOD-370 | Not started | 0 | 0 | 45 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 588 · partial 160 · n/a 164 · blocked 21 · open 816
+**All tasks:** 1749 · done 617 · partial 168 · n/a 171 · blocked 22 · open 771
 
 ## Phase 0 - Governance and Foundation
 
@@ -1482,72 +1482,72 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (`MOD-330-AC-900`)
   - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-330-AC-901`)
 
-### Module 22: [ ] MOD-340 — Bidirectional Follow-Ups, Reminders, SLA Pauses, and Escalations
+### Module 22: [!] MOD-340 — Bidirectional Follow-Ups, Reminders, SLA Pauses, and Escalations
 
-- [ ] **Main goals**
-  - [ ] Build and verify: follow-ups (`MOD-340-MP-001`)
-  - [ ] Build and verify: reminders (`MOD-340-MP-002`)
-  - [ ] Build and verify: escalations (`MOD-340-MP-003`)
-  - [ ] Build and verify: parent-child links (`MOD-340-MP-004`)
-  - [ ] Build and verify: SLA pauses (`MOD-340-MP-005`)
-  - [ ] Build and verify: business-time deadlines (`MOD-340-MP-006`)
-  - [ ] Build and verify: closure evidence (`MOD-340-MP-007`)
+- [x] **Main goals**
+  - [x] Build and verify: follow-ups (`MOD-340-MP-001`)
+  - [x] Build and verify: reminders (`MOD-340-MP-002`)
+  - [x] Build and verify: escalations (`MOD-340-MP-003`)
+  - [x] Build and verify: parent-child links (`MOD-340-MP-004`)
+  - [x] Build and verify: SLA pauses (`MOD-340-MP-005`)
+  - [x] Build and verify: business-time deadlines (`MOD-340-MP-006`)
+  - [x] Build and verify: closure evidence (`MOD-340-MP-007`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: follow-ups (`MOD-340-DB-001`)
-  - [ ] Design and migrate data for: reminders (`MOD-340-DB-002`)
-  - [ ] Design and migrate data for: escalations (`MOD-340-DB-003`)
-  - [ ] Design and migrate data for: parent-child links (`MOD-340-DB-004`)
-  - [ ] Design and migrate data for: SLA pauses (`MOD-340-DB-005`)
-  - [ ] Design and migrate data for: business-time deadlines (`MOD-340-DB-006`)
-  - [ ] Design and migrate data for: closure evidence (`MOD-340-DB-007`)
+- [x] **Database**
+  - [x] Design and migrate data for: follow-ups (`MOD-340-DB-001`)
+  - [x] Design and migrate data for: reminders (`MOD-340-DB-002`)
+  - [x] Design and migrate data for: escalations (`MOD-340-DB-003`)
+  - [x] Design and migrate data for: parent-child links (`MOD-340-DB-004`)
+  - [x] Design and migrate data for: SLA pauses (`MOD-340-DB-005`)
+  - [x] Design and migrate data for: business-time deadlines (`MOD-340-DB-006`)
+  - [x] Design and migrate data for: closure evidence (`MOD-340-DB-007`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-340-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-340-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-340-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-340-BE-004`)
+- [~] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-340-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-340-BE-002`)
+  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-340-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-340-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-340-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-340-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-340-API-003`)
+- [~] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-340-API-001`)
+  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-340-API-002`)
+  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-340-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-340-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-340-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-340-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-340-FE-004`)
+- [~] **Frontend**
+  - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-340-FE-001`)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-340-FE-002`)
+  - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-340-FE-003`)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-340-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-340-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-340-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-340-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-340-WF-004`)
+- [~] **Workflow / agents / events**
+  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-340-WF-001`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-340-WF-002`)
+  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-340-WF-003`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-340-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-340-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-340-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-340-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-340-SEC-004`)
+- [~] **Security / audit**
+  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-340-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-340-SEC-002`)
+  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-340-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-340-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-340-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-340-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-340-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-340-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-340-QA-005`)
+- [~] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-340-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-340-QA-002`)
+  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-340-QA-003`)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-340-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-340-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-340-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-340-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-340-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-340-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] Every request has owner, deadline, rule version, and closure condition. (`MOD-340-AC-001`)
-  - [ ] Overdue items trigger configured reminders and escalation. (`MOD-340-AC-002`)
-  - [ ] Parent-child chains preserve return routing. (`MOD-340-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-340-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-340-AC-901`)
+- [!] **Acceptance / Done gate**
+  - [x] Every request has owner, deadline, rule version, and closure condition. (`MOD-340-AC-001`)
+  - [x] Overdue items trigger configured reminders and escalation. (`MOD-340-AC-002`)
+  - [x] Parent-child chains preserve return routing. (`MOD-340-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-340-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-340-AC-901`)
 
 ### Module 23: [ ] MOD-350 — Temporal Orchestrator and Durable Business Workflows
 
