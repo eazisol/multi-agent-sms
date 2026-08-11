@@ -1,10 +1,15 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { EmptyState, StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   addAcceptanceCriterion,
@@ -25,6 +30,9 @@ export function ProjectsDeskPage() {
   const { session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+  const [showReq, setShowReq] = useState(false);
   const [projectId, setProjectId] = useState("");
   const [code, setCode] = useState("");
   const [title, setTitle] = useState("");
@@ -43,16 +51,24 @@ export function ProjectsDeskPage() {
       setRequirements([]);
       return;
     }
+    setLoading(true);
     try {
       setRequirements(await listRequirements(session, projectId));
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Load requirements failed");
+      setError(err instanceof ApiError ? err.problem.message : "Unable to load requirements");
+    } finally {
+      setLoading(false);
     }
   }, [projectId, session]);
 
   useEffect(() => {
     void refreshRequirements();
   }, [refreshRequirements]);
+
+  function applyWorkspaceProject(id: string) {
+    setProjectId(id);
+    setWorkspaceProjectId(id);
+  }
 
   async function onCreateProject(event: FormEvent) {
     event.preventDefault();
@@ -63,11 +79,13 @@ export function ProjectsDeskPage() {
         code: code.trim().toUpperCase(),
         title: title.trim(),
       });
-      setProjectId(project.id);
-      setWorkspaceProjectId(project.id);
-      setOk(`Project ${project.code} created`);
+      applyWorkspaceProject(project.id);
+      setOk(`${project.code} created and selected as the workspace project`);
+      setCode("");
+      setTitle("");
+      setShowCreate(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create project failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create project");
     }
   }
 
@@ -93,10 +111,13 @@ export function ProjectsDeskPage() {
         text: "Acceptance criterion for first version",
       });
       setLastVersion(version);
-      setOk(`Requirement ${requirement.requirement_code} v${version.version_number} drafted`);
+      setOk(`${requirement.requirement_code} draft ready for review`);
+      setReqTitle("");
+      setStatement("");
+      setShowReq(false);
       await refreshRequirements();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Requirement draft failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not draft requirement");
     }
   }
 
@@ -110,13 +131,13 @@ export function ProjectsDeskPage() {
       setOk("Requirement version approved");
       await refreshRequirements();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Approve failed");
+      setError(err instanceof ApiError ? err.problem.message : "Approval failed");
     }
   }
 
   async function onApproveSrs() {
     if (!projectId || !lastVersion || lastVersion.status !== "approved") {
-      setError("Need an approved requirement version first");
+      setError("Approve a requirement version before creating an SRS baseline");
       return;
     }
     setError(null);
@@ -124,149 +145,240 @@ export function ProjectsDeskPage() {
     try {
       const baseline = await createSrsBaseline(session, {
         project_id: projectId,
-        title: "SRS from desk",
-        summary: "Created from Projects desk",
+        title: "Project SRS",
+        summary: "SRS baseline from approved requirements",
         requirement_version_ids: [lastVersion.id],
       });
       const approved = await approveSrsBaseline(session, baseline.id);
-      setOk(`SRS v${approved.version_number} approved`);
+      setOk(`SRS version ${approved.version_number} approved`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "SRS approve failed");
+      setError(err instanceof ApiError ? err.problem.message : "SRS approval failed");
     }
   }
 
   return (
-    <AppShell title="Projects">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Projects &amp; SRS</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-240 project records, requirement versions, and human-approved SRS baselines.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+    <AppShell title="Projects" breadcrumbs={["Project Delivery", "Projects"]}>
+      <PageHeader
+        title="Projects"
+        description="Delivery homes for clients â€” create a project, draft must-have requirements, and approve an SRS baseline."
+        actions={
+          can(session.variant, "create") ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              New project
+            </Button>
+          ) : null
+        }
+      />
 
-        {can(session.variant, "create") ? (
-          <form
-            onSubmit={onCreateProject}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-3"
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+
+      <Card className="mb-6">
+        <CardBody>
+          <Field
+            label="Workspace project"
+            hint="Use the project created on Projects. Other desks (Roadmap, Tickets, Documents) follow this selection."
           >
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Project code</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm md:col-span-2">
-              <span>Title</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:w-fit"
+            <Input
+              value={projectId}
+              onChange={(e) => applyWorkspaceProject(e.target.value.trim())}
+              placeholder="Select or create a project above"
+            />
+          </Field>
+          {projectId ? (
+            <p className="mt-2 text-xs text-[var(--muted)]">
+              Workspace linked â€” requirements below belong to this project.
+            </p>
+          ) : null}
+        </CardBody>
+      </Card>
+
+      {showCreate ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Create project</h2>
+            <p className="text-sm text-[var(--muted)]">
+              A short code and title are enough to open delivery work for a client engagement.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form
+              onSubmit={onCreateProject}
+              className="grid gap-4 md:grid-cols-3"
+              aria-label="Create project"
             >
-              Create project
-            </button>
-          </form>
-        ) : null}
-
-        <label className="flex flex-col gap-1 text-sm">
-          <span>Active project id</span>
-          <input
-            className="rounded border border-[var(--line)] bg-white px-3 py-2 font-mono text-xs"
-            value={projectId}
-            onChange={(e) => {
-              setProjectId(e.target.value);
-              setWorkspaceProjectId(e.target.value);
-            }}
-          />
-        </label>
-
-        {projectId && can(session.variant, "create") ? (
-          <form
-            onSubmit={onCreateRequirement}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4"
-          >
-            <h3 className="font-medium">Draft requirement + AC</h3>
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="flex flex-col gap-1 text-sm">
-                <span>Requirement code</span>
-                <input
+              <Field label="Project code">
+                <Input
                   required
-                  className="rounded border border-[var(--line)] px-3 py-2"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="EARTH"
+                />
+              </Field>
+              <Field label="Title" className="md:col-span-2">
+                <Input
+                  required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="EarthCo client portal"
+                />
+              </Field>
+              <div className="flex justify-end gap-2 md:col-span-3">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create project</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
+
+      {projectId && can(session.variant, "create") ? (
+        <div className="mb-4 flex flex-wrap gap-2">
+          <Button variant="outline" onClick={() => setShowReq((v) => !v)}>
+            <Plus className="h-4 w-4" />
+            Draft requirement
+          </Button>
+          {lastVersion ? (
+            <>
+              <Button
+                variant="outline"
+                disabled={!can(session.variant, "approve")}
+                onClick={() => void onApproveVersion()}
+              >
+                Approve last version
+              </Button>
+              <Button
+                variant="outline"
+                disabled={!can(session.variant, "approve")}
+                onClick={() => void onApproveSrs()}
+              >
+                Create &amp; approve SRS
+              </Button>
+            </>
+          ) : null}
+        </div>
+      ) : null}
+
+      {showReq && projectId && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Draft requirement</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Capture a must-have statement and a first acceptance criterion.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form
+              onSubmit={onCreateRequirement}
+              className="grid gap-4 md:grid-cols-2"
+              aria-label="Draft requirement"
+            >
+              <Field label="Requirement code">
+                <Input
+                  required
                   value={reqCode}
                   onChange={(e) => setReqCode(e.target.value)}
+                  placeholder="REQ-001"
                 />
-              </label>
-              <label className="flex flex-col gap-1 text-sm">
-                <span>Title</span>
-                <input
+              </Field>
+              <Field label="Title">
+                <Input
                   required
-                  className="rounded border border-[var(--line)] px-3 py-2"
                   value={reqTitle}
                   onChange={(e) => setReqTitle(e.target.value)}
+                  placeholder="User can sign in securely"
                 />
-              </label>
-            </div>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Statement</span>
-              <textarea
-                required
-                className="min-h-20 rounded border border-[var(--line)] px-3 py-2"
-                value={statement}
-                onChange={(e) => setStatement(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:w-fit"
-            >
-              Create draft version
-            </button>
-          </form>
-        ) : null}
+              </Field>
+              <Field label="Statement" className="md:col-span-2">
+                <Textarea
+                  required
+                  rows={3}
+                  value={statement}
+                  onChange={(e) => setStatement(e.target.value)}
+                  placeholder="The system shallâ€¦"
+                />
+              </Field>
+              <div className="flex justify-end gap-2 md:col-span-2">
+                <Button type="button" variant="ghost" onClick={() => setShowReq(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create draft</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
 
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            className="rounded border border-[var(--line)] bg-white px-3 py-1.5 text-sm"
-            onClick={() => void onApproveVersion()}
-            disabled={!lastVersion || !can(session.variant, "approve")}
-          >
-            Approve last requirement version
-          </button>
-          <button
-            type="button"
-            className="rounded border border-[var(--line)] bg-white px-3 py-1.5 text-sm"
-            onClick={() => void onApproveSrs()}
-            disabled={!lastVersion || !can(session.variant, "approve")}
-          >
-            Create &amp; approve SRS
-          </button>
-        </div>
-
-        {requirements.length === 0 ? (
-          <EmptyState title="No requirements" body="Create a project requirement draft above." />
+      <Card>
+        <CardHeader className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="font-display text-lg">Requirements</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Must-have items tracked toward the project SRS.
+            </p>
+          </div>
+          {lastVersion ? <StatusBadge status={lastVersion.status} /> : null}
+        </CardHeader>
+        {!projectId ? (
+          <CardBody>
+            <EmptyState
+              title="No project selected"
+              body="Create a project to start drafting requirements and building an approved SRS."
+              action={
+                can(session.variant, "create") ? (
+                  <Button onClick={() => setShowCreate(true)}>
+                    <Plus className="h-4 w-4" />
+                    New project
+                  </Button>
+                ) : null
+              }
+            />
+          </CardBody>
+        ) : loading ? (
+          <SkeletonRows />
+        ) : requirements.length === 0 ? (
+          <CardBody>
+            <EmptyState
+              title="No requirements yet"
+              body="Draft the first must-have so the team can review and approve an SRS baseline."
+              action={
+                can(session.variant, "create") ? (
+                  <Button onClick={() => setShowReq(true)}>Draft requirement</Button>
+                ) : null
+              }
+            />
+          </CardBody>
         ) : (
-          <ul className="space-y-2 rounded border border-[var(--line)] bg-white p-4 text-sm">
-            {requirements.map((item) => (
-              <li key={item.id}>
-                <strong>{item.requirement_code}</strong> — {item.title}{" "}
-                <span className="text-[var(--muted)]">({item.status})</span>
-              </li>
-            ))}
-          </ul>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Code</th>
+                  <th className="px-5 py-3 font-medium">Title</th>
+                  <th className="px-5 py-3 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requirements.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+                  >
+                    <td className="px-5 py-3 font-medium">{item.requirement_code}</td>
+                    <td className="px-5 py-3">{item.title}</td>
+                    <td className="px-5 py-3">
+                      <StatusBadge status={item.status} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
-      </div>
+      </Card>
     </AppShell>
   );
 }

@@ -1,10 +1,15 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { Plus, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { EmptyState, StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   approveRequirementsBrief,
@@ -36,6 +41,7 @@ export function RequirementsDeskPage() {
   const { session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+  const [showBootstrap, setShowBootstrap] = useState(false);
   const [code, setCode] = useState("intake");
   const [title, setTitle] = useState("Discovery intake");
   const [versionId, setVersionId] = useState("");
@@ -86,9 +92,10 @@ export function RequirementsDeskPage() {
       });
       const published = await publishQuestionnaireVersion(session, version.id);
       setVersionId(published.id);
-      setOk(`Published questionnaire ${questionnaire.code} v${published.version_number}`);
+      setOk(`“${questionnaire.title}” is ready for answers`);
+      setShowBootstrap(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Questionnaire bootstrap failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not publish questionnaire");
     }
   }
 
@@ -119,11 +126,11 @@ export function RequirementsDeskPage() {
       setScore(computed);
       setOk(
         computed.meets_threshold
-          ? `Completeness ${computed.percentage}% — threshold met`
-          : `Completeness ${computed.percentage}% — gaps remain`,
+          ? `Completeness ${computed.percentage}% — ready for a brief`
+          : `Completeness ${computed.percentage}% — fill remaining gaps`,
       );
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Save answers failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not save answers");
     }
   }
 
@@ -143,9 +150,13 @@ export function RequirementsDeskPage() {
           owner_actor_id: session.actorId,
         });
       }
-      setOk(`Created ${score.gap_question_keys.length} clarification(s)`);
+      setOk(
+        score.gap_question_keys.length === 1
+          ? "1 clarification created"
+          : `${score.gap_question_keys.length} clarifications created`,
+      );
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Clarification create failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create clarifications");
     }
   }
 
@@ -158,145 +169,202 @@ export function RequirementsDeskPage() {
         related_entity_type: "opportunity",
         related_entity_id: entityId,
         title: `${title} brief`,
-        summary: "Draft brief from requirements desk",
+        summary: "Draft brief from discovery answers",
         questionnaire_version_id: versionId,
         completeness_score_id: score?.id,
         project_id: getWorkspaceProjectId() || undefined,
       });
       const approved = await approveRequirementsBrief(session, brief.id);
-      setOk(`Brief v${approved.version_number} approved`);
+      setOk(`Brief version ${approved.version_number} approved`);
       await refreshBriefs();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Brief failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create brief");
     }
   }
 
   return (
-    <AppShell title="Requirements">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Requirements gathering</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-230 questionnaires, completeness (≥95%), clarifications, and human-approved
-            briefs.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+    <AppShell title="Requirements" breadcrumbs={["Project Delivery", "Requirements"]}>
+      <PageHeader
+        title="Requirements"
+        description="Discovery questionnaires, completeness scoring, clarifications, and human-approved briefs."
+        actions={
+          can(session.variant, "create") && !versionId ? (
+            <Button onClick={() => setShowBootstrap((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              Start questionnaire
+            </Button>
+          ) : null
+        }
+      />
 
-        {can(session.variant, "create") ? (
-          <form
-            onSubmit={onBootstrap}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-2"
-            aria-label="Publish questionnaire"
-          >
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Questionnaire code</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                pattern="[a-z0-9_]+"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Title</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:col-span-2 md:w-fit"
-            >
-              Publish questionnaire
-            </button>
-          </form>
-        ) : null}
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
-        {versionId ? (
-          <p className="text-sm text-[var(--muted)]">
-            Version <code>{versionId}</code> · entity <code>{entityId}</code>
-          </p>
-        ) : null}
-
-        {versionId && can(session.variant, "create") ? (
-          <form
-            onSubmit={onSaveAnswers}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4"
-            aria-label="Answer questionnaire"
-          >
-            {DEFAULT_QUESTIONS.map((q) => (
-              <label key={q.key} className="flex flex-col gap-1 text-sm">
-                <span>{q.text}</span>
-                <textarea
-                  rows={2}
-                  className="rounded border border-[var(--line)] px-3 py-2"
-                  value={answers[q.key] ?? ""}
-                  onChange={(e) =>
-                    setAnswers((prev) => ({ ...prev, [q.key]: e.target.value }))
-                  }
-                />
-              </label>
-            ))}
-            <button
-              type="submit"
-              className="w-fit rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
-            >
-              Save answers &amp; score
-            </button>
-          </form>
-        ) : null}
-
-        {score ? (
-          <div className="rounded border border-[var(--line)] bg-white p-4 text-sm">
-            <p>
-              Coverage {score.covered_count}/{score.mandatory_total} (
-              {String(score.percentage)}%)
-              {score.meets_threshold ? " — ready for brief" : ""}
+      {showBootstrap && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Publish intake questionnaire</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Standard discovery questions help BD and delivery agree on the problem before a brief.
             </p>
-            {score.gap_question_keys.length > 0 ? (
-              <button
-                type="button"
-                className="mt-3 rounded border border-[var(--line)] px-3 py-2"
-                onClick={() => void onCreateGaps()}
-              >
-                Create clarifications for gaps
-              </button>
-            ) : can(session.variant, "approve") || can(session.variant, "create") ? (
-              <button
-                type="button"
-                className="mt-3 rounded border border-[var(--line)] px-3 py-2"
-                onClick={() => void onBrief()}
-              >
-                Create &amp; approve brief
-              </button>
-            ) : null}
-          </div>
-        ) : null}
+          </CardHeader>
+          <CardBody>
+            <form
+              onSubmit={onBootstrap}
+              className="grid gap-4 md:grid-cols-2"
+              aria-label="Publish questionnaire"
+            >
+              <Field label="Short name" hint="Internal reference for this intake form">
+                <Input
+                  required
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  pattern="[a-z0-9_]+"
+                  placeholder="intake"
+                />
+              </Field>
+              <Field label="Title">
+                <Input
+                  required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Discovery intake"
+                />
+              </Field>
+              <div className="flex justify-end gap-2 md:col-span-2">
+                <Button type="button" variant="ghost" onClick={() => setShowBootstrap(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Publish questionnaire</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
 
-        <section aria-label="Briefs">
-          <h3 className="font-display text-xl">Briefs</h3>
-          {briefs.length === 0 ? (
-            <EmptyState title="No briefs yet" body="Complete the questionnaire to draft a brief." />
-          ) : (
-            <ul className="mt-3 divide-y divide-[var(--line)] rounded border border-[var(--line)] bg-white">
-              {briefs.map((b) => (
-                <li key={b.id} className="px-4 py-3 text-sm">
-                  <span className="font-medium">
-                    {b.title} v{b.version_number}
-                  </span>
-                  <span className="ml-2 text-[var(--muted)]">{b.status}</span>
-                </li>
+      {!versionId && !showBootstrap ? (
+        <EmptyState
+          title="No questionnaire yet"
+          body="Publish an intake questionnaire, capture answers, then draft an approved requirements brief."
+          action={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowBootstrap(true)}>Start questionnaire</Button>
+            ) : null
+          }
+          secondaryAction={
+            <Button variant="ai">
+              <Sparkles className="h-4 w-4" />
+              Suggest questions
+            </Button>
+          }
+        />
+      ) : null}
+
+      {versionId && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">{title}</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Answer the discovery questions. Completeness is scored against mandatory items.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form onSubmit={onSaveAnswers} className="grid gap-4" aria-label="Answer questionnaire">
+              {DEFAULT_QUESTIONS.map((q) => (
+                <Field key={q.key} label={q.text}>
+                  <Textarea
+                    rows={2}
+                    value={answers[q.key] ?? ""}
+                    onChange={(e) =>
+                      setAnswers((prev) => ({ ...prev, [q.key]: e.target.value }))
+                    }
+                    placeholder="Your answer"
+                  />
+                </Field>
               ))}
-            </ul>
-          )}
-        </section>
-      </div>
+              <div className="flex justify-end">
+                <Button type="submit">Save answers &amp; score</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
+
+      {score ? (
+        <Card className="mb-6">
+          <CardHeader className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="font-display text-lg">Completeness</h2>
+              <p className="text-sm text-[var(--muted)]">
+                {score.covered_count} of {score.mandatory_total} mandatory questions covered
+              </p>
+            </div>
+            <StatusBadge status={score.meets_threshold ? "ready" : "pending"} />
+          </CardHeader>
+          <CardBody className="space-y-3">
+            <p className="text-sm">
+              Score <span className="font-semibold">{String(score.percentage)}%</span>
+              {score.meets_threshold
+                ? " — threshold met; you can create a brief."
+                : " — clarify remaining gaps before approving a brief."}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {score.gap_question_keys.length > 0 ? (
+                <Button variant="outline" onClick={() => void onCreateGaps()}>
+                  Create clarifications
+                </Button>
+              ) : null}
+              {score.meets_threshold &&
+              (can(session.variant, "approve") || can(session.variant, "create")) ? (
+                <Button onClick={() => void onBrief()}>Create &amp; approve brief</Button>
+              ) : null}
+            </div>
+          </CardBody>
+        </Card>
+      ) : null}
+
+      <Card>
+        <CardHeader>
+          <h2 className="font-display text-lg">Briefs</h2>
+          <p className="text-sm text-[var(--muted)]">
+            Approved briefs summarize discovery for delivery planning.
+          </p>
+        </CardHeader>
+        {briefs.length === 0 ? (
+          <CardBody>
+            <EmptyState
+              title="No briefs yet"
+              body="Complete the questionnaire and meet the completeness threshold to draft a brief."
+            />
+          </CardBody>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Brief</th>
+                  <th className="px-5 py-3 font-medium">Version</th>
+                  <th className="px-5 py-3 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {briefs.map((b) => (
+                  <tr
+                    key={b.id}
+                    className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+                  >
+                    <td className="px-5 py-3 font-medium">{b.title}</td>
+                    <td className="px-5 py-3 text-[var(--muted)]">v{b.version_number}</td>
+                    <td className="px-5 py-3">
+                      <StatusBadge status={b.status} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
     </AppShell>
   );
 }

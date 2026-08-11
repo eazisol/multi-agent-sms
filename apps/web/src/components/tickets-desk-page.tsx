@@ -1,10 +1,15 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { EmptyState, LoadingBlock, StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   addTicketEvidence,
@@ -32,11 +37,22 @@ import {
   setWorkspaceTicketId,
 } from "@/lib/workspace";
 
+const FLOW_TRANSITIONS = [
+  "assigned",
+  "in_progress",
+  "code_review",
+  "ready_for_qa",
+  "qa_in_progress",
+  "passed_qa",
+  "done",
+] as const;
+
 export function TicketsDeskPage() {
   const { session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const [projectId, setProjectId] = useState("");
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [active, setActive] = useState<Ticket | null>(null);
@@ -54,10 +70,6 @@ export function TicketsDeskPage() {
 
   useEffect(() => {
     setProjectId(getWorkspaceProjectId());
-    const tid = getWorkspaceTicketId();
-    if (tid) {
-      // loaded after list refresh
-    }
   }, []);
 
   const refresh = useCallback(async () => {
@@ -83,7 +95,7 @@ export function TicketsDeskPage() {
         setDoneChecks([]);
       }
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Load tickets failed");
+      setError(err instanceof ApiError ? err.problem.message : "Unable to load tickets");
       setTickets([]);
     } finally {
       setLoading(false);
@@ -94,10 +106,27 @@ export function TicketsDeskPage() {
     void refresh();
   }, [refresh]);
 
+  function applyWorkspaceProject(id: string) {
+    setProjectId(id);
+    setWorkspaceProjectId(id);
+  }
+
+  async function selectTicket(ticket: Ticket) {
+    setActive(ticket);
+    setWorkspaceTicketId(ticket.id);
+    try {
+      setReadiness(await listReadinessChecks(session, ticket.id));
+      setDoneChecks(await listDoneChecks(session, ticket.id));
+    } catch {
+      setReadiness([]);
+      setDoneChecks([]);
+    }
+  }
+
   async function onCreate(event: FormEvent) {
     event.preventDefault();
     if (!projectId) {
-      setError("Set a workspace project id (create one on Projects desk first)");
+      setError("Select a workspace project first (create one on Projects)");
       return;
     }
     setError(null);
@@ -119,11 +148,13 @@ export function TicketsDeskPage() {
       setWorkspaceProjectId(projectId);
       setWorkspaceTicketId(ticket.id);
       setActive(ticket);
-      setOk(`Ticket ${ticket.code} created in ${ticket.status}`);
+      setOk(`${ticket.code} created`);
       setTitle("");
+      setDescription("");
+      setShowCreate(false);
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create ticket failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create ticket");
     }
   }
 
@@ -144,10 +175,10 @@ export function TicketsDeskPage() {
       if (req && !requirementId) setRequirementId(req.id);
 
       ticket = await updateTicket(session, ticket.id, {
-        description: description.trim() || ticket.description || "Desk description",
+        description: description.trim() || ticket.description || "Implementation work item",
         acceptance_criteria:
-          acceptance.trim() || ticket.acceptance_criteria || "Desk acceptance criteria",
-        definition_of_done: dod.trim() || ticket.definition_of_done || "Tests pass",
+          acceptance.trim() || ticket.acceptance_criteria || "Meets stated acceptance criteria",
+        definition_of_done: dod.trim() || ticket.definition_of_done || "Tests pass and reviewed",
         estimate_points: estimate || String(ticket.estimate_points ?? "3"),
         priority: "high",
         phase_id: phaseId || (await listPhases(session, projectId))[0]?.id,
@@ -161,7 +192,7 @@ export function TicketsDeskPage() {
             requirement_id: req.id,
           });
         } catch {
-          // already linked is fine for desk UX
+          // already linked is fine
         }
       }
       const checks = await listReadinessChecks(session, ticket.id);
@@ -175,10 +206,10 @@ export function TicketsDeskPage() {
         expected_version: ticket.version,
       });
       setActive(ticket);
-      setOk("Ticket marked Ready");
+      setOk("Ticket prepared and marked Ready");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Ready prepare failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not prepare Ready");
     }
   }
 
@@ -201,7 +232,7 @@ export function TicketsDeskPage() {
         blocked_reason: next === "blocked" ? "Blocked from tickets desk" : undefined,
       });
       setActive(updated);
-      setOk(`Status → ${updated.status}`);
+      setOk(`Moved to ${updated.status.replace(/_/g, " ")}`);
       await refresh();
     } catch (err) {
       setError(err instanceof ApiError ? err.problem.message : "Transition failed");
@@ -216,7 +247,7 @@ export function TicketsDeskPage() {
       const evidence = await addTicketEvidence(session, {
         ticket_id: active.id,
         evidence_type: "reopen_justification",
-        title: "Reopen from tickets desk",
+        title: "Reopen justification",
         summary: reopenReason.trim(),
       });
       const updated = await reopenTicket(session, active.id, {
@@ -227,6 +258,7 @@ export function TicketsDeskPage() {
       });
       setActive(updated);
       setOk("Ticket reopened");
+      setReopenReason("");
       await refresh();
     } catch (err) {
       setError(err instanceof ApiError ? err.problem.message : "Reopen failed");
@@ -234,227 +266,263 @@ export function TicketsDeskPage() {
   }
 
   return (
-    <AppShell title="Tickets">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Tickets desk</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-300 work items with Definition of Ready / Done gates and authorized reopen.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+    <AppShell title="Tickets" breadcrumbs={["Project Delivery", "Tickets"]}>
+      <PageHeader
+        title="Tickets"
+        description="Work items with readiness and done gates â€” prepare Ready, move through delivery, and reopen with evidence when needed."
+        actions={
+          can(session.variant, "create") ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              New ticket
+            </Button>
+          ) : null
+        }
+      />
 
-        <label className="flex max-w-xl flex-col gap-1 text-sm">
-          <span>Workspace project id</span>
-          <input
-            className="rounded border border-[var(--line)] px-3 py-2 font-mono text-xs"
-            value={projectId}
-            onChange={(e) => {
-              setProjectId(e.target.value);
-              setWorkspaceProjectId(e.target.value);
-            }}
-            placeholder="From Projects desk"
-          />
-        </label>
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
-        {can(session.variant, "create") ? (
-          <form
-            onSubmit={onCreate}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-2"
-            aria-label="Create ticket"
+      <Card className="mb-6">
+        <CardBody>
+          <Field
+            label="Workspace project"
+            hint="Use the project created on Projects to load its tickets."
           >
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Code</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Title</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm md:col-span-2">
-              <span>Description</span>
-              <textarea
-                rows={2}
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Acceptance criteria</span>
-              <input
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={acceptance}
-                onChange={(e) => setAcceptance(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Definition of Done</span>
-              <input
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={dod}
-                onChange={(e) => setDod(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Estimate</span>
-              <input
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={estimate}
-                onChange={(e) => setEstimate(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Phase id (optional)</span>
-              <input
-                className="rounded border border-[var(--line)] px-3 py-2 font-mono text-xs"
-                value={phaseId}
-                onChange={(e) => setPhaseId(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm md:col-span-2">
-              <span>Requirement id (optional)</span>
-              <input
-                className="rounded border border-[var(--line)] px-3 py-2 font-mono text-xs"
-                value={requirementId}
-                onChange={(e) => setRequirementId(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:col-span-2 md:w-fit"
-            >
-              Create ticket
-            </button>
-          </form>
-        ) : null}
-
-        <section aria-label="Ticket list">
-          <h3 className="font-display text-xl">Project tickets</h3>
-          {loading ? <LoadingBlock label="Loading tickets" /> : null}
-          {!loading && tickets.length === 0 ? (
-            <EmptyState
-              title="No tickets"
-              body="Create a ticket for the workspace project."
+            <Input
+              value={projectId}
+              onChange={(e) => applyWorkspaceProject(e.target.value.trim())}
+              placeholder="Create a project on Projects first"
             />
+          </Field>
+        </CardBody>
+      </Card>
+
+      {showCreate && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Create ticket</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Capture enough detail for Definition of Ready before pulling into active work.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form
+              onSubmit={onCreate}
+              className="grid gap-4 md:grid-cols-2"
+              aria-label="Create ticket"
+            >
+              <Field label="Code">
+                <Input
+                  required
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="T-12"
+                />
+              </Field>
+              <Field label="Estimate">
+                <Input
+                  value={estimate}
+                  onChange={(e) => setEstimate(e.target.value)}
+                  placeholder="3"
+                />
+              </Field>
+              <Field label="Title" className="md:col-span-2">
+                <Input
+                  required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Implement secure sign-in"
+                />
+              </Field>
+              <Field label="Description" className="md:col-span-2">
+                <Textarea
+                  rows={2}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="What needs to be built and any constraints"
+                />
+              </Field>
+              <Field label="Acceptance criteria">
+                <Input
+                  value={acceptance}
+                  onChange={(e) => setAcceptance(e.target.value)}
+                  placeholder="Users can authenticate with MFA"
+                />
+              </Field>
+              <Field label="Definition of Done">
+                <Input
+                  value={dod}
+                  onChange={(e) => setDod(e.target.value)}
+                  placeholder="Tests pass and peer review complete"
+                />
+              </Field>
+              <div className="flex justify-end gap-2 md:col-span-2">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create ticket</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
+
+      <div className="grid gap-4 lg:grid-cols-[1fr_1.1fr]">
+        <Card>
+          <CardHeader>
+            <h2 className="font-display text-lg">Ticket list</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Select a ticket to prepare Ready, transition, or reopen.
+            </p>
+          </CardHeader>
+          {!projectId ? (
+            <CardBody>
+              <EmptyState
+                title="No project linked"
+                body="Create a project on Projects, then open tickets for that workspace."
+              />
+            </CardBody>
+          ) : loading ? (
+            <SkeletonRows />
+          ) : tickets.length === 0 ? (
+            <CardBody>
+              <EmptyState
+                title="No tickets yet"
+                body="Create the first work item for this project."
+                action={
+                  can(session.variant, "create") ? (
+                    <Button onClick={() => setShowCreate(true)}>New ticket</Button>
+                  ) : null
+                }
+              />
+            </CardBody>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--line)] rounded border border-[var(--line)] bg-white">
+            <ul className="divide-y divide-[var(--line)]">
               {tickets.map((t) => (
                 <li key={t.id}>
                   <button
                     type="button"
-                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm ${
-                      active?.id === t.id ? "bg-[var(--accent-soft)]" : ""
+                    className={`flex w-full items-center justify-between gap-3 px-5 py-3 text-left text-sm hover:bg-[var(--surface-muted)]/70 ${
+                      active?.id === t.id ? "bg-[var(--accent-soft)]/40" : ""
                     }`}
-                    onClick={() => {
-                      setActive(t);
-                      setWorkspaceTicketId(t.id);
-                      void listReadinessChecks(session, t.id).then(setReadiness);
-                      void listDoneChecks(session, t.id).then(setDoneChecks);
-                    }}
+                    onClick={() => void selectTicket(t)}
                   >
                     <span>
-                      <span className="font-medium">{t.code}</span> — {t.title}
+                      <span className="font-medium">{t.code}</span>
+                      <span className="ml-2 text-[var(--muted)]">{t.title}</span>
                     </span>
-                    <span className="text-[var(--muted)]">
-                      {t.status} · {formatUtc(t.created_at)}
+                    <span className="flex shrink-0 flex-col items-end gap-1">
+                      <StatusBadge status={t.status} />
+                      <span className="text-xs text-[var(--muted)]">{formatUtc(t.created_at)}</span>
                     </span>
                   </button>
                 </li>
               ))}
             </ul>
           )}
-        </section>
+        </Card>
 
-        {active ? (
-          <section className="space-y-3 rounded border border-[var(--line)] bg-white p-4">
-            <h3 className="font-display text-xl">
-              {active.code} · {active.status}
-            </h3>
-            <p className="text-sm text-[var(--muted)]">version {active.version}</p>
-            <div className="flex flex-wrap gap-2">
-              {active.status === "backlog" ? (
-                <button
-                  type="button"
-                  className="rounded border border-[var(--line)] px-3 py-2 text-sm"
-                  onClick={() => void onPrepareReady()}
-                >
-                  Prepare &amp; mark Ready
-                </button>
+        <Card>
+          <CardHeader>
+            <h2 className="font-display text-lg">Actions</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Readiness gates, status moves, and reopen with evidence.
+            </p>
+          </CardHeader>
+          {!active ? (
+            <CardBody>
+              <EmptyState
+                title="No ticket selected"
+                body="Choose a ticket from the list to manage its delivery flow."
+              />
+            </CardBody>
+          ) : (
+            <CardBody className="space-y-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h3 className="font-display text-xl">
+                    {active.code} â€” {active.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-[var(--muted)]">Revision {active.version}</p>
+                </div>
+                <StatusBadge status={active.status} />
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {active.status === "backlog" ? (
+                  <Button onClick={() => void onPrepareReady()}>Prepare &amp; mark Ready</Button>
+                ) : null}
+                {FLOW_TRANSITIONS.map((next) => (
+                  <Button
+                    key={next}
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void onTransition(next)}
+                  >
+                    {next.replace(/_/g, " ")}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <p className="mb-2 text-sm font-medium">Ready checks</p>
+                  <ul className="space-y-1.5 text-sm">
+                    {readiness.length === 0 ? (
+                      <li className="text-[var(--muted)]">No checks yet</li>
+                    ) : (
+                      readiness.map((c) => (
+                        <li key={c.id} className="flex items-start gap-2">
+                          <span className={c.is_satisfied ? "text-[var(--success)]" : "text-[var(--muted)]"}>
+                            {c.is_satisfied ? "âœ“" : "â—‹"}
+                          </span>
+                          <span>{c.label}</span>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+                <div>
+                  <p className="mb-2 text-sm font-medium">Done checks</p>
+                  <ul className="space-y-1.5 text-sm">
+                    {doneChecks.length === 0 ? (
+                      <li className="text-[var(--muted)]">No checks yet</li>
+                    ) : (
+                      doneChecks.map((c) => (
+                        <li key={c.id} className="flex items-start gap-2">
+                          <span className={c.is_satisfied ? "text-[var(--success)]" : "text-[var(--muted)]"}>
+                            {c.is_satisfied ? "âœ“" : "â—‹"}
+                          </span>
+                          <span>{c.label}</span>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+              </div>
+
+              {active.status === "done" ? (
+                <div className="space-y-3 border-t border-[var(--line)] pt-4">
+                  <Field label="Reopen reason" hint="Required evidence when returning a done ticket to active work.">
+                    <Input
+                      value={reopenReason}
+                      onChange={(e) => setReopenReason(e.target.value)}
+                      placeholder="Why this work must reopen"
+                    />
+                  </Field>
+                  <Button
+                    variant="outline"
+                    disabled={!reopenReason.trim()}
+                    onClick={() => void onReopen()}
+                  >
+                    Reopen with evidence
+                  </Button>
+                </div>
               ) : null}
-              {[
-                "assigned",
-                "in_progress",
-                "code_review",
-                "ready_for_qa",
-                "qa_in_progress",
-                "passed_qa",
-                "done",
-              ].map((next) => (
-                <button
-                  key={next}
-                  type="button"
-                  className="rounded border border-[var(--line)] px-3 py-2 text-sm"
-                  onClick={() => void onTransition(next)}
-                >
-                  → {next}
-                </button>
-              ))}
-            </div>
-            <div className="grid gap-2 text-sm md:grid-cols-2">
-              <div>
-                <p className="font-medium">Readiness checks</p>
-                <ul className="mt-1 space-y-1">
-                  {readiness.map((c) => (
-                    <li key={c.id}>
-                      {c.is_satisfied ? "[x]" : "[ ]"} {c.label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="font-medium">Done checks</p>
-                <ul className="mt-1 space-y-1">
-                  {doneChecks.map((c) => (
-                    <li key={c.id}>
-                      {c.is_satisfied ? "[x]" : "[ ]"} {c.label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            {active.status === "done" ? (
-              <div className="flex flex-wrap items-end gap-2">
-                <label className="flex min-w-[16rem] flex-1 flex-col gap-1 text-sm">
-                  <span>Reopen reason</span>
-                  <input
-                    className="rounded border border-[var(--line)] px-3 py-2"
-                    value={reopenReason}
-                    onChange={(e) => setReopenReason(e.target.value)}
-                  />
-                </label>
-                <button
-                  type="button"
-                  className="rounded border border-[var(--line)] px-3 py-2 text-sm"
-                  onClick={() => void onReopen()}
-                >
-                  Reopen with evidence
-                </button>
-              </div>
-            ) : null}
-          </section>
-        ) : null}
+            </CardBody>
+          )}
+        </Card>
       </div>
     </AppShell>
   );

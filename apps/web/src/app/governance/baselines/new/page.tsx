@@ -3,7 +3,7 @@ import { BaselineCreatePage } from "@/components/baseline-create-page";
 
 export default function Page() {
   return (
-    <AppShell title="New baseline">
+    <AppShell title="New baseline" breadcrumbs={["Governance", "Source Baselines", "Create"]}>
       <BaselineCreatePage />
     </AppShell>
   );

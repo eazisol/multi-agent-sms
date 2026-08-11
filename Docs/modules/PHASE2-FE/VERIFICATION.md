@@ -1,31 +1,30 @@
-# Phase 2–3 Frontend Desks
+# New UI — Design System Rollout
 
 **Date:** 2026-08-11  
-**Scope:** Shared shell + Clients, Queries, Comms, Requirements, Projects/SRS, Documents, Roadmap, Tickets
+**Source:** `New UI.md`  
+**Scope:** Full shell redesign + restyle of all existing desks; placeholders for modules without backend
 
-## Routes
+## Delivered
 
-| Path | Module |
-|---|---|
-| `/clients` | MOD-200 |
-| `/queries` | MOD-210 |
-| `/comms` | MOD-220 |
-| `/requirements` | MOD-230 |
-| `/projects` | MOD-240 |
-| `/documents` | MOD-250 |
-| `/roadmap` | MOD-260 |
-| `/tickets` | MOD-300 |
-| `/governance/baselines` | MOD-000 (existing) |
+- Collapsible sidebar + mobile drawer matching New UI information architecture
+- Global header: breadcrumbs, search/command palette (⌘K), Create, notifications, AI, theme toggle, role switcher
+- Light/dark theme tokens (indigo accent, cool gray surfaces)
+- Geist typography via `geist` package
+- Shared primitives: Button, Card, Field, StatusBadge, EmptyState, SkeletonRows, PageHeader
+- Dashboard at `/`
+- Existing desks restyled (Clients, Queries, Messages, Projects, Requirements, Documents, Roadmaps, Tickets, Governance baselines)
+- Placeholder routes for upcoming modules (Follow-ups, Approvals, Agents, QA, Admin, etc.)
 
 ## Verification
 
 | Check | Result |
 |---|---|
 | `npm --prefix apps/web run lint` | **passed** |
-| `npm --prefix apps/web run build` | **passed** |
+| `npm --prefix apps/web run build` | **passed** (37 routes) |
 
 ## Limits
 
+- Placeholder modules are intentional “coming next” screens (no fake CRUD)
+- Dashboard attention cards use illustrative sample content until those APIs exist
+- Command palette navigates modules; full entity search deferred
 - Auth remains header-stub session
-- Several APIs are CRUD-lite — desks use localStorage workspace ids where list endpoints are thin
-- Full a11y audit deferred; form-level labels/focus are present

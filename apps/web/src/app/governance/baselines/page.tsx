@@ -3,7 +3,7 @@ import { BaselineListPage } from "@/components/baseline-list-page";
 
 export default function Page() {
   return (
-    <AppShell title="Source baselines">
+    <AppShell title="Source Baselines" breadcrumbs={["Governance", "Source Baselines"]}>
       <BaselineListPage />
     </AppShell>
   );

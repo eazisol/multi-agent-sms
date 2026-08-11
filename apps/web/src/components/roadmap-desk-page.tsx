@@ -1,10 +1,15 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { Flag, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { EmptyState, LoadingBlock, StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   approveMilestone,
@@ -26,6 +31,7 @@ export function RoadmapDeskPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
   const [phaseCode, setPhaseCode] = useState("DISCOVER");
   const [phaseTitle, setPhaseTitle] = useState("Discovery");
   const [milestone, setMilestone] = useState<Milestone | null>(null);
@@ -44,7 +50,7 @@ export function RoadmapDeskPage() {
     try {
       setPhases(await listPhases(session, projectId));
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Load phases failed");
+      setError(err instanceof ApiError ? err.problem.message : "Unable to load phases");
       setPhases([]);
     } finally {
       setLoading(false);
@@ -54,6 +60,11 @@ export function RoadmapDeskPage() {
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  function applyWorkspaceProject(id: string) {
+    setProjectId(id);
+    setWorkspaceProjectId(id);
+  }
 
   async function onCreatePhase(event: FormEvent) {
     event.preventDefault();
@@ -67,10 +78,11 @@ export function RoadmapDeskPage() {
         title: phaseTitle.trim(),
         sequence: phases.length + 1,
       });
-      setOk(`Phase ${phase.code} created`);
+      setOk(`${phase.title} phase added`);
+      setShowCreate(false);
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create phase failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create phase");
     }
   }
 
@@ -87,9 +99,9 @@ export function RoadmapDeskPage() {
         requires_approval: true,
       });
       setMilestone(created);
-      setOk(`Milestone ${created.code} created`);
+      setOk(`Milestone ${created.title} created`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Milestone create failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create milestone");
     }
   }
 
@@ -100,7 +112,7 @@ export function RoadmapDeskPage() {
       setMilestone(approved);
       setOk("Milestone approved");
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Approve failed");
+      setError(err instanceof ApiError ? err.problem.message : "Approval failed");
     }
   }
 
@@ -111,7 +123,7 @@ export function RoadmapDeskPage() {
       setMilestone(done);
       setOk("Milestone completed");
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Complete failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not complete milestone");
     }
   }
 
@@ -123,135 +135,181 @@ export function RoadmapDeskPage() {
       setOk("Phase completed");
       await refresh();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Phase complete failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not complete phase");
     }
   }
 
   return (
-    <AppShell title="Roadmap">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Roadmap desk</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-260 phases and milestones for a workspace project.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
-
-        <label className="flex flex-col gap-1 text-sm">
-          <span>Project id</span>
-          <input
-            className="rounded border border-[var(--line)] bg-white px-3 py-2 font-mono text-xs"
-            value={projectId}
-            onChange={(e) => {
-              setProjectId(e.target.value);
-              setWorkspaceProjectId(e.target.value);
-            }}
-            placeholder="Create a project on the Projects desk first"
-          />
-        </label>
-
-        {can(session.variant, "create") && projectId ? (
-          <form
-            onSubmit={onCreatePhase}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-3"
-          >
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Phase code</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={phaseCode}
-                onChange={(e) => setPhaseCode(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm md:col-span-2">
-              <span>Title</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={phaseTitle}
-                onChange={(e) => setPhaseTitle(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:w-fit"
-            >
+    <AppShell title="Roadmaps" breadcrumbs={["Project Delivery", "Roadmaps"]}>
+      <PageHeader
+        title="Roadmaps"
+        description="Phases and checkpoints for the workspace project â€” plan discovery, build, and release milestones."
+        actions={
+          can(session.variant, "create") && projectId ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
               Add phase
-            </button>
-          </form>
-        ) : null}
+            </Button>
+          ) : null
+        }
+      />
 
-        {loading ? <LoadingBlock label="Loading phases" /> : null}
-        {!loading && projectId && phases.length === 0 ? (
-          <EmptyState title="No phases" body="Add a discovery/build phase for this project." />
-        ) : null}
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
-        <ul className="space-y-3">
-          {phases.map((phase) => (
-            <li
-              key={phase.id}
-              className="rounded border border-[var(--line)] bg-white p-4 text-sm"
+      <Card className="mb-6">
+        <CardBody>
+          <Field
+            label="Workspace project"
+            hint="Use the project created on Projects to load and edit its roadmap."
+          >
+            <Input
+              value={projectId}
+              onChange={(e) => applyWorkspaceProject(e.target.value.trim())}
+              placeholder="Create a project on Projects first"
+            />
+          </Field>
+        </CardBody>
+      </Card>
+
+      {showCreate && projectId && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Add phase</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Phases sequence the delivery journey â€” Discovery, Build, Launch, and beyond.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form
+              onSubmit={onCreatePhase}
+              className="grid gap-4 md:grid-cols-3"
+              aria-label="Add phase"
             >
-              <div className="flex flex-wrap items-center justify-between gap-2">
+              <Field label="Code">
+                <Input
+                  required
+                  value={phaseCode}
+                  onChange={(e) => setPhaseCode(e.target.value)}
+                  placeholder="DISCOVER"
+                />
+              </Field>
+              <Field label="Title" className="md:col-span-2">
+                <Input
+                  required
+                  value={phaseTitle}
+                  onChange={(e) => setPhaseTitle(e.target.value)}
+                  placeholder="Discovery"
+                />
+              </Field>
+              <div className="flex justify-end gap-2 md:col-span-3">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Add phase</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
+
+      <Card>
+        <CardHeader>
+          <h2 className="font-display text-lg">Phases</h2>
+          <p className="text-sm text-[var(--muted)]">
+            Track status and attach milestones that need approval.
+          </p>
+        </CardHeader>
+        {!projectId ? (
+          <CardBody>
+            <EmptyState
+              title="No project linked"
+              body="Open Projects, create a delivery project, then return here to plan phases."
+            />
+          </CardBody>
+        ) : loading ? (
+          <SkeletonRows />
+        ) : phases.length === 0 ? (
+          <CardBody>
+            <EmptyState
+              title="No phases yet"
+              body="Add a discovery or build phase to start the roadmap."
+              action={
+                can(session.variant, "create") ? (
+                  <Button onClick={() => setShowCreate(true)}>
+                    <Plus className="h-4 w-4" />
+                    Add phase
+                  </Button>
+                ) : null
+              }
+            />
+          </CardBody>
+        ) : (
+          <ul className="divide-y divide-[var(--line)]">
+            {phases.map((phase) => (
+              <li key={phase.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
                 <div>
-                  <strong>{phase.code}</strong> — {phase.title}{" "}
-                  <span className="text-[var(--muted)]">({phase.status})</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-medium">{phase.title}</p>
+                    <StatusBadge status={phase.status} />
+                  </div>
+                  <p className="mt-1 text-xs text-[var(--muted)]">{phase.code}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    className="rounded border border-[var(--line)] px-3 py-1.5"
-                    onClick={() => void onAddMilestone(phase.id)}
+                  <Button
+                    size="sm"
+                    variant="outline"
                     disabled={!can(session.variant, "create")}
+                    onClick={() => void onAddMilestone(phase.id)}
                   >
+                    <Flag className="h-3.5 w-3.5" />
                     Add milestone
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded border border-[var(--line)] px-3 py-1.5"
-                    onClick={() => void onCompletePhase(phase.id)}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
                     disabled={
                       phase.status === "completed" || !can(session.variant, "approve")
                     }
+                    onClick={() => void onCompletePhase(phase.id)}
                   >
                     Complete phase
-                  </button>
+                  </Button>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
 
-        {milestone ? (
-          <section className="rounded border border-[var(--line)] bg-white p-4 text-sm">
-            <p>
-              Latest milestone <strong>{milestone.code}</strong> · {milestone.status} ·{" "}
-              {milestone.target_date}
-            </p>
-            <div className="mt-2 flex gap-2">
-              <button
-                type="button"
-                className="rounded border border-[var(--line)] px-3 py-1.5"
-                onClick={() => void onApproveMs()}
-                disabled={!can(session.variant, "approve")}
-              >
-                Approve
-              </button>
-              <button
-                type="button"
-                className="rounded border border-[var(--line)] px-3 py-1.5"
-                onClick={() => void onCompleteMs()}
-                disabled={!can(session.variant, "approve")}
-              >
-                Complete
-              </button>
+      {milestone ? (
+        <Card className="mt-6">
+          <CardHeader className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 className="font-display text-lg">{milestone.title}</h3>
+              <p className="text-sm text-[var(--muted)]">
+                {milestone.code} Â· target {milestone.target_date}
+              </p>
             </div>
-          </section>
-        ) : null}
-      </div>
+            <StatusBadge status={milestone.status} />
+          </CardHeader>
+          <CardBody className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              disabled={!can(session.variant, "approve")}
+              onClick={() => void onApproveMs()}
+            >
+              Approve
+            </Button>
+            <Button
+              disabled={!can(session.variant, "approve")}
+              onClick={() => void onCompleteMs()}
+            >
+              Complete
+            </Button>
+          </CardBody>
+        </Card>
+      ) : null}
     </AppShell>
   );
 }

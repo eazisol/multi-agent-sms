@@ -1,10 +1,15 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { FileUp, Plus, ShieldCheck } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input, Select } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   createDocument,
@@ -20,16 +25,24 @@ import {
   setWorkspaceDocumentId,
 } from "@/lib/workspace";
 
+function storageKeyFor(filename: string) {
+  const safe = filename.trim().replace(/[^a-zA-Z0-9._-]+/g, "-") || "file.bin";
+  return `uploads/${Date.now().toString(36)}/${safe}`;
+}
+
 export function DocumentsDeskPage() {
   const { session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [showVersion, setShowVersion] = useState(false);
   const [title, setTitle] = useState("");
   const [documentId, setDocumentId] = useState("");
-  const [filename, setFilename] = useState("spec.pdf");
-  const [storageKey, setStorageKey] = useState("s3://bucket/org/spec.pdf");
+  const [documentTitle, setDocumentTitle] = useState("");
+  const [filename, setFilename] = useState("");
   const [version, setVersion] = useState<DocumentVersion | null>(null);
   const [verdict, setVerdict] = useState("clean");
+  const workspaceProject = getWorkspaceProjectId();
 
   useEffect(() => {
     setDocumentId(getWorkspaceDocumentId());
@@ -47,10 +60,14 @@ export function DocumentsDeskPage() {
         project_id: projectId,
       });
       setDocumentId(doc.id);
+      setDocumentTitle(doc.title);
       setWorkspaceDocumentId(doc.id);
-      setOk(`Document created (${doc.id})`);
+      setOk(`“${doc.title}” added`);
+      setTitle("");
+      setShowCreate(false);
+      setShowVersion(true);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create document");
     }
   }
 
@@ -60,17 +77,20 @@ export function DocumentsDeskPage() {
     setError(null);
     setOk(null);
     try {
+      const name = filename.trim() || "document.pdf";
       const created = await createDocumentVersion(session, {
         document_id: documentId,
-        storage_key: storageKey.trim(),
-        filename: filename.trim(),
+        storage_key: storageKeyFor(name),
+        filename: name,
         content_type: "application/pdf",
         size_bytes: 1024,
       });
       setVersion(created);
-      setOk(`Version ${created.version_number} created (status ${created.status})`);
+      setOk(`Version ${created.version_number} uploaded — ready for security scan`);
+      setFilename("");
+      setShowVersion(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Version create failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not add version");
     }
   }
 
@@ -82,9 +102,9 @@ export function DocumentsDeskPage() {
       const scan = await recordDocumentScan(session, {
         document_version_id: version.id,
         verdict,
-        detail: verdict === "clean" ? "stub clean" : "stub unsafe",
+        detail: verdict === "clean" ? "Scan completed clean" : "Scan flagged content",
       });
-      setOk(`Scan recorded: ${scan.verdict}`);
+      setOk(`Scan result: ${scan.verdict}`);
     } catch (err) {
       setError(err instanceof ApiError ? err.problem.message : "Scan failed");
     }
@@ -100,132 +120,185 @@ export function DocumentsDeskPage() {
       });
       setVersion(available);
       setOk(
-        `Version available · indexing_allowed=${String(available.indexing_allowed)}`,
+        available.indexing_allowed
+          ? "Document available for the team and knowledge indexing"
+          : "Document marked available",
       );
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Mark available failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not mark available");
     }
   }
 
   return (
-    <AppShell title="Documents">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Documents desk</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-250 metadata + scan gate. Object bytes stay in storage via storage_key.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+    <AppShell title="Documents" breadcrumbs={["Project Delivery", "Documents"]}>
+      <PageHeader
+        title="Documents"
+        description="Controlled project files — upload a version, run a security scan, then release it to the team."
+        actions={
+          can(session.variant, "create") ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              New document
+            </Button>
+          ) : null
+        }
+      />
 
-        {can(session.variant, "create") ? (
-          <>
-            <form
-              onSubmit={onCreateDocument}
-              className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-2"
-            >
-              <label className="flex flex-col gap-1 text-sm md:col-span-2">
-                <span>Document title</span>
-                <input
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+
+      {workspaceProject ? (
+        <p className="mb-4 text-sm text-[var(--muted)]">
+          New documents attach to the workspace project from Projects.
+        </p>
+      ) : (
+        <StatusBanner kind="info">
+          Tip: create or select a workspace project on Projects so documents stay linked to delivery.
+        </StatusBanner>
+      )}
+
+      {showCreate && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Create document</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Register the document metadata first, then add a file version.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form onSubmit={onCreateDocument} className="grid gap-4" aria-label="Create document">
+              <Field label="Title">
+                <Input
                   required
-                  className="rounded border border-[var(--line)] px-3 py-2"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Solution architecture overview"
                 />
-              </label>
-              <button
-                type="submit"
-                className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:w-fit"
-              >
-                Create document
-              </button>
+              </Field>
+              <div className="flex justify-end gap-2">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create document</Button>
+              </div>
             </form>
+          </CardBody>
+        </Card>
+      ) : null}
 
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Active document id</span>
-              <input
-                className="rounded border border-[var(--line)] bg-white px-3 py-2 font-mono text-xs"
-                value={documentId}
-                onChange={(e) => {
-                  setDocumentId(e.target.value);
-                  setWorkspaceDocumentId(e.target.value);
-                }}
-              />
-            </label>
+      {!documentId && !showCreate ? (
+        <EmptyState
+          title="No document open"
+          body="Create a document to upload versions, run scans, and release files to the delivery team."
+          action={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowCreate(true)}>
+                <Plus className="h-4 w-4" />
+                New document
+              </Button>
+            ) : null
+          }
+        />
+      ) : null}
 
-            <form
-              onSubmit={onCreateVersion}
-              className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-2"
-            >
-              <label className="flex flex-col gap-1 text-sm">
-                <span>Filename</span>
-                <input
-                  required
-                  className="rounded border border-[var(--line)] px-3 py-2"
-                  value={filename}
-                  onChange={(e) => setFilename(e.target.value)}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm">
-                <span>Storage key</span>
-                <input
-                  required
-                  className="rounded border border-[var(--line)] px-3 py-2"
-                  value={storageKey}
-                  onChange={(e) => setStorageKey(e.target.value)}
-                />
-              </label>
-              <button
-                type="submit"
-                className="rounded border border-[var(--line)] bg-[var(--panel)] px-4 py-2 text-sm md:w-fit"
-                disabled={!documentId}
-              >
-                Add version
-              </button>
-            </form>
-          </>
-        ) : (
-          <StatusBanner kind="error">This UI role cannot create documents.</StatusBanner>
-        )}
+      {documentId ? (
+        <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+          <Card>
+            <CardHeader className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="font-display text-xl">{documentTitle || "Current document"}</h2>
+                <p className="mt-1 text-sm text-[var(--muted)]">
+                  Upload a file version, then complete the scan gate before sharing.
+                </p>
+              </div>
+              {version ? <StatusBadge status={version.status} /> : null}
+            </CardHeader>
+            <CardBody className="space-y-4">
+              {can(session.variant, "create") ? (
+                showVersion ? (
+                  <form
+                    onSubmit={onCreateVersion}
+                    className="grid gap-4"
+                    aria-label="Add document version"
+                  >
+                    <Field label="File name" hint="The file is registered for this document; scan before release.">
+                      <Input
+                        required
+                        value={filename}
+                        onChange={(e) => setFilename(e.target.value)}
+                        placeholder="architecture.pdf"
+                      />
+                    </Field>
+                    <div className="flex justify-end gap-2">
+                      <Button type="button" variant="ghost" onClick={() => setShowVersion(false)}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">
+                        <FileUp className="h-4 w-4" />
+                        Add version
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <Button variant="outline" onClick={() => setShowVersion(true)}>
+                    <FileUp className="h-4 w-4" />
+                    Add version
+                  </Button>
+                )
+              ) : (
+                <StatusBanner kind="warning">Your role cannot upload document versions.</StatusBanner>
+              )}
 
-        {version ? (
-          <section className="space-y-3 rounded border border-[var(--line)] bg-white p-4 text-sm">
-            <p>
-              Version {version.version_number} · status <strong>{version.status}</strong>
-            </p>
-            <label className="flex max-w-xs flex-col gap-1">
-              <span>Scan verdict</span>
-              <select
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={verdict}
-                onChange={(e) => setVerdict(e.target.value)}
-              >
-                <option value="clean">clean</option>
-                <option value="infected">infected</option>
-                <option value="suspicious">suspicious</option>
-              </select>
-            </label>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                className="rounded border border-[var(--line)] px-3 py-1.5"
-                onClick={() => void onScan()}
-              >
-                Record scan
-              </button>
-              <button
-                type="button"
-                className="rounded border border-[var(--line)] px-3 py-1.5"
-                onClick={() => void onAvailable()}
-                disabled={!can(session.variant, "approve")}
-              >
-                Mark available
-              </button>
-            </div>
-          </section>
-        ) : null}
-      </div>
+              {version ? (
+                <div className="rounded-[var(--radius-sm)] border border-[var(--line)] bg-[var(--surface-muted)]/50 p-4 text-sm">
+                  <p className="font-medium">
+                    Version {version.version_number}
+                    {version.filename ? ` · ${version.filename}` : ""}
+                  </p>
+                  <p className="mt-1 text-[var(--muted)]">
+                    Complete a security scan, then mark the version available when clean.
+                  </p>
+                </div>
+              ) : null}
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <h3 className="font-display text-lg">Scan &amp; release</h3>
+            </CardHeader>
+            <CardBody className="space-y-4">
+              {!version ? (
+                <p className="text-sm text-[var(--muted)]">
+                  Add a version to enable security scanning and release actions.
+                </p>
+              ) : (
+                <>
+                  <Field label="Scan result">
+                    <Select value={verdict} onChange={(e) => setVerdict(e.target.value)}>
+                      <option value="clean">Clean</option>
+                      <option value="infected">Infected</option>
+                      <option value="suspicious">Suspicious</option>
+                    </Select>
+                  </Field>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" onClick={() => void onScan()}>
+                      <ShieldCheck className="h-4 w-4" />
+                      Record scan
+                    </Button>
+                    <Button
+                      disabled={!can(session.variant, "approve")}
+                      onClick={() => void onAvailable()}
+                    >
+                      Mark available
+                    </Button>
+                  </div>
+                </>
+              )}
+            </CardBody>
+          </Card>
+        </div>
+      ) : null}
     </AppShell>
   );
 }

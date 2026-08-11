@@ -1,10 +1,15 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   createQuery,
@@ -19,174 +24,193 @@ export function QueriesDeskPage() {
   const { session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
-  const [sourceCode, setSourceCode] = useState("web_form");
   const [sourceId, setSourceId] = useState("");
   const [subject, setSubject] = useState("");
   const [summary, setSummary] = useState("");
-  const [queryId, setQueryId] = useState("");
   const [current, setCurrent] = useState<ClientQuery | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
-    setQueryId(getWorkspaceQueryId());
+    const id = getWorkspaceQueryId();
+    if (id) {
+      setCurrent((prev) => prev ?? ({ id, subject: "Active inquiry", summary: "", status: "new", sla_status: "ok", client_id: null, project_id: null, source_id: null, created_at: new Date().toISOString() }));
+    }
   }, []);
 
-  async function onCreateSource(event: FormEvent) {
-    event.preventDefault();
-    setError(null);
-    setOk(null);
-    try {
-      const source = await createQuerySource(session, {
-        code: sourceCode.trim().toLowerCase(),
-        title: `Source ${sourceCode}`,
-        channel: "web",
-      });
-      setSourceId(source.id);
-      setOk(`Source ready: ${source.code}`);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Source create failed");
-    }
+  async function ensureSource() {
+    if (sourceId) return sourceId;
+    const source = await createQuerySource(session, {
+      code: `web_${Date.now().toString(36)}`,
+      title: "Web intake",
+      channel: "web",
+    });
+    setSourceId(source.id);
+    return source.id;
   }
 
-  async function onCreateQuery(event: FormEvent) {
+  async function onCreate(event: FormEvent) {
     event.preventDefault();
     setError(null);
     setOk(null);
     try {
+      const sid = await ensureSource();
       const created = await createQuery(session, {
         subject: subject.trim(),
         summary: summary.trim(),
-        source_id: sourceId || undefined,
+        source_id: sid,
       });
       setCurrent(created);
-      setQueryId(created.id);
       setWorkspaceQueryId(created.id);
-      setOk(`Query created in status ${created.status}`);
+      setOk("Inquiry captured");
+      setSubject("");
+      setSummary("");
+      setShowCreate(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Query create failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create inquiry");
     }
   }
 
   async function onTransition(next: string) {
-    if (!queryId) return;
+    if (!current) return;
     setError(null);
     setOk(null);
     try {
-      const updated = await transitionQuery(session, queryId, {
+      const updated = await transitionQuery(session, current.id, {
         next_status: next,
         classification: next === "classified" ? "new_build" : undefined,
       });
       setCurrent(updated);
-      setOk(`Transitioned to ${updated.status}`);
+      setOk(`Moved to ${updated.status.replace(/_/g, " ")}`);
     } catch (err) {
       setError(err instanceof ApiError ? err.problem.message : "Transition failed");
     }
   }
 
   return (
-    <AppShell title="Queries">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Query desk</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-210 inquiry capture. List API is deferred — this desk tracks the active query id.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+    <AppShell title="Queries" breadcrumbs={["Business Development", "Queries"]}>
+      <PageHeader
+        title="Queries"
+        description="Business-development inbox for new inquiries — qualify, respond, and route to opportunities."
+        actions={
+          can(session.variant, "create") ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              New inquiry
+            </Button>
+          ) : null
+        }
+      />
 
-        {!can(session.variant, "create") ? (
-          <StatusBanner kind="error">This UI role cannot create queries.</StatusBanner>
-        ) : (
-          <>
-            <form
-              onSubmit={onCreateSource}
-              className="flex flex-wrap items-end gap-3 rounded border border-[var(--line)] bg-white p-4"
-            >
-              <label className="flex min-w-40 flex-col gap-1 text-sm">
-                <span>Source code</span>
-                <input
-                  className="rounded border border-[var(--line)] px-3 py-2"
-                  value={sourceCode}
-                  onChange={(e) => setSourceCode(e.target.value)}
-                  required
-                />
-              </label>
-              <button
-                type="submit"
-                className="rounded border border-[var(--line)] bg-[var(--panel)] px-4 py-2 text-sm"
-              >
-                Ensure source
-              </button>
-              {sourceId ? (
-                <p className="text-xs text-[var(--muted)]">source_id={sourceId}</p>
-              ) : null}
-            </form>
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
-            <form
-              onSubmit={onCreateQuery}
-              className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-2"
-            >
-              <label className="flex flex-col gap-1 text-sm md:col-span-2">
-                <span>Subject</span>
-                <input
+      <div className="mb-4 flex flex-wrap gap-2">
+        {["All", "New", "Waiting client", "Qualified", "Overdue"].map((tab, idx) => (
+          <span
+            key={tab}
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+              idx === 0
+                ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+                : "bg-[var(--surface)] text-[var(--muted)] border border-[var(--line)]"
+            }`}
+          >
+            {tab}
+          </span>
+        ))}
+      </div>
+
+      {showCreate ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Capture inquiry</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Record what the client asked for so BD and AI agents can qualify next steps.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form onSubmit={onCreate} className="grid gap-4" aria-label="Create inquiry">
+              <Field label="Subject">
+                <Input
                   required
-                  className="rounded border border-[var(--line)] px-3 py-2"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
+                  placeholder="Mobile app for field crews"
                 />
-              </label>
-              <label className="flex flex-col gap-1 text-sm md:col-span-2">
-                <span>Summary</span>
-                <textarea
+              </Field>
+              <Field label="Summary">
+                <Textarea
                   required
-                  className="min-h-24 rounded border border-[var(--line)] px-3 py-2"
+                  rows={4}
                   value={summary}
                   onChange={(e) => setSummary(e.target.value)}
+                  placeholder="What they need, timeline, and any known constraints"
                 />
-              </label>
-              <button
-                type="submit"
-                className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:w-fit"
-              >
-                Create query
-              </button>
+              </Field>
+              <div className="flex justify-end gap-2">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save inquiry</Button>
+              </div>
             </form>
-          </>
-        )}
+          </CardBody>
+        </Card>
+      ) : null}
 
-        <section className="space-y-3 rounded border border-[var(--line)] bg-white p-4">
-          <h3 className="font-medium">Active query</h3>
-          <label className="flex flex-col gap-1 text-sm">
-            <span>Query id</span>
-            <input
-              className="rounded border border-[var(--line)] px-3 py-2 font-mono text-xs"
-              value={queryId}
-              onChange={(e) => {
-                setQueryId(e.target.value);
-                setWorkspaceQueryId(e.target.value);
-              }}
-            />
-          </label>
-          {current ? (
-            <p className="text-sm text-[var(--muted)]">
-              Status <strong>{current.status}</strong> · SLA {current.sla_status}
-            </p>
-          ) : null}
-          <div className="flex flex-wrap gap-2">
-            {["classified", "qualifying", "qualified"].map((status) => (
-              <button
-                key={status}
-                type="button"
-                className="rounded border border-[var(--line)] px-3 py-1.5 text-sm"
-                onClick={() => void onTransition(status)}
-                disabled={!queryId || !can(session.variant, "edit_draft")}
-              >
-                → {status}
-              </button>
-            ))}
-          </div>
-        </section>
-      </div>
+      {!current ? (
+        <EmptyState
+          title="No inquiry selected"
+          body="New inbound requests appear here. Capture an inquiry to start qualification and requirement gathering."
+          action={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowCreate(true)}>New inquiry</Button>
+            ) : null
+          }
+        />
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+          <Card>
+            <CardHeader className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-display text-xl">{current.subject}</h2>
+                <p className="mt-1 text-sm text-[var(--muted)]">{current.summary}</p>
+              </div>
+              <StatusBadge status={current.status} />
+            </CardHeader>
+            <CardBody className="space-y-3">
+              <p className="text-sm text-[var(--muted)]">
+                Move the inquiry through intake using the allowed actions for your role.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["classified", "qualified", "waiting_client"].map((next) => (
+                  <Button
+                    key={next}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => void onTransition(next)}
+                  >
+                    Mark {next.replace(/_/g, " ")}
+                  </Button>
+                ))}
+              </div>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              <h3 className="font-display text-lg">BD assistant</h3>
+            </CardHeader>
+            <CardBody className="space-y-3 text-sm">
+              <p className="text-[var(--muted)]">
+                Completeness and clarification prompts will appear here once requirement gathering
+                is linked to this inquiry.
+              </p>
+              <Button variant="ai" size="sm">
+                Generate clarifying questions
+              </Button>
+            </CardBody>
+          </Card>
+        </div>
+      )}
     </AppShell>
   );
 }

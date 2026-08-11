@@ -1,10 +1,15 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { MessageSquarePlus, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { EmptyState, StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   addMessageRecipient,
@@ -28,19 +33,18 @@ export function CommsDeskPage() {
   const { session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
   const [subject, setSubject] = useState("");
   const [classification, setClassification] = useState("internal");
-  const [entityType, setEntityType] = useState("client_query");
-  const [entityId, setEntityId] = useState("");
   const [conversationId, setConversationId] = useState("");
+  const [conversationSubject, setConversationSubject] = useState("");
   const [messageBody, setMessageBody] = useState("");
-  const [recipient, setRecipient] = useState("ops@example.com");
+  const [recipient, setRecipient] = useState("");
   const [activeMessage, setActiveMessage] = useState<CommsMessage | null>(null);
   const [messages, setMessages] = useState<CommsMessage[]>([]);
 
   useEffect(() => {
     setConversationId(getWorkspaceConversationId());
-    setEntityId(getWorkspaceQueryId() || crypto.randomUUID());
   }, []);
 
   const refreshMessages = useCallback(async () => {
@@ -51,7 +55,7 @@ export function CommsDeskPage() {
     try {
       setMessages(await listConversationMessages(session, conversationId));
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Load messages failed");
+      setError(err instanceof ApiError ? err.problem.message : "Unable to load messages");
     }
   }, [conversationId, session]);
 
@@ -65,19 +69,27 @@ export function CommsDeskPage() {
     setOk(null);
     try {
       const projectId = getWorkspaceProjectId();
+      const linkedQuery = getWorkspaceQueryId();
+      const relatedEntityId = linkedQuery || crypto.randomUUID();
       const created = await createConversation(session, {
         subject: subject.trim(),
-        related_entity_type: entityType.trim(),
-        related_entity_id: entityId.trim(),
+        related_entity_type: linkedQuery ? "client_query" : "opportunity",
+        related_entity_id: relatedEntityId,
         classification,
         project_id: projectId || undefined,
       });
       setConversationId(created.id);
+      setConversationSubject(created.subject);
       setWorkspaceConversationId(created.id);
-      setOk(`Conversation opened (${created.classification})`);
+      setOk(
+        created.classification === "confidential" || created.classification === "restricted"
+          ? "Conversation opened — sensitive messages will need approval before send"
+          : "Conversation opened",
+      );
       setSubject("");
+      setShowCreate(false);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create conversation failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not open conversation");
     }
   }
 
@@ -101,12 +113,12 @@ export function CommsDeskPage() {
       setMessageBody("");
       setOk(
         message.requires_approval
-          ? "Draft needs approval before send"
-          : "Message drafted with recipient",
+          ? "Draft saved — approval required before send"
+          : "Draft saved with recipient",
       );
       await refreshMessages();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Draft message failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not draft message");
     }
   }
 
@@ -120,7 +132,7 @@ export function CommsDeskPage() {
       setOk("Message approved");
       await refreshMessages();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Approve failed");
+      setError(err instanceof ApiError ? err.problem.message : "Approval failed");
     }
   }
 
@@ -131,7 +143,7 @@ export function CommsDeskPage() {
     try {
       const sent = await sendCommsMessage(session, activeMessage.id);
       setActiveMessage(sent);
-      setOk("Message sent — history is immutable");
+      setOk("Message sent");
       await refreshMessages();
     } catch (err) {
       setError(err instanceof ApiError ? err.problem.message : "Send failed");
@@ -139,163 +151,197 @@ export function CommsDeskPage() {
   }
 
   return (
-    <AppShell title="Comms">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Communications</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-220 entity-linked conversations. Sensitive classifications require approval
-            before send.
-          </p>
-        </div>
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+    <AppShell title="Messages" breadcrumbs={["Coordination", "Messages"]}>
+      <PageHeader
+        title="Messages"
+        description="Entity-linked conversations with the client and team. Sensitive classifications require approval before send."
+        actions={
+          can(session.variant, "create") ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              New conversation
+            </Button>
+          ) : null
+        }
+      />
 
-        {can(session.variant, "create") ? (
-          <form
-            onSubmit={onCreateConversation}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-2"
-            aria-label="Open conversation"
-          >
-            <label className="flex flex-col gap-1 text-sm md:col-span-2">
-              <span>Subject</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Related entity type</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={entityType}
-                onChange={(e) => setEntityType(e.target.value)}
-                pattern="[a-z0-9_]+"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Related entity id</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2 font-mono text-xs"
-                value={entityId}
-                onChange={(e) => setEntityId(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Classification</span>
-              <select
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={classification}
-                onChange={(e) => setClassification(e.target.value)}
-              >
-                <option value="internal">internal</option>
-                <option value="confidential">confidential (needs approval)</option>
-                <option value="restricted">restricted (needs approval)</option>
-              </select>
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:col-span-2 md:w-fit"
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+
+      {showCreate && can(session.variant, "create") ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Open conversation</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Links to the active inquiry from Queries when available, otherwise a new opportunity thread.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form
+              onSubmit={onCreateConversation}
+              className="grid gap-4 md:grid-cols-2"
+              aria-label="Open conversation"
             >
-              Open conversation
-            </button>
-          </form>
-        ) : (
-          <StatusBanner kind="error">This UI role cannot create conversations.</StatusBanner>
-        )}
-
-        {conversationId ? (
-          <p className="text-sm text-[var(--muted)]">
-            Active conversation: <code>{conversationId}</code>
-          </p>
-        ) : null}
-
-        {conversationId && can(session.variant, "create") ? (
-          <form
-            onSubmit={onCreateMessage}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4"
-            aria-label="Draft message"
-          >
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Message body</span>
-              <textarea
-                required
-                rows={4}
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={messageBody}
-                onChange={(e) => setMessageBody(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Recipient</span>
-              <input
-                required
-                type="email"
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="w-fit rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white"
-            >
-              Draft message
-            </button>
-          </form>
-        ) : null}
-
-        {activeMessage ? (
-          <div className="flex flex-wrap gap-2">
-            {activeMessage.requires_approval && can(session.variant, "approve") ? (
-              <button
-                type="button"
-                onClick={() => void onApprove()}
-                className="rounded border border-[var(--line)] bg-white px-3 py-2 text-sm"
+              <Field label="Subject" className="md:col-span-2">
+                <Input
+                  required
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder="Follow-up on discovery workshop"
+                />
+              </Field>
+              <Field
+                label="Sensitivity"
+                hint="Confidential and restricted drafts need approval before send."
               >
-                Approve message
-              </button>
-            ) : null}
-            {can(session.variant, "submit") || can(session.variant, "create") ? (
-              <button
-                type="button"
-                onClick={() => void onSend()}
-                className="rounded border border-[var(--line)] bg-white px-3 py-2 text-sm"
-              >
-                Send message
-              </button>
-            ) : null}
-          </div>
-        ) : null}
+                <Select
+                  value={classification}
+                  onChange={(e) => setClassification(e.target.value)}
+                >
+                  <option value="internal">Internal</option>
+                  <option value="confidential">Confidential</option>
+                  <option value="restricted">Restricted</option>
+                </Select>
+              </Field>
+              <div className="flex items-end justify-end gap-2">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Open conversation</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
 
-        <section aria-label="Conversation messages">
-          <h3 className="font-display text-xl">Messages</h3>
-          {messages.length === 0 ? (
-            <EmptyState title="No messages yet" body="Draft a message after opening a conversation." />
-          ) : (
-            <ul className="mt-3 divide-y divide-[var(--line)] rounded border border-[var(--line)] bg-white">
-              {messages.map((m) => (
-                <li key={m.id} className="px-4 py-3 text-sm">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-medium">{m.status}</span>
-                    <span className="text-[var(--muted)]">{formatUtc(m.created_at)}</span>
+      {!conversationId && !showCreate ? (
+        <EmptyState
+          title="No conversation open"
+          body="Start a thread for a client inquiry or opportunity. Draft messages, approve when needed, then send."
+          action={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowCreate(true)}>
+                <MessageSquarePlus className="h-4 w-4" />
+                New conversation
+              </Button>
+            ) : null
+          }
+        />
+      ) : null}
+
+      {conversationId ? (
+        <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
+          <Card>
+            <CardHeader>
+              <h2 className="font-display text-lg">
+                {conversationSubject || "Active conversation"}
+              </h2>
+              <p className="text-sm text-[var(--muted)]">
+                Draft the next message and choose a recipient.
+              </p>
+            </CardHeader>
+            <CardBody>
+              {can(session.variant, "create") ? (
+                <form
+                  onSubmit={onCreateMessage}
+                  className="grid gap-4"
+                  aria-label="Draft message"
+                >
+                  <Field label="Message">
+                    <Textarea
+                      required
+                      rows={5}
+                      value={messageBody}
+                      onChange={(e) => setMessageBody(e.target.value)}
+                      placeholder="Write the message to send…"
+                    />
+                  </Field>
+                  <Field label="Recipient">
+                    <Input
+                      required
+                      type="email"
+                      value={recipient}
+                      onChange={(e) => setRecipient(e.target.value)}
+                      placeholder="ops@client.com"
+                    />
+                  </Field>
+                  <Field label="Message sensitivity">
+                    <Select
+                      value={classification}
+                      onChange={(e) => setClassification(e.target.value)}
+                    >
+                      <option value="internal">Internal</option>
+                      <option value="confidential">Confidential</option>
+                      <option value="restricted">Restricted</option>
+                    </Select>
+                  </Field>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <Button type="submit">Draft message</Button>
+                    {activeMessage?.requires_approval && can(session.variant, "approve") ? (
+                      <Button type="button" variant="outline" onClick={() => void onApprove()}>
+                        Approve draft
+                      </Button>
+                    ) : null}
+                    {activeMessage &&
+                    (can(session.variant, "submit") || can(session.variant, "create")) ? (
+                      <Button type="button" variant="outline" onClick={() => void onSend()}>
+                        Send
+                      </Button>
+                    ) : null}
                   </div>
-                  <p className="mt-1 whitespace-pre-wrap">{m.body}</p>
-                  <p className="mt-1 text-xs text-[var(--muted)]">
-                    {m.classification}
-                    {m.requires_approval ? " · approval required" : ""}
-                    {m.sent_at ? ` · sent ${formatUtc(m.sent_at)}` : ""}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
+                </form>
+              ) : (
+                <StatusBanner kind="warning">Your role cannot draft messages.</StatusBanner>
+              )}
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <h2 className="font-display text-lg">Thread</h2>
+              <p className="text-sm text-[var(--muted)]">Sent and draft history for this conversation.</p>
+            </CardHeader>
+            {messages.length === 0 ? (
+              <CardBody>
+                <EmptyState
+                  title="No messages yet"
+                  body="Draft the first message to start the thread."
+                />
+              </CardBody>
+            ) : (
+              <ul className="divide-y divide-[var(--line)]">
+                {messages.map((m) => (
+                  <li key={m.id} className="px-5 py-4 text-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <StatusBadge status={m.status} />
+                        <StatusBadge status={m.classification} />
+                        {m.requires_approval ? (
+                          <span className="text-xs text-[var(--warning)]">Needs approval</span>
+                        ) : null}
+                      </div>
+                      <span className="text-xs text-[var(--muted)]">{formatUtc(m.created_at)}</span>
+                    </div>
+                    <p className="mt-2 whitespace-pre-wrap">{m.body}</p>
+                    {m.sent_at ? (
+                      <p className="mt-1 text-xs text-[var(--muted)]">
+                        Sent {formatUtc(m.sent_at)}
+                      </p>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="mt-2 text-xs font-medium text-[var(--accent)] hover:underline"
+                      onClick={() => setActiveMessage(m)}
+                    >
+                      Select for actions
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+        </div>
+      ) : null}
     </AppShell>
   );
 }

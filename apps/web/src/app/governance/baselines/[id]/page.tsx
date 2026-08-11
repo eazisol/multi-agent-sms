@@ -8,7 +8,7 @@ export default async function Page({
 }) {
   const { id } = await params;
   return (
-    <AppShell title="Baseline detail">
+    <AppShell title="Baseline detail" breadcrumbs={["Governance", "Source Baselines", "Detail"]}>
       <BaselineDetailPage baselineId={id} />
     </AppShell>
   );

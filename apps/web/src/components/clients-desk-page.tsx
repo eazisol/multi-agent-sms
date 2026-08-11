@@ -1,10 +1,15 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { Plus, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { useSession } from "@/components/session-provider";
-import { EmptyState, LoadingBlock, StatusBanner } from "@/components/ui-states";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
+import { Field, Input } from "@/components/ui/field";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { EmptyState, PageHeader, SkeletonRows, StatusBanner } from "@/components/ui-states";
 import {
   ApiError,
   createClient,
@@ -21,8 +26,10 @@ export function ClientsDeskPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
-  const [code, setCode] = useState("");
+  const [q, setQ] = useState("");
+  const [showCreate, setShowCreate] = useState(false);
   const [legalName, setLegalName] = useState("");
+  const [code, setCode] = useState("");
   const [industry, setIndustry] = useState("");
 
   const load = useCallback(async () => {
@@ -33,7 +40,7 @@ export function ClientsDeskPage() {
       setItems(page.items);
       setTotal(page.page.total);
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "API unreachable");
+      setError(err instanceof ApiError ? err.problem.message : "Unable to load clients");
       setItems([]);
     } finally {
       setLoading(false);
@@ -44,107 +51,170 @@ export function ClientsDeskPage() {
     void load();
   }, [load]);
 
+  const filtered = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    if (!query) return items;
+    return items.filter(
+      (c) =>
+        c.legal_name.toLowerCase().includes(query) ||
+        c.code.toLowerCase().includes(query) ||
+        (c.industry ?? "").toLowerCase().includes(query),
+    );
+  }, [items, q]);
+
   async function onCreate(event: FormEvent) {
     event.preventDefault();
     setError(null);
     setOk(null);
     try {
       const created = await createClient(session, {
-        code: code.trim().toLowerCase(),
+        code: (code || legalName).trim().toLowerCase().replace(/\s+/g, "-"),
         legal_name: legalName.trim(),
         industry: industry.trim() || undefined,
       });
-      setOk(`Created client ${created.code}`);
-      setCode("");
+      setOk(`${created.legal_name} added`);
       setLegalName("");
+      setCode("");
       setIndustry("");
+      setShowCreate(false);
       await load();
     } catch (err) {
-      setError(err instanceof ApiError ? err.problem.message : "Create failed");
+      setError(err instanceof ApiError ? err.problem.message : "Could not create client");
     }
   }
 
   return (
-    <AppShell title="Clients">
-      <div className="space-y-6">
-        <div>
-          <h2 className="font-display text-3xl tracking-tight">Client desk</h2>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            MOD-200 clients. Server authorization remains authoritative.
-          </p>
-        </div>
+    <AppShell title="Clients" breadcrumbs={["Business Development", "Clients"]}>
+      <PageHeader
+        title="Clients"
+        description="Accounts your team delivers for — contacts, projects, and commercial context in one place."
+        actions={
+          can(session.variant, "create") ? (
+            <Button onClick={() => setShowCreate((v) => !v)}>
+              <Plus className="h-4 w-4" />
+              New client
+            </Button>
+          ) : null
+        }
+      />
 
-        {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
-        {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
+      {error ? <StatusBanner kind="error">{error}</StatusBanner> : null}
+      {ok ? <StatusBanner kind="success">{ok}</StatusBanner> : null}
 
-        {can(session.variant, "create") ? (
-          <form
-            onSubmit={onCreate}
-            className="grid gap-3 rounded border border-[var(--line)] bg-white p-4 md:grid-cols-4"
-            aria-label="Create client"
-          >
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Code</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="acme"
-                pattern="[a-z0-9_-]+"
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm md:col-span-2">
-              <span>Legal name</span>
-              <input
-                required
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={legalName}
-                onChange={(e) => setLegalName(e.target.value)}
-              />
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span>Industry</span>
-              <input
-                className="rounded border border-[var(--line)] px-3 py-2"
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-              />
-            </label>
-            <button
-              type="submit"
-              className="rounded bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white md:col-span-4 md:w-fit"
-            >
-              Create client
-            </button>
-          </form>
+      {showCreate ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <h2 className="font-display text-lg">Create client</h2>
+            <p className="text-sm text-[var(--muted)]">
+              Add the basic business information. More contacts and ownership can be assigned later.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <form onSubmit={onCreate} className="grid gap-4 md:grid-cols-2" aria-label="Create client">
+              <Field label="Client name" hint="Legal or trading name used with the customer">
+                <Input
+                  required
+                  value={legalName}
+                  onChange={(e) => {
+                    setLegalName(e.target.value);
+                    if (!code) {
+                      setCode(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""));
+                    }
+                  }}
+                  placeholder="Acme Corporation"
+                />
+              </Field>
+              <Field label="Industry">
+                <Input
+                  value={industry}
+                  onChange={(e) => setIndustry(e.target.value)}
+                  placeholder="Technology"
+                />
+              </Field>
+              <Field label="Short code" hint="Used in reports and references">
+                <Input
+                  required
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  pattern="[a-z0-9_-]+"
+                />
+              </Field>
+              <div className="flex items-end justify-end gap-2 md:col-span-2">
+                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Create client</Button>
+              </div>
+            </form>
+          </CardBody>
+        </Card>
+      ) : null}
+
+      <Card>
+        <CardHeader className="flex flex-wrap items-center gap-3">
+          <div className="relative min-w-[220px] flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+            <Input
+              className="pl-9"
+              placeholder="Search clients..."
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              aria-label="Search clients"
+            />
+          </div>
+          <p className="text-sm text-[var(--muted)]">{total} total</p>
+        </CardHeader>
+        {loading ? (
+          <SkeletonRows />
+        ) : filtered.length === 0 ? (
+          <CardBody>
+            <EmptyState
+              title="No clients yet"
+              body="Clients anchor every query, project, and delivery conversation. Start by adding your first account."
+              action={
+                can(session.variant, "create") ? (
+                  <Button onClick={() => setShowCreate(true)}>
+                    <Plus className="h-4 w-4" />
+                    Add client
+                  </Button>
+                ) : null
+              }
+              secondaryAction={
+                <Button variant="ai">
+                  <Sparkles className="h-4 w-4" />
+                  Import with AI
+                </Button>
+              }
+            />
+          </CardBody>
         ) : (
-          <StatusBanner kind="error">This UI role cannot create clients.</StatusBanner>
-        )}
-
-        {loading ? <LoadingBlock label="Loading clients" /> : null}
-        {!loading && items.length === 0 ? (
-          <EmptyState title="No clients yet" body="Create a client to start Phase 2 work." />
-        ) : null}
-        {!loading && items.length > 0 ? (
-          <div className="overflow-x-auto rounded border border-[var(--line)] bg-white">
+          <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
-              <caption className="sr-only">Clients ({total})</caption>
-              <thead className="border-b border-[var(--line)] bg-[var(--panel)]">
+              <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
                 <tr>
-                  <th className="px-3 py-2 font-medium">Code</th>
-                  <th className="px-3 py-2 font-medium">Legal name</th>
-                  <th className="px-3 py-2 font-medium">Status</th>
-                  <th className="px-3 py-2 font-medium">Created</th>
+                  <th className="px-5 py-3 font-medium">Client</th>
+                  <th className="px-5 py-3 font-medium">Industry</th>
+                  <th className="px-5 py-3 font-medium">Status</th>
+                  <th className="px-5 py-3 font-medium">Created</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((client) => (
-                  <tr key={client.id} className="border-b border-[var(--line)]">
-                    <td className="px-3 py-2 font-medium">{client.code}</td>
-                    <td className="px-3 py-2">{client.legal_name}</td>
-                    <td className="px-3 py-2">{client.status}</td>
-                    <td className="px-3 py-2 text-[var(--muted)]">
+                {filtered.map((client) => (
+                  <tr
+                    key={client.id}
+                    className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+                  >
+                    <td className="px-5 py-3">
+                      <p className="font-medium">{client.legal_name}</p>
+                      <p className="text-xs text-[var(--muted)]">{client.code}</p>
+                    </td>
+                    <td className="px-5 py-3 text-[var(--muted)]">
+                      {client.industry || "—"}
+                    </td>
+                    <td className="px-5 py-3">
+                      <StatusBadge status={client.status} />
+                    </td>
+                    <td className="px-5 py-3 text-[var(--muted)]">
                       {formatUtc(client.created_at)}
                     </td>
                   </tr>
@@ -152,8 +222,8 @@ export function ClientsDeskPage() {
               </tbody>
             </table>
           </div>
-        ) : null}
-      </div>
+        )}
+      </Card>
     </AppShell>
   );
 }
