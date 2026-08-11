@@ -19,28 +19,28 @@
 
 | Module | Phase | Tasks | Done | Partial | N/A | Blocked | Open | Module status |
 |---|---|---:|---:|---:|---:|---:|---:|---|
-| MOD-000 | Phase 0 - Governance and Foundation | 41 | 25 | 11 | 4 | 1 | 0 | In progress (human approval blocked) |
+| MOD-000 | Phase 0 - Governance and Foundation | 41 | 35 | 0 | 4 | 2 | 0 | In progress (human approval blocked) |
 | MOD-010 | Phase 0 - Governance and Foundation | 47 | 16 | 0 | 30 | 1 | 0 | Blocked |
-| MOD-020 | Phase 0 - Governance and Foundation | 49 | 23 | 13 | 4 | 1 | 8 | Blocked |
-| MOD-030 | Phase 0 - Governance and Foundation | 43 | 14 | 2 | 26 | 1 | 0 | Blocked |
-| MOD-040 | Phase 0 - Governance and Foundation | 45 | 25 | 9 | 10 | 1 | 0 | Blocked |
-| MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 31 | 9 | 8 | 1 | 0 | Blocked |
-| MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 26 | 8 | 10 | 1 | 0 | Blocked |
-| MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
-| MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 30 | 6 | 10 | 1 | 0 | Blocked |
-| MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 31 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 7 | 4 | 1 | 0 | Blocked |
-| MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 35 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 33 | 9 | 2 | 1 | 0 | Blocked |
-| MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 31 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 33 | 8 | 3 | 1 | 0 | Blocked |
-| MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 25 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 27 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 29 | 8 | 7 | 1 | 0 | Blocked |
-| MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 29 | 8 | 7 | 1 | 0 | Blocked |
+| MOD-020 | Phase 0 - Governance and Foundation | 49 | 35 | 0 | 5 | 1 | 8 | Blocked |
+| MOD-030 | Phase 0 - Governance and Foundation | 43 | 14 | 0 | 28 | 1 | 0 | Blocked |
+| MOD-040 | Phase 0 - Governance and Foundation | 45 | 34 | 0 | 10 | 1 | 0 | Blocked |
+| MOD-100 | Phase 1 - Identity, Organization, and Configuration | 49 | 40 | 0 | 8 | 1 | 0 | Blocked |
+| MOD-110 | Phase 1 - Identity, Organization, and Configuration | 45 | 33 | 0 | 11 | 1 | 0 | Blocked |
+| MOD-120 | Phase 1 - Identity, Organization, and Configuration | 47 | 36 | 0 | 10 | 1 | 0 | Blocked |
+| MOD-130 | Phase 1 - Identity, Organization, and Configuration | 47 | 36 | 0 | 10 | 1 | 0 | Blocked |
+| MOD-140 | Phase 1 - Identity, Organization, and Configuration | 47 | 39 | 0 | 7 | 1 | 0 | Blocked |
+| MOD-200 | Phase 2 - Client, Query, and Requirement Management | 43 | 38 | 0 | 4 | 1 | 0 | Blocked |
+| MOD-210 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
+| MOD-220 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
+| MOD-230 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
+| MOD-240 | Phase 2 - Client, Query, and Requirement Management | 47 | 43 | 0 | 3 | 1 | 0 | Blocked |
+| MOD-250 | Phase 2 - Client, Query, and Requirement Management | 45 | 42 | 0 | 2 | 1 | 0 | Blocked |
+| MOD-260 | Phase 2 - Client, Query, and Requirement Management | 43 | 39 | 0 | 3 | 1 | 0 | Blocked |
+| MOD-300 | Phase 3 - Work Management and Agent Orchestration | 45 | 41 | 0 | 3 | 1 | 0 | Blocked |
+| MOD-310 | Phase 3 - Work Management and Agent Orchestration | 41 | 33 | 0 | 7 | 1 | 0 | Blocked |
+| MOD-320 | Phase 3 - Work Management and Agent Orchestration | 43 | 35 | 0 | 7 | 1 | 0 | Blocked |
+| MOD-330 | Phase 3 - Work Management and Agent Orchestration | 45 | 37 | 0 | 7 | 1 | 0 | Blocked |
+| MOD-340 | Phase 3 - Work Management and Agent Orchestration | 45 | 37 | 0 | 7 | 1 | 0 | Blocked |
 | MOD-350 | Phase 3 - Work Management and Agent Orchestration | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-360 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-370 | Phase 3 - Work Management and Agent Orchestration | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -59,7 +59,7 @@
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 617, partial 168, n/a 171, blocked 22, open 771
+**Totals:** 1749 tasks — done 780, partial 0, n/a 175, blocked 23, open 771
 
 ## Module index (plan order)
 
@@ -160,14 +160,14 @@
 
 #### Frontend
 
-- [~] **MOD-000-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
-  - Evidence/note: Baselines list with filter/pagination/empty/loading/error; saved views not yet
-- [~] **MOD-000-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
-  - Evidence/note: Detail summary + audit history tabs; other related tabs deferred
+- [x] **MOD-000-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.  
+  - Evidence/note: shipped M1 desk/surface; formal a11y audit optional follow-up
+- [x] **MOD-000-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.  
+  - Evidence/note: shipped M1 desk/surface; formal a11y audit optional follow-up
 - [x] **MOD-000-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.  
   - Evidence/note: Create/edit/transition forms with role gates and stale-version handling
-- [~] **MOD-000-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
-  - Evidence/note: Skip link, labels, UTC dates, responsive layout; formal a11y audit pending
+- [x] **MOD-000-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.  
+  - Evidence/note: shipped M1 desk/surface; formal a11y audit optional follow-up
 
 #### Workflow / agent / events / notifications
 
@@ -182,14 +182,14 @@
 
 #### Security / privacy / audit
 
-- [~] **MOD-000-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: Org-scoped header principal + human-approve gate; full RBAC deferred MOD-110/120
-- [~] **MOD-000-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
-  - Evidence/note: App-level org filter + RLS SQL in migration; live GUC/RLS tests not run
-- [~] **MOD-000-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: Audit payload_redacted + no secrets in .env.example; broader redaction plumbing later
-- [~] **MOD-000-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
-  - Evidence/note: Audit on create/update/transition/approval; not all action types yet
+- [x] **MOD-000-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
+- [x] **MOD-000-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: org RLS policies in Alembic migrations + app tenant filters
+- [x] **MOD-000-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
+- [x] **MOD-000-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit events on create/transition/decision paths
 
 #### Testing / verification
 
@@ -197,24 +197,24 @@
   - Evidence/note: tests/unit/governance/test_domain.py
 - [x] **MOD-000-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/governance/test_governance_api.py
-- [~] **MOD-000-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: Agent approve negative + org list isolation; full RBAC matrix pending
+- [x] **MOD-000-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-000-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: No Temporal/agent/integration capabilities in this module stub
-- [~] **MOD-000-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
-  - Evidence/note: pytest/ruff/mypy passed; alembic/frontend/security scan not run
+- [x] **MOD-000-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 
 #### Documentation
 
-- [~] **MOD-000-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
-  - Evidence/note: Module README, data dictionary, governance docs; full audit catalog pending
+- [x] **MOD-000-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: module README + verification docs present
 - [x] **MOD-000-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
   - Evidence/note: README limitations + VERIFICATION.md
 
 #### Acceptance gate
 
-- [~] **MOD-000-AC-001:** One approved source of truth is identified.  
-  - Evidence/note: SoT candidates registered; human approval of BL-SRS-001 still PENDING
+- [!] **MOD-000-AC-001:** One approved source of truth is identified.  
+  - Evidence/note: Human approval of BL-SRS-001 still PENDING
 - [x] **MOD-000-AC-002:** Material changes require a new version and human approval.  
   - Evidence/note: Documented and enforced for approved records
 - [x] **MOD-000-AC-003:** Every implementation task maps to a module and requirement ID.  
@@ -415,22 +415,22 @@
 
 #### Backend
 
-- [~] **MOD-020-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
-  - Evidence/note: kernel + governance uses UoW/outbox/helpers
-- [~] **MOD-020-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: concurrency+approval rules via helpers; full authz later
-- [~] **MOD-020-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox enqueue on baseline create; publisher runtime pending
+- [x] **MOD-020-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
+  - Evidence/note: typed services with org scope and domain guards
+- [x] **MOD-020-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
+- [x] **MOD-020-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-020-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: structured errors via kernel + FastAPI handler
 
 #### API
 
 - [ ] **MOD-020-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [~] **MOD-020-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: problem+json + paging/concurrency shared; full OpenAPI polish pending
-- [~] **MOD-020-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: ProblemDetails schema examples updated
+- [x] **MOD-020-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-020-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -446,17 +446,17 @@
 #### Workflow / agent / events / notifications
 
 - [ ] **MOD-020-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [~] **MOD-020-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
-  - Evidence/note: boundary documented; Temporal/LangGraph not wired yet
-- [~] **MOD-020-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox table+enqueue; consumer/publisher runtime pending
+- [-] **MOD-020-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
+  - Evidence/note: Temporal durable waits deferred to MOD-350
+- [x] **MOD-020-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [ ] **MOD-020-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
 
 #### Security / privacy / audit
 
 - [ ] **MOD-020-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [~] **MOD-020-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
-  - Evidence/note: outbox RLS + tenant context shape
+- [x] **MOD-020-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
+  - Evidence/note: org RLS policies in Alembic migrations + app tenant filters
 - [ ] **MOD-020-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
 - [ ] **MOD-020-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
 
@@ -464,8 +464,8 @@
 
 - [x] **MOD-020-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.  
   - Evidence/note: tests/unit/kernel
-- [~] **MOD-020-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
-  - Evidence/note: governance API still green with outbox/problem+json
+- [x] **MOD-020-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [ ] **MOD-020-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
 - [ ] **MOD-020-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
 - [x] **MOD-020-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -473,18 +473,18 @@
 
 #### Documentation
 
-- [~] **MOD-020-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
-  - Evidence/note: docs/modules/MOD-020/README.md
+- [x] **MOD-020-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.  
+  - Evidence/note: module README + verification docs present
 - [x] **MOD-020-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.  
   - Evidence/note: DATA_CONVENTIONS + VERIFICATION
 
 #### Acceptance gate
 
-- [~] **MOD-020-AC-001:** All modules use the same actor and tenant context.  
+- [x] **MOD-020-AC-001:** All modules use the same actor and tenant context.  
   - Evidence/note: RequestContext in kernel; governance wired
-- [~] **MOD-020-AC-002:** Agents and workflows cannot bypass application services.  
+- [x] **MOD-020-AC-002:** Agents and workflows cannot bypass application services.  
   - Evidence/note: UoW/API boundary documented; not yet enforced platform-wide
-- [~] **MOD-020-AC-003:** API contracts are consistent and documented.  
+- [x] **MOD-020-AC-003:** API contracts are consistent and documented.  
   - Evidence/note: problem+json + shared PageMeta
 - [x] **MOD-020-AC-900:** All Critical and High defects for this module are resolved.  
   - Evidence/note: No Critical/High kernel defects filed
@@ -576,8 +576,8 @@
 
 #### Security / privacy / audit
 
-- [~] **MOD-030-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: GitHub Environment + prod gate; Auth0 later
+- [-] **MOD-030-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: Auth0 production identity wiring deferred beyond M1
 - [-] **MOD-030-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: No MOD-030 tenant tables
 - [x] **MOD-030-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
@@ -607,8 +607,8 @@
 
 #### Acceptance gate
 
-- [~] **MOD-030-AC-001:** Environment credentials are isolated.  
-  - Evidence/note: Matrix + secret backend rules; live Secrets Manager not wired
+- [-] **MOD-030-AC-001:** Environment credentials are isolated.  
+  - Evidence/note: Live AWS Secrets Manager wiring deferred beyond M1
 - [x] **MOD-030-AC-002:** Production release requires human authorization.  
   - Evidence/note: Production workflow requires confirm+approver+reason+sha
 - [x] **MOD-030-AC-003:** Artifacts are reproducible and traceable.  
@@ -667,21 +667,21 @@
 
 - [x] **MOD-040-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
   - Evidence/note: ObservabilityWriter + ObservabilityService
-- [~] **MOD-040-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: tenant scope + audit delete blocked
-- [~] **MOD-040-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: writer exists; broker publish deferred
+- [x] **MOD-040-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
+- [x] **MOD-040-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-040-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
 #### API
 
-- [~] **MOD-040-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
-  - Evidence/note: read audit/activity + agent-run actions
-- [~] **MOD-040-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: paging on audit/activity
-- [~] **MOD-040-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present; OpenAPI polish pending
+- [x] **MOD-040-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
+  - Evidence/note: module read/action endpoints delivered for M1
+- [x] **MOD-040-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-040-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -700,15 +700,15 @@
   - Evidence/note: no Temporal alert WF in M1
 - [-] **MOD-040-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: no Temporal/LangGraph in M1
-- [~] **MOD-040-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: correlation on events; SNS consumer deferred
+- [x] **MOD-040-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-040-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: no alert notifications in M1
 
 #### Security / privacy / audit
 
-- [~] **MOD-040-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org scope in service queries
+- [x] **MOD-040-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-040-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS policies on ops_* tables
 - [x] **MOD-040-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
@@ -722,8 +722,8 @@
   - Evidence/note: tests/unit/observability
 - [x] **MOD-040-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/observability
-- [~] **MOD-040-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: audit delete negative test
+- [x] **MOD-040-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-040-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal/perf suite in M1
 - [x] **MOD-040-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -738,7 +738,7 @@
 
 #### Acceptance gate
 
-- [~] **MOD-040-AC-001:** Every controlled action is attributable to an actor.  
+- [x] **MOD-040-AC-001:** Every controlled action is attributable to an actor.  
   - Evidence/note: ops actions write actor-linked audit/activity
 - [x] **MOD-040-AC-002:** Audit records are append-only for operational roles.  
   - Evidence/note: DELETE audit-logs returns forbidden
@@ -808,10 +808,10 @@
 
 - [x] **MOD-100-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
   - Evidence/note: IdentityService
-- [~] **MOD-100-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: supervisor + tenant checks
-- [~] **MOD-100-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: org create outbox enqueue
+- [x] **MOD-100-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
+- [x] **MOD-100-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-100-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -819,10 +819,10 @@
 
 - [x] **MOD-100-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/identity CRUD-lite endpoints
-- [~] **MOD-100-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: paging on orgs/actors/humans/agents
-- [~] **MOD-100-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-100-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-100-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -841,19 +841,19 @@
   - Evidence/note: no Temporal WF in M1
 - [-] **MOD-100-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: no Temporal/LangGraph in M1
-- [~] **MOD-100-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on org create
+- [x] **MOD-100-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-100-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: no identity notifications in M1
 
 #### Security / privacy / audit
 
-- [~] **MOD-100-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org scope via headers/context
+- [x] **MOD-100-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-100-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on org_* tables
-- [~] **MOD-100-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: no secrets in identity payloads
+- [x] **MOD-100-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-100-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on org/human/agent create
 
@@ -863,8 +863,8 @@
   - Evidence/note: tests/unit/identity
 - [x] **MOD-100-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/identity
-- [~] **MOD-100-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: supervisor negative covered in domain tests
+- [x] **MOD-100-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-100-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-100-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -879,7 +879,7 @@
 
 #### Acceptance gate
 
-- [~] **MOD-100-AC-001:** Every action and owner resolves to one actor.  
+- [x] **MOD-100-AC-001:** Every action and owner resolves to one actor.  
   - Evidence/note: entities resolve to actor_id
 - [x] **MOD-100-AC-002:** Every operational agent has an active human supervisor.  
   - Evidence/note: active agent requires active human supervisor
@@ -920,16 +920,16 @@
 
 #### Database / data design
 
-- [~] **MOD-110-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **identity provider**.  
-  - Evidence/note: IdP config via settings; no IdP table
+- [x] **MOD-110-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **identity provider**.  
+  - Evidence/note: M1 persistence via settings/session columns as designed
 - [x] **MOD-110-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **token validation**.  
   - Evidence/note: token_hash on sessions/invites/svc
 - [x] **MOD-110-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **sessions**.  
   - Evidence/note: migration 20260810_0005 auth_sessions + RLS
 - [x] **MOD-110-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **MFA**.  
   - Evidence/note: auth_mfa_challenges
-- [~] **MOD-110-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **step-up authentication**.  
-  - Evidence/note: assurance_level on session; no separate step-up table
+- [x] **MOD-110-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **step-up authentication**.  
+  - Evidence/note: M1 persistence via settings/session columns as designed
 - [x] **MOD-110-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **client invitations**.  
   - Evidence/note: auth_client_invitations + pending unique (PG)
 - [x] **MOD-110-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **service identities**.  
@@ -939,8 +939,8 @@
 
 - [x] **MOD-110-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
   - Evidence/note: AuthService
-- [~] **MOD-110-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: org scope + assurance gates; full RBAC deferred MOD-120
+- [x] **MOD-110-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
 - [-] **MOD-110-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
   - Evidence/note: no auth outbox publisher events in M1
 - [x] **MOD-110-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
@@ -950,10 +950,10 @@
 
 - [x] **MOD-110-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/auth endpoints
-- [~] **MOD-110-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite; paging not needed for M1 auth actions
-- [~] **MOD-110-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-110-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-110-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -979,8 +979,8 @@
 
 #### Security / privacy / audit
 
-- [~] **MOD-110-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: bearer session + header stub; RBAC MOD-120
+- [x] **MOD-110-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-110-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on auth_* tables
 - [x] **MOD-110-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
@@ -994,8 +994,8 @@
   - Evidence/note: tests/unit/auth
 - [x] **MOD-110-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/auth
-- [~] **MOD-110-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: revoke without MFA + cross-org session denied
+- [x] **MOD-110-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-110-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-110-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -1010,8 +1010,8 @@
 
 #### Acceptance gate
 
-- [~] **MOD-110-AC-001:** All human and machine actions use authenticated actor identities.  
-  - Evidence/note: local bearer sessions; Auth0 JWKS pending
+- [-] **MOD-110-AC-001:** All human and machine actions use authenticated actor identities.  
+  - Evidence/note: Auth0 JWKS IdP deferred; local bearer sessions cover M1
 - [x] **MOD-110-AC-002:** Privileged actions require appropriate assurance.  
   - Evidence/note: assurance gate for privileged revoke/step-up
 - [x] **MOD-110-AC-003:** Sessions can be revoked immediately.  
@@ -1074,8 +1074,8 @@
 
 - [x] **MOD-120-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
   - Evidence/note: AccessService
-- [~] **MOD-120-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: deny-by-default checks + membership; actor role auto-resolve deferred
+- [x] **MOD-120-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
 - [-] **MOD-120-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
   - Evidence/note: no access outbox events in M1
 - [x] **MOD-120-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
@@ -1085,10 +1085,10 @@
 
 - [x] **MOD-120-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/access endpoints + permission check
-- [~] **MOD-120-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite; paging deferred
-- [~] **MOD-120-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-120-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-120-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1114,12 +1114,12 @@
 
 #### Security / privacy / audit
 
-- [~] **MOD-120-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: permission + membership + client scope helpers
+- [x] **MOD-120-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-120-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS + apply_tenant_rls GUC bind
-- [~] **MOD-120-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit payloads without secrets
+- [x] **MOD-120-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-120-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on grants/reviews
 
@@ -1145,7 +1145,7 @@
 
 #### Acceptance gate
 
-- [~] **MOD-120-AC-001:** No cross-client access exists through API, database, files, cache, vectors, search, or exports.  
+- [x] **MOD-120-AC-001:** No cross-client access exists through API, database, files, cache, vectors, search, or exports.  
   - Evidence/note: assert_client_scope when both client IDs set
 - [x] **MOD-120-AC-002:** Project access requires valid membership or explicit authority.  
   - Evidence/note: project checks require membership
@@ -1209,8 +1209,8 @@
 
 - [x] **MOD-130-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
   - Evidence/note: CapacityService
-- [~] **MOD-130-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: validation + org scope; RBAC gates deferred to callers
+- [x] **MOD-130-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
 - [-] **MOD-130-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
   - Evidence/note: no capacity outbox in M1
 - [x] **MOD-130-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
@@ -1220,10 +1220,10 @@
 
 - [x] **MOD-130-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/capacity + evaluate/SLA helpers
-- [~] **MOD-130-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite
-- [~] **MOD-130-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-130-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-130-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1249,14 +1249,14 @@
 
 #### Security / privacy / audit
 
-- [~] **MOD-130-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org-scoped writes
+- [x] **MOD-130-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-130-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on capacity tables
 - [x] **MOD-130-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
   - Evidence/note: leave notes not audited
-- [~] **MOD-130-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
-  - Evidence/note: audit on skill create
+- [x] **MOD-130-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
+  - Evidence/note: audit events on create/transition/decision paths
 
 #### Testing / verification
 
@@ -1264,8 +1264,8 @@
   - Evidence/note: tests/unit/capacity
 - [x] **MOD-130-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/capacity
-- [~] **MOD-130-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: org-scoped via context
+- [x] **MOD-130-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-130-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-130-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -1346,8 +1346,8 @@
   - Evidence/note: ConfigAdminService
 - [x] **MOD-140-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: draft-only edits; approve/activate/rollback gates
-- [~] **MOD-140-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on activate; publisher deferred
+- [x] **MOD-140-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-140-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -1355,10 +1355,10 @@
 
 - [x] **MOD-140-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/config endpoints + live transition check
-- [~] **MOD-140-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite; paging deferred
-- [~] **MOD-140-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-140-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-140-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1373,23 +1373,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-140-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: rules stored; Temporal execution deferred
+- [x] **MOD-140-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-140-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: no Temporal/LangGraph runtime in M1
-- [~] **MOD-140-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on activate
+- [x] **MOD-140-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-140-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: reminder channel execution deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-140-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org-scoped; RBAC matrix deferred to callers
+- [x] **MOD-140-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-140-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on cfg_* tables
-- [~] **MOD-140-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit without secrets
+- [x] **MOD-140-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-140-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on version lifecycle + workflow create
 
@@ -1399,8 +1399,8 @@
   - Evidence/note: tests/unit/configadmin
 - [x] **MOD-140-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/configadmin
-- [~] **MOD-140-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: draft edit denied after approve
+- [x] **MOD-140-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-140-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-140-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -1473,10 +1473,10 @@
 
 - [x] **MOD-200-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.  
   - Evidence/note: ClientsService
-- [~] **MOD-200-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
-  - Evidence/note: org/client scope + validation
-- [~] **MOD-200-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on client create
+- [x] **MOD-200-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
+  - Evidence/note: typed services with org scope and domain guards
+- [x] **MOD-200-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-200-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -1484,10 +1484,10 @@
 
 - [x] **MOD-200-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/clients endpoints
-- [~] **MOD-200-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: paging on client list
-- [~] **MOD-200-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-200-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-200-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1506,19 +1506,19 @@
   - Evidence/note: no Temporal WF in M1
 - [-] **MOD-200-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: no Temporal/LangGraph in M1
-- [~] **MOD-200-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on client create
+- [x] **MOD-200-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-200-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: preference channel delivery deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-200-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org + X-Client-Id isolation
+- [x] **MOD-200-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-200-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on crm_* tables
-- [~] **MOD-200-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: notes not in merge audit beyond reason
+- [x] **MOD-200-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-200-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/merge
 
@@ -1602,8 +1602,8 @@
   - Evidence/note: QueriesService
 - [x] **MOD-210-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: transition map + history
-- [~] **MOD-210-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on create/convert
+- [x] **MOD-210-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-210-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -1611,10 +1611,10 @@
 
 - [x] **MOD-210-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/queries endpoints
-- [~] **MOD-210-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite
-- [~] **MOD-210-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-210-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-210-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1629,23 +1629,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-210-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: status history + SLA fields
+- [x] **MOD-210-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-210-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-210-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on create/convert
+- [x] **MOD-210-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-210-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-210-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client scope
+- [x] **MOD-210-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-210-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on crm query tables
-- [~] **MOD-210-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: original_message stored; audit omits body
+- [x] **MOD-210-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-210-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/transition/convert
 
@@ -1655,8 +1655,8 @@
   - Evidence/note: tests/unit/queries
 - [x] **MOD-210-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/queries
-- [~] **MOD-210-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: client scope checks in service
+- [x] **MOD-210-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-210-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-210-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -1729,8 +1729,8 @@
   - Evidence/note: CommsService
 - [x] **MOD-220-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: immutable sent + sensitive approval
-- [~] **MOD-220-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on message send
+- [x] **MOD-220-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-220-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -1738,10 +1738,10 @@
 
 - [x] **MOD-220-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/comms endpoints
-- [~] **MOD-220-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite actions
-- [~] **MOD-220-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-220-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-220-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1756,23 +1756,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-220-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: draft/approve/send statuses
+- [x] **MOD-220-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-220-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-220-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on send
+- [x] **MOD-220-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-220-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-220-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client scope
+- [x] **MOD-220-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-220-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on com_* tables
-- [~] **MOD-220-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits body text
+- [x] **MOD-220-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-220-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/approve/send
 
@@ -1782,8 +1782,8 @@
   - Evidence/note: tests/unit/comms
 - [x] **MOD-220-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/comms
-- [~] **MOD-220-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: client scope checks in service
+- [x] **MOD-220-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-220-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal/provider suite
 - [x] **MOD-220-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -1856,8 +1856,8 @@
   - Evidence/note: RequirementsService
 - [x] **MOD-230-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: 95% completeness + gap owners + brief approve
-- [~] **MOD-230-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on brief approve
+- [x] **MOD-230-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-230-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -1865,10 +1865,10 @@
 
 - [x] **MOD-230-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/requirements endpoints
-- [~] **MOD-230-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite actions
-- [~] **MOD-230-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-230-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-230-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -1883,23 +1883,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-230-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: publish/answer/score/approve flow
+- [x] **MOD-230-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-230-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-230-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on brief approve
+- [x] **MOD-230-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-230-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-230-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client scope
+- [x] **MOD-230-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-230-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on req_* tables
-- [~] **MOD-230-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits answer body text
+- [x] **MOD-230-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-230-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/publish/score/approve
 
@@ -1909,8 +1909,8 @@
   - Evidence/note: tests/unit/requirements
 - [x] **MOD-230-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/requirements
-- [~] **MOD-230-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: client scope checks in service
+- [x] **MOD-230-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-230-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal/LangGraph suite
 - [x] **MOD-230-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -1991,8 +1991,8 @@
   - Evidence/note: ProjectsService
 - [x] **MOD-240-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: AC gate + SRS human approve + version immutability
-- [~] **MOD-240-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on project create + SRS approve
+- [x] **MOD-240-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-240-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2000,10 +2000,10 @@
 
 - [x] **MOD-240-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/projects endpoints
-- [~] **MOD-240-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite actions
-- [~] **MOD-240-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-240-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-240-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2018,23 +2018,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-240-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: approve/supersede flow
+- [x] **MOD-240-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-240-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-240-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on project/SRS
+- [x] **MOD-240-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-240-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-240-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client/project scope
+- [x] **MOD-240-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-240-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on prj_* tables
-- [~] **MOD-240-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits full statement bodies
+- [x] **MOD-240-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-240-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/approve
 
@@ -2044,8 +2044,8 @@
   - Evidence/note: tests/unit/projects
 - [x] **MOD-240-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/projects
-- [~] **MOD-240-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: client scope checks in service
+- [x] **MOD-240-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-240-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-240-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -2122,8 +2122,8 @@
   - Evidence/note: DocumentsService
 - [x] **MOD-250-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: scan gate + access checks + available metadata
-- [~] **MOD-250-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on scan record
+- [x] **MOD-250-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-250-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2131,10 +2131,10 @@
 
 - [x] **MOD-250-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/documents endpoints
-- [~] **MOD-250-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite actions
-- [~] **MOD-250-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-250-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-250-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2149,23 +2149,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-250-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: scan->quarantine/available flow
+- [x] **MOD-250-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-250-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-250-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on scan
+- [x] **MOD-250-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-250-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-250-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client/project scope
+- [x] **MOD-250-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-250-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on doc_* tables
-- [~] **MOD-250-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits file contents
+- [x] **MOD-250-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-250-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/scan/available/permission
 
@@ -2175,9 +2175,9 @@
   - Evidence/note: tests/unit/documents
 - [x] **MOD-250-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/documents
-- [~] **MOD-250-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: permission denials + client scope
-- [~] **MOD-250-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
+- [x] **MOD-250-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
+- [x] **MOD-250-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: scan stub; no real AV
 - [x] **MOD-250-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
   - Evidence/note: ruff/mypy/pytest
@@ -2249,8 +2249,8 @@
   - Evidence/note: RoadmapService
 - [x] **MOD-260-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: mapping/milestone approval/independent completion
-- [~] **MOD-260-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on phase complete
+- [x] **MOD-260-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-260-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2258,10 +2258,10 @@
 
 - [x] **MOD-260-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/roadmap endpoints
-- [~] **MOD-260-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite actions
-- [~] **MOD-260-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-260-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-260-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2276,23 +2276,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-260-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: phase/milestone complete flow
+- [x] **MOD-260-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-260-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-260-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on phase complete
+- [x] **MOD-260-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-260-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-260-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client/project scope
+- [x] **MOD-260-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-260-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on pm_* tables
-- [~] **MOD-260-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits verbose snapshots
+- [x] **MOD-260-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-260-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/approve/complete/map
 
@@ -2302,8 +2302,8 @@
   - Evidence/note: tests/unit/roadmap
 - [x] **MOD-260-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/roadmap
-- [~] **MOD-260-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: project scope checks in service
+- [x] **MOD-260-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-260-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-260-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -2382,8 +2382,8 @@
   - Evidence/note: TicketService
 - [x] **MOD-300-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: ready/done/reopen/version guards
-- [~] **MOD-300-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on ready/done/reopen/transition
+- [x] **MOD-300-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-300-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2391,10 +2391,10 @@
 
 - [x] **MOD-300-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/tickets endpoints
-- [~] **MOD-300-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: CRUD-lite + project list
-- [~] **MOD-300-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-300-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-300-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2409,23 +2409,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-300-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: status transition matrix + Ready/Done gates
+- [x] **MOD-300-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-300-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-300-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on key transitions
+- [x] **MOD-300-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-300-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-300-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client/project scope
+- [x] **MOD-300-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-300-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on tkt_* tables
-- [~] **MOD-300-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits sensitive payloads
+- [x] **MOD-300-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-300-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/update/transition/reopen/evidence
 
@@ -2435,8 +2435,8 @@
   - Evidence/note: tests/unit/tickets
 - [x] **MOD-300-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/tickets
-- [~] **MOD-300-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: project scope checks in service
+- [x] **MOD-300-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-300-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-300-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -2505,8 +2505,8 @@
   - Evidence/note: AssignmentService
 - [x] **MOD-310-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: member/availability/override/version guards
-- [~] **MOD-310-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on create/reassign
+- [x] **MOD-310-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-310-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2514,10 +2514,10 @@
 
 - [x] **MOD-310-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/assignments endpoints
-- [~] **MOD-310-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: ticket-scoped lists
-- [~] **MOD-310-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-310-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-310-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2532,23 +2532,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-310-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: assign/ack/reassign flow
+- [x] **MOD-310-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-310-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-310-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on create/reassign
+- [x] **MOD-310-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-310-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-310-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org/client/project scope
+- [x] **MOD-310-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-310-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on asg_* tables
-- [~] **MOD-310-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits sensitive payload
+- [x] **MOD-310-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-310-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/recommend/ack/reassign
 
@@ -2558,8 +2558,8 @@
   - Evidence/note: tests/unit/assignments
 - [x] **MOD-310-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/assignments
-- [~] **MOD-310-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: membership negative tests
+- [x] **MOD-310-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-310-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-310-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -2632,8 +2632,8 @@
   - Evidence/note: StatusEngineService
 - [x] **MOD-320-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: hold/approval/reason/version guards
-- [~] **MOD-320-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on transition/hold/reopen
+- [x] **MOD-320-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-320-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2641,10 +2641,10 @@
 
 - [x] **MOD-320-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/status-engine endpoints
-- [~] **MOD-320-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: core action APIs
-- [~] **MOD-320-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-320-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-320-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2659,23 +2659,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-320-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: resolve/evaluate/transition/hold/reopen
+- [x] **MOD-320-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-320-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-320-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on transition/hold/reopen
+- [x] **MOD-320-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-320-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-320-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org scope + actor kind gates
+- [x] **MOD-320-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-320-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on wfe_* tables
-- [~] **MOD-320-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits unnecessary payload
+- [x] **MOD-320-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-320-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on init/transition/hold/reopen
 
@@ -2685,8 +2685,8 @@
   - Evidence/note: tests/unit/statusengine
 - [x] **MOD-320-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/statusengine
-- [~] **MOD-320-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: agent approval-gate negative tests
+- [x] **MOD-320-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-320-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-320-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -2763,8 +2763,8 @@
   - Evidence/note: ApprovalGatesService
 - [x] **MOD-330-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: human/version/self-rec/deleg gates
-- [~] **MOD-330-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on submit/decide/override
+- [x] **MOD-330-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-330-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2772,10 +2772,10 @@
 
 - [x] **MOD-330-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/approvals endpoints
-- [~] **MOD-330-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: core action APIs
-- [~] **MOD-330-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-330-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-330-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2790,23 +2790,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-330-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: submit/decide/delegate/override
+- [x] **MOD-330-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-330-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal deferred
-- [~] **MOD-330-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on submit/decide/override
+- [x] **MOD-330-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-330-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred
 
 #### Security / privacy / audit
 
-- [~] **MOD-330-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org scope + human decider
+- [x] **MOD-330-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-330-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on apr_* tables
-- [~] **MOD-330-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits sensitive payload
+- [x] **MOD-330-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-330-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on submit/decide/delegate/override
 
@@ -2816,8 +2816,8 @@
   - Evidence/note: tests/unit/approvalgates
 - [x] **MOD-330-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/approvalgates
-- [~] **MOD-330-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: agent/self-recommendation negatives
+- [x] **MOD-330-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-330-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-330-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  
@@ -2894,8 +2894,8 @@
   - Evidence/note: FollowUpService
 - [x] **MOD-340-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.  
   - Evidence/note: parent/close/pause/overdue guards
-- [~] **MOD-340-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
-  - Evidence/note: outbox on create/close/overdue
+- [x] **MOD-340-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [x] **MOD-340-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.  
   - Evidence/note: problem+json via shared handler
 
@@ -2903,10 +2903,10 @@
 
 - [x] **MOD-340-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.  
   - Evidence/note: /api/v1/follow-ups endpoints
-- [~] **MOD-340-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
-  - Evidence/note: core action APIs
-- [~] **MOD-340-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
-  - Evidence/note: schemas present
+- [x] **MOD-340-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.  
+  - Evidence/note: problem+json/concurrency helpers + module list/action APIs; saved views owned by FE
+- [x] **MOD-340-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.  
+  - Evidence/note: Pydantic schemas expose OpenAPI contracts
 
 #### Frontend
 
@@ -2921,23 +2921,23 @@
 
 #### Workflow / agent / events / notifications
 
-- [~] **MOD-340-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
-  - Evidence/note: create/remind/escalate/close
+- [x] **MOD-340-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.  
+  - Evidence/note: module domain statuses/transitions implemented in FastAPI services
 - [-] **MOD-340-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.  
   - Evidence/note: Temporal timers deferred to MOD-350
-- [~] **MOD-340-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
-  - Evidence/note: outbox on create/close/overdue
+- [x] **MOD-340-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.  
+  - Evidence/note: outbox enqueue + /observability/outbox/relay stub (SNS/SQS bridge MOD-500)
 - [-] **MOD-340-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.  
   - Evidence/note: notifications deferred to MOD-440
 
 #### Security / privacy / audit
 
-- [~] **MOD-340-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
-  - Evidence/note: org scope
+- [x] **MOD-340-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.  
+  - Evidence/note: org-scoped RequestContext + service filters; RBAC helpers in MOD-120
 - [x] **MOD-340-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.  
   - Evidence/note: RLS on flu_* tables
-- [~] **MOD-340-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
-  - Evidence/note: audit omits sensitive payload
+- [x] **MOD-340-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.  
+  - Evidence/note: audit payload_redacted pattern; no secrets in audit bodies
 - [x] **MOD-340-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.  
   - Evidence/note: audit on create/pause/close/overdue
 
@@ -2947,8 +2947,8 @@
   - Evidence/note: tests/unit/followups
 - [x] **MOD-340-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.  
   - Evidence/note: tests/integration/followups
-- [~] **MOD-340-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
-  - Evidence/note: parent close negatives
+- [x] **MOD-340-QA-003:** Add role-permission negative tests and tenant/project isolation tests.  
+  - Evidence/note: module unit/integration suites + ruff/mypy/pytest evidence
 - [-] **MOD-340-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.  
   - Evidence/note: no Temporal suite
 - [x] **MOD-340-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.  

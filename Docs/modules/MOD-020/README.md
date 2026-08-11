@@ -25,8 +25,8 @@ Governance uses UoW, shared paging/concurrency, and enqueues `governance.baselin
 
 ## Remaining (beyond M1)
 
-- Outbox **publisher/consumer** runtime (Temporal/SNS-SQS — MOD-500ish)
-- Full OpenAPI examples for every error path
+- Real **SNS/SQS (or approved broker) outbox bridge** — MOD-500; M1 local relay is `/api/v1/observability/outbox/relay`
+- Full OpenAPI prose examples for every edge-case problem detail
 - Platform-wide enforcement that agents cannot open DB sessions
 - Human AC-901
 
@@ -34,6 +34,7 @@ Governance uses UoW, shared paging/concurrency, and enqueues `governance.baselin
 
 - FE CRUD for the kernel itself: **N/A**
 - Auth0: deferred to MOD-110; this module defines context *shape*
+- Outbox: enqueue in-transaction + relay stub publisher for M1; broker consumer still MOD-500
 
 ## Verification
 

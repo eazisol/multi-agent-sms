@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, Index, Integer, String, Text, func
+from sqlalchemy import DateTime, Index, Integer, String, Text, func, select
 from sqlalchemy.orm import Mapped, Session, mapped_column
 from sqlalchemy.types import JSON, Uuid
 
@@ -67,3 +67,34 @@ def enqueue_outbox(
     )
     session.add(message)
     return message
+
+
+def relay_pending_outbox(
+    session: Session,
+    *,
+    organization_id: UUID | None = None,
+    limit: int = 100,
+) -> list[OutboxMessage]:
+    """Mark pending outbox rows published (local relay stub).
+
+    Idempotent: only pending rows are selected. Real SNS/SQS bridge remains MOD-500;
+    this closes the M1 publisher gap for BE-003/WF-003.
+    """
+    stmt = (
+        select(OutboxMessage)
+        .where(OutboxMessage.status == "pending")
+        .order_by(OutboxMessage.created_at.asc())
+        .limit(max(1, min(limit, 500)))
+    )
+    if organization_id is not None:
+        stmt = stmt.where(OutboxMessage.organization_id == organization_id)
+
+    rows = list(session.scalars(stmt).all())
+    now = datetime.now(UTC)
+    for row in rows:
+        row.status = "published"
+        row.published_at = now
+        row.attempt_count = int(row.attempt_count or 0) + 1
+        row.last_error = None
+        session.add(row)
+    return rows

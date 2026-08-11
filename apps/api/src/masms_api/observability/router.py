@@ -17,6 +17,9 @@ from masms_api.observability.schemas import (
     AgentRunRead,
     AuditLogPage,
     AuditLogRead,
+    OutboxRelayItem,
+    OutboxRelayRequest,
+    OutboxRelayResponse,
     StatusHistoryRead,
 )
 from masms_api.observability.service import ObservabilityService
@@ -78,6 +81,18 @@ def list_status_history(
         "items": [StatusHistoryRead.model_validate(i) for i in items],
         "page": page,
     }
+
+
+@router.post("/outbox/relay", response_model=OutboxRelayResponse)
+def relay_outbox(
+    body: OutboxRelayRequest,
+    service: ObservabilityService = Depends(_service),
+) -> OutboxRelayResponse:
+    rows = service.relay_outbox(limit=body.limit)
+    return OutboxRelayResponse(
+        published_count=len(rows),
+        items=[OutboxRelayItem.model_validate(r) for r in rows],
+    )
 
 
 @router.post("/agent-runs", response_model=AgentRunRead, status_code=201)

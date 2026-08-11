@@ -95,3 +95,22 @@ class AgentRunFinish(BaseModel):
     status: str = Field(min_length=2, max_length=32)
     output_summary: dict[str, Any] = Field(default_factory=dict)
     error_summary: str | None = None
+
+
+class OutboxRelayRequest(BaseModel):
+    limit: int = Field(default=100, ge=1, le=500)
+
+
+class OutboxRelayItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    event_type: str
+    status: str
+    attempt_count: int
+    published_at: datetime | None
+
+
+class OutboxRelayResponse(BaseModel):
+    published_count: int
+    items: list[OutboxRelayItem]

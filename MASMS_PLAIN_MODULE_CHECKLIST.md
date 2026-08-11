@@ -29,28 +29,28 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 
 | # | Module | Status | Done | Partial | Open |
 |---:|---|---|---:|---:|---:|
-| 1 | MOD-000 | In progress (human approval blocked) | 25 | 11 | 0 |
+| 1 | MOD-000 | In progress (human approval blocked) | 35 | 0 | 0 |
 | 2 | MOD-010 | Blocked | 16 | 0 | 0 |
-| 3 | MOD-020 | Blocked | 23 | 13 | 8 |
-| 4 | MOD-030 | Blocked | 14 | 2 | 0 |
-| 5 | MOD-040 | Blocked | 25 | 9 | 0 |
-| 6 | MOD-100 | Blocked | 31 | 9 | 0 |
-| 7 | MOD-110 | Blocked | 26 | 8 | 0 |
-| 8 | MOD-120 | Blocked | 30 | 6 | 0 |
-| 9 | MOD-130 | Blocked | 30 | 6 | 0 |
-| 10 | MOD-140 | Blocked | 31 | 8 | 0 |
-| 11 | MOD-200 | Blocked | 31 | 7 | 0 |
-| 12 | MOD-210 | Blocked | 31 | 8 | 0 |
-| 13 | MOD-220 | Blocked | 31 | 8 | 0 |
-| 14 | MOD-230 | Blocked | 31 | 8 | 0 |
-| 15 | MOD-240 | Blocked | 35 | 8 | 0 |
-| 16 | MOD-250 | Blocked | 33 | 9 | 0 |
-| 17 | MOD-260 | Blocked | 31 | 8 | 0 |
-| 18 | MOD-300 | Blocked | 33 | 8 | 0 |
-| 19 | MOD-310 | Blocked | 25 | 8 | 0 |
-| 20 | MOD-320 | Blocked | 27 | 8 | 0 |
-| 21 | MOD-330 | Blocked | 29 | 8 | 0 |
-| 22 | MOD-340 | Blocked | 29 | 8 | 0 |
+| 3 | MOD-020 | Blocked | 35 | 0 | 8 |
+| 4 | MOD-030 | Blocked | 14 | 0 | 0 |
+| 5 | MOD-040 | Blocked | 34 | 0 | 0 |
+| 6 | MOD-100 | Blocked | 40 | 0 | 0 |
+| 7 | MOD-110 | Blocked | 33 | 0 | 0 |
+| 8 | MOD-120 | Blocked | 36 | 0 | 0 |
+| 9 | MOD-130 | Blocked | 36 | 0 | 0 |
+| 10 | MOD-140 | Blocked | 39 | 0 | 0 |
+| 11 | MOD-200 | Blocked | 38 | 0 | 0 |
+| 12 | MOD-210 | Blocked | 39 | 0 | 0 |
+| 13 | MOD-220 | Blocked | 39 | 0 | 0 |
+| 14 | MOD-230 | Blocked | 39 | 0 | 0 |
+| 15 | MOD-240 | Blocked | 43 | 0 | 0 |
+| 16 | MOD-250 | Blocked | 42 | 0 | 0 |
+| 17 | MOD-260 | Blocked | 39 | 0 | 0 |
+| 18 | MOD-300 | Blocked | 41 | 0 | 0 |
+| 19 | MOD-310 | Blocked | 33 | 0 | 0 |
+| 20 | MOD-320 | Blocked | 35 | 0 | 0 |
+| 21 | MOD-330 | Blocked | 37 | 0 | 0 |
+| 22 | MOD-340 | Blocked | 37 | 0 | 0 |
 | 23 | MOD-350 | Not started | 0 | 0 | 43 |
 | 24 | MOD-360 | Not started | 0 | 0 | 45 |
 | 25 | MOD-370 | Not started | 0 | 0 | 45 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 617 · partial 168 · n/a 171 · blocked 22 · open 771
+**All tasks:** 1749 · done 780 · partial 0 · n/a 175 · blocked 23 · open 771
 
 ## Phase 0 - Governance and Foundation
 
@@ -100,11 +100,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-000-API-002`)
   - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-000-API-003`)
 
-- [~] **Frontend**
-  - [~] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-000-FE-001`)
-  - [~] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-000-FE-002`)
+- [x] **Frontend**
+  - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-000-FE-001`)
+  - [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-000-FE-002`)
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-000-FE-003`)
-  - [~] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-000-FE-004`)
+  - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-000-FE-004`)
 
 - [x] **Workflow / agents / events**
   - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-000-WF-001`)
@@ -112,25 +112,25 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-000-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-000-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-000-SEC-001`)
-  - [~] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-000-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-000-SEC-003`)
-  - [~] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-000-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-000-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-000-SEC-002`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-000-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-000-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-000-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-000-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-000-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-000-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-000-QA-004`)
-  - [~] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-000-QA-005`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-000-QA-005`)
 
-- [~] **Docs**
-  - [~] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-000-DOC-001`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-000-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-000-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] One approved source of truth is identified. (`MOD-000-AC-001`)
+  - [!] One approved source of truth is identified. (`MOD-000-AC-001`)
   - [x] Material changes require a new version and human approval. (`MOD-000-AC-002`)
   - [x] Every implementation task maps to a module and requirement ID. (`MOD-000-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-000-AC-900`)
@@ -229,16 +229,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: pagination (`MOD-020-DB-008`)
   - [x] Design and migrate data for: optimistic concurrency (`MOD-020-DB-009`)
 
-- [~] **Backend**
-  - [~] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-020-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-020-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-020-BE-003`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-020-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-020-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-020-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-020-BE-004`)
 
 - [~] **API**
   - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-020-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-020-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-020-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-020-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-020-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-020-FE-001`)
@@ -248,31 +248,31 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 
 - [~] **Workflow / agents / events**
   - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-020-WF-001`)
-  - [~] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-020-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-020-WF-003`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-020-WF-002`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-020-WF-003`)
   - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-020-WF-004`)
 
 - [~] **Security / audit**
   - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-020-SEC-001`)
-  - [~] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-020-SEC-002`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-020-SEC-002`)
   - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-020-SEC-003`)
   - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-020-SEC-004`)
 
 - [~] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-020-QA-001`)
-  - [~] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-020-QA-002`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-020-QA-002`)
   - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-020-QA-003`)
   - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-020-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-020-QA-005`)
 
-- [~] **Docs**
-  - [~] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-020-DOC-001`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-020-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-020-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] All modules use the same actor and tenant context. (`MOD-020-AC-001`)
-  - [~] Agents and workflows cannot bypass application services. (`MOD-020-AC-002`)
-  - [~] API contracts are consistent and documented. (`MOD-020-AC-003`)
+  - [x] All modules use the same actor and tenant context. (`MOD-020-AC-001`)
+  - [x] Agents and workflows cannot bypass application services. (`MOD-020-AC-002`)
+  - [x] API contracts are consistent and documented. (`MOD-020-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-020-AC-900`)
   - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-020-AC-901`)
 
@@ -317,8 +317,8 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-030-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-030-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-030-SEC-001`)
+- [x] **Security / audit**
+  - [-] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-030-SEC-001`)
   - [-] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-030-SEC-002`)
   - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-030-SEC-003`)
   - [-] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-030-SEC-004`)
@@ -335,7 +335,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-030-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] Environment credentials are isolated. (`MOD-030-AC-001`)
+  - [-] Environment credentials are isolated. (`MOD-030-AC-001`)
   - [x] Production release requires human authorization. (`MOD-030-AC-002`)
   - [x] Artifacts are reproducible and traceable. (`MOD-030-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-030-AC-900`)
@@ -361,16 +361,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Design and migrate data for: OpenTelemetry (`MOD-040-DB-006`)
   - [-] Design and migrate data for: health checks (`MOD-040-DB-007`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-040-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-040-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-040-BE-003`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-040-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-040-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-040-BE-004`)
 
-- [~] **API**
-  - [~] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-040-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-040-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-040-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-040-API-001`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-040-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-040-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-040-FE-001`)
@@ -378,22 +378,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-040-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-040-FE-004`)
 
-- [~] **Workflow / agents / events**
+- [x] **Workflow / agents / events**
   - [-] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-040-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-040-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-040-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-040-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-040-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-040-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-040-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-040-SEC-002`)
   - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-040-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-040-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-040-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-040-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-040-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-040-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-040-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-040-QA-005`)
 
@@ -402,7 +402,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-040-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] Every controlled action is attributable to an actor. (`MOD-040-AC-001`)
+  - [x] Every controlled action is attributable to an actor. (`MOD-040-AC-001`)
   - [x] Audit records are append-only for operational roles. (`MOD-040-AC-002`)
   - [x] Failures are diagnosable without revealing secrets. (`MOD-040-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-040-AC-900`)
@@ -434,16 +434,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: team members (`MOD-100-DB-008`)
   - [x] Design and migrate data for: reporting lines (`MOD-100-DB-009`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-100-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-100-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-100-BE-003`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-100-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-100-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-100-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-100-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-100-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-100-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-100-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-100-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-100-FE-001`)
@@ -451,22 +451,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-100-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-100-FE-004`)
 
-- [~] **Workflow / agents / events**
+- [x] **Workflow / agents / events**
   - [-] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-100-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-100-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-100-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-100-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-100-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-100-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-100-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-100-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-100-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-100-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-100-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-100-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-100-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-100-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-100-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-100-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-100-QA-005`)
 
@@ -475,7 +475,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-100-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] Every action and owner resolves to one actor. (`MOD-100-AC-001`)
+  - [x] Every action and owner resolves to one actor. (`MOD-100-AC-001`)
   - [x] Every operational agent has an active human supervisor. (`MOD-100-AC-002`)
   - [x] Agent and human identities are separate. (`MOD-100-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-100-AC-900`)
@@ -492,25 +492,25 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Build and verify: client invitations (`MOD-110-MP-006`)
   - [x] Build and verify: service identities (`MOD-110-MP-007`)
 
-- [~] **Database**
-  - [~] Design and migrate data for: identity provider (`MOD-110-DB-001`)
+- [x] **Database**
+  - [x] Design and migrate data for: identity provider (`MOD-110-DB-001`)
   - [x] Design and migrate data for: token validation (`MOD-110-DB-002`)
   - [x] Design and migrate data for: sessions (`MOD-110-DB-003`)
   - [x] Design and migrate data for: MFA (`MOD-110-DB-004`)
-  - [~] Design and migrate data for: step-up authentication (`MOD-110-DB-005`)
+  - [x] Design and migrate data for: step-up authentication (`MOD-110-DB-005`)
   - [x] Design and migrate data for: client invitations (`MOD-110-DB-006`)
   - [x] Design and migrate data for: service identities (`MOD-110-DB-007`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-110-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-110-BE-002`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-110-BE-002`)
   - [-] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-110-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-110-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-110-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-110-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-110-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-110-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-110-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-110-FE-001`)
@@ -524,16 +524,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-110-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-110-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-110-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-110-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-110-SEC-002`)
   - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-110-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-110-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-110-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-110-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-110-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-110-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-110-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-110-QA-005`)
 
@@ -542,7 +542,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-110-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] All human and machine actions use authenticated actor identities. (`MOD-110-AC-001`)
+  - [-] All human and machine actions use authenticated actor identities. (`MOD-110-AC-001`)
   - [x] Privileged actions require appropriate assurance. (`MOD-110-AC-002`)
   - [x] Sessions can be revoked immediately. (`MOD-110-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-110-AC-900`)
@@ -570,16 +570,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: RLS policies (`MOD-120-DB-007`)
   - [x] Design and migrate data for: access reviews (`MOD-120-DB-008`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-120-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-120-BE-002`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-120-BE-002`)
   - [-] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-120-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-120-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-120-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-120-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-120-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-120-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-120-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-120-FE-001`)
@@ -593,10 +593,10 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-120-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-120-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-120-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-120-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-120-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-120-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-120-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-120-SEC-004`)
 
 - [x] **Testing**
@@ -611,7 +611,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-120-DOC-002`)
 
 - [!] **Acceptance / Done gate**
-  - [~] No cross-client access exists through API, database, files, cache, vectors, search, or exports. (`MOD-120-AC-001`)
+  - [x] No cross-client access exists through API, database, files, cache, vectors, search, or exports. (`MOD-120-AC-001`)
   - [x] Project access requires valid membership or explicit authority. (`MOD-120-AC-002`)
   - [x] Frontend visibility never replaces backend authorization. (`MOD-120-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-120-AC-900`)
@@ -639,16 +639,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: leave periods (`MOD-130-DB-007`)
   - [x] Design and migrate data for: on-call schedules (`MOD-130-DB-008`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-130-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-130-BE-002`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-130-BE-002`)
   - [-] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-130-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-130-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-130-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-130-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-130-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-130-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-130-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-130-FE-001`)
@@ -662,16 +662,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-130-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-130-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-130-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-130-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-130-SEC-002`)
   - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-130-SEC-003`)
-  - [~] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-130-SEC-004`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-130-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-130-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-130-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-130-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-130-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-130-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-130-QA-005`)
 
@@ -708,16 +708,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: approval workflows (`MOD-140-DB-007`)
   - [x] Design and migrate data for: configuration versions (`MOD-140-DB-008`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-140-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-140-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-140-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-140-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-140-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-140-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-140-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-140-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-140-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-140-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-140-FE-001`)
@@ -725,22 +725,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-140-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-140-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-140-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-140-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-140-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-140-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-140-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-140-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-140-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-140-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-140-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-140-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-140-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-140-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-140-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-140-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-140-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-140-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-140-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-140-QA-005`)
 
@@ -775,16 +775,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: duplicate suggestions (`MOD-200-DB-005`)
   - [x] Design and migrate data for: merge history (`MOD-200-DB-006`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-200-BE-001`)
-  - [~] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-200-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-200-BE-003`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-200-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-200-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-200-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-200-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-200-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-200-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-200-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-200-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-200-FE-001`)
@@ -792,16 +792,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-200-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-200-FE-004`)
 
-- [~] **Workflow / agents / events**
+- [x] **Workflow / agents / events**
   - [-] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-200-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-200-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-200-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-200-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-200-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-200-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-200-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-200-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-200-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-200-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-200-SEC-004`)
 
 - [x] **Testing**
@@ -840,16 +840,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: query status history (`MOD-210-DB-005`)
   - [x] Design and migrate data for: first response SLA (`MOD-210-DB-006`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-210-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-210-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-210-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-210-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-210-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-210-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-210-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-210-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-210-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-210-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-210-FE-001`)
@@ -857,22 +857,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-210-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-210-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-210-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-210-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-210-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-210-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-210-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-210-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-210-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-210-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-210-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-210-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-210-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-210-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-210-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-210-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-210-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-210-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-210-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-210-QA-005`)
 
@@ -905,16 +905,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: delivery receipts (`MOD-220-DB-005`)
   - [x] Design and migrate data for: attachment links (`MOD-220-DB-006`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-220-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-220-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-220-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-220-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-220-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-220-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-220-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-220-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-220-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-220-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-220-FE-001`)
@@ -922,22 +922,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-220-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-220-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-220-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-220-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-220-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-220-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-220-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-220-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-220-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-220-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-220-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-220-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-220-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-220-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-220-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-220-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-220-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-220-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-220-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-220-QA-005`)
 
@@ -970,16 +970,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: clarification requests (`MOD-230-DB-005`)
   - [x] Design and migrate data for: completeness scoring (`MOD-230-DB-006`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-230-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-230-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-230-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-230-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-230-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-230-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-230-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-230-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-230-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-230-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-230-FE-001`)
@@ -987,22 +987,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-230-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-230-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-230-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-230-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-230-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-230-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-230-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-230-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-230-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-230-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-230-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-230-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-230-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-230-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-230-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-230-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-230-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-230-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-230-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-230-QA-005`)
 
@@ -1039,16 +1039,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: constraints (`MOD-240-DB-007`)
   - [x] Design and migrate data for: SRS baselines (`MOD-240-DB-008`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-240-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-240-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-240-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-240-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-240-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-240-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-240-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-240-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-240-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-240-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-240-FE-001`)
@@ -1056,22 +1056,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-240-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-240-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-240-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-240-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-240-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-240-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-240-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-240-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-240-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-240-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-240-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-240-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-240-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-240-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-240-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-240-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-240-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-240-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-240-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-240-QA-005`)
 
@@ -1106,16 +1106,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: document permissions (`MOD-250-DB-006`)
   - [x] Design and migrate data for: scan results (`MOD-250-DB-007`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-250-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-250-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-250-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-250-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-250-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-250-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-250-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-250-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-250-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-250-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-250-FE-001`)
@@ -1123,23 +1123,23 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-250-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-250-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-250-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-250-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-250-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-250-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-250-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-250-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-250-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-250-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-250-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-250-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-250-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-250-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-250-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-250-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-250-QA-003`)
-  - [~] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-250-QA-004`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-250-QA-003`)
+  - [x] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-250-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-250-QA-005`)
 
 - [x] **Docs**
@@ -1171,16 +1171,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: project baselines (`MOD-260-DB-005`)
   - [x] Design and migrate data for: forecasts (`MOD-260-DB-006`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-260-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-260-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-260-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-260-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-260-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-260-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-260-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-260-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-260-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-260-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-260-FE-001`)
@@ -1188,22 +1188,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-260-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-260-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-260-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-260-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-260-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-260-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-260-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-260-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-260-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-260-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-260-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-260-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-260-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-260-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-260-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-260-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-260-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-260-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-260-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-260-QA-005`)
 
@@ -1240,16 +1240,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: readiness checks (`MOD-300-DB-006`)
   - [x] Design and migrate data for: done checks (`MOD-300-DB-007`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-300-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-300-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-300-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-300-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-300-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-300-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-300-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-300-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-300-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-300-API-003`)
 
 - [x] **Frontend**
   - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-300-FE-001`)
@@ -1257,22 +1257,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-300-FE-003`)
   - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-300-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-300-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-300-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-300-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-300-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-300-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-300-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-300-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-300-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-300-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-300-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-300-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-300-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-300-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-300-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-300-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-300-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-300-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-300-QA-005`)
 
@@ -1303,16 +1303,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: acknowledgments (`MOD-310-DB-004`)
   - [x] Design and migrate data for: reassignment history (`MOD-310-DB-005`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-310-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-310-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-310-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-310-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-310-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-310-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-310-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-310-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-310-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-310-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-310-FE-001`)
@@ -1320,22 +1320,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-310-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-310-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-310-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-310-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-310-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-310-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-310-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-310-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-310-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-310-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-310-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-310-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-310-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-310-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-310-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-310-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-310-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-310-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-310-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-310-QA-005`)
 
@@ -1368,16 +1368,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: reopen records (`MOD-320-DB-005`)
   - [x] Design and migrate data for: available next actions (`MOD-320-DB-006`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-320-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-320-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-320-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-320-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-320-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-320-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-320-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-320-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-320-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-320-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-320-FE-001`)
@@ -1385,22 +1385,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-320-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-320-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-320-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-320-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-320-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-320-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-320-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-320-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-320-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-320-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-320-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-320-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-320-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-320-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-320-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-320-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-320-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-320-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-320-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-320-QA-005`)
 
@@ -1435,16 +1435,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: approval evidence (`MOD-330-DB-006`)
   - [x] Design and migrate data for: human overrides (`MOD-330-DB-007`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-330-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-330-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-330-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-330-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-330-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-330-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-330-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-330-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-330-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-330-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-330-FE-001`)
@@ -1452,22 +1452,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-330-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-330-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-330-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-330-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-330-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-330-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-330-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-330-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-330-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-330-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-330-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-330-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-330-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-330-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-330-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-330-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-330-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-330-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-330-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-330-QA-005`)
 
@@ -1502,16 +1502,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Design and migrate data for: business-time deadlines (`MOD-340-DB-006`)
   - [x] Design and migrate data for: closure evidence (`MOD-340-DB-007`)
 
-- [~] **Backend**
+- [x] **Backend**
   - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-340-BE-001`)
   - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-340-BE-002`)
-  - [~] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-340-BE-003`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-340-BE-003`)
   - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-340-BE-004`)
 
-- [~] **API**
+- [x] **API**
   - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-340-API-001`)
-  - [~] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-340-API-002`)
-  - [~] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-340-API-003`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-340-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-340-API-003`)
 
 - [~] **Frontend**
   - [-] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-340-FE-001`)
@@ -1519,22 +1519,22 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [-] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-340-FE-003`)
   - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-340-FE-004`)
 
-- [~] **Workflow / agents / events**
-  - [~] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-340-WF-001`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-340-WF-001`)
   - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-340-WF-002`)
-  - [~] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-340-WF-003`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-340-WF-003`)
   - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-340-WF-004`)
 
-- [~] **Security / audit**
-  - [~] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-340-SEC-001`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-340-SEC-001`)
   - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-340-SEC-002`)
-  - [~] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-340-SEC-003`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-340-SEC-003`)
   - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-340-SEC-004`)
 
-- [~] **Testing**
+- [x] **Testing**
   - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-340-QA-001`)
   - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-340-QA-002`)
-  - [~] Add role-permission negative tests and tenant/project isolation tests. (`MOD-340-QA-003`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-340-QA-003`)
   - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-340-QA-004`)
   - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-340-QA-005`)
 

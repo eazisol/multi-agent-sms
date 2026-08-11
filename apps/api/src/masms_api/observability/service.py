@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from masms_api.deps import RequestContext
 from masms_api.errors import ForbiddenError, NotFoundError
+from masms_api.kernel.outbox import OutboxMessage, relay_pending_outbox
 from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.observability.models import (
@@ -134,3 +135,19 @@ class ObservabilityService:
 
     def refuse_audit_mutation(self) -> None:
         raise ForbiddenError("Audit logs are append-only for operational roles")
+
+    def relay_outbox(self, *, limit: int = 100) -> list[OutboxMessage]:
+        rows = relay_pending_outbox(
+            self.db,
+            organization_id=self.ctx.organization_id,
+            limit=limit,
+        )
+        if rows:
+            self.writer.write_audit(
+                action="outbox_relay",
+                entity_type="sys_outbox_messages",
+                entity_id=rows[0].id,
+                payload={"published_count": len(rows)},
+            )
+            self.uow.commit()
+        return rows
