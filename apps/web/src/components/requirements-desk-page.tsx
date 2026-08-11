@@ -5,6 +5,7 @@ import { Plus, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ListPagination } from "@/components/list-pagination";
+import { ScrollRegion, TableScroll } from "@/components/page-shell";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -323,309 +324,319 @@ export function RequirementsDeskPage() {
   }
 
   return (
-    <AppShell title="Requirements" breadcrumbs={["Project Delivery", "Requirements"]}>
-      <PageHeader
-        title="Requirements"
-        description="Discovery questionnaires, completeness scoring, clarifications, and human-approved briefs."
-        actions={
-          can(session.variant, "create") ? (
-            <Button onClick={() => setShowBootstrap((v) => !v)}>
-              <Plus className="h-4 w-4" />
-              Start questionnaire
-            </Button>
-          ) : null
-        }
-      />
+    <AppShell title="Requirements" breadcrumbs={["Project Delivery", "Requirements"]} fill>
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
+        <PageHeader
+          title="Requirements"
+          description="Discovery questionnaires, completeness scoring, clarifications, and human-approved briefs."
+          actions={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowBootstrap((v) => !v)}>
+                <Plus className="h-4 w-4" />
+                Start questionnaire
+              </Button>
+            ) : null
+          }
+        />
 
-      {showBootstrap && can(session.variant, "create") ? (
-        <Card className="mb-6">
-          <CardHeader>
-            <h2 className="font-display text-lg">Publish intake questionnaire</h2>
-            <p className="text-sm text-[var(--muted)]">
-              Standard discovery questions help BD and delivery agree on the problem before a brief.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <form
-              onSubmit={onBootstrap}
-              className="grid gap-4 md:grid-cols-2"
-              aria-label="Publish questionnaire"
-            >
-              <Field label="Short name" hint="Internal reference for this intake form">
-                <Input
-                  required
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  pattern="[a-z0-9_]+"
-                  placeholder="intake"
-                />
-              </Field>
-              <Field label="Title">
-                <Input
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Discovery intake"
-                />
-              </Field>
-              <div className="flex justify-end gap-2 md:col-span-2">
-                <Button type="button" variant="ghost" onClick={() => setShowBootstrap(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">Publish questionnaire</Button>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(280px,340px)_1fr]">
-        <Card>
-          <CardHeader>
-            <h2 className="font-display text-lg">Questionnaires</h2>
-            <p className="text-sm text-[var(--muted)]">Loaded from the organization database.</p>
-            <div className="relative mt-3">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
-              <Input
-                className="pl-9"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setQOffset(0);
-                }}
-                placeholder="Search code or title"
-                aria-label="Search questionnaires"
-              />
-            </div>
-          </CardHeader>
-          {loading ? (
-            <SkeletonRows />
-          ) : questionnaires.length === 0 ? (
-            <CardBody>
-              <EmptyState
-                title={search.trim() ? "No matching questionnaires" : "No questionnaires yet"}
-                body={
-                  search.trim()
-                    ? "Try a different code or title."
-                    : "Publish an intake questionnaire, capture answers, then draft an approved requirements brief."
-                }
-                action={
-                  !search.trim() && can(session.variant, "create") ? (
-                    <Button onClick={() => setShowBootstrap(true)}>Start questionnaire</Button>
-                  ) : null
-                }
-                secondaryAction={
-                  !search.trim() ? (
-                    <Button variant="ai">
-                      <Sparkles className="h-4 w-4" />
-                      Suggest questions
-                    </Button>
-                  ) : null
-                }
-              />
-            </CardBody>
-          ) : (
-            <ul className="divide-y divide-[var(--line)]">
-              {questionnaires.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => selectQuestionnaire(item.id)}
-                    className={`w-full px-5 py-3 text-left transition hover:bg-[var(--surface-muted)]/70 ${
-                      item.id === questionnaireId ? "bg-[var(--accent-soft)]" : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium">{item.title}</span>
-                      <StatusBadge status={item.status} />
-                    </div>
-                    <p className="mt-1 text-sm text-[var(--muted)]">{item.code}</p>
-                    {item.created_at ? (
-                      <p className="mt-1 text-xs text-[var(--muted)]">{formatUtc(item.created_at)}</p>
-                    ) : null}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          {!loading && (questionnaires.length > 0 || qPageMeta.total > 0) ? (
-            <ListPagination
-              page={qPageMeta}
-              onOffsetChange={setQOffset}
-              onLimitChange={setQLimit}
-              label="questionnaires"
-            />
-          ) : null}
-        </Card>
-
-        <div className="space-y-4">
-          {currentQuestionnaire ? (
-            <Card>
-              <CardHeader>
-                <h2 className="font-display text-xl">{currentQuestionnaire.title}</h2>
-                <p className="text-sm text-[var(--muted)]">
-                  Answers and briefs attach to a linked inquiry from Queries (preferred) or the
-                  workspace project.
-                </p>
-              </CardHeader>
-              <CardBody>
-                <Field
-                  label="Linked inquiry"
-                  hint={
-                    queries.length === 0
-                      ? "Create an inquiry on Queries, or ensure a workspace project is selected."
-                      : "Discovery work stays scoped to this crm_query record."
-                  }
-                >
-                  <Select
-                    value={entityId}
-                    onChange={(e) => selectEntity(e.target.value)}
-                    aria-label="Linked inquiry"
-                  >
-                    <option value="">Select inquiry…</option>
-                    {queries.map((q) => (
-                      <option key={q.id} value={q.id}>
-                        {q.subject}
-                      </option>
-                    ))}
-                    {getWorkspaceProjectId() &&
-                    !queries.some((q) => q.id === getWorkspaceProjectId()) ? (
-                      <option value={getWorkspaceProjectId()}>
-                        Workspace project ({getWorkspaceProjectId().slice(0, 8)}…)
-                      </option>
-                    ) : null}
-                  </Select>
-                </Field>
-                {!version ? (
-                  <StatusBanner kind="warning">
-                    This questionnaire has no published version yet.
-                  </StatusBanner>
-                ) : null}
-              </CardBody>
-            </Card>
-          ) : null}
-
-          {version && can(session.variant, "create") ? (
-            <Card>
-              <CardHeader>
-                <h2 className="font-display text-lg">
-                  {currentQuestionnaire?.title ?? title} · v{version.version_number}
-                </h2>
-                <p className="text-sm text-[var(--muted)]">
-                  Answer the discovery questions. Completeness is scored against mandatory items.
-                </p>
-              </CardHeader>
-              <CardBody>
-                <form
-                  onSubmit={onSaveAnswers}
-                  className="grid gap-4"
-                  aria-label="Answer questionnaire"
-                >
-                  {questions.map((q) => (
-                    <Field key={q.key} label={q.text}>
-                      <Textarea
-                        rows={2}
-                        value={answers[q.key] ?? ""}
-                        onChange={(e) =>
-                          setAnswers((prev) => ({ ...prev, [q.key]: e.target.value }))
-                        }
-                        placeholder="Your answer"
-                      />
-                    </Field>
-                  ))}
-                  <div className="flex justify-end">
-                    <Button type="submit">Save answers &amp; score</Button>
-                  </div>
-                </form>
-              </CardBody>
-            </Card>
-          ) : null}
-
-          {score ? (
-            <Card>
-              <CardHeader className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h2 className="font-display text-lg">Completeness</h2>
-                  <p className="text-sm text-[var(--muted)]">
-                    {score.covered_count} of {score.mandatory_total} mandatory questions covered
-                  </p>
-                </div>
-                <StatusBadge status={score.meets_threshold ? "ready" : "pending"} />
-              </CardHeader>
-              <CardBody className="space-y-3">
-                <p className="text-sm">
-                  Score <span className="font-semibold">{String(score.percentage)}%</span>
-                  {score.meets_threshold
-                    ? " — threshold met; you can create a brief."
-                    : " — clarify remaining gaps before approving a brief."}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {score.gap_question_keys.length > 0 ? (
-                    <Button variant="outline" onClick={() => void onCreateGaps()}>
-                      Create clarifications
-                    </Button>
-                  ) : null}
-                  {score.meets_threshold &&
-                  (can(session.variant, "approve") || can(session.variant, "create")) ? (
-                    <Button onClick={() => void onBrief()}>Create &amp; approve brief</Button>
-                  ) : null}
-                </div>
-              </CardBody>
-            </Card>
-          ) : null}
-
-          <Card>
+        {showBootstrap && can(session.variant, "create") ? (
+          <Card className="shrink-0">
             <CardHeader>
-              <h2 className="font-display text-lg">Briefs</h2>
+              <h2 className="font-display text-lg">Publish intake questionnaire</h2>
               <p className="text-sm text-[var(--muted)]">
-                {entityId
-                  ? "Briefs for the selected inquiry / project."
-                  : "Approved briefs across the organization."}
+                Standard discovery questions help BD and delivery agree on the problem before a brief.
               </p>
             </CardHeader>
-            {briefs.length === 0 ? (
+            <CardBody>
+              <form
+                onSubmit={onBootstrap}
+                className="grid gap-4 md:grid-cols-2"
+                aria-label="Publish questionnaire"
+              >
+                <Field label="Short name" hint="Internal reference for this intake form">
+                  <Input
+                    required
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    pattern="[a-z0-9_]+"
+                    placeholder="intake"
+                  />
+                </Field>
+                <Field label="Title">
+                  <Input
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Discovery intake"
+                  />
+                </Field>
+                <div className="flex justify-end gap-2 md:col-span-2">
+                  <Button type="button" variant="ghost" onClick={() => setShowBootstrap(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">Publish questionnaire</Button>
+                </div>
+              </form>
+            </CardBody>
+          </Card>
+        ) : null}
+
+        <div className="grid min-h-0 flex-1 gap-4 overflow-hidden lg:grid-cols-[minmax(280px,340px)_1fr]">
+          <Card className="flex min-h-0 flex-col overflow-hidden">
+            <CardHeader className="shrink-0">
+              <h2 className="font-display text-lg">Questionnaires</h2>
+              <p className="text-sm text-[var(--muted)]">Loaded from the organization database.</p>
+              <div className="relative mt-3">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+                <Input
+                  className="pl-9"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setQOffset(0);
+                  }}
+                  placeholder="Search code or title"
+                  aria-label="Search questionnaires"
+                />
+              </div>
+            </CardHeader>
+            {loading ? (
+              <SkeletonRows />
+            ) : questionnaires.length === 0 ? (
               <CardBody>
                 <EmptyState
-                  title="No briefs yet"
-                  body="Complete the questionnaire and meet the completeness threshold to draft a brief."
+                  title={search.trim() ? "No matching questionnaires" : "No questionnaires yet"}
+                  body={
+                    search.trim()
+                      ? "Try a different code or title."
+                      : "Publish an intake questionnaire, capture answers, then draft an approved requirements brief."
+                  }
+                  action={
+                    !search.trim() && can(session.variant, "create") ? (
+                      <Button onClick={() => setShowBootstrap(true)}>Start questionnaire</Button>
+                    ) : null
+                  }
+                  secondaryAction={
+                    !search.trim() ? (
+                      <Button variant="ai">
+                        <Sparkles className="h-4 w-4" />
+                        Suggest questions
+                      </Button>
+                    ) : null
+                  }
                 />
               </CardBody>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm">
-                  <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
-                    <tr>
-                      <th className="px-5 py-3 font-medium">Brief</th>
-                      <th className="px-5 py-3 font-medium">Version</th>
-                      <th className="px-5 py-3 font-medium">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {briefs.map((b) => (
-                      <tr
-                        key={b.id}
-                        className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+              <ScrollRegion className="flex-1">
+                <ul className="divide-y divide-[var(--line)]">
+                  {questionnaires.map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        onClick={() => selectQuestionnaire(item.id)}
+                        className={`w-full px-5 py-3 text-left transition hover:bg-[var(--surface-muted)]/70 ${
+                          item.id === questionnaireId ? "bg-[var(--accent-soft)]" : ""
+                        }`}
                       >
-                        <td className="px-5 py-3 font-medium">{b.title}</td>
-                        <td className="px-5 py-3 text-[var(--muted)]">v{b.version_number}</td>
-                        <td className="px-5 py-3">
-                          <StatusBadge status={b.status} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium">{item.title}</span>
+                          <StatusBadge status={item.status} />
+                        </div>
+                        <p className="mt-1 text-sm text-[var(--muted)]">{item.code}</p>
+                        {item.created_at ? (
+                          <p className="mt-1 text-xs text-[var(--muted)]">{formatUtc(item.created_at)}</p>
+                        ) : null}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollRegion>
             )}
-            {briefs.length > 0 || briefPageMeta.total > 0 ? (
-              <ListPagination
-                page={briefPageMeta}
-                onOffsetChange={setBriefOffset}
-                onLimitChange={setBriefLimit}
-                label="briefs"
-              />
+            {!loading && (questionnaires.length > 0 || qPageMeta.total > 0) ? (
+              <div className="shrink-0">
+                <ListPagination
+                  page={qPageMeta}
+                  onOffsetChange={setQOffset}
+                  onLimitChange={setQLimit}
+                  label="questionnaires"
+                />
+              </div>
             ) : null}
           </Card>
+
+          <ScrollRegion className="min-h-0">
+            <div className="grid gap-4 pb-2">
+              {currentQuestionnaire ? (
+                <Card>
+                  <CardHeader>
+                    <h2 className="font-display text-xl">{currentQuestionnaire.title}</h2>
+                    <p className="text-sm text-[var(--muted)]">
+                      Answers and briefs attach to a linked inquiry from Queries (preferred) or the
+                      workspace project.
+                    </p>
+                  </CardHeader>
+                  <CardBody>
+                    <Field
+                      label="Linked inquiry"
+                      hint={
+                        queries.length === 0
+                          ? "Create an inquiry on Queries, or ensure a workspace project is selected."
+                          : "Discovery work stays scoped to this crm_query record."
+                      }
+                    >
+                      <Select
+                        value={entityId}
+                        onChange={(e) => selectEntity(e.target.value)}
+                        aria-label="Linked inquiry"
+                      >
+                        <option value="">Select inquiry…</option>
+                        {queries.map((q) => (
+                          <option key={q.id} value={q.id}>
+                            {q.subject}
+                          </option>
+                        ))}
+                        {getWorkspaceProjectId() &&
+                        !queries.some((q) => q.id === getWorkspaceProjectId()) ? (
+                          <option value={getWorkspaceProjectId()}>
+                            Workspace project ({getWorkspaceProjectId().slice(0, 8)}…)
+                          </option>
+                        ) : null}
+                      </Select>
+                    </Field>
+                    {!version ? (
+                      <StatusBanner kind="warning">
+                        This questionnaire has no published version yet.
+                      </StatusBanner>
+                    ) : null}
+                  </CardBody>
+                </Card>
+              ) : null}
+
+              {version && can(session.variant, "create") ? (
+                <Card>
+                  <CardHeader>
+                    <h2 className="font-display text-lg">
+                      {currentQuestionnaire?.title ?? title} · v{version.version_number}
+                    </h2>
+                    <p className="text-sm text-[var(--muted)]">
+                      Answer the discovery questions. Completeness is scored against mandatory items.
+                    </p>
+                  </CardHeader>
+                  <CardBody>
+                    <form
+                      onSubmit={onSaveAnswers}
+                      className="grid gap-4"
+                      aria-label="Answer questionnaire"
+                    >
+                      {questions.map((q) => (
+                        <Field key={q.key} label={q.text}>
+                          <Textarea
+                            rows={2}
+                            value={answers[q.key] ?? ""}
+                            onChange={(e) =>
+                              setAnswers((prev) => ({ ...prev, [q.key]: e.target.value }))
+                            }
+                            placeholder="Your answer"
+                          />
+                        </Field>
+                      ))}
+                      <div className="flex justify-end">
+                        <Button type="submit">Save answers &amp; score</Button>
+                      </div>
+                    </form>
+                  </CardBody>
+                </Card>
+              ) : null}
+
+              {score ? (
+                <Card>
+                  <CardHeader className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h2 className="font-display text-lg">Completeness</h2>
+                      <p className="text-sm text-[var(--muted)]">
+                        {score.covered_count} of {score.mandatory_total} mandatory questions covered
+                      </p>
+                    </div>
+                    <StatusBadge status={score.meets_threshold ? "ready" : "pending"} />
+                  </CardHeader>
+                  <CardBody className="space-y-3">
+                    <p className="text-sm">
+                      Score <span className="font-semibold">{String(score.percentage)}%</span>
+                      {score.meets_threshold
+                        ? " — threshold met; you can create a brief."
+                        : " — clarify remaining gaps before approving a brief."}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {score.gap_question_keys.length > 0 ? (
+                        <Button variant="outline" onClick={() => void onCreateGaps()}>
+                          Create clarifications
+                        </Button>
+                      ) : null}
+                      {score.meets_threshold &&
+                      (can(session.variant, "approve") || can(session.variant, "create")) ? (
+                        <Button onClick={() => void onBrief()}>Create &amp; approve brief</Button>
+                      ) : null}
+                    </div>
+                  </CardBody>
+                </Card>
+              ) : null}
+
+              <Card>
+                <CardHeader>
+                  <h2 className="font-display text-lg">Briefs</h2>
+                  <p className="text-sm text-[var(--muted)]">
+                    {entityId
+                      ? "Briefs for the selected inquiry / project."
+                      : "Approved briefs across the organization."}
+                  </p>
+                </CardHeader>
+                {briefs.length === 0 ? (
+                  <CardBody>
+                    <EmptyState
+                      title="No briefs yet"
+                      body="Complete the questionnaire and meet the completeness threshold to draft a brief."
+                    />
+                  </CardBody>
+                ) : (
+                  <TableScroll className="rounded-none border-0 border-t border-[var(--line)]">
+                    <table className="w-full min-w-full table-fixed text-left text-sm">
+                      <thead className="sticky top-0 z-10 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+                        <tr>
+                          <th className="w-[55%] px-5 py-3 font-medium">Brief</th>
+                          <th className="w-[20%] px-5 py-3 font-medium">Version</th>
+                          <th className="w-[25%] px-5 py-3 font-medium">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {briefs.map((b) => (
+                          <tr
+                            key={b.id}
+                            className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+                          >
+                            <td className="px-5 py-3 font-medium">
+                              <span className="line-clamp-2">{b.title}</span>
+                            </td>
+                            <td className="px-5 py-3 text-[var(--muted)]">v{b.version_number}</td>
+                            <td className="px-5 py-3">
+                              <StatusBadge status={b.status} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </TableScroll>
+                )}
+                {briefs.length > 0 || briefPageMeta.total > 0 ? (
+                  <ListPagination
+                    page={briefPageMeta}
+                    onOffsetChange={setBriefOffset}
+                    onLimitChange={setBriefLimit}
+                    label="briefs"
+                  />
+                ) : null}
+              </Card>
+            </div>
+          </ScrollRegion>
         </div>
       </div>
     </AppShell>

@@ -5,6 +5,7 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
 
 import { ListPagination } from "@/components/list-pagination";
+import { TableScroll } from "@/components/page-shell";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -139,15 +140,15 @@ export function BaselineListPage() {
             />
           </CardBody>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+          <TableScroll className="rounded-none border-0 border-t border-[var(--line)]">
+            <table className="w-full min-w-full table-fixed text-left text-sm">
+              <thead className="sticky top-0 z-10 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
                 <tr>
-                  <th className="px-5 py-3 font-medium">Key</th>
-                  <th className="px-5 py-3 font-medium">Title</th>
-                  <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium">Version</th>
-                  <th className="px-5 py-3 font-medium">Updated</th>
+                  <th className="w-[18%] px-5 py-3 font-medium">Key</th>
+                  <th className="w-[34%] px-5 py-3 font-medium">Title</th>
+                  <th className="w-[16%] px-5 py-3 font-medium">Status</th>
+                  <th className="w-[12%] px-5 py-3 font-medium">Version</th>
+                  <th className="w-[20%] px-5 py-3 font-medium">Updated</th>
                 </tr>
               </thead>
               <tbody>
@@ -156,7 +157,7 @@ export function BaselineListPage() {
                     key={item.id}
                     className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
                   >
-                    <td className="px-5 py-3">
+                    <td className="truncate px-5 py-3">
                       <Link
                         className="font-medium text-[var(--accent)] underline-offset-2 hover:underline"
                         href={`/governance/baselines/${item.id}`}
@@ -164,17 +165,21 @@ export function BaselineListPage() {
                         {item.baseline_key}
                       </Link>
                     </td>
-                    <td className="px-5 py-3">{item.title}</td>
+                    <td className="px-5 py-3">
+                      <span className="line-clamp-2">{item.title}</span>
+                    </td>
                     <td className="px-5 py-3">
                       <StatusBadge status={item.approval_status} />
                     </td>
                     <td className="px-5 py-3 text-[var(--muted)]">{item.version}</td>
-                    <td className="px-5 py-3 text-[var(--muted)]">{formatUtc(item.updated_at)}</td>
+                    <td className="whitespace-nowrap px-5 py-3 text-[var(--muted)]">
+                      {formatUtc(item.updated_at)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
+          </TableScroll>
         )}
         {!loading && (items.length > 0 || pageMeta.total > 0) ? (
           <ListPagination

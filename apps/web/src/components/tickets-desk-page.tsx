@@ -5,6 +5,7 @@ import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ListPagination } from "@/components/list-pagination";
+import { ScrollRegion } from "@/components/page-shell";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -273,307 +274,315 @@ export function TicketsDeskPage() {
   }
 
   return (
-    <AppShell title="Tickets" breadcrumbs={["Project Delivery", "Tickets"]}>
-      <PageHeader
-        title="Tickets"
-        description="Work items with readiness and done gates â€” prepare Ready, move through delivery, and reopen with evidence when needed."
-        actions={
-          can(session.variant, "create") ? (
-            <Button onClick={() => setShowCreate((v) => !v)}>
-              <Plus className="h-4 w-4" />
-              New ticket
-            </Button>
-          ) : null
-        }
-      />
+    <AppShell title="Tickets" breadcrumbs={["Project Delivery", "Tickets"]} fill>
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
+        <PageHeader
+          title="Tickets"
+          description="Work items with readiness and done gates â€” prepare Ready, move through delivery, and reopen with evidence when needed."
+          actions={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowCreate((v) => !v)}>
+                <Plus className="h-4 w-4" />
+                New ticket
+              </Button>
+            ) : null
+          }
+        />
 
-      <Card className="mb-6">
-        <CardBody>
-          <Field
-            label="Workspace project"
-            hint="Use the project created on Projects to load its tickets."
-          >
-            <Input
-              value={projectId}
-              onChange={(e) => applyWorkspaceProject(e.target.value.trim())}
-              placeholder="Create a project on Projects first"
-            />
-          </Field>
-        </CardBody>
-      </Card>
-
-      {showCreate && can(session.variant, "create") ? (
-        <Card className="mb-6">
-          <CardHeader>
-            <h2 className="font-display text-lg">Create ticket</h2>
-            <p className="text-sm text-[var(--muted)]">
-              Capture enough detail for Definition of Ready before pulling into active work.
-            </p>
-          </CardHeader>
+        <Card className="shrink-0">
           <CardBody>
-            <form
-              onSubmit={onCreate}
-              className="grid gap-4 md:grid-cols-2"
-              aria-label="Create ticket"
+            <Field
+              label="Workspace project"
+              hint="Use the project created on Projects to load its tickets."
             >
-              <Field label="Code">
-                <Input
-                  required
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="T-12"
-                />
-              </Field>
-              <Field label="Estimate">
-                <Input
-                  value={estimate}
-                  onChange={(e) => setEstimate(e.target.value)}
-                  placeholder="3"
-                />
-              </Field>
-              <Field label="Title" className="md:col-span-2">
-                <Input
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Implement secure sign-in"
-                />
-              </Field>
-              <Field label="Description" className="md:col-span-2">
-                <Textarea
-                  rows={2}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="What needs to be built and any constraints"
-                />
-              </Field>
-              <Field label="Acceptance criteria">
-                <Input
-                  value={acceptance}
-                  onChange={(e) => setAcceptance(e.target.value)}
-                  placeholder="Users can authenticate with MFA"
-                />
-              </Field>
-              <Field label="Definition of Done">
-                <Input
-                  value={dod}
-                  onChange={(e) => setDod(e.target.value)}
-                  placeholder="Tests pass and peer review complete"
-                />
-              </Field>
-              <div className="flex justify-end gap-2 md:col-span-2">
-                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">Create ticket</Button>
-              </div>
-            </form>
+              <Input
+                value={projectId}
+                onChange={(e) => applyWorkspaceProject(e.target.value.trim())}
+                placeholder="Create a project on Projects first"
+              />
+            </Field>
           </CardBody>
         </Card>
-      ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-[1fr_1.1fr]">
-        <Card>
-          <CardHeader>
-            <h2 className="font-display text-lg">Ticket list</h2>
-            <p className="text-sm text-[var(--muted)]">
-              Select a ticket to prepare Ready, transition, or reopen.
-            </p>
-            <div className="relative mt-3">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
-              <Input
-                className="pl-9"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setOffset(0);
-                }}
-                placeholder="Search code or title"
-                aria-label="Search tickets"
-              />
-            </div>
-            <Field label="Status" className="mt-3 mb-0">
-              <Select
-                value={status}
-                onChange={(e) => {
-                  setStatus(e.target.value);
-                  setOffset(0);
-                }}
-                aria-label="Filter tickets by status"
+        {showCreate && can(session.variant, "create") ? (
+          <Card className="shrink-0">
+            <CardHeader>
+              <h2 className="font-display text-lg">Create ticket</h2>
+              <p className="text-sm text-[var(--muted)]">
+                Capture enough detail for Definition of Ready before pulling into active work.
+              </p>
+            </CardHeader>
+            <CardBody>
+              <form
+                onSubmit={onCreate}
+                className="grid gap-4 md:grid-cols-2"
+                aria-label="Create ticket"
               >
-                <option value="">Any status</option>
-                <option value="backlog">Backlog</option>
-                <option value="ready">Ready</option>
-                <option value="assigned">Assigned</option>
-                <option value="in_progress">In progress</option>
-                <option value="code_review">Code review</option>
-                <option value="ready_for_qa">Ready for QA</option>
-                <option value="qa_in_progress">QA in progress</option>
-                <option value="passed_qa">Passed QA</option>
-                <option value="done">Done</option>
-                <option value="blocked">Blocked</option>
-              </Select>
-            </Field>
-          </CardHeader>
-          {!projectId ? (
-            <CardBody>
-              <EmptyState
-                title="No project linked"
-                body="Create a project on Projects, then open tickets for that workspace."
-              />
-            </CardBody>
-          ) : loading ? (
-            <SkeletonRows />
-          ) : tickets.length === 0 ? (
-            <CardBody>
-              <EmptyState
-                title={search.trim() || status ? "No matching tickets" : "No tickets yet"}
-                body={
-                  search.trim() || status
-                    ? "Try a different search or status filter."
-                    : "Create the first work item for this project."
-                }
-                action={
-                  !search.trim() && !status && can(session.variant, "create") ? (
-                    <Button onClick={() => setShowCreate(true)}>New ticket</Button>
-                  ) : null
-                }
-              />
-            </CardBody>
-          ) : (
-            <ul className="divide-y divide-[var(--line)]">
-              {tickets.map((t) => (
-                <li key={t.id}>
-                  <button
-                    type="button"
-                    className={`flex w-full items-center justify-between gap-3 px-5 py-3 text-left text-sm hover:bg-[var(--surface-muted)]/70 ${
-                      active?.id === t.id ? "bg-[var(--accent-soft)]/40" : ""
-                    }`}
-                    onClick={() => void selectTicket(t)}
-                  >
-                    <span>
-                      <span className="font-medium">{t.code}</span>
-                      <span className="ml-2 text-[var(--muted)]">{t.title}</span>
-                    </span>
-                    <span className="flex shrink-0 flex-col items-end gap-1">
-                      <StatusBadge status={t.status} />
-                      <span className="text-xs text-[var(--muted)]">{formatUtc(t.created_at)}</span>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          {projectId && !loading && (tickets.length > 0 || pageMeta.total > 0) ? (
-            <ListPagination
-              page={pageMeta}
-              onOffsetChange={setOffset}
-              onLimitChange={setLimit}
-              label="tickets"
-            />
-          ) : null}
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <h2 className="font-display text-lg">Actions</h2>
-            <p className="text-sm text-[var(--muted)]">
-              Readiness gates, status moves, and reopen with evidence.
-            </p>
-          </CardHeader>
-          {!active ? (
-            <CardBody>
-              <EmptyState
-                title="No ticket selected"
-                body="Choose a ticket from the list to manage its delivery flow."
-              />
-            </CardBody>
-          ) : (
-            <CardBody className="space-y-5">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <h3 className="font-display text-xl">
-                    {active.code} â€” {active.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-[var(--muted)]">Revision {active.version}</p>
-                </div>
-                <StatusBadge status={active.status} />
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {active.status === "backlog" ? (
-                  <Button onClick={() => void onPrepareReady()}>Prepare &amp; mark Ready</Button>
-                ) : null}
-                {FLOW_TRANSITIONS.map((next) => (
-                  <Button
-                    key={next}
-                    size="sm"
-                    variant="outline"
-                    onClick={() => void onTransition(next)}
-                  >
-                    {next.replace(/_/g, " ")}
+                <Field label="Code">
+                  <Input
+                    required
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="T-12"
+                  />
+                </Field>
+                <Field label="Estimate">
+                  <Input
+                    value={estimate}
+                    onChange={(e) => setEstimate(e.target.value)}
+                    placeholder="3"
+                  />
+                </Field>
+                <Field label="Title" className="md:col-span-2">
+                  <Input
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Implement secure sign-in"
+                  />
+                </Field>
+                <Field label="Description" className="md:col-span-2">
+                  <Textarea
+                    rows={2}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="What needs to be built and any constraints"
+                  />
+                </Field>
+                <Field label="Acceptance criteria">
+                  <Input
+                    value={acceptance}
+                    onChange={(e) => setAcceptance(e.target.value)}
+                    placeholder="Users can authenticate with MFA"
+                  />
+                </Field>
+                <Field label="Definition of Done">
+                  <Input
+                    value={dod}
+                    onChange={(e) => setDod(e.target.value)}
+                    placeholder="Tests pass and peer review complete"
+                  />
+                </Field>
+                <div className="flex justify-end gap-2 md:col-span-2">
+                  <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                    Cancel
                   </Button>
-                ))}
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <p className="mb-2 text-sm font-medium">Ready checks</p>
-                  <ul className="space-y-1.5 text-sm">
-                    {readiness.length === 0 ? (
-                      <li className="text-[var(--muted)]">No checks yet</li>
-                    ) : (
-                      readiness.map((c) => (
-                        <li key={c.id} className="flex items-start gap-2">
-                          <span className={c.is_satisfied ? "text-[var(--success)]" : "text-[var(--muted)]"}>
-                            {c.is_satisfied ? "âœ“" : "â—‹"}
-                          </span>
-                          <span>{c.label}</span>
-                        </li>
-                      ))
-                    )}
-                  </ul>
+                  <Button type="submit">Create ticket</Button>
                 </div>
-                <div>
-                  <p className="mb-2 text-sm font-medium">Done checks</p>
-                  <ul className="space-y-1.5 text-sm">
-                    {doneChecks.length === 0 ? (
-                      <li className="text-[var(--muted)]">No checks yet</li>
-                    ) : (
-                      doneChecks.map((c) => (
-                        <li key={c.id} className="flex items-start gap-2">
-                          <span className={c.is_satisfied ? "text-[var(--success)]" : "text-[var(--muted)]"}>
-                            {c.is_satisfied ? "âœ“" : "â—‹"}
-                          </span>
-                          <span>{c.label}</span>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </div>
-              </div>
-
-              {active.status === "done" ? (
-                <div className="space-y-3 border-t border-[var(--line)] pt-4">
-                  <Field label="Reopen reason" hint="Required evidence when returning a done ticket to active work.">
-                    <Input
-                      value={reopenReason}
-                      onChange={(e) => setReopenReason(e.target.value)}
-                      placeholder="Why this work must reopen"
-                    />
-                  </Field>
-                  <Button
-                    variant="outline"
-                    disabled={!reopenReason.trim()}
-                    onClick={() => void onReopen()}
-                  >
-                    Reopen with evidence
-                  </Button>
-                </div>
-              ) : null}
+              </form>
             </CardBody>
-          )}
-        </Card>
+          </Card>
+        ) : null}
+
+        <div className="grid min-h-0 flex-1 gap-4 overflow-hidden lg:grid-cols-[1fr_1.1fr]">
+          <Card className="flex min-h-0 flex-col overflow-hidden">
+            <CardHeader className="shrink-0">
+              <h2 className="font-display text-lg">Ticket list</h2>
+              <p className="text-sm text-[var(--muted)]">
+                Select a ticket to prepare Ready, transition, or reopen.
+              </p>
+              <div className="relative mt-3">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+                <Input
+                  className="pl-9"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setOffset(0);
+                  }}
+                  placeholder="Search code or title"
+                  aria-label="Search tickets"
+                />
+              </div>
+              <Field label="Status" className="mt-3 mb-0">
+                <Select
+                  value={status}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    setOffset(0);
+                  }}
+                  aria-label="Filter tickets by status"
+                >
+                  <option value="">Any status</option>
+                  <option value="backlog">Backlog</option>
+                  <option value="ready">Ready</option>
+                  <option value="assigned">Assigned</option>
+                  <option value="in_progress">In progress</option>
+                  <option value="code_review">Code review</option>
+                  <option value="ready_for_qa">Ready for QA</option>
+                  <option value="qa_in_progress">QA in progress</option>
+                  <option value="passed_qa">Passed QA</option>
+                  <option value="done">Done</option>
+                  <option value="blocked">Blocked</option>
+                </Select>
+              </Field>
+            </CardHeader>
+            {!projectId ? (
+              <CardBody>
+                <EmptyState
+                  title="No project linked"
+                  body="Create a project on Projects, then open tickets for that workspace."
+                />
+              </CardBody>
+            ) : loading ? (
+              <SkeletonRows />
+            ) : tickets.length === 0 ? (
+              <CardBody>
+                <EmptyState
+                  title={search.trim() || status ? "No matching tickets" : "No tickets yet"}
+                  body={
+                    search.trim() || status
+                      ? "Try a different search or status filter."
+                      : "Create the first work item for this project."
+                  }
+                  action={
+                    !search.trim() && !status && can(session.variant, "create") ? (
+                      <Button onClick={() => setShowCreate(true)}>New ticket</Button>
+                    ) : null
+                  }
+                />
+              </CardBody>
+            ) : (
+              <ScrollRegion className="flex-1">
+                <ul className="divide-y divide-[var(--line)]">
+                  {tickets.map((t) => (
+                    <li key={t.id}>
+                      <button
+                        type="button"
+                        className={`flex w-full items-center justify-between gap-3 px-5 py-3 text-left text-sm hover:bg-[var(--surface-muted)]/70 ${
+                          active?.id === t.id ? "bg-[var(--accent-soft)]/40" : ""
+                        }`}
+                        onClick={() => void selectTicket(t)}
+                      >
+                        <span>
+                          <span className="font-medium">{t.code}</span>
+                          <span className="ml-2 text-[var(--muted)]">{t.title}</span>
+                        </span>
+                        <span className="flex shrink-0 flex-col items-end gap-1">
+                          <StatusBadge status={t.status} />
+                          <span className="text-xs text-[var(--muted)]">{formatUtc(t.created_at)}</span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollRegion>
+            )}
+            {projectId && !loading && (tickets.length > 0 || pageMeta.total > 0) ? (
+              <div className="shrink-0">
+                <ListPagination
+                  page={pageMeta}
+                  onOffsetChange={setOffset}
+                  onLimitChange={setLimit}
+                  label="tickets"
+                />
+              </div>
+            ) : null}
+          </Card>
+
+          <ScrollRegion className="min-h-0">
+            <Card>
+              <CardHeader>
+                <h2 className="font-display text-lg">Actions</h2>
+                <p className="text-sm text-[var(--muted)]">
+                  Readiness gates, status moves, and reopen with evidence.
+                </p>
+              </CardHeader>
+              {!active ? (
+                <CardBody>
+                  <EmptyState
+                    title="No ticket selected"
+                    body="Choose a ticket from the list to manage its delivery flow."
+                  />
+                </CardBody>
+              ) : (
+                <CardBody className="space-y-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-display text-xl">
+                        {active.code} â€” {active.title}
+                      </h3>
+                      <p className="mt-1 text-xs text-[var(--muted)]">Revision {active.version}</p>
+                    </div>
+                    <StatusBadge status={active.status} />
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {active.status === "backlog" ? (
+                      <Button onClick={() => void onPrepareReady()}>Prepare &amp; mark Ready</Button>
+                    ) : null}
+                    {FLOW_TRANSITIONS.map((next) => (
+                      <Button
+                        key={next}
+                        size="sm"
+                        variant="outline"
+                        onClick={() => void onTransition(next)}
+                      >
+                        {next.replace(/_/g, " ")}
+                      </Button>
+                    ))}
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <p className="mb-2 text-sm font-medium">Ready checks</p>
+                      <ul className="space-y-1.5 text-sm">
+                        {readiness.length === 0 ? (
+                          <li className="text-[var(--muted)]">No checks yet</li>
+                        ) : (
+                          readiness.map((c) => (
+                            <li key={c.id} className="flex items-start gap-2">
+                              <span className={c.is_satisfied ? "text-[var(--success)]" : "text-[var(--muted)]"}>
+                                {c.is_satisfied ? "âœ“" : "â—‹"}
+                              </span>
+                              <span>{c.label}</span>
+                            </li>
+                          ))
+                        )}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="mb-2 text-sm font-medium">Done checks</p>
+                      <ul className="space-y-1.5 text-sm">
+                        {doneChecks.length === 0 ? (
+                          <li className="text-[var(--muted)]">No checks yet</li>
+                        ) : (
+                          doneChecks.map((c) => (
+                            <li key={c.id} className="flex items-start gap-2">
+                              <span className={c.is_satisfied ? "text-[var(--success)]" : "text-[var(--muted)]"}>
+                                {c.is_satisfied ? "âœ“" : "â—‹"}
+                              </span>
+                              <span>{c.label}</span>
+                            </li>
+                          ))
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {active.status === "done" ? (
+                    <div className="space-y-3 border-t border-[var(--line)] pt-4">
+                      <Field label="Reopen reason" hint="Required evidence when returning a done ticket to active work.">
+                        <Input
+                          value={reopenReason}
+                          onChange={(e) => setReopenReason(e.target.value)}
+                          placeholder="Why this work must reopen"
+                        />
+                      </Field>
+                      <Button
+                        variant="outline"
+                        disabled={!reopenReason.trim()}
+                        onClick={() => void onReopen()}
+                      >
+                        Reopen with evidence
+                      </Button>
+                    </div>
+                  ) : null}
+                </CardBody>
+              )}
+            </Card>
+          </ScrollRegion>
+        </div>
       </div>
     </AppShell>
   );

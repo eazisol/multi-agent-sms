@@ -5,6 +5,7 @@ import { Plus, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ListPagination } from "@/components/list-pagination";
+import { ScrollRegion, TableScroll } from "@/components/page-shell";
 import { useSession } from "@/components/session-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -195,307 +196,317 @@ export function ProjectsDeskPage() {
   }
 
   return (
-    <AppShell title="Projects" breadcrumbs={["Project Delivery", "Projects"]}>
-      <PageHeader
-        title="Projects"
-        description="Delivery homes for clients — create a project, draft must-have requirements, and approve an SRS baseline."
-        actions={
-          can(session.variant, "create") ? (
-            <Button onClick={() => setShowCreate((v) => !v)}>
-              <Plus className="h-4 w-4" />
-              New project
-            </Button>
-          ) : null
-        }
-      />
+    <AppShell title="Projects" breadcrumbs={["Project Delivery", "Projects"]} fill>
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
+        <PageHeader
+          title="Projects"
+          description="Delivery homes for clients — create a project, draft must-have requirements, and approve an SRS baseline."
+          actions={
+            can(session.variant, "create") ? (
+              <Button onClick={() => setShowCreate((v) => !v)}>
+                <Plus className="h-4 w-4" />
+                New project
+              </Button>
+            ) : null
+          }
+        />
 
-      {showCreate ? (
-        <Card className="mb-6">
-          <CardHeader>
-            <h2 className="font-display text-lg">Create project</h2>
-            <p className="text-sm text-[var(--muted)]">
-              A short code and title are enough to open delivery work for a client engagement.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <form
-              onSubmit={onCreateProject}
-              className="grid gap-4 md:grid-cols-3"
-              aria-label="Create project"
-            >
-              <Field label="Project code">
-                <Input
-                  required
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="EARTH"
-                />
-              </Field>
-              <Field label="Title" className="md:col-span-2">
-                <Input
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="EarthCo client portal"
-                />
-              </Field>
-              <div className="flex justify-end gap-2 md:col-span-3">
-                <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">Create project</Button>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(280px,340px)_1fr]">
-        <Card>
-          <CardHeader>
-            <h2 className="font-display text-lg">Project inventory</h2>
-            <p className="text-sm text-[var(--muted)]">Loaded from the organization database.</p>
-            <div className="relative mt-3">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
-              <Input
-                className="pl-9"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setOffset(0);
-                }}
-                placeholder="Search code or title"
-                aria-label="Search projects"
-              />
-            </div>
-            <Field label="Status" className="mt-3 mb-0">
-              <Select
-                value={status}
-                onChange={(e) => {
-                  setStatus(e.target.value);
-                  setOffset(0);
-                }}
-                aria-label="Filter projects by status"
-              >
-                <option value="">Any status</option>
-                <option value="active">Active</option>
-                <option value="draft">Draft</option>
-                <option value="on_hold">On hold</option>
-                <option value="at_risk">At risk</option>
-                <option value="blocked">Blocked</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </Select>
-            </Field>
-          </CardHeader>
-          {loading ? (
-            <SkeletonRows />
-          ) : projects.length === 0 ? (
-            <CardBody>
-              <EmptyState
-                title={search.trim() || status ? "No matching projects" : "No projects yet"}
-                body={
-                  search.trim() || status
-                    ? "Try a different search or status filter."
-                    : "Create a project to start drafting requirements and building an approved SRS."
-                }
-                action={
-                  !search.trim() && !status && can(session.variant, "create") ? (
-                    <Button onClick={() => setShowCreate(true)}>
-                      <Plus className="h-4 w-4" />
-                      New project
-                    </Button>
-                  ) : null
-                }
-              />
-            </CardBody>
-          ) : (
-            <ul className="divide-y divide-[var(--line)]">
-              {projects.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => selectProject(item.id)}
-                    className={`w-full px-5 py-3 text-left transition hover:bg-[var(--surface-muted)]/70 ${
-                      item.id === projectId ? "bg-[var(--accent-soft)]" : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium">{item.code}</span>
-                      <StatusBadge status={item.status} />
-                    </div>
-                    <p className="mt-1 text-sm text-[var(--muted)]">{item.title}</p>
-                    <p className="mt-1 text-xs text-[var(--muted)]">{formatUtc(item.created_at)}</p>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          {!loading && (projects.length > 0 || pageMeta.total > 0) ? (
-            <ListPagination
-              page={pageMeta}
-              onOffsetChange={setOffset}
-              onLimitChange={setLimit}
-              label="projects"
-            />
-          ) : null}
-        </Card>
-
-        <div className="space-y-4">
-          {current ? (
-            <Card>
-              <CardHeader className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <h2 className="font-display text-xl">{current.title}</h2>
-                  <p className="mt-1 text-sm text-[var(--muted)]">
-                    Workspace project for Roadmap, Tickets, and Documents.
-                  </p>
-                </div>
-                <StatusBadge status={current.status} />
-              </CardHeader>
-              <CardBody className="space-y-3 text-sm">
-                <p>
-                  <span className="text-[var(--muted)]">Code:</span> {current.code}
-                </p>
-                {can(session.variant, "create") ? (
-                  <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" onClick={() => setShowReq((v) => !v)}>
-                      <Plus className="h-4 w-4" />
-                      Draft requirement
-                    </Button>
-                    {lastVersion ? (
-                      <>
-                        <Button
-                          variant="outline"
-                          disabled={!can(session.variant, "approve")}
-                          onClick={() => void onApproveVersion()}
-                        >
-                          Approve last version
-                        </Button>
-                        <Button
-                          variant="outline"
-                          disabled={!can(session.variant, "approve")}
-                          onClick={() => void onApproveSrs()}
-                        >
-                          Create &amp; approve SRS
-                        </Button>
-                      </>
-                    ) : null}
-                  </div>
-                ) : null}
-              </CardBody>
-            </Card>
-          ) : null}
-
-          {showReq && projectId && can(session.variant, "create") ? (
-            <Card>
-              <CardHeader>
-                <h2 className="font-display text-lg">Draft requirement</h2>
-                <p className="text-sm text-[var(--muted)]">
-                  Capture a must-have statement and a first acceptance criterion.
-                </p>
-              </CardHeader>
-              <CardBody>
-                <form
-                  onSubmit={onCreateRequirement}
-                  className="grid gap-4 md:grid-cols-2"
-                  aria-label="Draft requirement"
-                >
-                  <Field label="Requirement code">
-                    <Input
-                      required
-                      value={reqCode}
-                      onChange={(e) => setReqCode(e.target.value)}
-                      placeholder="REQ-001"
-                    />
-                  </Field>
-                  <Field label="Title">
-                    <Input
-                      required
-                      value={reqTitle}
-                      onChange={(e) => setReqTitle(e.target.value)}
-                      placeholder="User can sign in securely"
-                    />
-                  </Field>
-                  <Field label="Statement" className="md:col-span-2">
-                    <Textarea
-                      required
-                      rows={3}
-                      value={statement}
-                      onChange={(e) => setStatement(e.target.value)}
-                      placeholder="The system shall…"
-                    />
-                  </Field>
-                  <div className="flex justify-end gap-2 md:col-span-2">
-                    <Button type="button" variant="ghost" onClick={() => setShowReq(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit">Create draft</Button>
-                  </div>
-                </form>
-              </CardBody>
-            </Card>
-          ) : null}
-
-          <Card>
-            <CardHeader className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h2 className="font-display text-lg">Requirements</h2>
-                <p className="text-sm text-[var(--muted)]">
-                  Must-have items tracked toward the project SRS.
-                </p>
-              </div>
-              {lastVersion ? <StatusBadge status={lastVersion.status} /> : null}
+        {showCreate ? (
+          <Card className="shrink-0">
+            <CardHeader>
+              <h2 className="font-display text-lg">Create project</h2>
+              <p className="text-sm text-[var(--muted)]">
+                A short code and title are enough to open delivery work for a client engagement.
+              </p>
             </CardHeader>
-            {!projectId ? (
-              <CardBody>
-                <EmptyState
-                  title="No project selected"
-                  body="Create or select a project from the inventory."
+            <CardBody>
+              <form
+                onSubmit={onCreateProject}
+                className="grid gap-4 md:grid-cols-3"
+                aria-label="Create project"
+              >
+                <Field label="Project code">
+                  <Input
+                    required
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="EARTH"
+                  />
+                </Field>
+                <Field label="Title" className="md:col-span-2">
+                  <Input
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="EarthCo client portal"
+                  />
+                </Field>
+                <div className="flex justify-end gap-2 md:col-span-3">
+                  <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">Create project</Button>
+                </div>
+              </form>
+            </CardBody>
+          </Card>
+        ) : null}
+
+        <div className="grid min-h-0 flex-1 gap-4 overflow-hidden lg:grid-cols-[minmax(280px,340px)_1fr]">
+          <Card className="flex min-h-0 flex-col overflow-hidden">
+            <CardHeader className="shrink-0">
+              <h2 className="font-display text-lg">Project inventory</h2>
+              <p className="text-sm text-[var(--muted)]">Loaded from the organization database.</p>
+              <div className="relative mt-3">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
+                <Input
+                  className="pl-9"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setOffset(0);
+                  }}
+                  placeholder="Search code or title"
+                  aria-label="Search projects"
                 />
-              </CardBody>
-            ) : loadingReqs ? (
+              </div>
+              <Field label="Status" className="mt-3 mb-0">
+                <Select
+                  value={status}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                    setOffset(0);
+                  }}
+                  aria-label="Filter projects by status"
+                >
+                  <option value="">Any status</option>
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                  <option value="on_hold">On hold</option>
+                  <option value="at_risk">At risk</option>
+                  <option value="blocked">Blocked</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </Select>
+              </Field>
+            </CardHeader>
+            {loading ? (
               <SkeletonRows />
-            ) : requirements.length === 0 ? (
+            ) : projects.length === 0 ? (
               <CardBody>
                 <EmptyState
-                  title="No requirements yet"
-                  body="Draft the first must-have so the team can review and approve an SRS baseline."
+                  title={search.trim() || status ? "No matching projects" : "No projects yet"}
+                  body={
+                    search.trim() || status
+                      ? "Try a different search or status filter."
+                      : "Create a project to start drafting requirements and building an approved SRS."
+                  }
                   action={
-                    can(session.variant, "create") ? (
-                      <Button onClick={() => setShowReq(true)}>Draft requirement</Button>
+                    !search.trim() && !status && can(session.variant, "create") ? (
+                      <Button onClick={() => setShowCreate(true)}>
+                        <Plus className="h-4 w-4" />
+                        New project
+                      </Button>
                     ) : null
                   }
                 />
               </CardBody>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm">
-                  <thead className="sticky top-0 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
-                    <tr>
-                      <th className="px-5 py-3 font-medium">Code</th>
-                      <th className="px-5 py-3 font-medium">Title</th>
-                      <th className="px-5 py-3 font-medium">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {requirements.map((item) => (
-                      <tr
-                        key={item.id}
-                        className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+              <ScrollRegion className="flex-1">
+                <ul className="divide-y divide-[var(--line)]">
+                  {projects.map((item) => (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        onClick={() => selectProject(item.id)}
+                        className={`w-full px-5 py-3 text-left transition hover:bg-[var(--surface-muted)]/70 ${
+                          item.id === projectId ? "bg-[var(--accent-soft)]" : ""
+                        }`}
                       >
-                        <td className="px-5 py-3 font-medium">{item.requirement_code}</td>
-                        <td className="px-5 py-3">{item.title}</td>
-                        <td className="px-5 py-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-medium">{item.code}</span>
                           <StatusBadge status={item.status} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        </div>
+                        <p className="mt-1 text-sm text-[var(--muted)]">{item.title}</p>
+                        <p className="mt-1 text-xs text-[var(--muted)]">{formatUtc(item.created_at)}</p>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollRegion>
             )}
+            {!loading && (projects.length > 0 || pageMeta.total > 0) ? (
+              <div className="shrink-0">
+                <ListPagination
+                  page={pageMeta}
+                  onOffsetChange={setOffset}
+                  onLimitChange={setLimit}
+                  label="projects"
+                />
+              </div>
+            ) : null}
           </Card>
+
+          <ScrollRegion className="min-h-0">
+            <div className="grid gap-4 pb-2">
+              {current ? (
+                <Card>
+                  <CardHeader className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h2 className="font-display text-xl">{current.title}</h2>
+                      <p className="mt-1 text-sm text-[var(--muted)]">
+                        Workspace project for Roadmap, Tickets, and Documents.
+                      </p>
+                    </div>
+                    <StatusBadge status={current.status} />
+                  </CardHeader>
+                  <CardBody className="space-y-3 text-sm">
+                    <p>
+                      <span className="text-[var(--muted)]">Code:</span> {current.code}
+                    </p>
+                    {can(session.variant, "create") ? (
+                      <div className="flex flex-wrap gap-2">
+                        <Button variant="outline" onClick={() => setShowReq((v) => !v)}>
+                          <Plus className="h-4 w-4" />
+                          Draft requirement
+                        </Button>
+                        {lastVersion ? (
+                          <>
+                            <Button
+                              variant="outline"
+                              disabled={!can(session.variant, "approve")}
+                              onClick={() => void onApproveVersion()}
+                            >
+                              Approve last version
+                            </Button>
+                            <Button
+                              variant="outline"
+                              disabled={!can(session.variant, "approve")}
+                              onClick={() => void onApproveSrs()}
+                            >
+                              Create &amp; approve SRS
+                            </Button>
+                          </>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </CardBody>
+                </Card>
+              ) : null}
+
+              {showReq && projectId && can(session.variant, "create") ? (
+                <Card>
+                  <CardHeader>
+                    <h2 className="font-display text-lg">Draft requirement</h2>
+                    <p className="text-sm text-[var(--muted)]">
+                      Capture a must-have statement and a first acceptance criterion.
+                    </p>
+                  </CardHeader>
+                  <CardBody>
+                    <form
+                      onSubmit={onCreateRequirement}
+                      className="grid gap-4 md:grid-cols-2"
+                      aria-label="Draft requirement"
+                    >
+                      <Field label="Requirement code">
+                        <Input
+                          required
+                          value={reqCode}
+                          onChange={(e) => setReqCode(e.target.value)}
+                          placeholder="REQ-001"
+                        />
+                      </Field>
+                      <Field label="Title">
+                        <Input
+                          required
+                          value={reqTitle}
+                          onChange={(e) => setReqTitle(e.target.value)}
+                          placeholder="User can sign in securely"
+                        />
+                      </Field>
+                      <Field label="Statement" className="md:col-span-2">
+                        <Textarea
+                          required
+                          rows={3}
+                          value={statement}
+                          onChange={(e) => setStatement(e.target.value)}
+                          placeholder="The system shall…"
+                        />
+                      </Field>
+                      <div className="flex justify-end gap-2 md:col-span-2">
+                        <Button type="button" variant="ghost" onClick={() => setShowReq(false)}>
+                          Cancel
+                        </Button>
+                        <Button type="submit">Create draft</Button>
+                      </div>
+                    </form>
+                  </CardBody>
+                </Card>
+              ) : null}
+
+              <Card>
+                <CardHeader className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h2 className="font-display text-lg">Requirements</h2>
+                    <p className="text-sm text-[var(--muted)]">
+                      Must-have items tracked toward the project SRS.
+                    </p>
+                  </div>
+                  {lastVersion ? <StatusBadge status={lastVersion.status} /> : null}
+                </CardHeader>
+                {!projectId ? (
+                  <CardBody>
+                    <EmptyState
+                      title="No project selected"
+                      body="Create or select a project from the inventory."
+                    />
+                  </CardBody>
+                ) : loadingReqs ? (
+                  <SkeletonRows />
+                ) : requirements.length === 0 ? (
+                  <CardBody>
+                    <EmptyState
+                      title="No requirements yet"
+                      body="Draft the first must-have so the team can review and approve an SRS baseline."
+                      action={
+                        can(session.variant, "create") ? (
+                          <Button onClick={() => setShowReq(true)}>Draft requirement</Button>
+                        ) : null
+                      }
+                    />
+                  </CardBody>
+                ) : (
+                  <TableScroll className="rounded-none border-0 border-t border-[var(--line)]">
+                    <table className="w-full min-w-full table-fixed text-left text-sm">
+                      <thead className="sticky top-0 z-10 bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--muted)]">
+                        <tr>
+                          <th className="w-[25%] px-5 py-3 font-medium">Code</th>
+                          <th className="w-[55%] px-5 py-3 font-medium">Title</th>
+                          <th className="w-[20%] px-5 py-3 font-medium">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {requirements.map((item) => (
+                          <tr
+                            key={item.id}
+                            className="border-t border-[var(--line)] hover:bg-[var(--surface-muted)]/70"
+                          >
+                            <td className="truncate px-5 py-3 font-medium">{item.requirement_code}</td>
+                            <td className="px-5 py-3">
+                              <span className="line-clamp-2">{item.title}</span>
+                            </td>
+                            <td className="px-5 py-3">
+                              <StatusBadge status={item.status} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </TableScroll>
+                )}
+              </Card>
+            </div>
+          </ScrollRegion>
         </div>
       </div>
     </AppShell>
