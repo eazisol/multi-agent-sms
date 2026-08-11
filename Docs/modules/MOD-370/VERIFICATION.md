@@ -12,7 +12,7 @@
 | Integration suite | `.\.venv\Scripts\python.exe -m pytest tests/integration -q --tb=line` | 35 passed |
 | OpenAPI | path count via `create_app().openapi()` | **234** (was 223; +11) |
 | Meta | `GET /api/v1/meta` modules | includes `MOD-370` |
-| Web build | `npm run build` (in `apps/web`) | pending fill |
+| Web build | `npm run build` (in `apps/web`) | passed (`/knowledge` in route table) |
 | Alembic current | `.\.venv\Scripts\python.exe -m alembic current` | `20260811_0023 (head)` |
 
 ## Behaviors verified in tests
