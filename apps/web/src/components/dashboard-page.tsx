@@ -21,8 +21,10 @@ import {
   listOpenFollowUps,
   listProjects,
   listQueries,
+  refreshInsightsDashboard,
   type ApprovalRequest,
   type FollowUp,
+  type InsightsDashboardSnapshot,
   type Project,
   type ClientQuery,
 } from "@/lib/api";
@@ -49,6 +51,7 @@ export function DashboardPage() {
   const [queriesTotal, setQueriesTotal] = useState(0);
   const [breachedQueriesTotal, setBreachedQueriesTotal] = useState(0);
   const [receivedQueriesTotal, setReceivedQueriesTotal] = useState(0);
+  const [insightsSnap, setInsightsSnap] = useState<InsightsDashboardSnapshot | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -64,6 +67,7 @@ export function DashboardPage() {
         queriesResult,
         breachedResult,
         receivedResult,
+        insightsResult,
       ] = await Promise.allSettled([
         listProjects(session, { limit: 20 }),
         listProjects(session, { status: "active", limit: 1 }),
@@ -75,6 +79,7 @@ export function DashboardPage() {
         listQueries(session, { limit: 20 }),
         listQueries(session, { sla_status: "breached", limit: 1 }),
         listQueries(session, { status: "received", limit: 1 }),
+        refreshInsightsDashboard(session),
       ]);
 
       if (projectsResult.status === "fulfilled") {
@@ -128,6 +133,12 @@ export function DashboardPage() {
       setReceivedQueriesTotal(
         receivedResult.status === "fulfilled" ? receivedResult.value.page.total : 0,
       );
+
+      if (insightsResult.status === "fulfilled") {
+        setInsightsSnap(insightsResult.value);
+      } else {
+        setInsightsSnap(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -246,12 +257,15 @@ export function DashboardPage() {
     <AppShell title="Dashboard" breadcrumbs={["Workspace", "Dashboard"]}>
       <PageHeader
         title={`${greeting}`}
-        description="Live counts from Projects, Approvals, Follow-ups, and Queries for this organization."
+        description="Live counts from Projects, Approvals, Follow-ups, and Queries for this organization. Insights snapshot shown when available."
         actions={
           <>
             <Button variant="outline" onClick={() => void load()}>
               Refresh
             </Button>
+            <Link href="/insights">
+              <Button variant="outline">Insights</Button>
+            </Link>
             <Link href="/queries">
               <Button variant="outline">Open Queries</Button>
             </Link>
@@ -264,6 +278,29 @@ export function DashboardPage() {
           </>
         }
       />
+
+      {insightsSnap ? (
+        <Card className="mb-4">
+          <CardBody className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-[var(--muted)]">
+                Insights snapshot
+              </p>
+              <p className="mt-1 text-sm">
+                projects_total={String(insightsSnap.metrics.projects_total ?? "—")} · tickets_open=
+                {String(insightsSnap.metrics.tickets_open ?? "—")} · bugs_open=
+                {String(insightsSnap.metrics.bugs_open ?? "—")} · followups_open=
+                {String(insightsSnap.metrics.followups_open ?? "—")}
+              </p>
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                refreshed {formatUtc(insightsSnap.refreshed_at)} ·{" "}
+                {insightsSnap.is_fresh ? "fresh" : "stale"}
+              </p>
+            </div>
+            <StatusBadge status={insightsSnap.is_fresh ? "fresh" : "stale"} />
+          </CardBody>
+        </Card>
+      ) : null}
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {loading

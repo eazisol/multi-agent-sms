@@ -49,7 +49,7 @@
 | MOD-420 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 34 | 2 | 7 | 0 | 0 | Done (M1) |
 | MOD-430 | Phase 4 - Quality, Change, Release, and Reporting | 47 | 37 | 2 | 8 | 0 | 0 | Done (M1) |
 | MOD-440 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 37 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
-| MOD-450 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
+| MOD-450 | Phase 4 - Quality, Change, Release, and Reporting | 45 | 37 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
 | MOD-460 | Phase 4 - Quality, Change, Release, and Reporting | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-500 | Phase 5 - MVP Integrations | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-510 | Phase 5 - MVP Integrations | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
@@ -4067,82 +4067,128 @@
 **Title:** Dashboard, Reporting, Search, Project Health, and Activity Timeline  
 **Purpose:** Provide role-aware deterministic dashboards for queries, projects, phases, tickets, workload, follow-ups, approvals, quality, milestones, agent actions, and overrides.  
 **Requirements:** MVP-FR-012, MVP-FR-013, MVP-NFR-003  
-**Dependencies:** MOD-210, MOD-240, MOD-300, MOD-340, MOD-330, MOD-400, MOD-410, MOD-040
+**Dependencies:** MOD-210, MOD-240, MOD-300, MOD-340, MOD-330, MOD-400, MOD-410, MOD-040  
+**Status:** M1 Done — AC-901 blocked
 
 #### Main points
 
-- [ ] **MOD-450-MP-001:** Implement and verify dashboard read models.
-- [ ] **MOD-450-MP-002:** Implement and verify project health.
-- [ ] **MOD-450-MP-003:** Implement and verify saved filters.
-- [ ] **MOD-450-MP-004:** Implement and verify global search.
-- [ ] **MOD-450-MP-005:** Implement and verify activity timeline.
-- [ ] **MOD-450-MP-006:** Implement and verify reports.
-- [ ] **MOD-450-MP-007:** Implement and verify exports.
+- [x] **MOD-450-MP-001:** Implement and verify dashboard read models.  
+  - Evidence/note: rp_dashboard_snapshots
+- [x] **MOD-450-MP-002:** Implement and verify project health.  
+  - Evidence/note: rp_project_health
+- [x] **MOD-450-MP-003:** Implement and verify saved filters.  
+  - Evidence/note: rp_saved_filters
+- [x] **MOD-450-MP-004:** Implement and verify global search.  
+  - Evidence/note: rp_search_documents
+- [x] **MOD-450-MP-005:** Implement and verify activity timeline.  
+  - Evidence/note: rp_activity_events
+- [x] **MOD-450-MP-006:** Implement and verify reports.  
+  - Evidence/note: rp_reports
+- [x] **MOD-450-MP-007:** Implement and verify exports.  
+  - Evidence/note: rp_exports (in-DB preview)
 
 #### Database / data design
 
-- [ ] **MOD-450-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **dashboard read models**.
-- [ ] **MOD-450-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **project health**.
-- [ ] **MOD-450-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **saved filters**.
-- [ ] **MOD-450-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **global search**.
-- [ ] **MOD-450-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **activity timeline**.
-- [ ] **MOD-450-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **reports**.
-- [ ] **MOD-450-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **exports**.
+- [x] **MOD-450-DB-001:** Dashboard snapshots model + RLS.  
+  - Evidence/note: migration 20260811_0029
+- [x] **MOD-450-DB-002:** Project health.  
+  - Evidence/note: rp_project_health
+- [x] **MOD-450-DB-003:** Saved filters.  
+  - Evidence/note: rp_saved_filters
+- [x] **MOD-450-DB-004:** Search documents.  
+  - Evidence/note: rp_search_documents
+- [x] **MOD-450-DB-005:** Activity events.  
+  - Evidence/note: rp_activity_events
+- [x] **MOD-450-DB-006:** Reports.  
+  - Evidence/note: rp_reports
+- [x] **MOD-450-DB-007:** Exports.  
+  - Evidence/note: rp_exports
 
 #### Backend
 
-- [ ] **MOD-450-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-450-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-450-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-450-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-450-BE-001:** Typed domain/services.  
+  - Evidence/note: modules/insights
+- [x] **MOD-450-BE-002:** Authz/concurrency.  
+  - Evidence/note: org checks + expected_version on health
+- [x] **MOD-450-BE-003:** Outbox events.  
+  - Evidence/note: insights.* events
+- [x] **MOD-450-BE-004:** Structured errors.  
+  - Evidence/note: NotFound/Conflict/Validation
 
 #### API
 
-- [ ] **MOD-450-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-450-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-450-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-450-API-001:** Versioned endpoints.  
+  - Evidence/note: /api/v1/insights
+- [x] **MOD-450-API-002:** Pagination/filter/search.  
+  - Evidence/note: search + list paging
+- [x] **MOD-450-API-003:** OpenAPI schemas.  
+  - Evidence/note: insights tags
 
 #### Frontend
 
-- [ ] **MOD-450-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-450-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-450-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-450-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-450-FE-001:** List/dashboard.  
+  - Evidence/note: /insights desk + home snapshot panel
+- [-] **MOD-450-FE-002:** Detail tabs.  
+  - Evidence/note: deferred
+- [~] **MOD-450-FE-003:** Create/edit forms.  
+  - Evidence/note: filter create + export create
+- [-] **MOD-450-FE-004:** a11y pass.  
+  - Evidence/note: deferred
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-450-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-450-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-450-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-450-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-450-WF-001:** Triggers/statuses/rules.  
+  - Evidence/note: on-demand refresh + export ready
+- [-] **MOD-450-WF-002:** Temporal/LangGraph routing.  
+  - Evidence/note: no streaming refresh
+- [x] **MOD-450-WF-003:** Outbox/events.  
+  - Evidence/note: insights.dashboard.refreshed etc.
+- [-] **MOD-450-WF-004:** Notifications.  
+  - Evidence/note: not owned by insights M1
 
 #### Security / privacy / audit
 
-- [ ] **MOD-450-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-450-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-450-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-450-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-450-SEC-001:** Scope authorization.  
+  - Evidence/note: RequestContext org
+- [x] **MOD-450-SEC-002:** Tenant RLS.  
+  - Evidence/note: _rls on rp_* tables
+- [x] **MOD-450-SEC-003:** Redaction.  
+  - Evidence/note: bounded payload_preview
+- [x] **MOD-450-SEC-004:** Audit actions.  
+  - Evidence/note: rp_* audit writes
 
 #### Testing / verification
 
-- [ ] **MOD-450-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-450-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-450-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-450-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-450-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-450-QA-001:** Domain rules via integration.  
+  - Evidence/note: freshness + reconcile
+- [x] **MOD-450-QA-002:** Integration API tests.  
+  - Evidence/note: tests/integration/insights
+- [x] **MOD-450-QA-003:** Tenant isolation tests.  
+  - Evidence/note: AC-003 cross-org search/export
+- [-] **MOD-450-QA-004:** BI/streaming suite.  
+  - Evidence/note: no warehouse
+- [x] **MOD-450-QA-005:** Verification commands.  
+  - Evidence/note: Docs/modules/MOD-450/VERIFICATION.md
 
 #### Documentation
 
-- [ ] **MOD-450-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-450-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-450-DOC-001:** Module README.  
+  - Evidence/note: Docs/modules/MOD-450/README.md
+- [x] **MOD-450-DOC-002:** Verification evidence.  
+  - Evidence/note: Docs/modules/MOD-450/VERIFICATION.md
 
 #### Acceptance gate
 
-- [ ] **MOD-450-AC-001:** Dashboard values reconcile with source records.
-- [ ] **MOD-450-AC-002:** Normal updates appear within one minute.
-- [ ] **MOD-450-AC-003:** Counts, search, and exports do not leak unauthorized data.
-- [ ] **MOD-450-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-450-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-450-AC-001:** Dashboard values reconcile with source records.  
+  - Evidence/note: refresh vs projects_total
+- [x] **MOD-450-AC-002:** Normal updates appear within one minute.  
+  - Evidence/note: is_fresh &lt; 60s
+- [x] **MOD-450-AC-003:** Counts, search, and exports do not leak unauthorized data.  
+  - Evidence/note: cross-tenant isolation test
+- [x] **MOD-450-AC-900:** Crit/High cleared.  
+  - Evidence/note: none open for M1
+- [!] **MOD-450-AC-901:** Human owner approval.  
+  - Evidence/note: NOT obtained
 
 #### Module completion
 

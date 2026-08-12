@@ -2626,3 +2626,191 @@ export async function upsertNotificationPreference(
   });
   return parse<NotificationPreference>(response);
 }
+
+/* —— MOD-450 Insights —— */
+
+export type InsightsDashboardSnapshot = {
+  id: string;
+  organization_id: string;
+  scope_key: string;
+  project_id: string | null;
+  metrics: Record<string, unknown>;
+  source_hash: string | null;
+  computed_at: string;
+  refreshed_at: string;
+  is_fresh: boolean;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type InsightsSearchDocument = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  entity_type: string;
+  entity_id: string;
+  title: string;
+  body_preview: string;
+  classification: string;
+  indexed_at: string;
+  created_at: string;
+};
+
+export type InsightsActivityEvent = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  actor_id: string;
+  event_type: string;
+  entity_type: string;
+  entity_id: string | null;
+  summary: string;
+  occurred_at: string;
+  created_at: string;
+};
+
+export type InsightsSavedFilter = {
+  id: string;
+  organization_id: string;
+  owner_actor_id: string;
+  name: string;
+  module_key: string;
+  filter_json: string;
+  is_shared: boolean;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type InsightsExport = {
+  id: string;
+  organization_id: string;
+  report_id: string | null;
+  export_format: string;
+  status: string;
+  payload_preview: string | null;
+  row_count: number;
+  requested_by_actor_id: string;
+  completed_at: string | null;
+  failure_reason: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getInsightsDashboard(
+  session: SessionState,
+  projectId?: string,
+): Promise<InsightsDashboardSnapshot> {
+  const query = new URLSearchParams();
+  if (projectId) query.set("project_id", projectId);
+  const suffix = query.toString() ? `?${query}` : "";
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/dashboard${suffix}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<InsightsDashboardSnapshot>(response);
+}
+
+export async function refreshInsightsDashboard(
+  session: SessionState,
+  body: { project_id?: string } = {},
+): Promise<InsightsDashboardSnapshot> {
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/dashboard/refresh`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<InsightsDashboardSnapshot>(response);
+}
+
+export async function globalSearch(
+  session: SessionState,
+  params: { q: string; limit?: number; offset?: number },
+): Promise<ListPage<InsightsSearchDocument>> {
+  const query = new URLSearchParams();
+  query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/search?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<InsightsSearchDocument>>(response);
+}
+
+export async function listInsightsActivity(
+  session: SessionState,
+  params: { project_id?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<InsightsActivityEvent>> {
+  const query = new URLSearchParams();
+  if (params.project_id) query.set("project_id", params.project_id);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/activity?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<InsightsActivityEvent>>(response);
+}
+
+export async function createSavedFilter(
+  session: SessionState,
+  body: {
+    name: string;
+    module_key: string;
+    filter_json: string;
+    is_shared?: boolean;
+  },
+): Promise<InsightsSavedFilter> {
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/saved-filters`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<InsightsSavedFilter>(response);
+}
+
+export async function listSavedFilters(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<InsightsSavedFilter>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/saved-filters?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<InsightsSavedFilter>>(response);
+}
+
+export async function listInsightsExports(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<InsightsExport>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/exports?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<InsightsExport>>(response);
+}
+
+export async function createInsightsExport(
+  session: SessionState,
+  body: {
+    export_format?: string;
+    report_id?: string;
+    include_dashboard_metrics?: boolean;
+  } = {},
+): Promise<InsightsExport> {
+  const response = await apiFetch(`${apiBase()}/api/v1/insights/exports`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<InsightsExport>(response);
+}

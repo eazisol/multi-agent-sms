@@ -18,6 +18,7 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Workspace",
     items: [
       { href: "/", label: "Dashboard", ready: true },
+      { href: "/insights", label: "Insights", ready: true },
       { href: "/my-work", label: "My Work", ready: false },
       { href: "/inbox", label: "Inbox", ready: false },
     ],
