@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { SecurityDeskPage } from "@/components/security-desk-page";
 
-export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Security"
-      description="Security controls, sessions, and sensitive access."
-    />
-  );
+export default function SecurityPage() {
+  return <SecurityDeskPage />;
 }

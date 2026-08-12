@@ -54,12 +54,12 @@
 | MOD-500 | Phase 5 - MVP Integrations | 45 | 35 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
 | MOD-510 | Phase 5 - MVP Integrations | 45 | 35 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
 | MOD-520 | Phase 5 - MVP Integrations | 45 | 35 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
-| MOD-600 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
+| MOD-600 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 37 | 2 | 5 | 1 | 0 | Done (M1) — AC-901 blocked |
 | MOD-610 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 45 | 0 | 0 | 0 | 0 | 45 | Not started |
 | MOD-620 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 43 | 0 | 0 | 0 | 0 | 43 | Not started |
 | MOD-630 | Phase 6 - Security, Reliability, Pilot, and Production Readiness | 47 | 0 | 0 | 0 | 0 | 47 | Not started |
 
-**Totals:** 1749 tasks — done 878, partial 8, n/a 192, blocked 2, open 673
+**Totals:** 1749 tasks — done 915, partial 10, n/a 197, blocked 3, open 626
 
 ## Module index (plan order)
 
@@ -4680,80 +4680,80 @@
 
 #### Main points
 
-- [ ] **MOD-600-MP-001:** Implement and verify threat model.
-- [ ] **MOD-600-MP-002:** Implement and verify PII inventory.
-- [ ] **MOD-600-MP-003:** Implement and verify retention policies.
-- [ ] **MOD-600-MP-004:** Implement and verify legal holds.
-- [ ] **MOD-600-MP-005:** Implement and verify deletion jobs.
-- [ ] **MOD-600-MP-006:** Implement and verify backup records.
-- [ ] **MOD-600-MP-007:** Implement and verify restore tests.
-- [ ] **MOD-600-MP-008:** Implement and verify security incidents.
+- [x] **MOD-600-MP-001:** Implement and verify threat model.
+- [x] **MOD-600-MP-002:** Implement and verify PII inventory.
+- [x] **MOD-600-MP-003:** Implement and verify retention policies.
+- [x] **MOD-600-MP-004:** Implement and verify legal holds.
+- [x] **MOD-600-MP-005:** Implement and verify deletion jobs.
+- [x] **MOD-600-MP-006:** Implement and verify backup records.
+- [x] **MOD-600-MP-007:** Implement and verify restore tests.
+- [x] **MOD-600-MP-008:** Implement and verify security incidents.
 
 #### Database / data design
 
-- [ ] **MOD-600-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **threat model**.
-- [ ] **MOD-600-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **PII inventory**.
-- [ ] **MOD-600-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **retention policies**.
-- [ ] **MOD-600-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **legal holds**.
-- [ ] **MOD-600-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deletion jobs**.
-- [ ] **MOD-600-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **backup records**.
-- [ ] **MOD-600-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **restore tests**.
-- [ ] **MOD-600-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **security incidents**.
+- [x] **MOD-600-DB-001:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **threat model**.
+- [x] **MOD-600-DB-002:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **PII inventory**.
+- [x] **MOD-600-DB-003:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **retention policies**.
+- [x] **MOD-600-DB-004:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **legal holds**.
+- [x] **MOD-600-DB-005:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **deletion jobs**.
+- [x] **MOD-600-DB-006:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **backup records**.
+- [x] **MOD-600-DB-007:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **restore tests**.
+- [x] **MOD-600-DB-008:** Define the data model, ownership, tenant/project scope, constraints, indexes, versioning, retention, RLS, audit, and migration behavior for **security incidents**.
 
 #### Backend
 
-- [ ] **MOD-600-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
-- [ ] **MOD-600-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
-- [ ] **MOD-600-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
-- [ ] **MOD-600-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
+- [x] **MOD-600-BE-001:** Implement typed domain models, commands, queries, repositories, and application services for the approved scope.
+- [x] **MOD-600-BE-002:** Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation.
+- [x] **MOD-600-BE-003:** Publish domain events through the transactionally safe outbox when asynchronous processing is required.
+- [x] **MOD-600-BE-004:** Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required.
 
 #### API
 
-- [ ] **MOD-600-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
-- [ ] **MOD-600-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
-- [ ] **MOD-600-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
+- [x] **MOD-600-API-001:** Create versioned CRUD, query, transition, action, and history endpoints required by the module.
+- [x] **MOD-600-API-002:** Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors.
+- [x] **MOD-600-API-003:** Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI.
 
 #### Frontend
 
-- [ ] **MOD-600-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
-- [ ] **MOD-600-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
-- [ ] **MOD-600-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
-- [ ] **MOD-600-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
+- [~] **MOD-600-FE-001:** Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states.
+- [-] **MOD-600-FE-002:** Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable.
+- [~] **MOD-600-FE-003:** Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages.
+- [-] **MOD-600-FE-004:** Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels.
 
 #### Workflow / agent / events / notifications
 
-- [ ] **MOD-600-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
-- [ ] **MOD-600-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
-- [ ] **MOD-600-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
-- [ ] **MOD-600-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
+- [x] **MOD-600-WF-001:** Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules.
+- [-] **MOD-600-WF-002:** Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services.
+- [x] **MOD-600-WF-003:** Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules.
+- [-] **MOD-600-WF-004:** Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling.
 
 #### Security / privacy / audit
 
-- [ ] **MOD-600-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
-- [ ] **MOD-600-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
-- [ ] **MOD-600-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
-- [ ] **MOD-600-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
+- [x] **MOD-600-SEC-001:** Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization.
+- [x] **MOD-600-SEC-002:** Add tenant-isolation and project-isolation controls in application services and RLS where applicable.
+- [x] **MOD-600-SEC-003:** Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors.
+- [x] **MOD-600-SEC-004:** Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions.
 
 #### Testing / verification
 
-- [ ] **MOD-600-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
-- [ ] **MOD-600-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
-- [ ] **MOD-600-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
-- [ ] **MOD-600-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
-- [ ] **MOD-600-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
+- [x] **MOD-600-QA-001:** Add unit tests for domain rules, validation, conflicts, and invalid state.
+- [x] **MOD-600-QA-002:** Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency.
+- [x] **MOD-600-QA-003:** Add role-permission negative tests and tenant/project isolation tests.
+- [x] **MOD-600-QA-004:** Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities.
+- [x] **MOD-600-QA-005:** Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks.
 
 #### Documentation
 
-- [ ] **MOD-600-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
-- [ ] **MOD-600-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
+- [x] **MOD-600-DOC-001:** Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance.
+- [x] **MOD-600-DOC-002:** Record migration, rollback, known limitations, verification commands, and evidence references.
 
 #### Acceptance gate
 
-- [ ] **MOD-600-AC-001:** No Critical security or isolation defect remains.
-- [ ] **MOD-600-AC-002:** RPO and RTO targets are validated.
-- [ ] **MOD-600-AC-003:** Client and company data are excluded from model training by default.
-- [ ] **MOD-600-AC-900:** All Critical and High defects for this module are resolved.
-- [ ] **MOD-600-AC-901:** The responsible human owner reviews and approves the completion evidence.
+- [x] **MOD-600-AC-001:** No Critical security or isolation defect remains.
+- [x] **MOD-600-AC-002:** RPO and RTO targets are validated.
+- [x] **MOD-600-AC-003:** Client and company data are excluded from model training by default.
+- [x] **MOD-600-AC-900:** All Critical and High defects for this module are resolved.
+- [!] **MOD-600-AC-901:** The responsible human owner reviews and approves the completion evidence.
 
 #### Module completion
 

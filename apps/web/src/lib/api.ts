@@ -3546,3 +3546,184 @@ export async function retryJiraCommentSync(
   return parse<JiraCommentSync>(response);
 }
 
+// --- MOD-600 Security Hardening ---
+
+export type SecurityGate = {
+  critical_open_count: number;
+  gate_passed: boolean;
+};
+
+export type SecurityTrainingPolicy = {
+  id: string;
+  organization_id: string;
+  allow_model_training: boolean;
+  approval_evidence: string | null;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SecurityIncident = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  severity: string;
+  status: string;
+  summary: string;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SecurityBackupRecord = {
+  id: string;
+  organization_id: string;
+  backup_ref: string;
+  environment: string;
+  rpo_minutes: number;
+  rto_minutes: number;
+  status: string;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type SecurityRestoreTest = {
+  id: string;
+  organization_id: string;
+  backup_record_id: string;
+  measured_rpo_minutes: number;
+  measured_rto_minutes: number;
+  result: string;
+  notes: string | null;
+  tested_by_actor_id: string;
+  created_at: string;
+};
+
+export type SecurityLegalHold = {
+  id: string;
+  organization_id: string;
+  code: string;
+  reason: string;
+  scope_json: Record<string, unknown>;
+  status: string;
+  held_entity_type: string | null;
+  held_entity_id: string | null;
+  created_by_actor_id: string;
+  released_by_actor_id: string | null;
+  created_at: string;
+  released_at: string | null;
+};
+
+export async function getSecurityGate(session: SessionState): Promise<SecurityGate> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/gate`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<SecurityGate>(response);
+}
+
+export async function getSecurityTrainingPolicy(
+  session: SessionState,
+): Promise<SecurityTrainingPolicy> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/training-policy`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<SecurityTrainingPolicy>(response);
+}
+
+export async function updateSecurityTrainingPolicy(
+  session: SessionState,
+  body: { allow_model_training: boolean; human_approval_evidence?: string },
+): Promise<SecurityTrainingPolicy> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/training-policy`, {
+    method: "PUT",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<SecurityTrainingPolicy>(response);
+}
+
+export async function createSecurityIncident(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    severity: string;
+    summary: string;
+    status?: string;
+  },
+): Promise<SecurityIncident> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/incidents`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<SecurityIncident>(response);
+}
+
+export async function closeSecurityIncident(
+  session: SessionState,
+  incidentId: string,
+  body: { expected_version?: number; summary?: string } = {},
+): Promise<SecurityIncident> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/incidents/${incidentId}/close`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<SecurityIncident>(response);
+}
+
+export async function createSecurityBackup(
+  session: SessionState,
+  body: {
+    backup_ref: string;
+    environment: string;
+    rpo_minutes: number;
+    rto_minutes: number;
+    status?: string;
+  },
+): Promise<SecurityBackupRecord> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/backups`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<SecurityBackupRecord>(response);
+}
+
+export async function createSecurityRestoreTest(
+  session: SessionState,
+  body: {
+    backup_record_id: string;
+    measured_rpo_minutes: number;
+    measured_rto_minutes: number;
+    notes?: string;
+  },
+): Promise<SecurityRestoreTest> {
+  const response = await apiFetch(`${apiBase()}/api/v1/security/restore-tests`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<SecurityRestoreTest>(response);
+}
+
+export async function listSecurityLegalHolds(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<SecurityLegalHold>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/security/legal-holds?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<SecurityLegalHold>>(response);
+}
+

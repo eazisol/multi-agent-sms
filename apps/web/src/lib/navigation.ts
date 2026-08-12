@@ -100,7 +100,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/gmail", label: "Gmail", ready: true },
       { href: "/jira", label: "Jira", ready: true },
       { href: "/notifications", label: "Notifications", ready: true },
-      { href: "/security", label: "Security", ready: false },
+      { href: "/security", label: "Security", ready: true },
     ],
   },
 ];
