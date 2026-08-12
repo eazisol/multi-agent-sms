@@ -3727,3 +3727,181 @@ export async function listSecurityLegalHolds(
   return parse<ListPage<SecurityLegalHold>>(response);
 }
 
+export type ApiSlo = {
+  performance_test_id: string | null;
+  p95_ms: number | null;
+  sample_count: number;
+  budget_ms: number;
+  slo_met: boolean;
+};
+
+export type DashboardSlo = {
+  slo_dashboard_id: string | null;
+  dashboard_p95_ms: number | null;
+  sample_count: number;
+  budget_ms: number;
+  slo_met: boolean;
+};
+
+export type PerformanceTest = {
+  id: string;
+  organization_id: string;
+  code: string;
+  suite_name: string;
+  p95_ms: number;
+  sample_count: number;
+  status: string;
+  notes: string | null;
+  version: number;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type WorkflowReplay = {
+  id: string;
+  organization_id: string;
+  workflow_name: string;
+  idempotency_key: string;
+  status: string;
+  attempt_count: number;
+  last_error: string | null;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type DrRunbook = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  rto_minutes: number;
+  rpo_minutes: number;
+  status: string;
+  body_preview: string | null;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getApiSlo(session: SessionState): Promise<ApiSlo> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/api-slo`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ApiSlo>(response);
+}
+
+export async function getDashboardSlo(session: SessionState): Promise<DashboardSlo> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/dashboard-slo`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<DashboardSlo>(response);
+}
+
+export async function createPerformanceTest(
+  session: SessionState,
+  body: {
+    code: string;
+    suite_name: string;
+    p95_ms: number;
+    sample_count?: number;
+    notes?: string;
+  },
+): Promise<PerformanceTest> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/performance-tests`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<PerformanceTest>(response);
+}
+
+export async function createWorkflowReplay(
+  session: SessionState,
+  body: { workflow_name: string; idempotency_key: string },
+): Promise<WorkflowReplay> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/replays`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<WorkflowReplay>(response);
+}
+
+export async function failWorkflowReplay(
+  session: SessionState,
+  replayId: string,
+  body: { last_error?: string; expected_version?: number } = {},
+): Promise<WorkflowReplay> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/replays/${replayId}/fail`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<WorkflowReplay>(response);
+}
+
+export async function resumeWorkflowReplay(
+  session: SessionState,
+  replayId: string,
+  body: { expected_version?: number } = {},
+): Promise<WorkflowReplay> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/replays/${replayId}/resume`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<WorkflowReplay>(response);
+}
+
+export async function completeWorkflowReplay(
+  session: SessionState,
+  replayId: string,
+  body: { expected_version?: number } = {},
+): Promise<WorkflowReplay> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/replays/${replayId}/complete`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<WorkflowReplay>(response);
+}
+
+export async function listDrRunbooks(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<DrRunbook>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/dr-runbooks?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<DrRunbook>>(response);
+}
+
+export async function createDrRunbook(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    rto_minutes: number;
+    rpo_minutes: number;
+    body_preview?: string;
+  },
+): Promise<DrRunbook> {
+  const response = await apiFetch(`${apiBase()}/api/v1/reliability/dr-runbooks`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<DrRunbook>(response);
+}
+

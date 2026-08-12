@@ -35,6 +35,7 @@ from masms_api.modules.queries import models as _queries  # noqa: F401
 from masms_api.modules.releases import models as _rl  # noqa: F401
 from masms_api.modules.requirements import models as _reqs  # noqa: F401
 from masms_api.modules.roadmap import models as _roadmap  # noqa: F401
+from masms_api.modules.reliability import models as _rlb  # noqa: F401
 from masms_api.modules.securityhardening import models as _sh  # noqa: F401
 from masms_api.modules.statusengine import models as _wfe  # noqa: F401
 from masms_api.modules.testcases import models as _tc  # noqa: F401

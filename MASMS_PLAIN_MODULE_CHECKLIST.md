@@ -65,11 +65,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 34 | MOD-510 | Done (M1) | 35 | 2 | 0 |
 | 35 | MOD-520 | Done (M1) | 35 | 2 | 0 |
 | 36 | MOD-600 | Done (M1) | 37 | 2 | 0 |
-| 37 | MOD-610 | Not started | 0 | 0 | 45 |
+| 37 | MOD-610 | Done (M1) | 35 | 2 | 0 |
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 915 · partial 10 · n/a 197 · blocked 3 · open 626
+**All tasks:** 1749 · done 950 · partial 12 · n/a 202 · blocked 4 · open 581
 
 ## Phase 0 - Governance and Foundation
 
@@ -2489,72 +2489,72 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (`MOD-600-AC-900`)
   - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-600-AC-901`)
 
-### Module 37: [ ] MOD-610 — Performance, Reliability, Idempotency, Resilience, and Disaster Recovery
+### Module 37: [~] MOD-610 — Performance, Reliability, Idempotency, Resilience, and Disaster Recovery
 
-- [ ] **Main goals**
-  - [ ] Build and verify: performance tests (`MOD-610-MP-001`)
-  - [ ] Build and verify: resilience tests (`MOD-610-MP-002`)
-  - [ ] Build and verify: index review (`MOD-610-MP-003`)
-  - [ ] Build and verify: SLO dashboards (`MOD-610-MP-004`)
-  - [ ] Build and verify: workflow replay (`MOD-610-MP-005`)
-  - [ ] Build and verify: integration failure tests (`MOD-610-MP-006`)
-  - [ ] Build and verify: DR runbook (`MOD-610-MP-007`)
+- [x] **Main goals**
+  - [x] Build and verify: performance tests (`MOD-610-MP-001`)
+  - [x] Build and verify: resilience tests (`MOD-610-MP-002`)
+  - [x] Build and verify: index review (`MOD-610-MP-003`)
+  - [x] Build and verify: SLO dashboards (`MOD-610-MP-004`)
+  - [x] Build and verify: workflow replay (`MOD-610-MP-005`)
+  - [x] Build and verify: integration failure tests (`MOD-610-MP-006`)
+  - [x] Build and verify: DR runbook (`MOD-610-MP-007`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: performance tests (`MOD-610-DB-001`)
-  - [ ] Design and migrate data for: resilience tests (`MOD-610-DB-002`)
-  - [ ] Design and migrate data for: index review (`MOD-610-DB-003`)
-  - [ ] Design and migrate data for: SLO dashboards (`MOD-610-DB-004`)
-  - [ ] Design and migrate data for: workflow replay (`MOD-610-DB-005`)
-  - [ ] Design and migrate data for: integration failure tests (`MOD-610-DB-006`)
-  - [ ] Design and migrate data for: DR runbook (`MOD-610-DB-007`)
+- [x] **Database**
+  - [x] Design and migrate data for: performance tests (`MOD-610-DB-001`)
+  - [x] Design and migrate data for: resilience tests (`MOD-610-DB-002`)
+  - [x] Design and migrate data for: index review (`MOD-610-DB-003`)
+  - [x] Design and migrate data for: SLO dashboards (`MOD-610-DB-004`)
+  - [x] Design and migrate data for: workflow replay (`MOD-610-DB-005`)
+  - [x] Design and migrate data for: integration failure tests (`MOD-610-DB-006`)
+  - [x] Design and migrate data for: DR runbook (`MOD-610-DB-007`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-610-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-610-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-610-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-610-BE-004`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-610-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-610-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-610-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-610-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-610-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-610-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-610-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-610-API-001`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-610-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-610-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-610-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-610-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-610-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-610-FE-004`)
+- [~] **Frontend**
+  - [~] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-610-FE-001`)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-610-FE-002`)
+  - [~] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-610-FE-003`)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-610-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-610-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-610-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-610-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-610-WF-004`)
+- [~] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-610-WF-001`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-610-WF-002`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-610-WF-003`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-610-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-610-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-610-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-610-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-610-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-610-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-610-SEC-002`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-610-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-610-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-610-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-610-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-610-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-610-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-610-QA-005`)
+- [x] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-610-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-610-QA-002`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-610-QA-003`)
+  - [x] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-610-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-610-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-610-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-610-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-610-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-610-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] 95% of normal APIs are under two seconds. (`MOD-610-AC-001`)
-  - [ ] Dashboard is under three seconds at pilot load. (`MOD-610-AC-002`)
-  - [ ] Durable workflows resume after failure and remain idempotent. (`MOD-610-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-610-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-610-AC-901`)
+- [~] **Acceptance / Done gate**
+  - [x] 95% of normal APIs are under two seconds. (`MOD-610-AC-001`)
+  - [x] Dashboard is under three seconds at pilot load. (`MOD-610-AC-002`)
+  - [x] Durable workflows resume after failure and remain idempotent. (`MOD-610-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-610-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-610-AC-901`)
 
 ### Module 38: [ ] MOD-620 — Synthetic Sample Projects, Agent Evaluation, End-to-End Acceptance, and UAT
 

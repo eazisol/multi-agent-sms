@@ -29,6 +29,7 @@ from masms_api.modules.identity import models as _identity  # noqa: F401
 from masms_api.modules.insights import models as _rp  # noqa: F401
 from masms_api.modules.integrations import models as _ig  # noqa: F401
 from masms_api.modules.jira import models as _jira  # noqa: F401
+from masms_api.modules.reliability import models as _rlb  # noqa: F401
 from masms_api.modules.securityhardening import models as _sh  # noqa: F401
 from masms_api.modules.knowledge import models as _kn  # noqa: F401
 from masms_api.modules.notifications import models as _ntf  # noqa: F401

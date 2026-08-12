@@ -101,6 +101,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/jira", label: "Jira", ready: true },
       { href: "/notifications", label: "Notifications", ready: true },
       { href: "/security", label: "Security", ready: true },
+      { href: "/reliability", label: "Reliability", ready: true },
     ],
   },
 ];
