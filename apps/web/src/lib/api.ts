@@ -2814,3 +2814,219 @@ export async function createInsightsExport(
   });
   return parse<InsightsExport>(response);
 }
+
+export type MustHaveRequirement = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  requirement_id: string;
+  requirement_code: string;
+  title: string;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type TraceabilityCoverage = {
+  organization_id: string;
+  project_id: string | null;
+  total_must_haves: number;
+  complete_count: number;
+  incomplete_count: number;
+  coverage_pct: number;
+  release_ready: boolean;
+  incomplete_requirement_ids: string[];
+};
+
+export type AuditCoverageReport = {
+  organization_id: string;
+  action_count: number;
+  audited_count: number;
+  coverage_pct: number;
+  complete: boolean;
+};
+
+export type EvidenceManifest = {
+  id: string;
+  organization_id: string;
+  project_id: string | null;
+  code: string;
+  title: string;
+  status: string;
+  item_count: number;
+  checksum: string | null;
+  sealed_at: string | null;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EvidenceExport = {
+  id: string;
+  organization_id: string;
+  manifest_id: string;
+  export_format: string;
+  status: string;
+  payload_preview: string | null;
+  reconciliation_hash: string | null;
+  requested_by_actor_id: string;
+  completed_at: string | null;
+  failure_reason: string | null;
+  created_at: string;
+};
+
+export async function registerMustHave(
+  session: SessionState,
+  body: {
+    requirement_id: string;
+    requirement_code: string;
+    title: string;
+    project_id?: string;
+  },
+): Promise<MustHaveRequirement> {
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/must-haves`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<MustHaveRequirement>(response);
+}
+
+export async function listMustHaves(
+  session: SessionState,
+  params: { project_id?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<MustHaveRequirement>> {
+  const query = new URLSearchParams();
+  if (params.project_id) query.set("project_id", params.project_id);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/must-haves?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<MustHaveRequirement>>(response);
+}
+
+export async function createRequirementTicketLink(
+  session: SessionState,
+  body: { requirement_id: string; ticket_id: string; notes?: string },
+): Promise<unknown> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/traceability/links/requirement-tickets`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse(response);
+}
+
+export async function getTraceabilityCoverage(
+  session: SessionState,
+  projectId?: string,
+): Promise<TraceabilityCoverage> {
+  const query = new URLSearchParams();
+  if (projectId) query.set("project_id", projectId);
+  const suffix = query.toString() ? `?${query}` : "";
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/coverage${suffix}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<TraceabilityCoverage>(response);
+}
+
+export async function getAuditCoverage(
+  session: SessionState,
+): Promise<AuditCoverageReport> {
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/audit-coverage`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<AuditCoverageReport>(response);
+}
+
+export async function createEvidenceManifest(
+  session: SessionState,
+  body: { code: string; title: string; project_id?: string },
+): Promise<EvidenceManifest> {
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/manifests`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<EvidenceManifest>(response);
+}
+
+export async function listEvidenceManifests(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<EvidenceManifest>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/manifests?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<EvidenceManifest>>(response);
+}
+
+export async function addManifestItem(
+  session: SessionState,
+  manifestId: string,
+  body: { item_type: string; item_id: string; label?: string },
+): Promise<unknown> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/traceability/manifests/${manifestId}/items`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse(response);
+}
+
+export async function sealEvidenceManifest(
+  session: SessionState,
+  manifestId: string,
+  body: { expected_version?: number } = {},
+): Promise<EvidenceManifest> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/traceability/manifests/${manifestId}/seal`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse<EvidenceManifest>(response);
+}
+
+export async function createEvidenceExport(
+  session: SessionState,
+  body: { manifest_id: string; export_format?: string },
+): Promise<EvidenceExport> {
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/exports`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<EvidenceExport>(response);
+}
+
+export async function listEvidenceExports(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<EvidenceExport>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/traceability/exports?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<EvidenceExport>>(response);
+}

@@ -84,6 +84,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/governance/baselines", label: "Source Baselines", ready: true },
       { href: "/architecture-decisions", label: "Architecture Decisions", ready: false },
       { href: "/change-requests", label: "Change Requests", ready: true },
+      { href: "/traceability", label: "Traceability", ready: true },
       { href: "/audit-logs", label: "Audit Logs", ready: false },
     ],
   },
