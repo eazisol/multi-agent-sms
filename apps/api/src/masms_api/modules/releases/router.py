@@ -42,6 +42,11 @@ class ReleasePage(BaseModel):
     page: PageMeta = Field(description="Pagination metadata")
 
 
+class DeploymentPage(BaseModel):
+    items: list[DeploymentRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -89,6 +94,20 @@ def list_checks(
     deployment_id: UUID, service: ReleaseService = Depends(_service)
 ) -> list[DeploymentCheckRead]:
     return [DeploymentCheckRead.model_validate(r) for r in service.list_checks(deployment_id)]
+
+
+@router.get("/deployments", response_model=DeploymentPage)
+def list_all_deployments(
+    status: str | None = Query(default=None),
+    environment_code: str | None = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: ReleaseService = Depends(_service),
+) -> DeploymentPage:
+    items, page = service.list_all_deployments(
+        status=status, environment_code=environment_code, limit=limit, offset=offset
+    )
+    return DeploymentPage(items=[DeploymentRead.model_validate(r) for r in items], page=page)
 
 
 @router.get("/{release_id}", response_model=ReleaseRead)

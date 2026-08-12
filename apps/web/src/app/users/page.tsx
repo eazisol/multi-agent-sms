@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { UsersDeskPage } from "@/components/users-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Users & Teams"
-      description="People, teams, and membership."
-    />
-  );
+  return <UsersDeskPage />;
 }

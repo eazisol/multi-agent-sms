@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { DeploymentsDeskPage } from "@/components/deployments-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Deployments"
-      description="Environment deployments with approval gates."
-    />
-  );
+  return <DeploymentsDeskPage />;
 }

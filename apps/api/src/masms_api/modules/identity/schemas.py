@@ -186,3 +186,13 @@ class HumanUserPage(BaseModel):
 class AgentPage(BaseModel):
     items: list[AgentRead]
     page: PageMeta
+
+
+class RolePage(BaseModel):
+    items: list[RoleRead]
+    page: PageMeta
+
+
+class TeamPage(BaseModel):
+    items: list[TeamRead]
+    page: PageMeta

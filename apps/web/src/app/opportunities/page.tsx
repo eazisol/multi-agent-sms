@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { OpportunitiesDeskPage } from "@/components/opportunities-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Opportunities"
-      description="Track commercial opportunities from qualified queries."
-    />
-  );
+  return <OpportunitiesDeskPage />;
 }

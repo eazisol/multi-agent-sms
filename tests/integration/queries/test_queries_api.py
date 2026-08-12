@@ -137,6 +137,10 @@ def test_query_lifecycle_qualification_convert_and_sla(client: TestClient) -> No
     assert opportunity.status_code == 201, opportunity.text
     assert opportunity.json()["query_id"] == query_id
 
+    listed_opps = client.get("/api/v1/queries/opportunities", headers=headers)
+    assert listed_opps.status_code == 200, listed_opps.text
+    assert any(row["id"] == opportunity.json()["id"] for row in listed_opps.json()["items"])
+
     history = client.get(f"/api/v1/queries/{query_id}/history", headers=headers)
     assert history.status_code == 200
     statuses = [h["next_status"] for h in history.json()]

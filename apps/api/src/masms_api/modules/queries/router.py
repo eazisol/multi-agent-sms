@@ -34,6 +34,11 @@ class ClientQueryPage(BaseModel):
     page: PageMeta = Field(description="Pagination metadata")
 
 
+class OpportunityPage(BaseModel):
+    items: list[OpportunityRead]
+    page: PageMeta = Field(description="Pagination metadata")
+
+
 def _service(
     db: Session = Depends(get_db),
     ctx: RequestContext = Depends(get_request_context),
@@ -62,6 +67,20 @@ def list_queries(
     )
     return ClientQueryPage(
         items=[ClientQueryRead.model_validate(r) for r in items], page=page
+    )
+
+
+@router.get("/opportunities", response_model=OpportunityPage)
+def list_opportunities(
+    status: str | None = Query(default=None),
+    q: str | None = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: QueriesService = Depends(_service),
+) -> OpportunityPage:
+    items, page = service.list_opportunities(status=status, q=q, limit=limit, offset=offset)
+    return OpportunityPage(
+        items=[OpportunityRead.model_validate(r) for r in items], page=page
     )
 
 

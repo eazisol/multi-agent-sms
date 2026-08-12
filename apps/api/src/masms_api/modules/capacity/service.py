@@ -6,11 +6,12 @@ from datetime import UTC, date
 from decimal import Decimal
 from uuid import UUID, uuid4
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from masms_api.errors import ConflictError, NotFoundError, ValidationAppError
 from masms_api.kernel.context import RequestContext
+from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.capacity import domain
@@ -78,6 +79,15 @@ class CapacityService:
         self.uow.refresh(row)
         return row
 
+    def list_skills(self, *, limit: int = 20, offset: int = 0) -> tuple[list[Skill], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [Skill.organization_id == self.ctx.organization_id]
+        total = self.db.scalar(select(func.count()).select_from(Skill).where(*filters)) or 0
+        rows = self.db.scalars(
+            select(Skill).where(*filters).order_by(Skill.code).offset(offset).limit(limit)
+        )
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
+
     def assign_actor_skill(self, data: ActorSkillCreate) -> ActorSkill:
         domain.assert_proficiency(data.proficiency)
         skill = self._get_skill(data.skill_id)
@@ -141,6 +151,24 @@ class CapacityService:
         self.uow.commit()
         self.uow.refresh(row)
         return row
+
+    def list_allocations(
+        self, *, limit: int = 20, offset: int = 0
+    ) -> tuple[list[CapacityAllocation], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [CapacityAllocation.organization_id == self.ctx.organization_id]
+        total = (
+            self.db.scalar(select(func.count()).select_from(CapacityAllocation).where(*filters))
+            or 0
+        )
+        rows = self.db.scalars(
+            select(CapacityAllocation)
+            .where(*filters)
+            .order_by(CapacityAllocation.created_at.desc())
+            .offset(offset)
+            .limit(limit)
+        )
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
     def create_calendar(self, data: BusinessCalendarCreate) -> BusinessCalendar:
         if self.db.scalar(

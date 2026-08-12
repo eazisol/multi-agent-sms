@@ -273,6 +273,38 @@ class QueriesService:
         self.uow.refresh(opportunity)
         return opportunity
 
+    def list_opportunities(
+        self,
+        *,
+        status: str | None = None,
+        q: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[Opportunity], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [Opportunity.organization_id == self.ctx.organization_id]
+        ctx_client = self.ctx.tenant.client_id
+        if ctx_client is not None:
+            filters.append(Opportunity.client_id == ctx_client)
+        if status:
+            filters.append(Opportunity.status == status)
+        if q and q.strip():
+            like = f"%{q.strip()}%"
+            filters.append(Opportunity.title.ilike(like))
+        total = (
+            self.db.scalar(select(func.count()).select_from(Opportunity).where(*filters)) or 0
+        )
+        rows = list(
+            self.db.scalars(
+                select(Opportunity)
+                .where(*filters)
+                .order_by(Opportunity.created_at.desc())
+                .offset(offset)
+                .limit(limit)
+            )
+        )
+        return rows, build_page_meta(limit=limit, offset=offset, total=int(total))
+
     def list_queries(
         self,
         *,

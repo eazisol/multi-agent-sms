@@ -24,10 +24,12 @@ from masms_api.modules.identity.schemas import (
     ReportingLineCreate,
     ReportingLineRead,
     RoleCreate,
+    RolePage,
     RoleRead,
     TeamCreate,
     TeamMemberCreate,
     TeamMemberRead,
+    TeamPage,
     TeamRead,
 )
 from masms_api.modules.identity.service import IdentityService
@@ -117,6 +119,16 @@ def create_role(
     return RoleRead.model_validate(service.create_role(body))
 
 
+@router.get("/roles", response_model=RolePage)
+def list_roles(
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: IdentityService = Depends(_service),
+) -> RolePage:
+    items, page = service.list_roles(limit=limit, offset=offset)
+    return RolePage(items=[RoleRead.model_validate(i) for i in items], page=page)
+
+
 @router.post("/departments", response_model=DepartmentRead, status_code=201)
 def create_department(
     body: DepartmentCreate,
@@ -131,6 +143,16 @@ def create_team(
     service: IdentityService = Depends(_service),
 ) -> TeamRead:
     return TeamRead.model_validate(service.create_team(body))
+
+
+@router.get("/teams", response_model=TeamPage)
+def list_teams(
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: IdentityService = Depends(_service),
+) -> TeamPage:
+    items, page = service.list_teams(limit=limit, offset=offset)
+    return TeamPage(items=[TeamRead.model_validate(i) for i in items], page=page)
 
 
 @router.post("/team-members", response_model=TeamMemberRead, status_code=201)

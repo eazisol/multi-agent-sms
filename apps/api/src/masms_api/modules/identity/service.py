@@ -357,3 +357,33 @@ class IdentityService:
             .limit(limit)
         )
         return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
+
+    def list_roles(self, *, limit: int = 20, offset: int = 0) -> tuple[list[RoleDefinition], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [
+            RoleDefinition.organization_id == self.ctx.organization_id,
+            RoleDefinition.deleted_at.is_(None),
+        ]
+        total = (
+            self.db.scalar(select(func.count()).select_from(RoleDefinition).where(*filters)) or 0
+        )
+        rows = self.db.scalars(
+            select(RoleDefinition)
+            .where(*filters)
+            .order_by(RoleDefinition.code)
+            .offset(offset)
+            .limit(limit)
+        )
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
+
+    def list_teams(self, *, limit: int = 20, offset: int = 0) -> tuple[list[Team], PageMeta]:
+        limit, offset = normalize_paging(limit, offset)
+        filters = [
+            Team.organization_id == self.ctx.organization_id,
+            Team.deleted_at.is_(None),
+        ]
+        total = self.db.scalar(select(func.count()).select_from(Team).where(*filters)) or 0
+        rows = self.db.scalars(
+            select(Team).where(*filters).order_by(Team.code).offset(offset).limit(limit)
+        )
+        return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))

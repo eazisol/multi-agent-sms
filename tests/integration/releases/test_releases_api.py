@@ -166,6 +166,10 @@ def test_release_production_gate_traceability_and_closure(client: TestClient) ->
     assert deploy.status_code == 201, deploy.text
     deploy_id = deploy.json()["id"]
 
+    all_deploys = client.get("/api/v1/releases/deployments", headers=headers)
+    assert all_deploys.status_code == 200, all_deploys.text
+    assert any(row["id"] == deploy_id for row in all_deploys.json()["items"])
+
     check = client.post(
         f"/api/v1/releases/deployments/{deploy_id}/checks",
         headers=headers,

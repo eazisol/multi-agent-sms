@@ -300,6 +300,55 @@ export async function listQueries(
   return parse<ListPage<ClientQuery>>(response);
 }
 
+export type Opportunity = {
+  id: string;
+  organization_id: string;
+  query_id: string;
+  client_id: string | null;
+  title: string;
+  status: string;
+  estimated_value: string | null;
+  currency: string;
+  owner_actor_id: string;
+  conversion_notes: string | null;
+  version: number;
+  created_at: string;
+};
+
+export async function listOpportunities(
+  session: SessionState,
+  params: { status?: string; q?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<Opportunity>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.q) query.set("q", params.q);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/queries/opportunities?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<Opportunity>>(response);
+}
+
+export async function convertQuery(
+  session: SessionState,
+  queryId: string,
+  body: {
+    title: string;
+    estimated_value?: string;
+    currency?: string;
+    conversion_notes?: string;
+  },
+): Promise<Opportunity> {
+  const response = await apiFetch(`${apiBase()}/api/v1/queries/${queryId}/convert`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Opportunity>(response);
+}
+
 export async function getQuery(
   session: SessionState,
   queryId: string,
@@ -2434,6 +2483,53 @@ export async function createRelease(
   return parse<Release>(response);
 }
 
+export type Deployment = {
+  id: string;
+  organization_id: string;
+  release_id: string;
+  environment_code: string;
+  status: string;
+  build_ref: string | null;
+  requested_by_actor_id: string;
+  started_at: string | null;
+  finished_at: string | null;
+  created_at: string;
+};
+
+export async function listDeployments(
+  session: SessionState,
+  params: {
+    status?: string;
+    environment_code?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<Deployment>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.environment_code) query.set("environment_code", params.environment_code);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/releases/deployments?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<Deployment>>(response);
+}
+
+export async function startDeployment(
+  session: SessionState,
+  releaseId: string,
+  body: { environment_code: string; build_ref?: string; expected_version?: number },
+): Promise<Deployment> {
+  const response = await apiFetch(`${apiBase()}/api/v1/releases/${releaseId}/deployments`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<Deployment>(response);
+}
+
 export async function submitRelease(
   session: SessionState,
   releaseId: string,
@@ -4286,6 +4382,338 @@ export async function signFinalSignoff(
     body: JSON.stringify({ evidence }),
   });
   return parse<FinalSignoff>(response);
+}
+
+/* ---- Identity / access / capacity / governance desks ---- */
+
+export type HumanUser = {
+  id: string;
+  organization_id: string;
+  actor_id: string;
+  email: string;
+  full_name: string;
+  status: string;
+  primary_role_code: string | null;
+  version: number;
+};
+
+export type IdentityTeam = {
+  id: string;
+  organization_id: string;
+  department_id: string | null;
+  code: string;
+  name: string;
+  status: string;
+  version: number;
+};
+
+export type IdentityRole = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  status: string;
+  version: number;
+};
+
+export type AccessPermission = {
+  id: string;
+  organization_id: string;
+  code: string;
+  module_key: string;
+  action_key: string;
+  title: string;
+  status: string;
+  created_at: string;
+};
+
+export type CapacitySkill = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  category: string;
+  status: string;
+  created_at: string;
+};
+
+export type CapacityAllocation = {
+  id: string;
+  organization_id: string;
+  actor_id: string;
+  project_id: string | null;
+  allocation_pct: string;
+  status: string;
+  effective_from: string;
+  effective_to: string | null;
+  created_at: string;
+};
+
+export type ArchitectureDecision = {
+  id: string;
+  organization_id: string;
+  adr_key: string;
+  title: string;
+  status: string;
+  version: number;
+  context: string;
+  decision: string;
+  consequences: string;
+  security_notes: string | null;
+  document_path: string | null;
+};
+
+export type ObservabilityAuditLog = {
+  id: string;
+  organization_id: string;
+  actor_id: string;
+  actor_kind: string;
+  action: string;
+  entity_type: string;
+  entity_id: string;
+  entity_version: number | null;
+  correlation_id: string;
+  payload_redacted: Record<string, unknown>;
+  created_at: string;
+};
+
+export async function listHumans(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<HumanUser>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/identity/humans?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<HumanUser>>(response);
+}
+
+export async function createHuman(
+  session: SessionState,
+  body: { email: string; full_name: string; primary_role_code?: string },
+): Promise<HumanUser> {
+  const response = await apiFetch(`${apiBase()}/api/v1/identity/humans`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<HumanUser>(response);
+}
+
+export async function listTeams(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<IdentityTeam>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/identity/teams?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<IdentityTeam>>(response);
+}
+
+export async function createTeam(
+  session: SessionState,
+  body: { code: string; name: string; department_id?: string },
+): Promise<IdentityTeam> {
+  const response = await apiFetch(`${apiBase()}/api/v1/identity/teams`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<IdentityTeam>(response);
+}
+
+export async function listRoles(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<IdentityRole>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/identity/roles?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<IdentityRole>>(response);
+}
+
+export async function createRole(
+  session: SessionState,
+  body: { code: string; title: string; description?: string },
+): Promise<IdentityRole> {
+  const response = await apiFetch(`${apiBase()}/api/v1/identity/roles`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<IdentityRole>(response);
+}
+
+export async function listPermissions(session: SessionState): Promise<AccessPermission[]> {
+  const response = await apiFetch(`${apiBase()}/api/v1/access/permissions`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<AccessPermission[]>(response);
+}
+
+export async function createPermission(
+  session: SessionState,
+  body: {
+    code: string;
+    module_key: string;
+    action_key: string;
+    title: string;
+    description?: string;
+  },
+): Promise<AccessPermission> {
+  const response = await apiFetch(`${apiBase()}/api/v1/access/permissions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<AccessPermission>(response);
+}
+
+export async function grantRolePermission(
+  session: SessionState,
+  body: { role_id: string; permission_id: string },
+): Promise<{ id: string; role_id: string; permission_id: string; status: string }> {
+  const response = await apiFetch(`${apiBase()}/api/v1/access/role-permissions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string; role_id: string; permission_id: string; status: string }>(response);
+}
+
+export async function listSkills(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<CapacitySkill>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/capacity/skills?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<CapacitySkill>>(response);
+}
+
+export async function createSkill(
+  session: SessionState,
+  body: { code: string; title: string; category?: string; description?: string },
+): Promise<CapacitySkill> {
+  const response = await apiFetch(`${apiBase()}/api/v1/capacity/skills`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<CapacitySkill>(response);
+}
+
+export async function listAllocations(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<CapacityAllocation>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/capacity/allocations?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<CapacityAllocation>>(response);
+}
+
+export async function createAllocation(
+  session: SessionState,
+  body: {
+    actor_id: string;
+    allocation_pct: string;
+    project_id?: string;
+    effective_from: string;
+    effective_to?: string;
+  },
+): Promise<CapacityAllocation> {
+  const response = await apiFetch(`${apiBase()}/api/v1/capacity/allocations`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<CapacityAllocation>(response);
+}
+
+export async function listArchitectureDecisions(
+  session: SessionState,
+  params: { status?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<ArchitectureDecision>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/governance/architecture-decisions?${query}`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<ListPage<ArchitectureDecision>>(response);
+}
+
+export async function createArchitectureDecision(
+  session: SessionState,
+  body: {
+    adr_key: string;
+    title: string;
+    context: string;
+    decision: string;
+    consequences: string;
+    security_notes?: string;
+    document_path?: string;
+  },
+): Promise<ArchitectureDecision> {
+  const response = await apiFetch(`${apiBase()}/api/v1/governance/architecture-decisions`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<ArchitectureDecision>(response);
+}
+
+export async function transitionArchitectureDecision(
+  session: SessionState,
+  adrId: string,
+  body: { target_status: string; expected_version: number; reason?: string },
+): Promise<ArchitectureDecision> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/governance/architecture-decisions/${adrId}/transitions`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse<ArchitectureDecision>(response);
+}
+
+export async function listAuditLogs(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<ObservabilityAuditLog>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/observability/audit-logs?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<ObservabilityAuditLog>>(response);
 }
 
 

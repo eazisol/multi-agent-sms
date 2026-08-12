@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { ArchitectureDecisionsDeskPage } from "@/components/architecture-decisions-desk-page";
 
 export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Architecture Decisions"
-      description="ADR register and review status."
-    />
-  );
+  return <ArchitectureDecisionsDeskPage />;
 }

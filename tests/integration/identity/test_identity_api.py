@@ -135,3 +135,11 @@ def test_identity_bootstrap_and_agent_supervisor_rule(client: TestClient) -> Non
     actors = client.get("/api/v1/identity/actors", headers=headers)
     assert actors.status_code == 200
     assert actors.json()["page"]["total"] >= 2
+
+    roles = client.get("/api/v1/identity/roles", headers=headers)
+    assert roles.status_code == 200
+    assert any(row["code"] == "PM" for row in roles.json()["items"])
+
+    teams = client.get("/api/v1/identity/teams", headers=headers)
+    assert teams.status_code == 200
+    assert any(row["code"] == "ALPHA" for row in teams.json()["items"])

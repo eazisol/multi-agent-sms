@@ -97,6 +97,14 @@ def test_capacity_assignment_and_sla(client: TestClient) -> None:
     )
     assert alloc.status_code == 201
 
+    skills = client.get("/api/v1/capacity/skills", headers=headers)
+    assert skills.status_code == 200
+    assert any(row["code"] == "python" for row in skills.json()["items"])
+
+    allocations = client.get("/api/v1/capacity/allocations", headers=headers)
+    assert allocations.status_code == 200
+    assert any(row["id"] == alloc.json()["id"] for row in allocations.json()["items"])
+
     calendar = client.post(
         "/api/v1/capacity/calendars",
         headers=headers,

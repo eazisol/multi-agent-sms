@@ -137,6 +137,28 @@ class ReleaseService:
         )
         return items, build_page_meta(total=total, limit=limit, offset=offset)
 
+    def list_all_deployments(
+        self,
+        *,
+        status: str | None = None,
+        environment_code: str | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> tuple[list[Deployment], PageMeta]:
+        limit, offset = normalize_paging(limit=limit, offset=offset)
+        stmt = select(Deployment).where(Deployment.organization_id == self.ctx.organization_id)
+        if status:
+            stmt = stmt.where(Deployment.status == status)
+        if environment_code:
+            stmt = stmt.where(Deployment.environment_code == environment_code)
+        total = self.db.scalar(select(func.count()).select_from(stmt.subquery())) or 0
+        items = list(
+            self.db.scalars(
+                stmt.order_by(Deployment.created_at.desc()).limit(limit).offset(offset)
+            )
+        )
+        return items, build_page_meta(total=total, limit=limit, offset=offset)
+
     def add_item(self, release_id: UUID, data: ReleaseItemCreate) -> ReleaseItem:
         self.get_release(release_id)
         domain.assert_link_type(data.link_type)

@@ -19,8 +19,8 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { href: "/", label: "Dashboard", ready: true },
       { href: "/insights", label: "Insights", ready: true },
-      { href: "/my-work", label: "My Work", ready: false },
-      { href: "/inbox", label: "Inbox", ready: false },
+      { href: "/my-work", label: "My Work", ready: true },
+      { href: "/inbox", label: "Inbox", ready: true },
     ],
   },
   {
@@ -29,7 +29,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { href: "/clients", label: "Clients", ready: true },
       { href: "/queries", label: "Queries", ready: true },
-      { href: "/opportunities", label: "Opportunities", ready: false },
+      { href: "/opportunities", label: "Opportunities", ready: true },
       { href: "/comms", label: "Messages", ready: true },
     ],
   },
@@ -74,7 +74,7 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Delivery",
     items: [
       { href: "/releases", label: "Releases", ready: true },
-      { href: "/deployments", label: "Deployments", ready: false },
+      { href: "/deployments", label: "Deployments", ready: true },
     ],
   },
   {
@@ -82,19 +82,19 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Governance",
     items: [
       { href: "/governance/baselines", label: "Source Baselines", ready: true },
-      { href: "/architecture-decisions", label: "Architecture Decisions", ready: false },
+      { href: "/architecture-decisions", label: "Architecture Decisions", ready: true },
       { href: "/change-requests", label: "Change Requests", ready: true },
       { href: "/traceability", label: "Traceability", ready: true },
-      { href: "/audit-logs", label: "Audit Logs", ready: false },
+      { href: "/audit-logs", label: "Audit Logs", ready: true },
     ],
   },
   {
     id: "admin",
     label: "Administration",
     items: [
-      { href: "/users", label: "Users & Teams", ready: false },
-      { href: "/roles", label: "Roles & Permissions", ready: false },
-      { href: "/capacity", label: "Skills & Capacity", ready: false },
+      { href: "/users", label: "Users & Teams", ready: true },
+      { href: "/roles", label: "Roles & Permissions", ready: true },
+      { href: "/capacity", label: "Skills & Capacity", ready: true },
       { href: "/workflows", label: "Workflows", ready: true },
       { href: "/integrations", label: "Integrations", ready: true },
       { href: "/gmail", label: "Gmail", ready: true },

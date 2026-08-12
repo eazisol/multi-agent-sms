@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from masms_api.db import get_db
@@ -17,6 +17,7 @@ from masms_api.modules.capacity.schemas import (
     BusinessCalendarCreate,
     BusinessCalendarRead,
     CapacityAllocationCreate,
+    CapacityAllocationPage,
     CapacityAllocationRead,
     HolidayCreate,
     HolidayRead,
@@ -25,6 +26,7 @@ from masms_api.modules.capacity.schemas import (
     OnCallCreate,
     OnCallRead,
     SkillCreate,
+    SkillPage,
     SkillRead,
     SlaBusinessDayRequest,
     SlaBusinessDayResponse,
@@ -46,6 +48,16 @@ def create_skill(body: SkillCreate, service: CapacityService = Depends(_service)
     return SkillRead.model_validate(service.create_skill(body))
 
 
+@router.get("/skills", response_model=SkillPage)
+def list_skills(
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: CapacityService = Depends(_service),
+) -> SkillPage:
+    items, page = service.list_skills(limit=limit, offset=offset)
+    return SkillPage(items=[SkillRead.model_validate(r) for r in items], page=page)
+
+
 @router.post("/actor-skills", response_model=ActorSkillRead, status_code=201)
 def assign_skill(
     body: ActorSkillCreate, service: CapacityService = Depends(_service)
@@ -65,6 +77,19 @@ def create_allocation(
     body: CapacityAllocationCreate, service: CapacityService = Depends(_service)
 ) -> CapacityAllocationRead:
     return CapacityAllocationRead.model_validate(service.create_capacity(body))
+
+
+@router.get("/allocations", response_model=CapacityAllocationPage)
+def list_allocations(
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    service: CapacityService = Depends(_service),
+) -> CapacityAllocationPage:
+    items, page = service.list_allocations(limit=limit, offset=offset)
+    return CapacityAllocationPage(
+        items=[CapacityAllocationRead.model_validate(r) for r in items],
+        page=page,
+    )
 
 
 @router.post("/calendars", response_model=BusinessCalendarRead, status_code=201)

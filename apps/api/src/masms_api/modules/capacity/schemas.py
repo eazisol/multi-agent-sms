@@ -8,6 +8,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from masms_api.kernel.pagination import PageMeta
+
 
 class SkillCreate(BaseModel):
     code: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9_]+$")
@@ -26,6 +28,11 @@ class SkillRead(BaseModel):
     category: str
     status: str
     created_at: datetime
+
+
+class SkillPage(BaseModel):
+    items: list[SkillRead]
+    page: PageMeta
 
 
 class ActorSkillCreate(BaseModel):
@@ -88,6 +95,11 @@ class CapacityAllocationRead(BaseModel):
     effective_from: date
     effective_to: date | None
     created_at: datetime
+
+
+class CapacityAllocationPage(BaseModel):
+    items: list[CapacityAllocationRead]
+    page: PageMeta
 
 
 class BusinessCalendarCreate(BaseModel):
