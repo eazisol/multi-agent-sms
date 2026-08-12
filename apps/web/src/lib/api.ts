@@ -3905,3 +3905,139 @@ export async function createDrRunbook(
   return parse<DrRunbook>(response);
 }
 
+export type SampleGate = {
+  passed_count: number;
+  required_count: number;
+  gate_passed: boolean;
+};
+
+export type AgentQuality = {
+  evaluation_id: string | null;
+  target_pct: number;
+  latest_score: number | null;
+  meets_target: boolean;
+};
+
+export type SampleProject = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  workflow_status: string;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type AcceptanceEvidence = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  evidence_ref: string;
+  status: string;
+  submitted_by_actor_id: string;
+  accepted_by_actor_id: string | null;
+  version: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getSampleGate(session: SessionState): Promise<SampleGate> {
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/sample-gate`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<SampleGate>(response);
+}
+
+export async function getAgentQuality(session: SessionState): Promise<AgentQuality> {
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/agent-quality`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<AgentQuality>(response);
+}
+
+export async function seedSampleProjects(session: SessionState): Promise<SampleProject[]> {
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/sample-projects/seed`, {
+    method: "POST",
+    headers: headers(session),
+  });
+  return parse<SampleProject[]>(response);
+}
+
+export async function listSampleProjects(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<SampleProject>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/sample-projects?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<SampleProject>>(response);
+}
+
+export async function markSampleProjectPassed(
+  session: SessionState,
+  code: string,
+): Promise<SampleProject> {
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/sample-projects/${code}/pass`, {
+    method: "POST",
+    headers: headers(session),
+  });
+  return parse<SampleProject>(response);
+}
+
+export async function createAgentEvaluation(
+  session: SessionState,
+  body: {
+    code: string;
+    agent_code: string;
+    accuracy_pct: number;
+    sample_count?: number;
+    notes?: string;
+  },
+): Promise<{ id: string; accuracy_pct: number; status: string }> {
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/agent-evaluations`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<{ id: string; accuracy_pct: number; status: string }>(response);
+}
+
+export async function listAcceptanceEvidence(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<AcceptanceEvidence>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/acceptance-evidence?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<AcceptanceEvidence>>(response);
+}
+
+export async function createAcceptanceEvidence(
+  session: SessionState,
+  body: {
+    code: string;
+    title: string;
+    evidence_ref: string;
+    status?: string;
+  },
+): Promise<AcceptanceEvidence> {
+  const response = await apiFetch(`${apiBase()}/api/v1/uat/acceptance-evidence`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<AcceptanceEvidence>(response);
+}
+
+

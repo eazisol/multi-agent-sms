@@ -44,6 +44,7 @@ from masms_api.modules.gmail.router import router as gmail_router
 from masms_api.modules.jira.router import router as jira_router
 from masms_api.modules.securityhardening.router import router as securityhardening_router
 from masms_api.modules.reliability.router import router as reliability_router
+from masms_api.modules.uateval.router import router as uateval_router
 from masms_api.observability.health import build_readiness
 from masms_api.observability.router import router as observability_router
 
@@ -124,6 +125,7 @@ def create_app() -> FastAPI:
                 "MOD-520",
                 "MOD-600",
                 "MOD-610",
+                "MOD-620",
             ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
@@ -166,6 +168,7 @@ def create_app() -> FastAPI:
     app.include_router(jira_router, prefix="/api/v1")
     app.include_router(securityhardening_router, prefix="/api/v1")
     app.include_router(reliability_router, prefix="/api/v1")
+    app.include_router(uateval_router, prefix="/api/v1")
     return app
 
 
