@@ -63,7 +63,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 32 | MOD-460 | Done (M1) | 35 | 2 | 0 |
 | 33 | MOD-500 | Done (M1) | 35 | 2 | 0 |
 | 34 | MOD-510 | Done (M1) | 35 | 2 | 0 |
-| 35 | MOD-520 | Not started | 0 | 0 | 45 |
+| 35 | MOD-520 | Done (M1) | 35 | 2 | 0 |
 | 36 | MOD-600 | Not started | 0 | 0 | 47 |
 | 37 | MOD-610 | Not started | 0 | 0 | 45 |
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
@@ -2351,72 +2351,72 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (`MOD-510-AC-900`)
   - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-510-AC-901`)
 
-### Module 35: [ ] MOD-520 — Jira Work Management Integration
+### Module 35: [~] MOD-520 — Jira Work Management Integration
 
-- [ ] **Main goals**
-  - [ ] Build and verify: Jira connection (`MOD-520-MP-001`)
-  - [ ] Build and verify: project mapping (`MOD-520-MP-002`)
-  - [ ] Build and verify: field mapping (`MOD-520-MP-003`)
-  - [ ] Build and verify: status mapping (`MOD-520-MP-004`)
-  - [ ] Build and verify: issue mapping (`MOD-520-MP-005`)
-  - [ ] Build and verify: comment sync (`MOD-520-MP-006`)
-  - [ ] Build and verify: conflict handling (`MOD-520-MP-007`)
+- [x] **Main goals**
+  - [x] Build and verify: Jira connection (`MOD-520-MP-001`)
+  - [x] Build and verify: project mapping (`MOD-520-MP-002`)
+  - [x] Build and verify: field mapping (`MOD-520-MP-003`)
+  - [x] Build and verify: status mapping (`MOD-520-MP-004`)
+  - [x] Build and verify: issue mapping (`MOD-520-MP-005`)
+  - [x] Build and verify: comment sync (`MOD-520-MP-006`)
+  - [x] Build and verify: conflict handling (`MOD-520-MP-007`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: Jira connection (`MOD-520-DB-001`)
-  - [ ] Design and migrate data for: project mapping (`MOD-520-DB-002`)
-  - [ ] Design and migrate data for: field mapping (`MOD-520-DB-003`)
-  - [ ] Design and migrate data for: status mapping (`MOD-520-DB-004`)
-  - [ ] Design and migrate data for: issue mapping (`MOD-520-DB-005`)
-  - [ ] Design and migrate data for: comment sync (`MOD-520-DB-006`)
-  - [ ] Design and migrate data for: conflict handling (`MOD-520-DB-007`)
+- [x] **Database**
+  - [x] Design and migrate data for: Jira connection (`MOD-520-DB-001`)
+  - [x] Design and migrate data for: project mapping (`MOD-520-DB-002`)
+  - [x] Design and migrate data for: field mapping (`MOD-520-DB-003`)
+  - [x] Design and migrate data for: status mapping (`MOD-520-DB-004`)
+  - [x] Design and migrate data for: issue mapping (`MOD-520-DB-005`)
+  - [x] Design and migrate data for: comment sync (`MOD-520-DB-006`)
+  - [x] Design and migrate data for: conflict handling (`MOD-520-DB-007`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-520-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-520-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-520-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-520-BE-004`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-520-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-520-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-520-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-520-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-520-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-520-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-520-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-520-API-001`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-520-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-520-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-520-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-520-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-520-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-520-FE-004`)
+- [x] **Frontend**
+  - [x] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-520-FE-001`)
+  - [x] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-520-FE-002`)
+  - [x] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-520-FE-003`)
+  - [x] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-520-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-520-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-520-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-520-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-520-WF-004`)
+- [x] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-520-WF-001`)
+  - [x] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-520-WF-002`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-520-WF-003`)
+  - [x] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-520-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-520-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-520-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-520-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-520-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-520-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-520-SEC-002`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-520-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-520-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-520-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-520-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-520-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-520-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-520-QA-005`)
+- [x] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-520-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-520-QA-002`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-520-QA-003`)
+  - [x] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-520-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-520-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-520-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-520-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-520-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-520-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] Approved internal tickets create Jira issues and retain keys. (`MOD-520-AC-001`)
-  - [ ] Jira cannot bypass internal transition or approval rules. (`MOD-520-AC-002`)
-  - [ ] Sync failures are visible, retriable, and audited. (`MOD-520-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-520-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-520-AC-901`)
+- [x] **Acceptance / Done gate**
+  - [x] Approved internal tickets create Jira issues and retain keys. (`MOD-520-AC-001`)
+  - [x] Jira cannot bypass internal transition or approval rules. (`MOD-520-AC-002`)
+  - [x] Sync failures are visible, retriable, and audited. (`MOD-520-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-520-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-520-AC-901`)
 
 ## Phase 6 - Security, Reliability, Pilot, and Production Readiness
 

@@ -3418,3 +3418,131 @@ export async function sendGmailDraft(
   );
 }
 
+// --- MOD-520 Jira ---
+
+export type JiraIssuePush = {
+  id: string;
+  organization_id: string;
+  internal_ticket_id: string;
+  jira_issue_key: string;
+  summary: string;
+  approval_status: string;
+  push_status: string;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type JiraStatusConflict = {
+  id: string;
+  organization_id: string;
+  issue_push_id: string;
+  external_status: string;
+  attempted_internal_status: string | null;
+  conflict_reason: string;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type JiraCommentSync = {
+  id: string;
+  organization_id: string;
+  issue_push_id: string;
+  comment_text: string;
+  sync_status: string;
+  retry_count: number;
+  failure_reason: string | null;
+  last_attempt_at: string | null;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function pushJiraIssue(
+  session: SessionState,
+  body: {
+    internal_ticket_id: string;
+    summary: string;
+    approval_status: string;
+    simulated_jira_key?: string;
+  },
+): Promise<JiraIssuePush> {
+  const response = await apiFetch(`${apiBase()}/api/v1/jira/issues/push`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<JiraIssuePush>(response);
+}
+
+export async function listJiraIssuePushes(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<JiraIssuePush>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/jira/issues/pushes?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<JiraIssuePush>>(response);
+}
+
+export async function sendJiraStatusWebhook(
+  session: SessionState,
+  body: {
+    issue_push_id: string;
+    external_status: string;
+    attempted_internal_status?: string;
+  },
+): Promise<JiraStatusConflict> {
+  const response = await apiFetch(`${apiBase()}/api/v1/jira/webhooks/status`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<JiraStatusConflict>(response);
+}
+
+export async function createJiraCommentSync(
+  session: SessionState,
+  body: { issue_push_id: string; comment_text: string; force_fail?: boolean },
+): Promise<JiraCommentSync> {
+  const response = await apiFetch(`${apiBase()}/api/v1/jira/comments/sync`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<JiraCommentSync>(response);
+}
+
+export async function listJiraCommentSyncs(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<JiraCommentSync>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/jira/comments/sync?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<JiraCommentSync>>(response);
+}
+
+export async function retryJiraCommentSync(
+  session: SessionState,
+  syncId: string,
+): Promise<JiraCommentSync> {
+  const response = await apiFetch(`${apiBase()}/api/v1/jira/comments/sync/${syncId}/retry`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({}),
+  });
+  return parse<JiraCommentSync>(response);
+}
+

@@ -41,6 +41,7 @@ from masms_api.modules.insights.router import router as insights_router
 from masms_api.modules.traceability.router import router as traceability_router
 from masms_api.modules.integrations.router import router as integrations_router
 from masms_api.modules.gmail.router import router as gmail_router
+from masms_api.modules.jira.router import router as jira_router
 from masms_api.observability.health import build_readiness
 from masms_api.observability.router import router as observability_router
 
@@ -118,6 +119,7 @@ def create_app() -> FastAPI:
                 "MOD-460",
                 "MOD-500",
                 "MOD-510",
+                "MOD-520",
             ],
             "kernel": "masms_api.kernel",
             "environment": settings.env,
@@ -157,6 +159,7 @@ def create_app() -> FastAPI:
     app.include_router(traceability_router, prefix="/api/v1")
     app.include_router(integrations_router, prefix="/api/v1")
     app.include_router(gmail_router, prefix="/api/v1")
+    app.include_router(jira_router, prefix="/api/v1")
     return app
 
 
