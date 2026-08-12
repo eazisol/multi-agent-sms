@@ -3173,3 +3173,248 @@ export async function getConnectionHealth(
   return parse<ConnectionHealth>(response);
 }
 
+// --- MOD-510 Gmail ---
+
+export type GmailConnection = {
+  id: string;
+  organization_id: string;
+  code: string;
+  email_address: string;
+  credential_ref: string | null;
+  status: string;
+  scopes_json: string | null;
+  history_id: string | null;
+  owner_actor_id: string;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type GmailThreadMapping = {
+  id: string;
+  organization_id: string;
+  connection_id: string;
+  gmail_thread_id: string;
+  internal_thread_id: string;
+  query_id: string | null;
+  client_id: string | null;
+  created_at: string;
+};
+
+export type GmailMessageMapping = {
+  id: string;
+  organization_id: string;
+  connection_id: string;
+  gmail_message_id: string;
+  internal_message_id: string | null;
+  thread_mapping_id: string;
+  direction: string;
+  subject: string | null;
+  snippet: string | null;
+  status: string;
+  created_at: string;
+};
+
+export type GmailDraftReview = {
+  id: string;
+  organization_id: string;
+  connection_id: string;
+  draft_id: string;
+  thread_mapping_id: string | null;
+  to_addresses: string;
+  subject: string;
+  body_preview: string | null;
+  status: string;
+  reviewer_actor_id: string | null;
+  review_notes: string | null;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type GmailApprovedSend = {
+  id: string;
+  organization_id: string;
+  connection_id: string;
+  draft_review_id: string;
+  message_mapping_id: string | null;
+  external_send_id: string;
+  status: string;
+  sent_at: string | null;
+  failure_reason: string | null;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export async function createGmailConnection(
+  session: SessionState,
+  body: { code: string; email_address: string; credential_ref?: string },
+): Promise<GmailConnection> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/connections`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<GmailConnection>(response);
+}
+
+export async function listGmailConnections(
+  session: SessionState,
+  params: { status?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<GmailConnection>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/connections?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<GmailConnection>>(response);
+}
+
+export async function activateGmailConnection(
+  session: SessionState,
+  connectionId: string,
+): Promise<GmailConnection> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/gmail/connections/${connectionId}/activate`,
+    { method: "POST", headers: headers(session), body: JSON.stringify({}) },
+  );
+  return parse<GmailConnection>(response);
+}
+
+export async function processGmailInbound(
+  session: SessionState,
+  body: {
+    connection_id: string;
+    gmail_message_id: string;
+    gmail_thread_id: string;
+    from_email: string;
+    subject?: string;
+    snippet?: string;
+    query_id?: string;
+    client_id?: string;
+  },
+): Promise<unknown> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/inbound/process`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse(response);
+}
+
+export async function receiveGmailPush(
+  session: SessionState,
+  body: {
+    connection_id: string;
+    external_event_id: string;
+    event_type: string;
+    payload?: Record<string, unknown>;
+  },
+): Promise<unknown> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/push/receive`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse(response);
+}
+
+export async function listGmailThreads(
+  session: SessionState,
+  params: { connection_id?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<GmailThreadMapping>> {
+  const query = new URLSearchParams();
+  if (params.connection_id) query.set("connection_id", params.connection_id);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/threads?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<GmailThreadMapping>>(response);
+}
+
+export async function listGmailMessages(
+  session: SessionState,
+  params: {
+    connection_id?: string;
+    direction?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<ListPage<GmailMessageMapping>> {
+  const query = new URLSearchParams();
+  if (params.connection_id) query.set("connection_id", params.connection_id);
+  if (params.direction) query.set("direction", params.direction);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/messages?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<GmailMessageMapping>>(response);
+}
+
+export async function createGmailDraft(
+  session: SessionState,
+  body: {
+    connection_id: string;
+    to_addresses: string;
+    subject: string;
+    body_preview?: string;
+    thread_mapping_id?: string;
+  },
+): Promise<GmailDraftReview> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/drafts`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<GmailDraftReview>(response);
+}
+
+export async function submitGmailDraft(
+  session: SessionState,
+  draftReviewId: string,
+): Promise<GmailDraftReview> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/drafts/${draftReviewId}/submit`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({}),
+  });
+  return parse<GmailDraftReview>(response);
+}
+
+export async function approveGmailDraft(
+  session: SessionState,
+  draftReviewId: string,
+): Promise<GmailDraftReview> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/drafts/${draftReviewId}/approve`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({}),
+  });
+  return parse<GmailDraftReview>(response);
+}
+
+export async function sendGmailDraft(
+  session: SessionState,
+  draftReviewId: string,
+): Promise<{ approved_send: GmailApprovedSend; message_mapping: GmailMessageMapping }> {
+  const response = await apiFetch(`${apiBase()}/api/v1/gmail/drafts/${draftReviewId}/send`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({}),
+  });
+  return parse<{ approved_send: GmailApprovedSend; message_mapping: GmailMessageMapping }>(
+    response,
+  );
+}
+

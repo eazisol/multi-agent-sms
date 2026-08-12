@@ -97,6 +97,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/capacity", label: "Skills & Capacity", ready: false },
       { href: "/workflows", label: "Workflows", ready: true },
       { href: "/integrations", label: "Integrations", ready: true },
+      { href: "/gmail", label: "Gmail", ready: true },
       { href: "/notifications", label: "Notifications", ready: true },
       { href: "/security", label: "Security", ready: false },
     ],
