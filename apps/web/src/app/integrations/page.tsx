@@ -1,10 +1,5 @@
-﻿import { PlaceholderModulePage } from "@/components/placeholder-module-page";
+﻿import { IntegrationsDeskPage } from "@/components/integrations-desk-page";
 
-export default function Page() {
-  return (
-    <PlaceholderModulePage
-      title="Integrations"
-      description="External systems connected to MASMS."
-    />
-  );
+export default function IntegrationsPage() {
+  return <IntegrationsDeskPage />;
 }

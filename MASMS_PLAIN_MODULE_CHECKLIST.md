@@ -61,7 +61,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 30 | MOD-440 | Done (M1) | 37 | 2 | 0 |
 | 31 | MOD-450 | Done (M1) | 37 | 2 | 0 |
 | 32 | MOD-460 | Done (M1) | 35 | 2 | 0 |
-| 33 | MOD-500 | Not started | 0 | 0 | 45 |
+| 33 | MOD-500 | Done (M1) | 35 | 2 | 0 |
 | 34 | MOD-510 | Not started | 0 | 0 | 45 |
 | 35 | MOD-520 | Not started | 0 | 0 | 45 |
 | 36 | MOD-600 | Not started | 0 | 0 | 47 |
@@ -69,7 +69,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 38 | MOD-620 | Not started | 0 | 0 | 43 |
 | 39 | MOD-630 | Not started | 0 | 0 | 47 |
 
-**All tasks:** 1749 · done 843 · partial 6 · n/a 187 · blocked 1 · open 718
+**All tasks:** 1749 · done 878 · partial 8 · n/a 187 · blocked 1 · open 673
 
 ## Phase 0 - Governance and Foundation
 
@@ -2217,72 +2217,72 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 
 ## Phase 5 - MVP Integrations
 
-### Module 33: [ ] MOD-500 — Integration Framework, OAuth Connections, Webhooks, Outbox, Inbox, and Sync State
+### Module 33: [~] MOD-500 — Integration Framework, OAuth Connections, Webhooks, Outbox, Inbox, and Sync State
 
-- [ ] **Main goals**
-  - [ ] Build and verify: integration connections (`MOD-500-MP-001`)
-  - [ ] Build and verify: webhook events (`MOD-500-MP-002`)
-  - [ ] Build and verify: sync cursors (`MOD-500-MP-003`)
-  - [ ] Build and verify: external mappings (`MOD-500-MP-004`)
-  - [ ] Build and verify: outbox events (`MOD-500-MP-005`)
-  - [ ] Build and verify: inbox events (`MOD-500-MP-006`)
-  - [ ] Build and verify: connection health (`MOD-500-MP-007`)
+- [x] **Main goals**
+  - [x] Build and verify: integration connections (`MOD-500-MP-001`)
+  - [x] Build and verify: webhook events (`MOD-500-MP-002`)
+  - [x] Build and verify: sync cursors (`MOD-500-MP-003`)
+  - [x] Build and verify: external mappings (`MOD-500-MP-004`)
+  - [x] Build and verify: outbox events (`MOD-500-MP-005`)
+  - [x] Build and verify: inbox events (`MOD-500-MP-006`)
+  - [x] Build and verify: connection health (`MOD-500-MP-007`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: integration connections (`MOD-500-DB-001`)
-  - [ ] Design and migrate data for: webhook events (`MOD-500-DB-002`)
-  - [ ] Design and migrate data for: sync cursors (`MOD-500-DB-003`)
-  - [ ] Design and migrate data for: external mappings (`MOD-500-DB-004`)
-  - [ ] Design and migrate data for: outbox events (`MOD-500-DB-005`)
-  - [ ] Design and migrate data for: inbox events (`MOD-500-DB-006`)
-  - [ ] Design and migrate data for: connection health (`MOD-500-DB-007`)
+- [x] **Database**
+  - [x] Design and migrate data for: integration connections (`MOD-500-DB-001`)
+  - [x] Design and migrate data for: webhook events (`MOD-500-DB-002`)
+  - [x] Design and migrate data for: sync cursors (`MOD-500-DB-003`)
+  - [x] Design and migrate data for: external mappings (`MOD-500-DB-004`)
+  - [x] Design and migrate data for: outbox events (`MOD-500-DB-005`)
+  - [x] Design and migrate data for: inbox events (`MOD-500-DB-006`)
+  - [x] Design and migrate data for: connection health (`MOD-500-DB-007`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-500-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-500-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-500-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-500-BE-004`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-500-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-500-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-500-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-500-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-500-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-500-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-500-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-500-API-001`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-500-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-500-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-500-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-500-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-500-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-500-FE-004`)
+- [~] **Frontend**
+  - [~] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-500-FE-001`)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-500-FE-002`)
+  - [~] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-500-FE-003`)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-500-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-500-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-500-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-500-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-500-WF-004`)
+- [~] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-500-WF-001`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-500-WF-002`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-500-WF-003`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-500-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-500-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-500-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-500-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-500-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-500-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-500-SEC-002`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-500-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-500-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-500-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-500-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-500-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-500-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-500-QA-005`)
+- [x] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-500-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-500-QA-002`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-500-QA-003`)
+  - [-] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-500-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-500-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-500-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-500-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-500-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-500-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] Integration failure cannot corrupt internal data. (`MOD-500-AC-001`)
-  - [ ] External mappings and events are tenant-scoped and audited. (`MOD-500-AC-002`)
-  - [ ] Credentials never appear in logs, prompts, tickets, or business tables. (`MOD-500-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-500-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-500-AC-901`)
+- [~] **Acceptance / Done gate**
+  - [x] Integration failure cannot corrupt internal data. (`MOD-500-AC-001`)
+  - [x] External mappings and events are tenant-scoped and audited. (`MOD-500-AC-002`)
+  - [x] Credentials never appear in logs, prompts, tickets, or business tables. (`MOD-500-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-500-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-500-AC-901`)
 
 ### Module 34: [ ] MOD-510 — Gmail Client Communication Integration
 

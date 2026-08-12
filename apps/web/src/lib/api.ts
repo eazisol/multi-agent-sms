@@ -3030,3 +3030,146 @@ export async function listEvidenceExports(
   });
   return parse<ListPage<EvidenceExport>>(response);
 }
+
+// --- MOD-500 Integrations ---
+
+export type IntegrationConnection = {
+  id: string;
+  organization_id: string;
+  code: string;
+  provider: string;
+  auth_type: string;
+  status: string;
+  credential_ref: string | null;
+  scopes_json: string | null;
+  metadata_json: string | null;
+  owner_actor_id: string;
+  version: number;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ConnectionHealth = {
+  id: string;
+  organization_id: string;
+  connection_id: string;
+  health_status: string;
+  last_success_at: string | null;
+  last_failure_at: string | null;
+  failure_count: number;
+  last_error: string | null;
+  checked_at: string;
+  updated_at: string;
+};
+
+export type InboxEvent = {
+  id: string;
+  organization_id: string;
+  connection_id: string;
+  external_event_id: string;
+  event_type: string;
+  payload_json: string | null;
+  status: string;
+  failure_reason: string | null;
+  created_at: string;
+  processed_at: string | null;
+};
+
+export async function createIntegrationConnection(
+  session: SessionState,
+  body: { code: string; provider: string; auth_type: string; credential_ref?: string },
+): Promise<IntegrationConnection> {
+  const response = await apiFetch(`${apiBase()}/api/v1/integrations/connections`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<IntegrationConnection>(response);
+}
+
+export async function listIntegrationConnections(
+  session: SessionState,
+  params: { status?: string; limit?: number; offset?: number } = {},
+): Promise<ListPage<IntegrationConnection>> {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/integrations/connections?${query}`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<ListPage<IntegrationConnection>>(response);
+}
+
+export async function activateIntegrationConnection(
+  session: SessionState,
+  connectionId: string,
+): Promise<IntegrationConnection> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/integrations/connections/${connectionId}/activate`,
+    { method: "POST", headers: headers(session), body: JSON.stringify({}) },
+  );
+  return parse<IntegrationConnection>(response);
+}
+
+export async function receiveIntegrationWebhook(
+  session: SessionState,
+  body: {
+    connection_id: string;
+    external_event_id: string;
+    event_type: string;
+    payload?: Record<string, unknown>;
+  },
+): Promise<unknown> {
+  const response = await apiFetch(`${apiBase()}/api/v1/integrations/webhooks/receive`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse(response);
+}
+
+export async function receiveInboxEvent(
+  session: SessionState,
+  body: {
+    connection_id: string;
+    external_event_id: string;
+    event_type: string;
+    payload?: Record<string, unknown>;
+  },
+): Promise<InboxEvent> {
+  const response = await apiFetch(`${apiBase()}/api/v1/integrations/inbox`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<InboxEvent>(response);
+}
+
+export async function processInboxEvent(
+  session: SessionState,
+  inboxId: string,
+  body: { force_fail?: boolean } = {},
+): Promise<InboxEvent> {
+  const response = await apiFetch(`${apiBase()}/api/v1/integrations/inbox/${inboxId}/process`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<InboxEvent>(response);
+}
+
+export async function getConnectionHealth(
+  session: SessionState,
+  connectionId: string,
+): Promise<ConnectionHealth> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/integrations/health/${connectionId}`,
+    { headers: headers(session), cache: "no-store" },
+  );
+  return parse<ConnectionHealth>(response);
+}
+
