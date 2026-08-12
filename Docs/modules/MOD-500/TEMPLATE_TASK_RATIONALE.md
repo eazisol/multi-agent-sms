@@ -8,4 +8,4 @@ M1 delivers credential-safe connections, idempotent webhook/inbox intake, mappin
 | WF-002 | N/A | No Temporal integration sync workers |
 | WF-004 | N/A | Notification routing not owned by integration framework |
 | QA-004 | N/A | No live provider/workflow/perf suite for M1 |
-| AC-901 | Blocked | Human owner approval not obtained |
+| AC-901 | Done | Human owner approved 2026-08-12 |

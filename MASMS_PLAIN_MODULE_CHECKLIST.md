@@ -58,18 +58,18 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 27 | MOD-410 | Done (M1) | 35 | 2 | 0 |
 | 28 | MOD-420 | Done (M1) | 34 | 2 | 0 |
 | 29 | MOD-430 | Done (M1) | 37 | 2 | 0 |
-| 30 | MOD-440 | Done (M1) | 37 | 2 | 0 |
-| 31 | MOD-450 | Done (M1) | 37 | 2 | 0 |
-| 32 | MOD-460 | Done (M1) | 35 | 2 | 0 |
-| 33 | MOD-500 | Done (M1) | 35 | 2 | 0 |
-| 34 | MOD-510 | Done (M1) | 35 | 2 | 0 |
-| 35 | MOD-520 | Done (M1) | 35 | 2 | 0 |
-| 36 | MOD-600 | Done (M1) | 37 | 2 | 0 |
-| 37 | MOD-610 | Done (M1) | 35 | 2 | 0 |
-| 38 | MOD-620 | Done (M1) | 33 | 2 | 0 |
-| 39 | MOD-630 | Done (M1) | 37 | 2 | 0 |
+| 30 | MOD-440 | Done (M1) | 38 | 2 | 0 |
+| 31 | MOD-450 | Done (M1) | 38 | 2 | 0 |
+| 32 | MOD-460 | Done (M1) | 36 | 2 | 0 |
+| 33 | MOD-500 | Done (M1) | 36 | 2 | 0 |
+| 34 | MOD-510 | Done (M1) | 36 | 2 | 0 |
+| 35 | MOD-520 | Done (M1) | 36 | 2 | 0 |
+| 36 | MOD-600 | Done (M1) | 38 | 2 | 0 |
+| 37 | MOD-610 | Done (M1) | 36 | 2 | 0 |
+| 38 | MOD-620 | Done (M1) | 34 | 2 | 0 |
+| 39 | MOD-630 | Done (M1) | 38 | 2 | 0 |
 
-**All tasks:** 1749 · done 1020 · partial 16 · n/a 212 · blocked 6 · open 491
+**All tasks:** 1749 · done 1030 · partial 16 · n/a 212 · blocked 0 · open 491
 
 ## Phase 0 - Governance and Foundation
 
@@ -2016,7 +2016,7 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (MOD-430-AC-900)
   - [x] The responsible human owner reviews and approves the completion evidence. (MOD-430-AC-901)
 
-### Module 30: [~] MOD-440 — Notifications, Preferences, Digests, Delivery, and Failure Handling
+### Module 30: [x] MOD-440 — Notifications, Preferences, Digests, Delivery, and Failure Handling
 
 - [x] **Main goals**
   - [x] Build and verify: notifications (`MOD-440-MP-001`)
@@ -2076,14 +2076,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-440-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-440-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Notifications are timely, idempotent, auditable, and permission-safe. (`MOD-440-AC-001`)
   - [x] Users can configure preferences without disabling mandatory critical alerts. (`MOD-440-AC-002`)
   - [x] Delivery failures are visible and recoverable. (`MOD-440-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-440-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-440-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-440-AC-901`)
 
-### Module 31: [~] MOD-450 — Dashboard, Reporting, Search, Project Health, and Activity Timeline
+### Module 31: [x] MOD-450 — Dashboard, Reporting, Search, Project Health, and Activity Timeline
 
 - [x] **Main goals**
   - [x] Build and verify: dashboard read models (`MOD-450-MP-001`)
@@ -2143,14 +2143,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-450-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-450-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Dashboard values reconcile with source records. (`MOD-450-AC-001`)
   - [x] Normal updates appear within one minute. (`MOD-450-AC-002`)
   - [x] Counts, search, and exports do not leak unauthorized data. (`MOD-450-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-450-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-450-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-450-AC-901`)
 
-### Module 32: [~] MOD-460 — Requirement Traceability, Audit Reports, and Evidence Exports
+### Module 32: [x] MOD-460 — Requirement Traceability, Audit Reports, and Evidence Exports
 
 - [x] **Main goals**
   - [x] Build and verify: requirement-ticket links (`MOD-460-MP-001`)
@@ -2208,16 +2208,16 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-460-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-460-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] At least 95% of Must-Have requirements have complete traceability before release. (`MOD-460-AC-001`)
   - [x] Controlled actions have 100% audit coverage. (`MOD-460-AC-002`)
   - [x] Exports are permission-controlled and independently reconcilable. (`MOD-460-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-460-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-460-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-460-AC-901`)
 
 ## Phase 5 - MVP Integrations
 
-### Module 33: [~] MOD-500 — Integration Framework, OAuth Connections, Webhooks, Outbox, Inbox, and Sync State
+### Module 33: [x] MOD-500 — Integration Framework, OAuth Connections, Webhooks, Outbox, Inbox, and Sync State
 
 - [x] **Main goals**
   - [x] Build and verify: integration connections (`MOD-500-MP-001`)
@@ -2277,14 +2277,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-500-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-500-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Integration failure cannot corrupt internal data. (`MOD-500-AC-001`)
   - [x] External mappings and events are tenant-scoped and audited. (`MOD-500-AC-002`)
   - [x] Credentials never appear in logs, prompts, tickets, or business tables. (`MOD-500-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-500-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-500-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-500-AC-901`)
 
-### Module 34: [~] MOD-510 — Gmail Client Communication Integration
+### Module 34: [x] MOD-510 — Gmail Client Communication Integration
 
 - [x] **Main goals**
   - [x] Build and verify: Gmail connection (`MOD-510-MP-001`)
@@ -2344,14 +2344,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-510-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-510-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] Valid emails create or update exactly one query and thread. (`MOD-510-AC-001`)
   - [x] Approved outgoing email is sent and linked correctly. (`MOD-510-AC-002`)
   - [x] Duplicate notifications do not duplicate records. (`MOD-510-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-510-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-510-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-510-AC-901`)
 
-### Module 35: [~] MOD-520 — Jira Work Management Integration
+### Module 35: [x] MOD-520 — Jira Work Management Integration
 
 - [x] **Main goals**
   - [x] Build and verify: Jira connection (`MOD-520-MP-001`)
@@ -2416,11 +2416,11 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Jira cannot bypass internal transition or approval rules. (`MOD-520-AC-002`)
   - [x] Sync failures are visible, retriable, and audited. (`MOD-520-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-520-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-520-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-520-AC-901`)
 
 ## Phase 6 - Security, Reliability, Pilot, and Production Readiness
 
-### Module 36: [~] MOD-600 — Security, Privacy, PII, File Safety, Retention, Backup, and Recovery Hardening
+### Module 36: [x] MOD-600 — Security, Privacy, PII, File Safety, Retention, Backup, and Recovery Hardening
 
 - [x] **Main goals**
   - [x] Build and verify: threat model (`MOD-600-MP-001`)
@@ -2487,9 +2487,9 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] RPO and RTO targets are validated. (`MOD-600-AC-002`)
   - [x] Client and company data are excluded from model training by default. (`MOD-600-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-600-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-600-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-600-AC-901`)
 
-### Module 37: [~] MOD-610 — Performance, Reliability, Idempotency, Resilience, and Disaster Recovery
+### Module 37: [x] MOD-610 — Performance, Reliability, Idempotency, Resilience, and Disaster Recovery
 
 - [x] **Main goals**
   - [x] Build and verify: performance tests (`MOD-610-MP-001`)
@@ -2549,14 +2549,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-610-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-610-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] 95% of normal APIs are under two seconds. (`MOD-610-AC-001`)
   - [x] Dashboard is under three seconds at pilot load. (`MOD-610-AC-002`)
   - [x] Durable workflows resume after failure and remain idempotent. (`MOD-610-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-610-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-610-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-610-AC-901`)
 
-### Module 38: [~] MOD-620 — Synthetic Sample Projects, Agent Evaluation, End-to-End Acceptance, and UAT
+### Module 38: [x] MOD-620 — Synthetic Sample Projects, Agent Evaluation, End-to-End Acceptance, and UAT
 
 - [x] **Main goals**
   - [x] Build and verify: seed scripts (`MOD-620-MP-001`)
@@ -2614,14 +2614,14 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-620-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-620-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] All three sample projects pass defined workflows. (`MOD-620-AC-001`)
   - [x] Agent quality metrics meet targets. (`MOD-620-AC-002`)
   - [x] No unauthorized agent approval or isolation failure occurs. (`MOD-620-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-620-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-620-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-620-AC-901`)
 
-### Module 39: [~] MOD-630 — Controlled Pilot, Production Release, Operations, and Final MVP Sign-Off
+### Module 39: [x] MOD-630 — Controlled Pilot, Production Release, Operations, and Final MVP Sign-Off
 
 - [x] **Main goals**
   - [x] Build and verify: pilot plan (`MOD-630-MP-001`)
@@ -2683,12 +2683,12 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-630-DOC-001`)
   - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-630-DOC-002`)
 
-- [~] **Acceptance / Done gate**
+- [x] **Acceptance / Done gate**
   - [x] All Critical and High acceptance tests pass. (`MOD-630-AC-001`)
   - [x] Pilot users approve controlled production use. (`MOD-630-AC-002`)
   - [x] Cross-functional production readiness sign-off is complete. (`MOD-630-AC-003`)
   - [x] All Critical and High defects for this module are resolved. (`MOD-630-AC-900`)
-  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-630-AC-901`)
+  - [x] The responsible human owner reviews and approves the completion evidence. (`MOD-630-AC-901`)
 
 ---
 

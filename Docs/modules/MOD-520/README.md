@@ -1,5 +1,8 @@
 # MOD-520 Jira Work Management Integration (M1)
 
+**Status:** M1 Done (human AC-901 approved 2026-08-12)  
+**Human Done (AC-901):** Obtained 2026-08-12
+
 ## Scope delivered in M1
 
 - Approval-gated Jira issue push endpoint that only accepts approved internal tickets.

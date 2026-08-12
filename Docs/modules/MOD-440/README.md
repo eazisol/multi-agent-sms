@@ -1,7 +1,7 @@
 # MOD-440 — Notifications, Preferences, Digests, Delivery, and Failure Handling
 
-**Status:** Implementation draft (M1); AC-901 NOT obtained  
-**Human Done (AC-901):** Not obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-12)
+**Human Done (AC-901):** Obtained 2026-08-12
 
 ## Purpose
 
@@ -12,7 +12,7 @@ Persist org-scoped notifications, preferences, templates, deliveries, retries, d
 - No live email provider; delivery uses `provider_ref=local-sim` only.
 - FE is a desk list + create / mark-read / simulate deliver / preference mute note — not a full notification studio.
 - Temporal digest scheduling deferred; digest create/process is a FastAPI stub.
-- AC-901 human owner approval has **not** been obtained.
+- AC-901 obtained 2026-08-12 (human owner sign-off).
 
 ## M1 delivered
 

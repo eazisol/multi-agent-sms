@@ -1,7 +1,7 @@
 # MOD-510 — Gmail Client Communication Integration
 
-**Status:** Implementation draft (M1); AC-901 NOT obtained  
-**Human Done (AC-901):** Not obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-12)
+**Human Done (AC-901):** Obtained 2026-08-12
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Connect Gmail mailboxes with opaque `credential_ref` only, sync inbound email in
 - **Push idempotency** tracked via `gm_history_cursors` with `push:{external_event_id}` keys.
 - **Query/thread linkage** stores UUID refs on `gm_thread_mappings`; does not mutate MOD-210 query records directly in M1.
 - **Pub/Sub, Gmail history sync workers, and Temporal send workflows** are deferred.
-- AC-901 human owner approval has **not** been obtained.
+- AC-901 obtained 2026-08-12 (human owner sign-off).
 
 ## M1 delivered
 

@@ -1,5 +1,8 @@
 # MOD-630 Controlled Pilot, Production Release, Operations, and Final MVP Sign-Off (M1)
 
+**Status:** M1 Done (human AC-901 approved 2026-08-12)  
+**Human Done (AC-901):** Obtained 2026-08-12
+
 ## Scope delivered in M1
 
 - Acceptance-test gate (`GET /pilot/acceptance-gate`) from recorded results. `gate_passed` is true only when no Critical or High tests are `failed` or `blocked`.
@@ -47,4 +50,4 @@
 - Production deployment is a persisted **record** only. Agents must not finalize production deployment; a human must supply evidence and perform any real release outside this API.
 - Rollback is a recorded reason against a deployment record, not an automated infrastructure rollback.
 - Training and support readiness are checklists, not live LMS or on-call systems.
-- AC-901 (human completion approval) is not obtained in this slice.
+- AC-901 obtained 2026-08-12 (human owner sign-off).

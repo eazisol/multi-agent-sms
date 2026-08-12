@@ -8,4 +8,4 @@ M1 delivers org-scoped insights snapshots, indexed search, activity, health, rep
 | WF-002 | N/A | No Temporal streaming refresh |
 | WF-004 | N/A | Notification routing not owned by insights |
 | QA-004 | N/A | No BI warehouse / streaming suite |
-| AC-901 | Blocked | Human owner approval not obtained |
+| AC-901 | Done | Human owner approved 2026-08-12 |

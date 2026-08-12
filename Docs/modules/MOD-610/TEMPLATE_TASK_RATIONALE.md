@@ -20,4 +20,4 @@ This iteration establishes the minimum enforceable reliability and recovery reco
 - Live k6 / load-generation against a running API
 - Temporal workflow replay execution (registry only in M1)
 - Executed disaster-recovery drills
-- Human AC-901 completion approval
+- Human AC-901 obtained 2026-08-12

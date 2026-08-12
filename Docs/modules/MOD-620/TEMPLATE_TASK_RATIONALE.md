@@ -20,4 +20,4 @@ This iteration establishes the minimum enforceable UAT and agent-evaluation reco
 - Full production-like seed of clients, tickets, and workflow history
 - Playwright / live E2E execution (registry of recorded results only)
 - Live agent evaluation jobs against model runs
-- Human AC-901 completion approval
+- Human AC-901 obtained 2026-08-12

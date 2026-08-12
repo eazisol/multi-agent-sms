@@ -1,5 +1,7 @@
 # MOD-620 M1 Verification
 
+**Human Done (AC-901):** Obtained 2026-08-12 (human owner sign-off)
+
 Run from repository root.
 
 ## Required command set

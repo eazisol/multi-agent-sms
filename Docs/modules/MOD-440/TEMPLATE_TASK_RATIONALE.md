@@ -7,4 +7,4 @@ M1 delivers org-scoped notifications with preference safety, simulated delivery,
 | FE-002…004 | N/A / partial | Desk list + create/actions only |
 | WF-002 | N/A | Temporal digests deferred |
 | QA-003/004 | partial / N/A | Isolation suite deferred; no live email provider |
-| AC-901 | Blocked | Human owner approval not obtained |
+| AC-901 | Done | Human owner approved 2026-08-12 |

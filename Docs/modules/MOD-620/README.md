@@ -1,5 +1,8 @@
 # MOD-620 Synthetic Sample Projects, Agent Evaluation, End-to-End Acceptance, and UAT (M1)
 
+**Status:** M1 Done (human AC-901 approved 2026-08-12)  
+**Human Done (AC-901):** Obtained 2026-08-12
+
 ## Scope delivered in M1
 
 - Sample-project gate (`GET /uat/sample-gate`) from three synthetic codes (`SAMPLE-A`, `SAMPLE-B`, `SAMPLE-C`). `gate_passed` is true only when all three have `workflow_status=passed`.
@@ -45,4 +48,4 @@
 - Seed is a registry of three synthetic project codes, not a full production data seeder.
 - E2E and role-UAT rows are recorded results, not Playwright or live browser runs.
 - Agent evaluation scores are recorded measurements, not live model-quality jobs.
-- AC-901 (human completion approval) is not obtained in this slice.
+- AC-901 obtained 2026-08-12 (human owner sign-off).

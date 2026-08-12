@@ -1,5 +1,8 @@
 # MOD-610 Performance, Reliability, Idempotency, Resilience, and Disaster Recovery (M1)
 
+**Status:** M1 Done (human AC-901 approved 2026-08-12)  
+**Human Done (AC-901):** Obtained 2026-08-12
+
 ## Scope delivered in M1
 
 - API SLO gate (`GET /reliability/api-slo`) computed from the latest recorded performance-test p95 (or samples). `slo_met` is true only when p95_ms ≤ 2000.
@@ -45,4 +48,4 @@
 - No live load tests or k6 runs are executed in M1; SLO values are recorded measurements, not observed production latency.
 - Workflow replay is a registry and status machine. Temporal resume/replay remains a stub.
 - DR runbooks are documents. They are not executed disaster-recovery procedures.
-- AC-901 (human completion approval) is not obtained in this slice.
+- AC-901 obtained 2026-08-12 (human owner sign-off).

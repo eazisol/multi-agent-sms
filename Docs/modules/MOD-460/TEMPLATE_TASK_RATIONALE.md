@@ -8,4 +8,4 @@ M1 delivers requirement link registry, must-have coverage gate, evidence manifes
 | WF-002 | N/A | No Temporal long-running traceability workflows |
 | WF-004 | N/A | Notification routing not owned by traceability |
 | QA-004 | N/A | No agent/workflow/perf suite for this module |
-| AC-901 | Blocked | Human owner approval not obtained |
+| AC-901 | Done | Human owner approved 2026-08-12 |

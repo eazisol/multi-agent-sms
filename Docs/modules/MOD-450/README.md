@@ -1,7 +1,7 @@
 # MOD-450 — Dashboard, Reporting, Search, Project Health, and Activity Timeline
 
-**Status:** Implementation draft (M1); AC-901 NOT obtained  
-**Human Done (AC-901):** Not obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-12)
+**Human Done (AC-901):** Obtained 2026-08-12
 
 ## Purpose
 
@@ -14,7 +14,7 @@ Provide org-scoped dashboard snapshots reconciled from live source counts, proje
 - Exports are **in-DB `payload_preview`**, not S3/file download artifacts.
 - No BI warehouse / OLAP layer.
 - FE is a desk for search + activity + filters + exports plus dashboard snapshot wiring — not a full analytics studio.
-- AC-901 human owner approval has **not** been obtained.
+- AC-901 obtained 2026-08-12 (human owner sign-off).
 
 ## M1 delivered
 

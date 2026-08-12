@@ -8,4 +8,4 @@ M1 delivers credential-safe Gmail connections, idempotent inbound/push intake, t
 | WF-002 | N/A | No Temporal Gmail sync/send workers |
 | WF-004 | N/A | Notification routing not owned by Gmail module |
 | QA-004 | N/A | No live Gmail API/workflow/perf suite for M1 |
-| AC-901 | Blocked | Human owner approval not obtained |
+| AC-901 | Done | Human owner approved 2026-08-12 |

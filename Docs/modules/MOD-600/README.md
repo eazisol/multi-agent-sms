@@ -1,5 +1,8 @@
 # MOD-600 Security, Privacy, Retention, Backup, and Recovery Hardening (M1)
 
+**Status:** M1 Done (human AC-901 approved 2026-08-12)  
+**Human Done (AC-901):** Obtained 2026-08-12
+
 ## Scope delivered in M1
 
 - Security gate (`GET /security/gate`) that fails while Critical incidents remain open.
@@ -45,4 +48,4 @@
 - Restore tests store measured RPO/RTO values; they do not execute restores.
 - Deletion jobs use simulated row counters and legal-hold blocking logic.
 - Threat models are registry records, not automated threat scanners.
-- AC-901 (human completion approval) is not obtained in this slice.
+- AC-901 obtained 2026-08-12 (human owner sign-off).

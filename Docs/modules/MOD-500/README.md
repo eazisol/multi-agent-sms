@@ -1,7 +1,7 @@
 # MOD-500 — Integration Framework, OAuth Connections, Webhooks, Outbox, Inbox, and Sync State
 
-**Status:** Implementation draft (M1); AC-901 NOT obtained  
-**Human Done (AC-901):** Not obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-12)
+**Human Done (AC-901):** Obtained 2026-08-12
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Provide org-scoped integration connections with opaque `credential_ref` (never r
 - **`ig_outbox_events` is distinct from kernel `sys_outbox_messages`** — module outbox is for outbound integration relay; kernel outbox still receives domain events via `enqueue_outbox`.
 - **Relay and inbox process are simulated** — `force_fail` flags exercise failure paths without external side effects.
 - **Webhook signature validation, rate limits, Temporal workers, and SNS/SQS bridges** are deferred.
-- AC-901 human owner approval has **not** been obtained.
+- AC-901 obtained 2026-08-12 (human owner sign-off).
 
 ## M1 delivered
 

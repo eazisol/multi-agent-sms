@@ -1,7 +1,7 @@
 # MOD-460 — Requirement Traceability, Audit Reports, and Evidence Exports
 
-**Status:** Implementation draft (M1); AC-901 NOT obtained  
-**Human Done (AC-901):** Not obtained
+**Status:** M1 Done (human AC-901 approved 2026-08-12)
+**Human Done (AC-901):** Obtained 2026-08-12
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Provide org-scoped requirement-to-ticket/test/release/document link registry, ti
 - Exports are **in-DB `payload_preview` JSON**, not S3/file download artifacts.
 - Audit coverage is **module-local** `tr_action_audits` plus observability `write_audit` on controlled mutations — not a global platform audit completeness proof.
 - FE is a desk for must-haves, one link type, coverage, manifest seal/export — not a full traceability matrix studio.
-- AC-901 human owner approval has **not** been obtained.
+- AC-901 obtained 2026-08-12 (human owner sign-off).
 
 ## M1 delivered
 
