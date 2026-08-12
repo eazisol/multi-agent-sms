@@ -40,6 +40,7 @@ from masms_api.modules.reliability import models as _rlb  # noqa: F401
 from masms_api.modules.securityhardening import models as _sh  # noqa: F401
 from masms_api.modules.statusengine import models as _wfe  # noqa: F401
 from masms_api.modules.uateval import models as _ua  # noqa: F401
+from masms_api.modules.pilot import models as _pl  # noqa: F401
 from masms_api.modules.testcases import models as _tc  # noqa: F401
 from masms_api.modules.tickets import models as _tickets  # noqa: F401
 from masms_api.modules.traceability import models as _tr  # noqa: F401

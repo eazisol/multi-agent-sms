@@ -67,9 +67,9 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
 | 36 | MOD-600 | Done (M1) | 37 | 2 | 0 |
 | 37 | MOD-610 | Done (M1) | 35 | 2 | 0 |
 | 38 | MOD-620 | Done (M1) | 33 | 2 | 0 |
-| 39 | MOD-630 | Not started | 0 | 0 | 47 |
+| 39 | MOD-630 | Done (M1) | 37 | 2 | 0 |
 
-**All tasks:** 1749 · done 983 · partial 14 · n/a 207 · blocked 5 · open 538
+**All tasks:** 1749 · done 1020 · partial 16 · n/a 212 · blocked 6 · open 491
 
 ## Phase 0 - Governance and Foundation
 
@@ -2621,74 +2621,74 @@ Plan IDs (like `MOD-000-API-001`) are shown in backticks for traceability.
   - [x] All Critical and High defects for this module are resolved. (`MOD-620-AC-900`)
   - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-620-AC-901`)
 
-### Module 39: [ ] MOD-630 — Controlled Pilot, Production Release, Operations, and Final MVP Sign-Off
+### Module 39: [~] MOD-630 — Controlled Pilot, Production Release, Operations, and Final MVP Sign-Off
 
-- [ ] **Main goals**
-  - [ ] Build and verify: pilot plan (`MOD-630-MP-001`)
-  - [ ] Build and verify: pilot users (`MOD-630-MP-002`)
-  - [ ] Build and verify: training (`MOD-630-MP-003`)
-  - [ ] Build and verify: support readiness (`MOD-630-MP-004`)
-  - [ ] Build and verify: known limitations (`MOD-630-MP-005`)
-  - [ ] Build and verify: production deployment (`MOD-630-MP-006`)
-  - [ ] Build and verify: rollback (`MOD-630-MP-007`)
-  - [ ] Build and verify: final sign-offs (`MOD-630-MP-008`)
+- [x] **Main goals**
+  - [x] Build and verify: pilot plan (`MOD-630-MP-001`)
+  - [x] Build and verify: pilot users (`MOD-630-MP-002`)
+  - [x] Build and verify: training (`MOD-630-MP-003`)
+  - [x] Build and verify: support readiness (`MOD-630-MP-004`)
+  - [x] Build and verify: known limitations (`MOD-630-MP-005`)
+  - [x] Build and verify: production deployment (`MOD-630-MP-006`)
+  - [x] Build and verify: rollback (`MOD-630-MP-007`)
+  - [x] Build and verify: final sign-offs (`MOD-630-MP-008`)
 
-- [ ] **Database**
-  - [ ] Design and migrate data for: pilot plan (`MOD-630-DB-001`)
-  - [ ] Design and migrate data for: pilot users (`MOD-630-DB-002`)
-  - [ ] Design and migrate data for: training (`MOD-630-DB-003`)
-  - [ ] Design and migrate data for: support readiness (`MOD-630-DB-004`)
-  - [ ] Design and migrate data for: known limitations (`MOD-630-DB-005`)
-  - [ ] Design and migrate data for: production deployment (`MOD-630-DB-006`)
-  - [ ] Design and migrate data for: rollback (`MOD-630-DB-007`)
-  - [ ] Design and migrate data for: final sign-offs (`MOD-630-DB-008`)
+- [x] **Database**
+  - [x] Design and migrate data for: pilot plan (`MOD-630-DB-001`)
+  - [x] Design and migrate data for: pilot users (`MOD-630-DB-002`)
+  - [x] Design and migrate data for: training (`MOD-630-DB-003`)
+  - [x] Design and migrate data for: support readiness (`MOD-630-DB-004`)
+  - [x] Design and migrate data for: known limitations (`MOD-630-DB-005`)
+  - [x] Design and migrate data for: production deployment (`MOD-630-DB-006`)
+  - [x] Design and migrate data for: rollback (`MOD-630-DB-007`)
+  - [x] Design and migrate data for: final sign-offs (`MOD-630-DB-008`)
 
-- [ ] **Backend**
-  - [ ] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-630-BE-001`)
-  - [ ] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-630-BE-002`)
-  - [ ] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-630-BE-003`)
-  - [ ] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-630-BE-004`)
+- [x] **Backend**
+  - [x] Implement typed domain models, commands, queries, repositories, and application services for the approved scope. (`MOD-630-BE-001`)
+  - [x] Enforce authorization, approval, status-transition, concurrency, and idempotency rules before mutation. (`MOD-630-BE-002`)
+  - [x] Publish domain events through the transactionally safe outbox when asynchronous processing is required. (`MOD-630-BE-003`)
+  - [x] Return structured errors for validation, forbidden, not found, conflict, invalid transition, and approval required. (`MOD-630-BE-004`)
 
-- [ ] **API**
-  - [ ] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-630-API-001`)
-  - [ ] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-630-API-002`)
-  - [ ] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-630-API-003`)
+- [x] **API**
+  - [x] Create versioned CRUD, query, transition, action, and history endpoints required by the module. (`MOD-630-API-001`)
+  - [x] Add pagination, filtering, sorting, bounded search, optimistic concurrency, idempotency, and standard problem-details errors. (`MOD-630-API-002`)
+  - [x] Document request, response, validation, authorization, conflict, approval-required, invalid-transition, and not-found examples in OpenAPI. (`MOD-630-API-003`)
 
-- [ ] **Frontend**
-  - [ ] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-630-FE-001`)
-  - [ ] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-630-FE-002`)
-  - [ ] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-630-FE-003`)
-  - [ ] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-630-FE-004`)
+- [~] **Frontend**
+  - [~] Create the module list or dashboard view with role-aware columns, filters, sorting, pagination, saved views, and empty/loading/error/forbidden states. (`MOD-630-FE-001`)
+  - [-] Create detail view tabs for summary, ownership, status, related records, documents, messages, follow-ups, approvals, audit, and activity where applicable. (`MOD-630-FE-002`)
+  - [~] Create create/edit/review forms with field validation, permission-aware actions, stale-version handling, confirmation, and accessible error messages. (`MOD-630-FE-003`)
+  - [-] Verify responsive layout, keyboard navigation, focus order, contrast, timezone rendering, and screen-reader labels. (`MOD-630-FE-004`)
 
-- [ ] **Workflow / agents / events**
-  - [ ] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-630-WF-001`)
-  - [ ] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-630-WF-002`)
-  - [ ] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-630-WF-003`)
-  - [ ] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-630-WF-004`)
+- [~] **Workflow / agents / events**
+  - [x] Define triggers, owners, inputs, outputs, statuses, transitions, waits, reminders, escalations, approvals, evidence, and closure rules. (`MOD-630-WF-001`)
+  - [-] Route long-running waits and timers through Temporal; route bounded reasoning through LangGraph; keep state changes in FastAPI services. (`MOD-630-WF-002`)
+  - [x] Define domain events, outbox publication, idempotent consumers, correlation IDs, retries, dead-letter behavior, and replay rules. (`MOD-630-WF-003`)
+  - [-] Define notification recipients, channels, content classification, quiet hours, priority overrides, delivery audit, and failure handling. (`MOD-630-WF-004`)
 
-- [ ] **Security / audit**
-  - [ ] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-630-SEC-001`)
-  - [ ] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-630-SEC-002`)
-  - [ ] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-630-SEC-003`)
-  - [ ] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-630-SEC-004`)
+- [x] **Security / audit**
+  - [x] Enforce organization, client, project, role, module, action, classification, environment, and effective-date authorization. (`MOD-630-SEC-001`)
+  - [x] Add tenant-isolation and project-isolation controls in application services and RLS where applicable. (`MOD-630-SEC-002`)
+  - [x] Minimize and redact PII, secrets, tokens, credentials, and restricted data in logs, prompts, notifications, events, exports, and errors. (`MOD-630-SEC-003`)
+  - [x] Create audit events for create, read-sensitive, update, delete, assignment, transition, approval, rejection, override, export, integration, and agent actions. (`MOD-630-SEC-004`)
 
-- [ ] **Testing**
-  - [ ] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-630-QA-001`)
-  - [ ] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-630-QA-002`)
-  - [ ] Add role-permission negative tests and tenant/project isolation tests. (`MOD-630-QA-003`)
-  - [ ] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-630-QA-004`)
-  - [ ] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-630-QA-005`)
+- [x] **Testing**
+  - [x] Add unit tests for domain rules, validation, conflicts, and invalid state. (`MOD-630-QA-001`)
+  - [x] Add integration and API-contract tests for transactions, persistence, errors, concurrency, and idempotency. (`MOD-630-QA-002`)
+  - [x] Add role-permission negative tests and tenant/project isolation tests. (`MOD-630-QA-003`)
+  - [x] Add workflow, agent, event, integration, file, security, or performance tests where the module uses those capabilities. (`MOD-630-QA-004`)
+  - [x] Run formatter, lint, type check, tests, migrations, frontend build, and relevant security or performance checks. (`MOD-630-QA-005`)
 
-- [ ] **Docs**
-  - [ ] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-630-DOC-001`)
-  - [ ] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-630-DOC-002`)
+- [x] **Docs**
+  - [x] Update module README, data dictionary, API documentation, permissions, status rules, approvals, events, audit catalog, operational notes, and user guidance. (`MOD-630-DOC-001`)
+  - [x] Record migration, rollback, known limitations, verification commands, and evidence references. (`MOD-630-DOC-002`)
 
-- [ ] **Acceptance / Done gate**
-  - [ ] All Critical and High acceptance tests pass. (`MOD-630-AC-001`)
-  - [ ] Pilot users approve controlled production use. (`MOD-630-AC-002`)
-  - [ ] Cross-functional production readiness sign-off is complete. (`MOD-630-AC-003`)
-  - [ ] All Critical and High defects for this module are resolved. (`MOD-630-AC-900`)
-  - [ ] The responsible human owner reviews and approves the completion evidence. (`MOD-630-AC-901`)
+- [~] **Acceptance / Done gate**
+  - [x] All Critical and High acceptance tests pass. (`MOD-630-AC-001`)
+  - [x] Pilot users approve controlled production use. (`MOD-630-AC-002`)
+  - [x] Cross-functional production readiness sign-off is complete. (`MOD-630-AC-003`)
+  - [x] All Critical and High defects for this module are resolved. (`MOD-630-AC-900`)
+  - [!] The responsible human owner reviews and approves the completion evidence. (`MOD-630-AC-901`)
 
 ---
 

@@ -4040,4 +4040,252 @@ export async function createAcceptanceEvidence(
   return parse<AcceptanceEvidence>(response);
 }
 
+export type PilotPlan = {
+  id: string;
+  organization_id: string;
+  code: string;
+  title: string;
+  status: string;
+  start_at: string | null;
+  end_at: string | null;
+  version: number;
+  owner_actor_id: string;
+  created_by_actor_id: string;
+  updated_by_actor_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PilotUser = {
+  id: string;
+  organization_id: string;
+  plan_id: string;
+  actor_id: string;
+  role_label: string;
+  approved_production_use: boolean;
+  approved_at: string | null;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type AcceptanceTest = {
+  id: string;
+  organization_id: string;
+  plan_id: string;
+  code: string;
+  title: string;
+  severity: string;
+  result: string;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type FinalSignoff = {
+  id: string;
+  organization_id: string;
+  plan_id: string;
+  function_code: string;
+  status: string;
+  evidence: string;
+  signed_by_actor_id: string | null;
+  signed_at: string | null;
+  created_by_actor_id: string;
+  created_at: string;
+};
+
+export type AcceptanceGate = {
+  plan_id: string;
+  critical_high_failed_count: number;
+  gate_passed: boolean;
+};
+
+export type PilotApprovalGate = {
+  plan_id: string;
+  registered_count: number;
+  approved_count: number;
+  pending_count: number;
+  gate_passed: boolean;
+};
+
+export type ReadinessGate = {
+  plan_id: string;
+  required_functions: string[];
+  signed_functions: string[];
+  gate_passed: boolean;
+};
+
+export async function getAcceptanceGate(
+  session: SessionState,
+  planId: string,
+): Promise<AcceptanceGate> {
+  const query = new URLSearchParams();
+  query.set("plan_id", planId);
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/acceptance-gate?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<AcceptanceGate>(response);
+}
+
+export async function getPilotApprovalGate(
+  session: SessionState,
+  planId: string,
+): Promise<PilotApprovalGate> {
+  const query = new URLSearchParams();
+  query.set("plan_id", planId);
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/pilot-approval-gate?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<PilotApprovalGate>(response);
+}
+
+export async function getReadinessGate(
+  session: SessionState,
+  planId: string,
+): Promise<ReadinessGate> {
+  const query = new URLSearchParams();
+  query.set("plan_id", planId);
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/readiness-gate?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ReadinessGate>(response);
+}
+
+export async function createPilotPlan(
+  session: SessionState,
+  body: { code: string; title: string; status?: string },
+): Promise<PilotPlan> {
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/plans`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<PilotPlan>(response);
+}
+
+export async function listPilotPlans(
+  session: SessionState,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<PilotPlan>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/plans?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<PilotPlan>>(response);
+}
+
+export async function addPilotUser(
+  session: SessionState,
+  planId: string,
+  body: { actor_id: string; role_label: string },
+): Promise<PilotUser> {
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/plans/${planId}/users`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify(body),
+  });
+  return parse<PilotUser>(response);
+}
+
+export async function listPilotUsers(
+  session: SessionState,
+  planId: string,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<PilotUser>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/pilot/plans/${planId}/users?${query}`,
+    {
+      headers: headers(session),
+      cache: "no-store",
+    },
+  );
+  return parse<ListPage<PilotUser>>(response);
+}
+
+export async function approvePilotUser(
+  session: SessionState,
+  planId: string,
+  userId: string,
+): Promise<PilotUser> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/pilot/plans/${planId}/users/${userId}/approve`,
+    {
+      method: "POST",
+      headers: headers(session),
+    },
+  );
+  return parse<PilotUser>(response);
+}
+
+export async function createAcceptanceTest(
+  session: SessionState,
+  planId: string,
+  body: { code: string; title: string; severity: string; result: string },
+): Promise<AcceptanceTest> {
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/pilot/plans/${planId}/acceptance-tests`,
+    {
+      method: "POST",
+      headers: headers(session),
+      body: JSON.stringify(body),
+    },
+  );
+  return parse<AcceptanceTest>(response);
+}
+
+export async function listAcceptanceTests(
+  session: SessionState,
+  planId: string,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<AcceptanceTest>> {
+  const query = new URLSearchParams();
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(
+    `${apiBase()}/api/v1/pilot/plans/${planId}/acceptance-tests?${query}`,
+    {
+      headers: headers(session),
+      cache: "no-store",
+    },
+  );
+  return parse<ListPage<AcceptanceTest>>(response);
+}
+
+export async function listFinalSignoffs(
+  session: SessionState,
+  planId: string,
+  params: { limit?: number; offset?: number } = {},
+): Promise<ListPage<FinalSignoff>> {
+  const query = new URLSearchParams();
+  query.set("plan_id", planId);
+  query.set("limit", String(params.limit ?? 20));
+  query.set("offset", String(params.offset ?? 0));
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/signoffs?${query}`, {
+    headers: headers(session),
+    cache: "no-store",
+  });
+  return parse<ListPage<FinalSignoff>>(response);
+}
+
+export async function signFinalSignoff(
+  session: SessionState,
+  signoffId: string,
+  evidence: string,
+): Promise<FinalSignoff> {
+  const response = await apiFetch(`${apiBase()}/api/v1/pilot/signoffs/${signoffId}/sign`, {
+    method: "POST",
+    headers: headers(session),
+    body: JSON.stringify({ evidence }),
+  });
+  return parse<FinalSignoff>(response);
+}
+
 

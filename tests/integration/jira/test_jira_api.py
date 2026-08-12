@@ -32,6 +32,7 @@ from masms_api.modules.jira import models as _jira  # noqa: F401
 from masms_api.modules.reliability import models as _rlb  # noqa: F401
 from masms_api.modules.securityhardening import models as _sh  # noqa: F401
 from masms_api.modules.uateval import models as _ua  # noqa: F401
+from masms_api.modules.pilot import models as _pl  # noqa: F401
 from masms_api.modules.knowledge import models as _kn  # noqa: F401
 from masms_api.modules.notifications import models as _ntf  # noqa: F401
 from masms_api.modules.orchestrator import models as _orf  # noqa: F401

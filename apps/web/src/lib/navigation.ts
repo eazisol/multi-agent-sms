@@ -103,6 +103,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { href: "/security", label: "Security", ready: true },
       { href: "/reliability", label: "Reliability", ready: true },
       { href: "/uat", label: "UAT", ready: true },
+      { href: "/pilot", label: "Pilot", ready: true },
     ],
   },
 ];

@@ -44,6 +44,7 @@ from masms_api.modules.testcases import models as _tc  # noqa: F401
 from masms_api.modules.tickets import models as _tickets  # noqa: F401
 from masms_api.modules.traceability import models as _tr  # noqa: F401
 from masms_api.modules.uateval import models as _ua  # noqa: F401
+from masms_api.modules.pilot import models as _pl  # noqa: F401
 from masms_api.observability import models as _ops  # noqa: F401
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
