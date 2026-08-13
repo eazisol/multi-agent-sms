@@ -172,6 +172,7 @@ class PilotService:
             updated_by_actor_id=self.ctx.actor_id,
         )
         self.uow.add(row)
+        self.uow.flush()
         self._seed_signoffs(row)
         self._audit(
             action="pl_pilot_plan_create",

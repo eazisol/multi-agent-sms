@@ -88,13 +88,26 @@ class ApprovalGatesService:
         )
         self.uow.add(row)
 
+        serializable_steps = [
+            {
+                "order": step["order"],
+                "role_code": step["role_code"],
+                "required_authority_level": step["required_authority_level"],
+                "assignee_actor_id": (
+                    str(step["assignee_actor_id"])
+                    if step["assignee_actor_id"] is not None
+                    else None
+                ),
+            }
+            for step in steps_spec
+        ]
         wf = ApprovalWorkflowInstance(
             id=uuid4(),
             organization_id=self.ctx.organization_id,
             approval_id=row.id,
             code=data.workflow_code or "ad_hoc",
             title=data.title,
-            steps_json=steps_spec,
+            steps_json=serializable_steps,
             configuration_version_id=self._effective_config_id(),
         )
         self.uow.add(wf)
