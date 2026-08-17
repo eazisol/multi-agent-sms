@@ -28,6 +28,35 @@ def test_settings_rejects_unknown_env(monkeypatch: pytest.MonkeyPatch) -> None:
         Settings()
 
 
+def test_provider_settings_default_to_safe_local_stubs() -> None:
+    settings = Settings(_env_file=None)
+
+    assert settings.header_identity_enabled is True
+    assert settings.temporal_address is None
+    assert settings.gmail_mode == "sim"
+    assert settings.jira_mode == "sim"
+
+
+def test_auth0_urls_are_derived_from_domain() -> None:
+    settings = Settings(
+        _env_file=None,
+        auth_provider="auth0",
+        auth0_domain="https://tenant.example.auth0.com/",
+        auth0_audience="https://api.masms.local",
+    )
+
+    assert settings.header_identity_enabled is False
+    assert settings.auth0_issuer == "https://tenant.example.auth0.com/"
+    assert settings.auth0_jwks_url == (
+        "https://tenant.example.auth0.com/.well-known/jwks.json"
+    )
+
+
+def test_settings_rejects_unknown_integration_mode() -> None:
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, gmail_mode="production")
+
+
 def test_local_secret_backend() -> None:
     backend = create_secret_backend(
         backend=LOCAL_BACKEND,
@@ -37,6 +66,21 @@ def test_local_secret_backend() -> None:
         local_values={"database_url": "sqlite+pysqlite:///:memory:"},
     )
     assert backend.get_secret("database_url").startswith("sqlite")
+
+
+def test_local_secret_backend_resolves_opaque_reference(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("MASMS_SECRET_GMAIL_SANDBOX", '{"access_token":"test-only"}')
+    backend = create_secret_backend(
+        backend=LOCAL_BACKEND,
+        environment=Environment.LOCAL,
+        aws_region=None,
+        secrets_prefix="masms",
+        local_values={},
+    )
+
+    assert backend.get_secret("secrets/gmail_sandbox") == '{"access_token":"test-only"}'
 
 
 def test_production_forbids_local_secret_backend() -> None:

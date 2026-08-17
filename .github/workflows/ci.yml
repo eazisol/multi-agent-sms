@@ -59,10 +59,84 @@ jobs:
           name: web-build-meta-${{ github.sha }}
           path: apps/web/package.json
 
+  browser-e2e:
+    name: Browser smoke
+    runs-on: ubuntu-latest
+    needs: [api, web]
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: masms
+          POSTGRES_USER: masms
+          POSTGRES_PASSWORD: masms_dev_only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U masms -d masms"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      MASMS_ENV: test
+      MASMS_DATABASE_URL: postgresql+psycopg://masms:masms_dev_only@127.0.0.1:5432/masms
+      MASMS_AUTH_PROVIDER: local
+      MASMS_API_ORIGIN: http://127.0.0.1:8000
+      NEXT_PUBLIC_AUTH_MODE: local
+      NEXT_PUBLIC_DEFAULT_ORGANIZATION_ID: 00000000-0000-4000-8000-000000000001
+      NEXT_PUBLIC_DEFAULT_ACTOR_ID: 00000000-0000-4000-8000-000000000101
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install
+        run: |
+          uv sync
+          npm ci --prefix apps/web
+          npm --prefix apps/web exec -- playwright install --with-deps chromium
+      - name: Migrate and build
+        run: |
+          uv run alembic upgrade head
+          npm --prefix apps/web run build
+      - name: Start application
+        run: |
+          uv run uvicorn masms_api.main:app --app-dir apps/api/src --host 127.0.0.1 --port 8000 > api.log 2>&1 &
+          npm --prefix apps/web run start > web.log 2>&1 &
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/health >/dev/null &&
+               curl --fail --silent http://127.0.0.1:3000 >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+      - name: Playwright smoke
+        run: npm --prefix apps/web run e2e:smoke
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-e2e-${{ github.sha }}
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+            api.log
+            web.log
+          if-no-files-found: ignore
+
   traceability:
     name: Artifact traceability
     runs-on: ubuntu-latest
-    needs: [api, web]
+    needs: [api, web, browser-e2e]
     steps:
       - name: Record commit identity
         run: |

@@ -13,8 +13,8 @@ from masms_api.deps import RequestContext, get_request_context
 from masms_api.kernel.pagination import PageMeta
 from masms_api.modules.knowledge.schemas import (
     ActivateVersion,
-    CitationHit,
     ChunkRead,
+    CitationHit,
     ConflictCreate,
     ConflictRead,
     ConflictResolve,
@@ -145,7 +145,7 @@ def search(
     return SearchResponse(
         query=body.query,
         items=[CitationHit.model_validate(h) for h in hits],
-        stub=True,
+        stub=not service.live_search_enabled,
     )
 
 

@@ -12,6 +12,7 @@ from masms_api.kernel import outbox as _outbox  # noqa: F401
 from masms_api.main import create_app
 from masms_api.modules.access import models as _access  # noqa: F401
 from masms_api.modules.agents import models as _agr  # noqa: F401
+from masms_api.modules.agents.domain import AGENT_DEPARTMENTS, AGENT_TITLES, ALLOWED_CODES
 from masms_api.modules.approvalgates import models as _apr  # noqa: F401
 from masms_api.modules.assignments import models as _asg  # noqa: F401
 from masms_api.modules.auth import models as _auth  # noqa: F401
@@ -66,6 +67,16 @@ def _headers() -> dict[str, str]:
         "X-Actor-Kind": "human",
         "X-Correlation-Id": str(uuid4()),
     }
+
+
+AGENT_ENTITY_TYPES: dict[str, str] = {
+    "query_intake_agent": "crm_query",
+    "requirements_clarifier": "req_requirement",
+    "roadmap_planner": "rmp_roadmap_item",
+    "ticket_triage_agent": "wfe_ticket",
+    "qa_review_assistant": "qa_review",
+    "status_report_drafter": "prj_project",
+}
 
 
 def test_agent_runtime_happy_path_review_and_unknown_code(client: TestClient) -> None:
@@ -153,3 +164,61 @@ def test_agent_runtime_happy_path_review_and_unknown_code(client: TestClient) ->
         },
     )
     assert bad.status_code == 422, bad.text
+
+
+@pytest.mark.parametrize("agent_code", sorted(ALLOWED_CODES))
+def test_every_catalog_agent_starts_and_completes_stub_run(
+    client: TestClient, agent_code: str
+) -> None:
+    headers = _headers()
+    entity_type = AGENT_ENTITY_TYPES[agent_code]
+    created = client.post(
+        "/api/v1/agent-runtime/runs",
+        headers=headers,
+        json={
+            "agent_code": agent_code,
+            "related_entity_type": entity_type,
+            "related_entity_id": str(uuid4()),
+            "input_json": {"note": f"catalog check for {agent_code}"},
+        },
+    )
+    assert created.status_code == 201, created.text
+    body = created.json()
+    assert body["agent_code"] == agent_code
+    assert body["status"] == "completed"
+    assert body["review_required"] is False
+    assert body["langgraph_run_id"].startswith("stub-lg-")
+    assert body["model_name"]
+    assert body["prompt_version_number"] >= 1
+    assert body["sources_json"]
+    assert body["output_json"]["stub"] is True
+    assert agent_code in str(body["output_json"]["summary"])
+    assert body["confidence"] is not None and body["confidence"] >= 0.6
+
+    fetched = client.get(f"/api/v1/agent-runtime/runs/{body['id']}", headers=headers)
+    assert fetched.status_code == 200, fetched.text
+    assert fetched.json()["status"] == "completed"
+
+    listed = client.get(
+        f"/api/v1/agent-runtime/runs?agent_code={agent_code}&limit=10&offset=0",
+        headers=headers,
+    )
+    assert listed.status_code == 200, listed.text
+    codes = {item["agent_code"] for item in listed.json()["items"]}
+    assert agent_code in codes
+
+
+def test_definitions_seed_all_catalog_codes_with_expected_departments(
+    client: TestClient,
+) -> None:
+    headers = _headers()
+    defs = client.get("/api/v1/agent-runtime/definitions", headers=headers)
+    assert defs.status_code == 200, defs.text
+    rows = defs.json()
+    assert {row["code"] for row in rows} == set(ALLOWED_CODES)
+    assert all(row["status"] == "active" for row in rows)
+    by_code = {row["code"]: row for row in rows}
+
+    for code in ALLOWED_CODES:
+        assert by_code[code]["title"] == AGENT_TITLES[code]
+        assert by_code[code]["department_code"] == AGENT_DEPARTMENTS[code]

@@ -339,14 +339,15 @@ class AgentRuntimeService:
             run_id=str(run_id),
             input_payload=data.input_json,
         )
-        stub = self.langgraph.invoke_stub(
+        result = self.langgraph.invoke(
             agent_code=definition.code,
             prompt_version=prompt.version_number,
             model_name=prompt.model_name,
             input_payload=data.input_json,
             allowed_tools=list(tool_policy.allowed_tools) if tool_policy else [],
+            max_output_tokens=context_profile.max_tokens if context_profile else 1200,
         )
-        confidence = float(stub.get("confidence", 0.0))
+        confidence = float(result.get("confidence", 0.0))
         review_flag = bool(data.input_json.get("force_review")) or (
             confidence < domain.LOW_CONFIDENCE_THRESHOLD
         )
@@ -370,18 +371,18 @@ class AgentRuntimeService:
             related_entity_id=data.related_entity_id,
             status=final_status,
             langgraph_run_id=lg_id,
-            model_name=prompt.model_name,
+            model_name=str(result.get("model_name") or prompt.model_name),
             prompt_version_number=prompt.version_number,
             input_json=dict(data.input_json),
             output_json={
-                "summary": stub.get("summary"),
-                "stub": True,
-                "raw": {k: v for k, v in stub.items() if k != "summary"},
+                "summary": result.get("summary"),
+                "stub": bool(result.get("stub", True)),
+                "raw": {k: v for k, v in result.items() if k != "summary"},
             },
-            sources_json=list(stub.get("sources") or []),
-            tools_used_json=list(stub.get("tools_used") or []),
+            sources_json=list(result.get("sources") or []),
+            tools_used_json=list(result.get("tools_used") or []),
             confidence=confidence,
-            cost_units=float(stub.get("cost_units") or 0.0),
+            cost_units=float(result.get("cost_units") or 0.0),
             review_required=final_status == "review_required",
             owner_actor_id=data.owner_actor_id or self.ctx.actor_id,
             correlation_id=self.ctx.correlation_id,

@@ -43,6 +43,7 @@ Authorized human approval remains mandatory for approving baselines, ADRs, and c
 
 ## Related docs
 
+- `Docs/testing/README.md` — end-to-end testing handbook and per-module `E2E_GUIDE.md` files
 - `Docs/Multi_Agent_Software_House_Management_System_MVP_SRS_v1.0.md`
 - `Docs/Multi-Agent_Software_House_Management_System_Comprehensive_Specification_v1.1_Corrected.md`
 - `MASMS_CURSOR_MODULE_WISE_IMPLEMENTATION_PLAN.md`

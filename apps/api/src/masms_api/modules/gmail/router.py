@@ -91,6 +91,15 @@ def get_connection(
     return ConnectionRead.model_validate(service.get_connection(connection_id))
 
 
+@router.post("/connections/{connection_id}/sync")
+def sync_connection(
+    connection_id: UUID,
+    limit: int = Query(default=20, ge=1, le=100),
+    service: GmailService = Depends(_service),
+) -> dict[str, object]:
+    return service.sync_inbound(connection_id, limit=limit)
+
+
 @router.post("/connections/{connection_id}/activate", response_model=ConnectionRead)
 def activate_connection(
     connection_id: UUID,

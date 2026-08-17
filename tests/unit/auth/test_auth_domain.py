@@ -36,5 +36,5 @@ def test_auth0_provider_fail_closed() -> None:
     with pytest.raises(ForbiddenError):
         bare.validate_access_token("anything")
     configured = Auth0IdentityProvider(domain="example.auth0.com", audience="api")
-    with pytest.raises(ForbiddenError, match="JWKS"):
+    with pytest.raises(ForbiddenError, match="Invalid Auth0 access token"):
         configured.validate_access_token("jwt.not.real")

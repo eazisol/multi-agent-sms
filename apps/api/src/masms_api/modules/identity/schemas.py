@@ -46,6 +46,7 @@ class HumanUserCreate(BaseModel):
     email: str = Field(min_length=3, max_length=320, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
     full_name: str = Field(min_length=2, max_length=255)
     primary_role_code: str | None = Field(default=None, max_length=64)
+    idp_subject: str | None = Field(default=None, min_length=3, max_length=255)
 
 
 class HumanUserRead(BaseModel):
@@ -56,6 +57,7 @@ class HumanUserRead(BaseModel):
     actor_id: UUID
     email: str
     full_name: str
+    idp_subject: str | None
     status: str
     primary_role_code: str | None
     version: int

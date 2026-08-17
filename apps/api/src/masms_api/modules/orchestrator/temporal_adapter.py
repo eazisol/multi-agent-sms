@@ -1,20 +1,22 @@
-"""Temporal client stub/adapter (MOD-350 M1).
-
-A live Temporal server is NOT required. The stub returns deterministic-looking
-run identifiers and no-ops signal/cancel calls so FastAPI can own business state.
-"""
+"""Temporal adapters for deterministic tests and the opt-in live runtime."""
 
 from __future__ import annotations
 
+import asyncio
 import logging
+from collections.abc import Coroutine
 from typing import Any
 from uuid import uuid4
+
+from temporalio.client import Client
+
+from masms_api.config import get_settings
 
 logger = logging.getLogger(__name__)
 
 
 class TemporalAdapter:
-    """Default stub Temporal adapter used until a real client is configured."""
+    """Deterministic stub used when no Temporal address is configured."""
 
     def start_workflow(
         self,
@@ -64,6 +66,90 @@ class TemporalAdapter:
         )
 
 
+class LiveTemporalAdapter(TemporalAdapter):
+    """Synchronous application-service bridge to the asynchronous Temporal client."""
+
+    def __init__(self, *, address: str, namespace: str, task_queue: str) -> None:
+        self.address = address
+        self.namespace = namespace
+        self.task_queue = task_queue
+
+    async def _client(self) -> Client:
+        return await Client.connect(self.address, namespace=self.namespace)
+
+    def start_workflow(
+        self,
+        *,
+        workflow_type: str,
+        workflow_id: str,
+        input_payload: dict[str, Any] | None = None,
+    ) -> str:
+        async def start() -> str:
+            client = await self._client()
+            handle = await client.start_workflow(
+                workflow_type,
+                input_payload or {},
+                id=workflow_id,
+                task_queue=self.task_queue,
+            )
+            if not handle.result_run_id:
+                raise RuntimeError("Temporal did not return a workflow run id")
+            return handle.result_run_id
+
+        return _run(start())
+
+    def signal_workflow(
+        self,
+        *,
+        workflow_id: str,
+        signal_name: str,
+        payload: dict[str, Any] | None = None,
+        run_id: str | None = None,
+    ) -> None:
+        async def signal() -> None:
+            client = await self._client()
+            handle = client.get_workflow_handle(workflow_id, run_id=run_id)
+            await handle.signal(signal_name, payload or {})
+
+        _run(signal())
+
+    def cancel_workflow(
+        self,
+        *,
+        workflow_id: str,
+        run_id: str | None = None,
+        reason: str | None = None,
+    ) -> None:
+        async def cancel() -> None:
+            client = await self._client()
+            handle = client.get_workflow_handle(workflow_id, run_id=run_id)
+            await handle.cancel()
+
+        logger.info(
+            "temporal.cancel_workflow workflow_id=%s run_id=%s reason=%s",
+            workflow_id,
+            run_id,
+            reason,
+        )
+        _run(cancel())
+
+
+def _run[T](awaitable: Coroutine[Any, Any, T]) -> T:
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(awaitable)
+    awaitable.close()
+    raise RuntimeError("LiveTemporalAdapter must be called from a synchronous service context")
+
+
 def get_temporal_adapter() -> TemporalAdapter:
-    """Factory hook for a future real client; M1 always returns the stub."""
+    """Select live Temporal only when its address is explicitly configured."""
+    settings = get_settings()
+    if settings.temporal_address:
+        return LiveTemporalAdapter(
+            address=settings.temporal_address,
+            namespace=settings.temporal_namespace,
+            task_queue=settings.temporal_task_queue,
+        )
     return TemporalAdapter()

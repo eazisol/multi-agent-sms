@@ -6,6 +6,17 @@ export type SessionState = {
   actorId: string;
   actorKind: ActorKind;
   variant: GovVariant;
+  accessToken?: string;
+  displayName?: string;
+  email?: string;
+};
+
+export type CurrentIdentity = {
+  organization_id: string;
+  actor_id: string;
+  actor_kind: ActorKind;
+  display_name: string;
+  assurance_level: number;
 };
 
 export type ProblemDetails = {
@@ -106,6 +117,19 @@ function apiBase(): string {
 }
 
 function headers(session: SessionState): HeadersInit {
+  if (process.env.NEXT_PUBLIC_AUTH_MODE === "auth0") {
+    if (!session.accessToken) {
+      throw new ApiError(401, {
+        code: "authentication_required",
+        message: "Your authenticated session is not ready. Please sign in again.",
+      });
+    }
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.accessToken}`,
+      "X-Correlation-Id": newId(),
+    };
+  }
   return {
     "Content-Type": "application/json",
     "X-Organization-Id": session.organizationId,
@@ -145,6 +169,17 @@ async function parse<T>(response: Response): Promise<T> {
     // keep fallback
   }
   throw new ApiError(response.status, problem);
+}
+
+export async function getCurrentIdentity(accessToken: string): Promise<CurrentIdentity> {
+  const response = await apiFetch(`${apiBase()}/api/v1/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "X-Correlation-Id": newId(),
+    },
+    cache: "no-store",
+  });
+  return parse<CurrentIdentity>(response);
 }
 
 export async function listBaselines(

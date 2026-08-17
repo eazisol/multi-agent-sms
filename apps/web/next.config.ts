@@ -1,5 +1,9 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { NextConfig } from "next";
 
+const appDir = path.dirname(fileURLToPath(import.meta.url));
 const apiOrigin =
   process.env.MASMS_API_ORIGIN?.replace(/\/$/, "") ||
   process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "") ||
@@ -10,6 +14,7 @@ const nextConfig: NextConfig = {
   // so `npm run build` cannot invalidate an active local session and cause
   // `/_next/static/...` 404s in the browser.
   distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
+  outputFileTracingRoot: appDir,
   async rewrites() {
     // Same-origin /api/* → FastAPI. Avoids browser CORS during local/dev UI work.
     return [

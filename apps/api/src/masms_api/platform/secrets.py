@@ -7,6 +7,8 @@ Agents must never receive raw secret values in prompts or logs.
 
 from __future__ import annotations
 
+import os
+import re
 from abc import ABC, abstractmethod
 from typing import Final
 
@@ -30,9 +32,19 @@ class LocalEnvSecretBackend(SecretBackend):
         self._values = values
 
     def get_secret(self, name: str) -> str:
-        if name not in self._values or not self._values[name]:
+        configured = self._values.get(name)
+        if configured:
+            return configured
+        normalized = name.strip()
+        for prefix in ("sm://", "sm:", "secrets/"):
+            if normalized.startswith(prefix):
+                normalized = normalized.removeprefix(prefix)
+                break
+        env_key = re.sub(r"[^A-Za-z0-9]+", "_", normalized).strip("_").upper()
+        value = os.getenv(f"MASMS_SECRET_{env_key}") if env_key else None
+        if not value:
             raise SecretBackendError(f"Secret '{name}' is not configured in local env")
-        return self._values[name]
+        return value
 
 
 class AwsSecretsManagerSecretBackend(SecretBackend):

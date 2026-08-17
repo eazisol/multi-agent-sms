@@ -81,6 +81,7 @@ class HumanUser(Base):
     )
     email: Mapped[str] = mapped_column(String(320), nullable=False)
     full_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    idp_subject: Mapped[str | None] = mapped_column(String(255), nullable=True, unique=True)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="active")
     primary_role_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)

@@ -47,6 +47,7 @@ def get_request_context(
                 identity = Auth0IdentityProvider(
                     domain=settings.auth0_domain,
                     audience=settings.auth0_audience,
+                    db=db,
                 ).validate_access_token(token)
             else:
                 from masms_api.modules.auth.service import resolve_session_token
@@ -74,6 +75,9 @@ def get_request_context(
         if db is not None:
             apply_tenant_rls(db, ctx.organization_id)
         return ctx
+
+    if not settings.header_identity_enabled:
+        raise HTTPException(status_code=401, detail="Bearer authentication is required")
 
     try:
         organization_id = UUID(x_organization_id or settings.default_organization_id)

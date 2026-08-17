@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, Response, status
+from fastapi import APIRouter, Depends, Header, Query, Request, Response, status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -61,12 +61,21 @@ def list_issue_pushes(
 
 
 @router.post("/webhooks/status", response_model=JiraStatusConflictRead)
-def receive_status_webhook(
+async def receive_status_webhook(
     body: JiraStatusWebhookIn,
+    request: Request,
     response: Response,
+    x_jira_webhook_signature: str | None = Header(
+        default=None,
+        alias="X-Jira-Webhook-Signature",
+    ),
     service: JiraService = Depends(_service),
 ) -> JiraStatusConflictRead:
-    conflict = service.receive_status_webhook(body)
+    conflict = service.receive_status_webhook(
+        body,
+        raw_body=await request.body(),
+        signature=x_jira_webhook_signature,
+    )
     response.status_code = status.HTTP_409_CONFLICT
     return JiraStatusConflictRead.model_validate(conflict)
 

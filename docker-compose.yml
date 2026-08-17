@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16
     environment:
       POSTGRES_DB: masms
       POSTGRES_USER: masms
@@ -24,6 +24,40 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  temporal:
+    image: temporalio/auto-setup:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: masms
+      POSTGRES_PWD: masms_dev_only
+      POSTGRES_SEEDS: postgres
+    ports:
+      - "7233:7233"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "temporal operator cluster health --address $(hostname -i):7233 >/dev/null 2>&1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  temporal-ui:
+    image: temporalio/ui:latest
+    depends_on:
+      temporal:
+        condition: service_healthy
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_CORS_ORIGINS: http://localhost:3000
+    ports:
+      - "8080:8080"
 
   # Optional local object-storage stand-in for later file modules (not required for MOD-010/030).
   # Uncomment when needed:

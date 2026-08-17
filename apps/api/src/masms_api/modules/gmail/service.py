@@ -16,6 +16,7 @@ from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_pag
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
 from masms_api.modules.gmail import domain
+from masms_api.modules.gmail.client import GmailClient, get_gmail_client
 from masms_api.modules.gmail.models import (
     GmailApprovedSend,
     GmailAttachmentImport,
@@ -38,9 +39,15 @@ from masms_api.observability.writer import ObservabilityWriter
 
 
 class GmailService:
-    def __init__(self, db: Session, ctx: RequestContext) -> None:
+    def __init__(
+        self,
+        db: Session,
+        ctx: RequestContext,
+        gmail_client: GmailClient | None = None,
+    ) -> None:
         self.db = db
         self.ctx = ctx
+        self.gmail_client = gmail_client or get_gmail_client()
         self.uow = SqlAlchemyUnitOfWork(db)
         self.obs = ObservabilityWriter(db, ctx)
         apply_tenant_rls(db, ctx.organization_id)
@@ -637,16 +644,31 @@ class GmailService:
                 raise ConflictError("Approved send exists but message mapping missing")
             return {"approved_send": existing_send, "message_mapping": msg, "idempotent": True}
 
-        external_send_id = domain.simulate_external_send_id()
-        gmail_message_id = f"outbound-{external_send_id}"
-
+        connection = self._get_connection(draft.connection_id)
         thread_mapping_id = draft.thread_mapping_id
+        gmail_thread_id: str | None = None
+        if thread_mapping_id is not None:
+            existing_thread = self.db.get(GmailThreadMapping, thread_mapping_id)
+            if (
+                existing_thread is None
+                or existing_thread.organization_id != self.ctx.organization_id
+            ):
+                raise NotFoundError("Gmail thread mapping not found")
+            gmail_thread_id = existing_thread.gmail_thread_id
+        send_result = self.gmail_client.send_message(
+            connection=connection,
+            draft=draft,
+            thread_id=gmail_thread_id,
+        )
+        external_send_id = send_result.external_send_id
+        gmail_message_id = send_result.message_id
+
         if thread_mapping_id is None:
             thread = GmailThreadMapping(
                 id=uuid4(),
                 organization_id=self.ctx.organization_id,
                 connection_id=draft.connection_id,
-                gmail_thread_id=f"thread-{draft.draft_id}",
+                gmail_thread_id=send_result.thread_id,
                 internal_thread_id=uuid4(),
                 query_id=None,
                 client_id=None,
@@ -714,6 +736,44 @@ class GmailService:
             "idempotent": False,
         }
 
+    def sync_inbound(self, connection_id: UUID, *, limit: int = 20) -> dict[str, Any]:
+        connection = self._get_connection(connection_id)
+        if connection.status != "active":
+            raise ValidationAppError("Gmail sync requires an active connection")
+        messages = self.gmail_client.list_inbound(
+            connection=connection,
+            history_id=connection.history_id,
+            limit=limit,
+        )
+        processed: list[dict[str, Any]] = []
+        latest_history_id = connection.history_id
+        for message in messages:
+            result = self.process_inbound(
+                InboundProcess(
+                    connection_id=connection.id,
+                    gmail_message_id=message.message_id,
+                    gmail_thread_id=message.thread_id,
+                    subject=message.subject,
+                    from_email=message.from_email,
+                    snippet=message.snippet,
+                )
+            )
+            processed.append(result)
+            if message.history_id:
+                latest_history_id = message.history_id
+        if latest_history_id != connection.history_id:
+            connection.history_id = latest_history_id
+            connection.version += 1
+            connection.updated_by_actor_id = self.ctx.actor_id
+            self.uow.add(connection)
+            self.uow.commit()
+        return {
+            "connection_id": connection.id,
+            "processed_count": len(processed),
+            "history_id": latest_history_id,
+            "items": processed,
+        }
+
     def receive_push_notification(self, data: PushReceive) -> dict[str, Any]:
         self._get_connection(data.connection_id)
         domain.assert_no_raw_secrets(data.payload)
@@ -727,9 +787,9 @@ class GmailService:
             )
         )
         if existing_cursor is not None:
-            inbound_result = None
+            existing_inbound = None
             if data.event_type == "message_received" and existing_cursor.cursor_value:
-                inbound_result = {
+                existing_inbound = {
                     "message_mapping_id": UUID(existing_cursor.cursor_value),
                     "idempotent": True,
                 }
@@ -737,7 +797,7 @@ class GmailService:
                 "external_event_id": data.external_event_id,
                 "event_type": data.event_type,
                 "status": "processed",
-                "inbound": inbound_result,
+                "inbound": existing_inbound,
                 "idempotent": True,
             }
 
@@ -749,7 +809,8 @@ class GmailService:
             required = ("gmail_message_id", "gmail_thread_id", "from_email")
             if not all(payload.get(k) for k in required):
                 raise ValidationAppError(
-                    "message_received payload requires gmail_message_id, gmail_thread_id, from_email"
+                    "message_received payload requires gmail_message_id, "
+                    "gmail_thread_id, from_email"
                 )
             inbound = InboundProcess(
                 connection_id=data.connection_id,

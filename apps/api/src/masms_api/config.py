@@ -32,6 +32,18 @@ class Settings(BaseSettings):
     auth_provider: str = "local"
     auth0_domain: str | None = None
     auth0_audience: str | None = None
+    disable_header_identity: bool = False
+    temporal_address: str | None = None
+    temporal_namespace: str = "default"
+    temporal_task_queue: str = "masms-local"
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4.1-mini"
+    embedding_model: str | None = None
+    gmail_mode: str = "sim"
+    jira_mode: str = "sim"
+    jira_base_url: str | None = None
+    jira_project_key: str | None = None
+    jira_credential_ref: str | None = None
 
     @field_validator("env")
     @classmethod
@@ -46,6 +58,14 @@ class Settings(BaseSettings):
             raise ValueError("MASMS_AUTH_PROVIDER must be 'local' or 'auth0'")
         return normalized
 
+    @field_validator("gmail_mode", "jira_mode")
+    @classmethod
+    def _validate_integration_mode(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {"sim", "live"}:
+            raise ValueError("Integration mode must be 'sim' or 'live'")
+        return normalized
+
     @property
     def environment(self) -> Environment:
         return Environment(self.env)
@@ -53,6 +73,22 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [part.strip() for part in self.cors_origins.split(",") if part.strip()]
+
+    @property
+    def auth0_issuer(self) -> str | None:
+        if not self.auth0_domain:
+            return None
+        return f"https://{self.auth0_domain.strip().removeprefix('https://').rstrip('/')}/"
+
+    @property
+    def auth0_jwks_url(self) -> str | None:
+        if not self.auth0_issuer:
+            return None
+        return f"{self.auth0_issuer}.well-known/jwks.json"
+
+    @property
+    def header_identity_enabled(self) -> bool:
+        return self.auth_provider == "local" and not self.disable_header_identity
 
     def secret_provider(self) -> SecretBackend:
         local_values = {

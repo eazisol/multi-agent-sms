@@ -56,7 +56,8 @@ def test_provider_meta_and_session_mfa_flow(client: TestClient) -> None:
     provider = client.get("/api/v1/auth/provider")
     assert provider.status_code == 200
     assert provider.json()["provider"] == "local"
-    assert provider.json()["jwks_enabled"] is False
+    assert provider.json()["jwks_enabled"] is True
+    assert provider.json()["header_identity_enabled"] is True
 
     org_id = "00000000-0000-4000-8000-000000000001"
     actor_id = "00000000-0000-4000-8000-000000000101"

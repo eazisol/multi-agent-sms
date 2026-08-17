@@ -13,7 +13,8 @@ Authoritative product inputs live under `Docs/`. Engineering rules live under `.
 
 Detailed plan task IDs: `MASMS_IMPLEMENTATION_PROGRESS_CHECKLIST.md`  
 Easy hierarchy: `MASMS_PLAIN_MODULE_CHECKLIST.md`  
-Toolchain start guide: `docs/modules/MOD-010/README.md`
+Toolchain start guide: `docs/modules/MOD-010/README.md`  
+End-to-end testing handbook (all modules and journeys): `Docs/testing/README.md`
 
 ## Quick start (API + web)
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import func, or_, select
@@ -108,7 +109,10 @@ class KnowledgeService:
             action="kn_item_create",
             entity_type="kn_item",
             entity_id=row.id,
-            payload={"code": row.code, "project_id": str(data.project_id) if data.project_id else None},
+            payload={
+                "code": row.code,
+                "project_id": str(data.project_id) if data.project_id else None,
+            },
         )
         enqueue_outbox(
             self.db,
@@ -208,7 +212,11 @@ class KnowledgeService:
             stmt = stmt.where(KnowledgeVersion.item_id == item_id)
         return list(self.db.scalars(stmt.order_by(KnowledgeVersion.version_number.desc())))
 
-    def activate_version(self, version_id: UUID, data: ActivateVersion | None = None) -> KnowledgeVersion:
+    def activate_version(
+        self,
+        version_id: UUID,
+        data: ActivateVersion | None = None,
+    ) -> KnowledgeVersion:
         data = data or ActivateVersion()
         row = self.db.get(KnowledgeVersion, version_id)
         if row is None or row.organization_id != self.ctx.organization_id:
@@ -271,6 +279,7 @@ class KnowledgeService:
                     model_name=self.retrieval.model_name,
                     dims=self.retrieval.dims,
                     vector_stub=self.retrieval.embed_stub(part),
+                    embedding=self.retrieval.embed(part),
                 )
             )
 
@@ -388,7 +397,55 @@ class KnowledgeService:
             status=version.status, effective_from_ok=from_ok, effective_to_ok=to_ok
         )
 
-    def search(self, data: SearchRequest) -> list[dict]:
+    @property
+    def live_search_enabled(self) -> bool:
+        return self.retrieval.is_live and self.db.get_bind().dialect.name == "postgresql"
+
+    def _rank_with_pgvector(
+        self,
+        *,
+        query: str,
+        candidates: list[dict[str, Any]],
+        limit: int,
+    ) -> list[dict[str, Any]]:
+        query_embedding = self.retrieval.embed(query)
+        if not query_embedding:
+            return []
+        by_chunk: dict[UUID, dict[str, Any]] = {
+            candidate["chunk_id"]: candidate
+            for candidate in candidates
+            if isinstance(candidate.get("chunk_id"), UUID)
+        }
+        if not by_chunk:
+            return []
+        distance = KnowledgeEmbedding.embedding.cosine_distance(query_embedding)
+        rows = self.db.execute(
+            select(
+                KnowledgeEmbedding.chunk_id,
+                distance.label("distance"),
+            )
+            .where(
+                KnowledgeEmbedding.organization_id == self.ctx.organization_id,
+                KnowledgeEmbedding.chunk_id.in_(list(by_chunk)),
+                KnowledgeEmbedding.embedding.is_not(None),
+            )
+            .order_by(distance)
+            .limit(max(limit * 3, limit))
+        ).all()
+        ranked: list[dict[str, Any]] = []
+        for chunk_id, raw_distance in rows:
+            candidate = by_chunk.get(chunk_id)
+            if candidate is None:
+                continue
+            ranked.append(
+                {
+                    **candidate,
+                    "score": round(max(0.0, 1.0 - float(raw_distance)), 4),
+                }
+            )
+        return ranked
+
+    def search(self, data: SearchRequest) -> list[dict[str, Any]]:
         now = datetime.now(UTC)
         items = list(
             self.db.scalars(
@@ -424,7 +481,7 @@ class KnowledgeService:
 
         # AC-002: when project_id set, prefer project-scoped items over generic org ones
         # for the same code by ranking project hits first (score boost).
-        candidates: list[dict] = []
+        candidates: list[dict[str, Any]] = []
         for item in items:
             if data.project_id is not None and item.project_id not in (None, data.project_id):
                 continue
@@ -454,15 +511,26 @@ class KnowledgeService:
                     }
                 )
 
-        ranked = self.retrieval.rank(query=data.query, candidates=candidates, limit=data.limit)
-        # Apply project boost after stub rank
+        if self.live_search_enabled:
+            ranked = self._rank_with_pgvector(
+                query=data.query,
+                candidates=candidates,
+                limit=data.limit,
+            )
+        else:
+            ranked = self.retrieval.rank(
+                query=data.query,
+                candidates=candidates,
+                limit=data.limit,
+            )
+        # Apply project boost after semantic or fallback rank.
         for hit in ranked:
             hit["score"] = round(float(hit["score"]) + float(hit.get("scope_boost") or 0), 4)
         ranked.sort(key=lambda r: (-float(r["score"]), str(r["chunk_id"])))
         ranked = ranked[: data.limit]
 
         # Record usage + build citations (AC-001)
-        results: list[dict] = []
+        results: list[dict[str, Any]] = []
         for hit in ranked:
             citation = (
                 f"{hit['item_code']}@v{hit['version_number']}#chunk-{hit['chunk_index']}"

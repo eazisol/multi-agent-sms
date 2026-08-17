@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID, uuid4
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     Boolean,
     DateTime,
@@ -119,6 +120,7 @@ class KnowledgeEmbedding(Base):
     dims: Mapped[int] = mapped_column(Integer, nullable=False, default=8)
     # Stub vector stored as JSON list[float]; live pgvector deferred.
     vector_stub: Mapped[list[Any]] = mapped_column(JSON, nullable=False, default=list)
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(1536), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

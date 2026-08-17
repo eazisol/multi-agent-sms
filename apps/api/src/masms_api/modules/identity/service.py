@@ -98,6 +98,12 @@ class IdentityService:
 
     def create_human_user(self, data: HumanUserCreate) -> HumanUser:
         org_id = self.ctx.organization_id
+        if data.idp_subject:
+            linked = self.db.scalar(
+                select(HumanUser).where(HumanUser.idp_subject == data.idp_subject.strip())
+            )
+            if linked is not None:
+                raise ConflictError("Auth0 subject is already linked to a MASMS user")
         actor = Actor(
             id=uuid4(),
             organization_id=org_id,
@@ -115,6 +121,7 @@ class IdentityService:
             actor_id=actor.id,
             email=data.email.lower(),
             full_name=data.full_name,
+            idp_subject=data.idp_subject.strip() if data.idp_subject else None,
             status="active",
             primary_role_code=data.primary_role_code,
             version=1,
@@ -358,7 +365,9 @@ class IdentityService:
         )
         return list(rows), build_page_meta(limit=limit, offset=offset, total=int(total))
 
-    def list_roles(self, *, limit: int = 20, offset: int = 0) -> tuple[list[RoleDefinition], PageMeta]:
+    def list_roles(
+        self, *, limit: int = 20, offset: int = 0
+    ) -> tuple[list[RoleDefinition], PageMeta]:
         limit, offset = normalize_paging(limit, offset)
         filters = [
             RoleDefinition.organization_id == self.ctx.organization_id,

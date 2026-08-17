@@ -45,8 +45,22 @@ def auth_provider_info() -> dict[str, object]:
         "provider": settings.auth_provider,
         "auth0_domain_configured": bool(settings.auth0_domain),
         "auth0_audience_configured": bool(settings.auth0_audience),
-        "jwks_enabled": False,
-        "note": "Auth0 JWKS validation remains fail-closed until tenant config is approved",
+        "jwks_enabled": True,
+        "header_identity_enabled": settings.header_identity_enabled,
+        "note": "Auth0 mode validates JWTs and requires a pre-linked MASMS human user",
+    }
+
+
+@router.get("/me")
+def current_identity(
+    ctx: RequestContext = Depends(get_request_context),
+) -> dict[str, object]:
+    return {
+        "organization_id": ctx.organization_id,
+        "actor_id": ctx.actor_id,
+        "actor_kind": ctx.actor_kind.value,
+        "display_name": ctx.display_name,
+        "assurance_level": ctx.assurance_level,
     }
 
 

@@ -26,6 +26,8 @@ import { cn } from "@/lib/cn";
 import { findNavLabel, NAV_SECTIONS } from "@/lib/navigation";
 import { VARIANT_OPTIONS } from "@/lib/roles";
 
+const AUTH_MODE = process.env.NEXT_PUBLIC_AUTH_MODE ?? "local";
+
 export function AppShell({
   title,
   breadcrumbs,
@@ -205,27 +207,44 @@ export function AppShell({
             <Button variant="ghost" size="sm" onClick={toggle} aria-label="Toggle theme">
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <label className="hidden items-center gap-2 text-xs text-[var(--muted)] xl:flex">
-              Role
-              <Select
-                className="h-8 w-[140px]"
-                value={session.variant}
-                onChange={(e) => setVariant(e.target.value as typeof session.variant)}
-                aria-label="UI role variant"
-              >
-                {VARIANT_OPTIONS.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </Select>
-            </label>
+            {AUTH_MODE === "local" ? (
+              <label className="hidden items-center gap-2 text-xs text-[var(--muted)] xl:flex">
+                Role
+                <Select
+                  className="h-8 w-[140px]"
+                  value={session.variant}
+                  onChange={(e) => setVariant(e.target.value as typeof session.variant)}
+                  aria-label="UI role variant"
+                >
+                  {VARIANT_OPTIONS.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+            ) : null}
+            {session.displayName ? (
+              <div className="hidden max-w-40 text-right xl:block">
+                <p className="truncate text-xs font-semibold">{session.displayName}</p>
+                {session.email ? (
+                  <p className="truncate text-[10px] text-[var(--muted)]">{session.email}</p>
+                ) : null}
+              </div>
+            ) : null}
             <div
               className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent-soft)] text-xs font-semibold text-[var(--accent)]"
-              title="Signed-in user"
+              title={session.displayName ?? "Signed-in user"}
             >
-              {session.actorKind === "agent" ? "AI" : "You"}
+              {session.actorKind === "agent"
+                ? "AI"
+                : (session.displayName?.trim().charAt(0).toUpperCase() ?? "You")}
             </div>
+            {AUTH_MODE === "auth0" ? (
+              <a className="text-xs text-[var(--muted)] hover:text-[var(--ink)]" href="/auth/logout">
+                Logout
+              </a>
+            ) : null}
             {mobileOpen ? (
               <button type="button" className="lg:hidden" onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
