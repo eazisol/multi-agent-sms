@@ -19,7 +19,7 @@ class CaseCreate(BaseModel):
     preconditions: str | None = None
     expected_result: str | None = None
     owner_actor_id: UUID | None = None
-    steps: list["StepCreate"] = Field(default_factory=list)
+    steps: list[StepCreate] = Field(default_factory=list)
 
 
 class CaseRead(BaseModel):

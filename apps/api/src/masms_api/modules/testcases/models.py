@@ -189,7 +189,9 @@ class TestCoverageLink(Base):
     organization_id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), nullable=False, index=True)
     case_id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), nullable=False)
     requirement_id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), nullable=False)
-    requirement_priority: Mapped[str] = mapped_column(String(32), nullable=False, default="Must-Have")
+    requirement_priority: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="Must-Have"
+    )
     coverage_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_by_actor_id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), nullable=False)
     created_at: Mapped[datetime] = mapped_column(

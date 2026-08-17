@@ -31,19 +31,19 @@ from masms_api.modules.integrations import models as _ig  # noqa: F401
 from masms_api.modules.knowledge import models as _kn  # noqa: F401
 from masms_api.modules.notifications import models as _ntf  # noqa: F401
 from masms_api.modules.orchestrator import models as _orf  # noqa: F401
+from masms_api.modules.pilot import models as _pl  # noqa: F401
 from masms_api.modules.projects import models as _projects  # noqa: F401
 from masms_api.modules.queries import models as _queries  # noqa: F401
 from masms_api.modules.releases import models as _rl  # noqa: F401
+from masms_api.modules.reliability import models as _rlb  # noqa: F401
 from masms_api.modules.requirements import models as _reqs  # noqa: F401
 from masms_api.modules.roadmap import models as _roadmap  # noqa: F401
-from masms_api.modules.reliability import models as _rlb  # noqa: F401
 from masms_api.modules.securityhardening import models as _sh  # noqa: F401
 from masms_api.modules.statusengine import models as _wfe  # noqa: F401
-from masms_api.modules.uateval import models as _ua  # noqa: F401
-from masms_api.modules.pilot import models as _pl  # noqa: F401
 from masms_api.modules.testcases import models as _tc  # noqa: F401
 from masms_api.modules.tickets import models as _tickets  # noqa: F401
 from masms_api.modules.traceability import models as _tr  # noqa: F401
+from masms_api.modules.uateval import models as _ua  # noqa: F401
 from masms_api.observability import models as _ops  # noqa: F401
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -82,7 +82,9 @@ def _headers(org_suffix: str = "1") -> dict[str, str]:
     }
 
 
-def _create_connection(client: TestClient, headers: dict[str, str], code: str = "gmail-main") -> str:
+def _create_connection(
+    client: TestClient, headers: dict[str, str], code: str = "gmail-main"
+) -> str:
     resp = client.post(
         "/api/v1/gmail/connections",
         headers=headers,

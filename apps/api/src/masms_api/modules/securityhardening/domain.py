@@ -134,7 +134,9 @@ def active_hold_blocks_deletion(
         held_id = getattr(hold, "held_entity_id", None)
         if held_type is None:
             return f"Active legal hold '{getattr(hold, 'code', hold)}' blocks deletion"
-        if held_type == entity_type and (held_id is None or entity_id is None or str(held_id) == str(entity_id)):
+        if held_type == entity_type and (
+            held_id is None or entity_id is None or str(held_id) == str(entity_id)
+        ):
             return f"Active legal hold '{getattr(hold, 'code', hold)}' blocks deletion"
     return None
 

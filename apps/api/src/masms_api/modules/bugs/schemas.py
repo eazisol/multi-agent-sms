@@ -15,7 +15,7 @@ class BugCreate(BaseModel):
     project_id: UUID | None = None
     severity: str = Field(default="medium", max_length=16)
     blocks_release: bool | None = None
-    links: list["LinkCreate"] = Field(default_factory=list)
+    links: list[LinkCreate] = Field(default_factory=list)
 
 
 class BugRead(BaseModel):

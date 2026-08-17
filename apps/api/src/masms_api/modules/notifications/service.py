@@ -193,7 +193,9 @@ class NotificationService:
         )
         return int(current or 0) + 1
 
-    def _move_to_dead_letter(self, row: Notification, *, reason: str, last_error: str | None) -> None:
+    def _move_to_dead_letter(
+        self, row: Notification, *, reason: str, last_error: str | None
+    ) -> None:
         domain.assert_notification_transition(
             from_status=row.status, to_status="dead_lettered"
         )

@@ -14,7 +14,7 @@ class ReleaseCreate(BaseModel):
     description: str | None = None
     project_id: UUID | None = None
     version_label: str = Field(default="0.1.0", max_length=64)
-    items: list["ReleaseItemCreate"] = Field(default_factory=list)
+    items: list[ReleaseItemCreate] = Field(default_factory=list)
 
 
 class ReleaseRead(BaseModel):

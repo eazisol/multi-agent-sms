@@ -40,7 +40,8 @@ def assert_human_signoff(actor_kind: ActorKind | str) -> None:
     kind = actor_kind.value if isinstance(actor_kind, ActorKind) else str(actor_kind)
     if kind != ActorKind.HUMAN.value:
         raise ApprovalRequiredError(
-            "Agents cannot sign production readiness or record production deployment; a human actor is required"
+            "Agents cannot sign production readiness or record production "
+            "deployment; a human actor is required"
         )
 
 
@@ -134,5 +135,6 @@ def assert_production_may_record(*, gates_ok: bool, evidence: str | None) -> Non
     text = (evidence or "").strip()
     if not gates_ok or not text:
         raise ApprovalRequiredError(
-            "Production deployment records require all three gates passed and non-empty human_approval_evidence"
+            "Production deployment records require all three gates passed "
+            "and non-empty human_approval_evidence"
         )

@@ -26,6 +26,7 @@ from masms_api.modules.bugs.models import (
 )
 from masms_api.modules.bugs.schemas import (
     AssignmentCreate,
+    AssignmentRead,
     BugCreate,
     BugHistory,
     BugRead,
@@ -33,17 +34,16 @@ from masms_api.modules.bugs.schemas import (
     BugReopen,
     BugTransition,
     FixCreate,
+    FixRead,
     KnownIssueCreate,
     KnownIssueDecide,
+    KnownIssueRead,
     LinkCreate,
     LinkRead,
     ReleaseGateResult,
     RetestCreate,
-    SeveritySlaUpsert,
-    AssignmentRead,
-    FixRead,
-    KnownIssueRead,
     RetestRead,
+    SeveritySlaUpsert,
 )
 from masms_api.observability.writer import ObservabilityWriter
 
