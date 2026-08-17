@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TypeVar
 from uuid import UUID, uuid4
 
 from sqlalchemy import func, select
@@ -34,6 +34,8 @@ from masms_api.modules.uateval.schemas import (
     SeedScriptCreate,
 )
 from masms_api.observability.writer import ObservabilityWriter
+
+TModel = TypeVar("TModel")
 
 
 class UatEvalService:
@@ -87,11 +89,11 @@ class UatEvalService:
         )
         return items, build_page_meta(total=total, limit=limit, offset=offset)
 
-    def _org_by_code(self, model: type[Any], code: str) -> Any | None:
+    def _org_by_code(self, model: type[TModel], code: str) -> TModel | None:
         return self.db.scalar(
             select(model).where(
-                model.organization_id == self.ctx.organization_id,
-                model.code == code,
+                model.organization_id == self.ctx.organization_id,  # type: ignore[attr-defined]
+                model.code == code,  # type: ignore[attr-defined]
             )
         )
 

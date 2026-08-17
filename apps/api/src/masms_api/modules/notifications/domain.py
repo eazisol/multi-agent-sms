@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Protocol
 
 from masms_api.errors import ConflictError, InvalidTransitionError, ValidationAppError
@@ -104,7 +105,7 @@ def assert_preference_allows_mute(
 
 
 def is_delivery_suppressed(
-    prefs: list[PreferenceLike],
+    prefs: Sequence[PreferenceLike],
     notification: NotificationLike,
 ) -> bool:
     """Critical and system_alert always deliver; other prefs may mute type/channel."""

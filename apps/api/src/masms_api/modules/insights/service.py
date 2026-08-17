@@ -51,10 +51,10 @@ class InsightsService:
     def _count_model(self, model: type[Any], *, open_statuses: frozenset[str] | None = None) -> int:
         try:
             stmt = select(func.count()).select_from(model).where(
-                model.organization_id == self.ctx.organization_id  # type: ignore[attr-defined]
+                model.organization_id == self.ctx.organization_id
             )
             if open_statuses is not None and hasattr(model, "status"):
-                stmt = stmt.where(model.status.in_(open_statuses))  # type: ignore[attr-defined]
+                stmt = stmt.where(model.status.in_(open_statuses))
             return int(self.db.scalar(stmt) or 0)
         except Exception:
             return 0
