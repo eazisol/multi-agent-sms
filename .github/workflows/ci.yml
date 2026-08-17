@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
+      - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
       - uses: actions/setup-python@v5
@@ -87,9 +87,12 @@ jobs:
       NEXT_PUBLIC_DEFAULT_ACTOR_ID: 00000000-0000-4000-8000-000000000101
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
+      # Background `uv run uvicorn` holds the uv cache lock; pruning in post-cleanup
+      # then fails with exit code 2 (astral-sh/setup-uv#588). Disable prune here.
+      - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
+          prune-cache: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -110,7 +113,9 @@ jobs:
       - name: Start application
         run: |
           uv run uvicorn masms_api.main:app --app-dir apps/api/src --host 127.0.0.1 --port 8000 > api.log 2>&1 &
+          echo $! > api.pid
           npm --prefix apps/web run start > web.log 2>&1 &
+          echo $! > web.pid
           for i in {1..30}; do
             if curl --fail --silent http://127.0.0.1:8000/health >/dev/null &&
                curl --fail --silent http://127.0.0.1:3000 >/dev/null; then
@@ -121,6 +126,14 @@ jobs:
           exit 1
       - name: Playwright smoke
         run: npm --prefix apps/web run e2e:smoke
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -f api.pid ]; then kill "$(cat api.pid)" 2>/dev/null || true; fi
+          if [ -f web.pid ]; then kill "$(cat web.pid)" 2>/dev/null || true; fi
+          pkill -f "uvicorn masms_api.main:app" 2>/dev/null || true
+          pkill -f "next-server" 2>/dev/null || true
+          sleep 1
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
