@@ -10,6 +10,7 @@ EXCLUDED_FROM_RETRIEVAL = frozenset({"draft", "retired", "rejected", "superseded
 RETRIEVABLE_STATUSES = frozenset({"active"})
 
 PERMISSION_EFFECTS = frozenset({"allow", "deny"})
+PERMISSION_PRINCIPAL_TYPES = frozenset({"organization", "actor"})
 CONFLICT_STATUSES = frozenset({"open", "resolved", "dismissed"})
 
 VERSION_TRANSITIONS: dict[str, frozenset[str]] = {
@@ -37,6 +38,15 @@ def assert_version_transition(*, from_status: str, to_status: str) -> None:
 def assert_permission_effect(effect: str) -> None:
     if effect not in PERMISSION_EFFECTS:
         raise ValidationAppError(f"Invalid permission effect '{effect}'")
+
+
+def assert_permission_principal(*, principal_type: str, principal_id: object | None) -> None:
+    if principal_type not in PERMISSION_PRINCIPAL_TYPES:
+        raise ValidationAppError(f"Invalid knowledge permission principal '{principal_type}'")
+    if principal_type == "organization" and principal_id is not None:
+        raise ValidationAppError("Organization knowledge permissions must not include principal_id")
+    if principal_type == "actor" and principal_id is None:
+        raise ValidationAppError("Actor knowledge permissions require principal_id")
 
 
 def assert_conflict_status(status: str) -> None:

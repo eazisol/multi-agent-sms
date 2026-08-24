@@ -15,6 +15,7 @@ from masms_api.kernel.outbox import enqueue_outbox
 from masms_api.kernel.pagination import PageMeta, build_page_meta, normalize_paging
 from masms_api.kernel.rls import apply_tenant_rls
 from masms_api.kernel.uow import SqlAlchemyUnitOfWork
+from masms_api.modules.access.models import ProjectMember
 from masms_api.modules.knowledge import domain
 from masms_api.modules.knowledge.models import (
     KnowledgeChunk,
@@ -325,6 +326,10 @@ class KnowledgeService:
     def add_permission(self, item_id: UUID, data: PermissionCreate) -> KnowledgePermission:
         self.get_item(item_id)
         domain.assert_permission_effect(data.effect)
+        domain.assert_permission_principal(
+            principal_type=data.principal_type,
+            principal_id=data.principal_id,
+        )
         row = KnowledgePermission(
             id=uuid4(),
             organization_id=self.ctx.organization_id,
@@ -366,20 +371,45 @@ class KnowledgeService:
         project_id: UUID | None,
         permissions: list[KnowledgePermission],
     ) -> bool:
-        """Deny overrides allow; default deny if no matching allow."""
+        """Apply matching principal permissions with deny-overrides-allow semantics."""
         relevant = [
             p
             for p in permissions
             if p.item_id == item.id
-            and (p.project_id is None or p.project_id == project_id or project_id is None)
+            and (p.project_id is None or p.project_id == project_id)
+            and self._permission_matches_requester(p)
         ]
         if any(p.effect == "deny" and p.can_retrieve for p in relevant):
-            # explicit deny on retrieve
-            deny_hits = [p for p in relevant if p.effect == "deny"]
-            if deny_hits:
-                return False
+            return False
         allows = [p for p in relevant if p.effect == "allow" and p.can_retrieve]
         return bool(allows)
+
+    def _permission_matches_requester(self, permission: KnowledgePermission) -> bool:
+        if permission.principal_type == "organization":
+            return permission.principal_id is None
+        if permission.principal_type == "actor":
+            return permission.principal_id == self.ctx.actor_id
+        return False
+
+    def _has_active_project_membership(self, *, project_id: UUID, now: datetime) -> bool:
+        membership = self.db.scalar(
+            select(ProjectMember).where(
+                ProjectMember.organization_id == self.ctx.organization_id,
+                ProjectMember.project_id == project_id,
+                ProjectMember.actor_id == self.ctx.actor_id,
+                ProjectMember.status == "active",
+            )
+        )
+        if membership is None:
+            return False
+
+        effective_from = membership.effective_from
+        if effective_from.tzinfo is None:
+            effective_from = effective_from.replace(tzinfo=UTC)
+        effective_to = membership.effective_to
+        if effective_to is not None and effective_to.tzinfo is None:
+            effective_to = effective_to.replace(tzinfo=UTC)
+        return effective_from <= now and (effective_to is None or effective_to >= now)
 
     def _effective_ok(self, version: KnowledgeVersion, *, now: datetime) -> bool:
         def _aware(value: datetime | None) -> datetime | None:
@@ -484,6 +514,11 @@ class KnowledgeService:
         candidates: list[dict[str, Any]] = []
         for item in items:
             if data.project_id is not None and item.project_id not in (None, data.project_id):
+                continue
+            if item.project_id is not None and not self._has_active_project_membership(
+                project_id=item.project_id,
+                now=now,
+            ):
                 continue
             if not self._is_allowed(item=item, project_id=data.project_id, permissions=permissions):
                 continue

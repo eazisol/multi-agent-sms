@@ -60,3 +60,19 @@ def test_live_adapter_starts_workflow(monkeypatch: pytest.MonkeyPatch) -> None:
 
     assert run_id == "run-123"
     client.start_workflow.assert_awaited_once()
+
+
+def test_live_adapter_reads_completed_workflow_result(monkeypatch: pytest.MonkeyPatch) -> None:
+    handle = SimpleNamespace(result=AsyncMock(return_value={"status": "completed"}))
+    client = Mock()
+    client.get_workflow_handle.return_value = handle
+    adapter = LiveTemporalAdapter(
+        address="localhost:7233",
+        namespace="default",
+        task_queue="masms-local",
+    )
+    monkeypatch.setattr(adapter, "_client", AsyncMock(return_value=client))
+
+    assert adapter.wait_for_workflow_result(workflow_id="query_intake:test") == {
+        "status": "completed"
+    }

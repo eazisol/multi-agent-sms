@@ -23,6 +23,7 @@ from masms_api.modules.followups import models as _flu  # noqa: F401
 from masms_api.modules.governance import models as _gov  # noqa: F401
 from masms_api.modules.identity import models as _identity  # noqa: F401
 from masms_api.modules.orchestrator import models as _orf  # noqa: F401
+from masms_api.modules.orchestrator.temporal_adapter import TemporalAdapter
 from masms_api.modules.projects import models as _projects  # noqa: F401
 from masms_api.modules.queries import models as _queries  # noqa: F401
 from masms_api.modules.requirements import models as _reqs  # noqa: F401
@@ -65,6 +66,36 @@ def _headers() -> dict[str, str]:
         "X-Actor-Kind": "human",
         "X-Correlation-Id": str(uuid4()),
     }
+
+
+class CompletingTemporalAdapter(TemporalAdapter):
+    def wait_for_workflow_result(
+        self,
+        *,
+        workflow_id: str,
+        run_id: str | None = None,
+        timeout_seconds: float = 5.0,
+    ) -> dict[str, object]:
+        _ = workflow_id, run_id, timeout_seconds
+        return {"status": "completed"}
+
+
+class EventuallyCompletingTemporalAdapter(TemporalAdapter):
+    def __init__(self) -> None:
+        self.result_checks = 0
+
+    def wait_for_workflow_result(
+        self,
+        *,
+        workflow_id: str,
+        run_id: str | None = None,
+        timeout_seconds: float = 5.0,
+    ) -> dict[str, object] | None:
+        _ = workflow_id, run_id, timeout_seconds
+        self.result_checks += 1
+        if self.result_checks == 1:
+            return None
+        return {"status": "completed"}
 
 
 def test_orchestrator_happy_path_and_unknown_code(client: TestClient) -> None:
@@ -228,3 +259,98 @@ def test_orchestrator_happy_path_and_unknown_code(client: TestClient) -> None:
         headers=headers,
     )
     assert len(interventions.json()) == 1
+
+
+def test_terminal_signal_reconciles_confirmed_temporal_completion(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        "masms_api.modules.orchestrator.service.get_temporal_adapter",
+        CompletingTemporalAdapter,
+    )
+    headers = _headers()
+    version = client.post(
+        "/api/v1/orchestrator/definitions/query_intake/versions",
+        headers=headers,
+        json={"temporal_workflow_type": "masms.query_intake"},
+    )
+    assert version.status_code == 201, version.text
+    activated = client.post(
+        f"/api/v1/orchestrator/versions/{version.json()['id']}/activate",
+        headers=headers,
+    )
+    assert activated.status_code == 200, activated.text
+    started = client.post(
+        "/api/v1/orchestrator/instances",
+        headers=headers,
+        json={
+            "workflow_code": "query_intake",
+            "related_entity_type": "crm_query",
+            "related_entity_id": str(uuid4()),
+        },
+    )
+    assert started.status_code == 201, started.text
+
+    signal = client.post(
+        f"/api/v1/orchestrator/instances/{started.json()['id']}/signals",
+        headers=headers,
+        json={
+            "signal_name": "approved",
+            "idempotency_key": "terminal-signal-1",
+        },
+    )
+    assert signal.status_code == 201, signal.text
+
+    completed = client.get(
+        f"/api/v1/orchestrator/instances/{started.json()['id']}",
+        headers=headers,
+    )
+    assert completed.status_code == 200, completed.text
+    assert completed.json()["status"] == "completed"
+    assert completed.json()["closed_at"] is not None
+
+
+def test_duplicate_terminal_signal_reconciles_a_later_completion(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    temporal = EventuallyCompletingTemporalAdapter()
+    monkeypatch.setattr(
+        "masms_api.modules.orchestrator.service.get_temporal_adapter",
+        lambda: temporal,
+    )
+    headers = _headers()
+    version = client.post(
+        "/api/v1/orchestrator/definitions/query_intake/versions",
+        headers=headers,
+        json={"temporal_workflow_type": "masms.query_intake"},
+    )
+    assert version.status_code == 201, version.text
+    assert (
+        client.post(
+            f"/api/v1/orchestrator/versions/{version.json()['id']}/activate",
+            headers=headers,
+        ).status_code
+        == 200
+    )
+    started = client.post(
+        "/api/v1/orchestrator/instances",
+        headers=headers,
+        json={
+            "workflow_code": "query_intake",
+            "related_entity_type": "crm_query",
+            "related_entity_id": str(uuid4()),
+        },
+    )
+    assert started.status_code == 201, started.text
+    signal_url = f"/api/v1/orchestrator/instances/{started.json()['id']}/signals"
+    payload = {"signal_name": "approved", "idempotency_key": "terminal-retry-1"}
+    assert client.post(signal_url, headers=headers, json=payload).status_code == 201
+
+    duplicate = client.post(signal_url, headers=headers, json=payload)
+    assert duplicate.status_code == 201, duplicate.text
+    assert duplicate.json()["status"] == "duplicate"
+    completed = client.get(
+        f"/api/v1/orchestrator/instances/{started.json()['id']}", headers=headers
+    )
+    assert completed.status_code == 200, completed.text
+    assert completed.json()["status"] == "completed"

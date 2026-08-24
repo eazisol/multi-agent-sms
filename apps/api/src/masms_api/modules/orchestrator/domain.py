@@ -49,6 +49,9 @@ INSTANCE_TRANSITIONS: dict[str, frozenset[str]] = {
 
 TERMINAL_INSTANCE_STATUSES = frozenset({"completed", "cancelled"})
 OPEN_INSTANCE_STATUSES = frozenset({"pending", "running", "waiting", "failed"})
+TERMINAL_SIGNALS_BY_WORKFLOW: dict[str, frozenset[str]] = {
+    "query_intake": frozenset({"complete", "resolved", "approved"}),
+}
 
 VERSION_STATUSES = frozenset({"draft", "active", "retired"})
 SIGNAL_STATUSES = frozenset({"accepted", "applied", "rejected", "duplicate"})
@@ -76,6 +79,10 @@ def assert_instance_open(status: str) -> None:
         raise ConflictError(f"Workflow instance is closed (status={status})")
     if status not in OPEN_INSTANCE_STATUSES:
         raise ConflictError(f"Workflow instance is not open (status={status})")
+
+
+def is_terminal_signal(*, workflow_code: str, signal_name: str) -> bool:
+    return signal_name in TERMINAL_SIGNALS_BY_WORKFLOW.get(workflow_code, frozenset())
 
 
 def assert_intervention_action(action_code: str) -> None:

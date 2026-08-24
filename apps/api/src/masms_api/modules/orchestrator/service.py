@@ -303,6 +303,26 @@ class OrchestratorService:
             )
         )
         if existing is not None:
+            if existing.status == "accepted":
+                completed = self._reconcile_terminal_completion(
+                    instance,
+                    data.signal_name,
+                    timeout_seconds=0.1,
+                )
+                if not completed:
+                    self.temporal.signal_workflow(
+                        workflow_id=instance.temporal_workflow_id or str(instance.id),
+                        signal_name=data.signal_name,
+                        payload=data.payload_json or {},
+                        run_id=instance.temporal_run_id,
+                    )
+                    existing.status = "applied"
+                    self._reconcile_terminal_completion(instance, data.signal_name)
+                self.uow.commit()
+                self.uow.refresh(existing)
+            elif self._reconcile_terminal_completion(instance, data.signal_name):
+                self.uow.commit()
+                self.uow.refresh(existing)
             return existing, True
 
         domain.assert_instance_open(instance.status)
@@ -318,6 +338,17 @@ class OrchestratorService:
             actor_id=self.ctx.actor_id,
         )
         self.uow.add(row)
+        self.obs.write_audit(
+            action="orf_signal_accepted",
+            entity_type="orf_workflow_instance",
+            entity_id=instance_id,
+            payload={
+                "signal_name": data.signal_name,
+                "idempotency_key": data.idempotency_key,
+                "signal_id": str(row.id),
+            },
+        )
+        self.uow.commit()
         self.temporal.signal_workflow(
             workflow_id=instance.temporal_workflow_id or str(instance.id),
             signal_name=data.signal_name,
@@ -325,6 +356,7 @@ class OrchestratorService:
             run_id=instance.temporal_run_id,
         )
         row.status = "applied"
+        self._reconcile_terminal_completion(instance, data.signal_name)
         if instance.status == "waiting":
             domain.assert_instance_transition(from_status="waiting", to_status="running")
             instance.status = "running"
@@ -354,6 +386,53 @@ class OrchestratorService:
         self.uow.commit()
         self.uow.refresh(row)
         return row, False
+
+    def _reconcile_terminal_completion(
+        self,
+        instance: WorkflowInstance,
+        signal_name: str,
+        *,
+        timeout_seconds: float = 5.0,
+    ) -> bool:
+        if not domain.is_terminal_signal(
+            workflow_code=instance.workflow_code,
+            signal_name=signal_name,
+        ):
+            return False
+        result = self.temporal.wait_for_workflow_result(
+            workflow_id=instance.temporal_workflow_id or str(instance.id),
+            run_id=instance.temporal_run_id,
+            timeout_seconds=timeout_seconds,
+        )
+        if result is None or result.get("status") != "completed":
+            return False
+        if instance.status == "completed":
+            return True
+
+        domain.assert_instance_transition(from_status=instance.status, to_status="completed")
+        now = datetime.now(UTC)
+        instance.status = "completed"
+        instance.closed_at = now
+        instance.updated_at = now
+        instance.updated_by_actor_id = self.ctx.actor_id
+        instance.version += 1
+        self.obs.write_audit(
+            action="orf_instance_completed",
+            entity_type="orf_workflow_instance",
+            entity_id=instance.id,
+            payload={"temporal_status": "completed", "signal_name": signal_name},
+        )
+        enqueue_outbox(
+            self.db,
+            organization_id=self.ctx.organization_id,
+            aggregate_type="orf_workflow_instance",
+            aggregate_id=instance.id,
+            event_type="orchestrator.workflow.completed",
+            payload={"workflow_code": instance.workflow_code, "status": "completed"},
+            correlation_id=instance.correlation_id,
+            project_id=instance.project_id,
+        )
+        return True
 
     def list_signals(self, instance_id: UUID) -> list[WorkflowSignal]:
         self._get_instance(instance_id)

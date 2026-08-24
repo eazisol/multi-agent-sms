@@ -13,6 +13,7 @@ from masms_api.main import create_app
 from masms_api.modules.access import models as _access  # noqa: F401
 from masms_api.modules.agents import models as _agr  # noqa: F401
 from masms_api.modules.agents.domain import AGENT_DEPARTMENTS, AGENT_TITLES, ALLOWED_CODES
+from masms_api.modules.agents.langgraph_adapter import LangGraphAdapter
 from masms_api.modules.approvalgates import models as _apr  # noqa: F401
 from masms_api.modules.assignments import models as _asg  # noqa: F401
 from masms_api.modules.auth import models as _auth  # noqa: F401
@@ -24,6 +25,8 @@ from masms_api.modules.documents import models as _docs  # noqa: F401
 from masms_api.modules.followups import models as _flu  # noqa: F401
 from masms_api.modules.governance import models as _gov  # noqa: F401
 from masms_api.modules.identity import models as _identity  # noqa: F401
+from masms_api.modules.knowledge import models as _kn  # noqa: F401
+from masms_api.modules.knowledge.retrieval_adapter import KnowledgeRetrievalAdapter
 from masms_api.modules.orchestrator import models as _orf  # noqa: F401
 from masms_api.modules.projects import models as _projects  # noqa: F401
 from masms_api.modules.queries import models as _queries  # noqa: F401
@@ -38,7 +41,7 @@ from sqlalchemy.pool import StaticPool
 
 
 @pytest.fixture()
-def client() -> Generator[TestClient, None, None]:
+def client(monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient, None, None]:
     engine = create_engine(
         "sqlite+pysqlite:///:memory:",
         connect_args={"check_same_thread": False},
@@ -54,6 +57,13 @@ def client() -> Generator[TestClient, None, None]:
         finally:
             db.close()
 
+    monkeypatch.setattr(
+        "masms_api.modules.agents.service.get_langgraph_adapter", LangGraphAdapter
+    )
+    monkeypatch.setattr(
+        "masms_api.modules.knowledge.service.get_retrieval_adapter",
+        KnowledgeRetrievalAdapter,
+    )
     app = create_app()
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
@@ -67,6 +77,11 @@ def _headers() -> dict[str, str]:
         "X-Actor-Kind": "human",
         "X-Correlation-Id": str(uuid4()),
     }
+
+
+class FailingLangGraphAdapter(LangGraphAdapter):
+    def invoke(self, **kwargs: object) -> dict[str, object]:
+        raise RuntimeError("sensitive provider failure")
 
 
 AGENT_ENTITY_TYPES: dict[str, str] = {
@@ -164,6 +179,80 @@ def test_agent_runtime_happy_path_review_and_unknown_code(client: TestClient) ->
         },
     )
     assert bad.status_code == 422, bad.text
+
+
+def test_provider_failure_is_persisted_without_provider_details(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        "masms_api.modules.agents.service.get_langgraph_adapter", FailingLangGraphAdapter
+    )
+
+    response = client.post(
+        "/api/v1/agent-runtime/runs",
+        headers=_headers(),
+        json={
+            "agent_code": "query_intake_agent",
+            "related_entity_type": "crm_query",
+            "related_entity_id": str(uuid4()),
+            "input_json": {"note": "safe failure handling check"},
+        },
+    )
+
+    assert response.status_code == 201, response.text
+    body = response.json()
+    assert body["status"] == "failed"
+    assert body["output_json"] == {
+        "failure": {
+            "code": "provider_unavailable",
+            "message": "The agent provider could not complete this recommendation.",
+        }
+    }
+    assert "sensitive provider failure" not in response.text
+
+
+def test_query_intake_uses_only_permission_filtered_knowledge_sources(
+    client: TestClient,
+) -> None:
+    headers = _headers()
+    item = client.post(
+        "/api/v1/knowledge/items",
+        headers=headers,
+        json={"code": "intake_context", "title": "Approved intake guidance"},
+    )
+    assert item.status_code == 201, item.text
+    version = client.post(
+        f"/api/v1/knowledge/items/{item.json()['id']}/versions",
+        headers=headers,
+        json={"body_text": "Schedule discovery before publishing a delivery estimate."},
+    )
+    assert version.status_code == 201, version.text
+    activated = client.post(
+        f"/api/v1/knowledge/versions/{version.json()['id']}/activate",
+        headers=headers,
+        json={},
+    )
+    assert activated.status_code == 200, activated.text
+
+    run = client.post(
+        "/api/v1/agent-runtime/runs",
+        headers=headers,
+        json={
+            "agent_code": "query_intake_agent",
+            "related_entity_type": "crm_query",
+            "related_entity_id": str(uuid4()),
+            "input_json": {
+                "knowledge_query": "When should discovery happen before an estimate?",
+                "sources": [{"type": "untrusted", "ref": "user-supplied-reference"}],
+            },
+        },
+    )
+    assert run.status_code == 201, run.text
+    body = run.json()
+    assert body["sources_json"] == [
+        {"type": "knowledge", "ref": "intake_context@v1#chunk-0"}
+    ]
+    assert "user-supplied-reference" not in str(body["sources_json"])
 
 
 @pytest.mark.parametrize("agent_code", sorted(ALLOWED_CODES))

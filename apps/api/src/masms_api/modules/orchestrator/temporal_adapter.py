@@ -51,6 +51,16 @@ class TemporalAdapter:
             sorted((payload or {}).keys()),
         )
 
+    def wait_for_workflow_result(
+        self,
+        *,
+        workflow_id: str,
+        run_id: str | None = None,
+        timeout_seconds: float = 5.0,
+    ) -> dict[str, Any] | None:
+        _ = workflow_id, run_id, timeout_seconds
+        return None
+
     def cancel_workflow(
         self,
         *,
@@ -112,6 +122,26 @@ class LiveTemporalAdapter(TemporalAdapter):
             await handle.signal(signal_name, payload or {})
 
         _run(signal())
+
+    def wait_for_workflow_result(
+        self,
+        *,
+        workflow_id: str,
+        run_id: str | None = None,
+        timeout_seconds: float = 5.0,
+    ) -> dict[str, Any] | None:
+        async def wait() -> dict[str, Any] | None:
+            client = await self._client()
+            handle = client.get_workflow_handle(workflow_id, run_id=run_id)
+            try:
+                result = await asyncio.wait_for(handle.result(), timeout=timeout_seconds)
+            except TimeoutError:
+                return None
+            if not isinstance(result, dict):
+                raise RuntimeError("Temporal workflow returned an invalid completion result")
+            return result
+
+        return _run(wait())
 
     def cancel_workflow(
         self,

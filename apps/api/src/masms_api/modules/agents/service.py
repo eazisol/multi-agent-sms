@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import func, or_, select
@@ -34,7 +35,23 @@ from masms_api.modules.agents.schemas import (
     RunCreate,
     ToolPolicyCreate,
 )
+from masms_api.modules.knowledge.schemas import SearchRequest
+from masms_api.modules.knowledge.service import KnowledgeService
 from masms_api.observability.writer import ObservabilityWriter
+
+
+def _provider_failure_code(exc: Exception) -> str:
+    """Map provider failures to a safe, non-secret-bearing category."""
+    name = type(exc).__name__.lower()
+    if "authentication" in name:
+        return "provider_authentication_failed"
+    if "rate" in name and "limit" in name:
+        return "provider_rate_limited"
+    if "timeout" in name:
+        return "provider_timeout"
+    if "apiresponsevalidation" in name or "validation" in name:
+        return "provider_invalid_response"
+    return "provider_unavailable"
 
 
 class AgentRuntimeService:
@@ -43,12 +60,14 @@ class AgentRuntimeService:
         db: Session,
         ctx: RequestContext,
         langgraph: LangGraphAdapter | None = None,
+        knowledge: KnowledgeService | None = None,
     ) -> None:
         self.db = db
         self.ctx = ctx
         self.uow = SqlAlchemyUnitOfWork(db)
         self.obs = ObservabilityWriter(db, ctx)
         self.langgraph = langgraph or get_langgraph_adapter()
+        self.knowledge = knowledge or KnowledgeService(db, ctx)
         apply_tenant_rls(db, ctx.organization_id)
 
     def ensure_definitions(self) -> list[AgentDefinition]:
@@ -334,30 +353,6 @@ class AgentRuntimeService:
                 raise NotFoundError("Context profile not found")
 
         run_id = uuid4()
-        lg_id = self.langgraph.start_run(
-            agent_code=definition.code,
-            run_id=str(run_id),
-            input_payload=data.input_json,
-        )
-        result = self.langgraph.invoke(
-            agent_code=definition.code,
-            prompt_version=prompt.version_number,
-            model_name=prompt.model_name,
-            input_payload=data.input_json,
-            allowed_tools=list(tool_policy.allowed_tools) if tool_policy else [],
-            max_output_tokens=context_profile.max_tokens if context_profile else 1200,
-        )
-        confidence = float(result.get("confidence", 0.0))
-        review_flag = bool(data.input_json.get("force_review")) or (
-            confidence < domain.LOW_CONFIDENCE_THRESHOLD
-        )
-        final_status = domain.resolve_run_status_after_stub(
-            confidence=confidence, review_required_flag=review_flag
-        )
-        domain.assert_run_transition(from_status="pending", to_status="running")
-        domain.assert_run_transition(from_status="running", to_status=final_status)
-
-        now = datetime.now(UTC)
         row = AgentRun(
             id=run_id,
             organization_id=self.ctx.organization_id,
@@ -369,40 +364,27 @@ class AgentRuntimeService:
             context_profile_id=context_profile.id if context_profile else None,
             related_entity_type=data.related_entity_type,
             related_entity_id=data.related_entity_id,
-            status=final_status,
-            langgraph_run_id=lg_id,
-            model_name=str(result.get("model_name") or prompt.model_name),
+            status="running",
+            model_name=prompt.model_name,
             prompt_version_number=prompt.version_number,
             input_json=dict(data.input_json),
-            output_json={
-                "summary": result.get("summary"),
-                "stub": bool(result.get("stub", True)),
-                "raw": {k: v for k, v in result.items() if k != "summary"},
-            },
-            sources_json=list(result.get("sources") or []),
-            tools_used_json=list(result.get("tools_used") or []),
-            confidence=confidence,
-            cost_units=float(result.get("cost_units") or 0.0),
-            review_required=final_status == "review_required",
+            output_json={},
+            sources_json=[],
+            tools_used_json=[],
+            review_required=False,
             owner_actor_id=data.owner_actor_id or self.ctx.actor_id,
             correlation_id=self.ctx.correlation_id,
             idempotency_key=data.idempotency_key,
             version=1,
             created_by_actor_id=self.ctx.actor_id,
             updated_by_actor_id=self.ctx.actor_id,
-            closed_at=now if final_status == "completed" else None,
         )
         self.uow.add(row)
         self.obs.write_audit(
             action="agr_run_start",
             entity_type="agr_agent_run",
             entity_id=row.id,
-            payload={
-                "agent_code": definition.code,
-                "status": final_status,
-                "confidence": confidence,
-                "langgraph_run_id": lg_id,
-            },
+            payload={"agent_code": definition.code, "status": "running"},
         )
         enqueue_outbox(
             self.db,
@@ -412,6 +394,98 @@ class AgentRuntimeService:
             event_type="agent_runtime.run.started",
             payload={"run_id": str(row.id), "agent_code": definition.code},
             correlation_id=row.correlation_id,
+        )
+        self.uow.commit()
+
+        try:
+            model_input = self._build_model_input(
+                agent_code=definition.code,
+                input_json=data.input_json,
+                project_id=data.project_id,
+                max_sources=context_profile.min_sources if context_profile else 5,
+            )
+            lg_id = self.langgraph.start_run(
+                agent_code=definition.code,
+                run_id=str(run_id),
+                input_payload=model_input,
+            )
+            result = self.langgraph.invoke(
+                agent_code=definition.code,
+                prompt_version=prompt.version_number,
+                model_name=prompt.model_name,
+                input_payload=model_input,
+                allowed_tools=list(tool_policy.allowed_tools) if tool_policy else [],
+                max_output_tokens=context_profile.max_tokens if context_profile else 1200,
+            )
+        except Exception as exc:
+            row.status = "failed"
+            row.version += 1
+            row.updated_by_actor_id = self.ctx.actor_id
+            row.updated_at = datetime.now(UTC)
+            row.output_json = {
+                "failure": {
+                    "code": _provider_failure_code(exc),
+                    "message": "The agent provider could not complete this recommendation.",
+                }
+            }
+            self.obs.write_audit(
+                action="agr_run_provider_failed",
+                entity_type="agr_agent_run",
+                entity_id=row.id,
+                payload={
+                    "agent_code": definition.code,
+                    "failure_code": _provider_failure_code(exc),
+                },
+            )
+            enqueue_outbox(
+                self.db,
+                organization_id=self.ctx.organization_id,
+                aggregate_type="agr_agent_run",
+                aggregate_id=row.id,
+                event_type="agent_runtime.run.failed",
+                payload={"run_id": str(row.id), "failure_code": _provider_failure_code(exc)},
+                correlation_id=row.correlation_id,
+            )
+            self.uow.commit()
+            self.db.refresh(row)
+            return row
+
+        confidence = float(result.get("confidence", 0.0))
+        review_flag = bool(data.input_json.get("force_review")) or (
+            confidence < domain.LOW_CONFIDENCE_THRESHOLD
+        )
+        final_status = domain.resolve_run_status_after_stub(
+            confidence=confidence, review_required_flag=review_flag
+        )
+        domain.assert_run_transition(from_status="pending", to_status="running")
+        domain.assert_run_transition(from_status="running", to_status=final_status)
+
+        now = datetime.now(UTC)
+        row.status = final_status
+        row.langgraph_run_id = lg_id
+        row.model_name = str(result.get("model_name") or prompt.model_name)
+        row.output_json = {
+            "summary": result.get("summary"),
+            "stub": bool(result.get("stub", True)),
+            "raw": {k: v for k, v in result.items() if k != "summary"},
+        }
+        row.sources_json = list(result.get("sources") or [])
+        row.tools_used_json = list(result.get("tools_used") or [])
+        row.confidence = confidence
+        row.cost_units = float(result.get("cost_units") or 0.0)
+        row.review_required = final_status == "review_required"
+        row.updated_at = now
+        row.closed_at = now if final_status == "completed" else None
+        self.obs.write_audit(
+            action="agr_run_completed",
+            entity_type="agr_agent_run",
+            entity_id=row.id,
+            payload={
+                "agent_code": definition.code,
+                "status": final_status,
+                "confidence": confidence,
+                "langgraph_run_id": lg_id,
+            },
         )
         event_done = (
             "agent_runtime.run.review_required"
@@ -431,6 +505,46 @@ class AgentRuntimeService:
         self.db.refresh(row)
         return row
 
+    def _build_model_input(
+        self,
+        *,
+        agent_code: str,
+        input_json: dict[str, Any],
+        project_id: UUID | None,
+        max_sources: int,
+    ) -> dict[str, Any]:
+        payload = dict(input_json)
+        if agent_code != "query_intake_agent":
+            return payload
+
+        payload["sources"] = []
+        query = self._knowledge_query(input_json)
+        if query is None:
+            return payload
+        limit = max(1, min(max_sources or 5, 10))
+        hits = self.knowledge.search(
+            SearchRequest(query=query, project_id=project_id, limit=limit)
+        )
+        payload["sources"] = [
+            {"type": "knowledge", "ref": str(hit["source_citation"])} for hit in hits
+        ]
+        payload["retrieved_knowledge"] = [
+            {
+                "source_citation": str(hit["source_citation"]),
+                "content_text": str(hit["content_text"]),
+                "untrusted_content": True,
+            }
+            for hit in hits
+        ]
+        return payload
+
+    @staticmethod
+    def _knowledge_query(input_json: dict[str, Any]) -> str | None:
+        for key in ("knowledge_query", "query", "summary", "note"):
+            value = input_json.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        return None
     def get_run(self, run_id: UUID) -> AgentRun:
         row = self.db.get(AgentRun, run_id)
         if row is None or row.organization_id != self.ctx.organization_id:

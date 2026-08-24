@@ -24,6 +24,7 @@ from masms_api.modules.followups import models as _flu  # noqa: F401
 from masms_api.modules.governance import models as _gov  # noqa: F401
 from masms_api.modules.identity import models as _identity  # noqa: F401
 from masms_api.modules.knowledge import models as _kn  # noqa: F401
+from masms_api.modules.knowledge.retrieval_adapter import KnowledgeRetrievalAdapter
 from masms_api.modules.orchestrator import models as _orf  # noqa: F401
 from masms_api.modules.projects import models as _projects  # noqa: F401
 from masms_api.modules.queries import models as _queries  # noqa: F401
@@ -38,7 +39,7 @@ from sqlalchemy.pool import StaticPool
 
 
 @pytest.fixture()
-def client() -> Generator[TestClient, None, None]:
+def client(monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient, None, None]:
     engine = create_engine(
         "sqlite+pysqlite:///:memory:",
         connect_args={"check_same_thread": False},
@@ -54,16 +55,20 @@ def client() -> Generator[TestClient, None, None]:
         finally:
             db.close()
 
+    monkeypatch.setattr(
+        "masms_api.modules.knowledge.service.get_retrieval_adapter",
+        KnowledgeRetrievalAdapter,
+    )
     app = create_app()
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
         yield test_client
 
 
-def _headers() -> dict[str, str]:
+def _headers(*, actor_id: str = "00000000-0000-4000-8000-000000000101") -> dict[str, str]:
     return {
         "X-Organization-Id": "00000000-0000-4000-8000-000000000001",
-        "X-Actor-Id": "00000000-0000-4000-8000-000000000101",
+        "X-Actor-Id": actor_id,
         "X-Actor-Kind": "human",
         "X-Correlation-Id": str(uuid4()),
     }
@@ -197,3 +202,88 @@ def test_knowledge_create_activate_search_and_conflict(client: TestClient) -> No
     listed = client.get("/api/v1/knowledge/items?limit=10&offset=0", headers=headers)
     assert listed.status_code == 200
     assert "items" in listed.json() and "page" in listed.json()
+
+
+def test_project_knowledge_requires_membership_and_honors_actor_deny(
+    client: TestClient,
+) -> None:
+    owner_headers = _headers()
+    requester_id = str(uuid4())
+    requester_headers = _headers(actor_id=requester_id)
+    project_id = str(uuid4())
+
+    item = client.post(
+        "/api/v1/knowledge/items",
+        headers=owner_headers,
+        json={
+            "code": "project_private_fact",
+            "title": "Project-private fact",
+            "project_id": project_id,
+        },
+    )
+    assert item.status_code == 201, item.text
+    version = client.post(
+        f"/api/v1/knowledge/items/{item.json()['id']}/versions",
+        headers=owner_headers,
+        json={"body_text": "The Orion delivery milestone is November 17."},
+    )
+    assert version.status_code == 201, version.text
+    activated = client.post(
+        f"/api/v1/knowledge/versions/{version.json()['id']}/activate",
+        headers=owner_headers,
+        json={},
+    )
+    assert activated.status_code == 200, activated.text
+
+    before_membership = client.post(
+        "/api/v1/knowledge/search",
+        headers=requester_headers,
+        json={"query": "Orion milestone date", "project_id": project_id},
+    )
+    assert before_membership.status_code == 200, before_membership.text
+    assert before_membership.json()["items"] == []
+
+    membership = client.post(
+        "/api/v1/access/project-members",
+        headers=owner_headers,
+        json={"project_id": project_id, "actor_id": requester_id},
+    )
+    assert membership.status_code == 201, membership.text
+
+    allowed = client.post(
+        "/api/v1/knowledge/search",
+        headers=requester_headers,
+        json={"query": "Orion milestone date", "project_id": project_id},
+    )
+    assert allowed.status_code == 200, allowed.text
+    assert [hit["item_code"] for hit in allowed.json()["items"]] == [
+        "project_private_fact"
+    ]
+
+    deny = client.post(
+        f"/api/v1/knowledge/items/{item.json()['id']}/permissions",
+        headers=owner_headers,
+        json={
+            "effect": "deny",
+            "principal_type": "actor",
+            "principal_id": requester_id,
+            "project_id": project_id,
+            "can_retrieve": True,
+        },
+    )
+    assert deny.status_code == 201, deny.text
+
+    denied = client.post(
+        "/api/v1/knowledge/search",
+        headers=requester_headers,
+        json={"query": "Orion milestone date", "project_id": project_id},
+    )
+    assert denied.status_code == 200, denied.text
+    assert denied.json()["items"] == []
+
+    invalid_principal = client.post(
+        f"/api/v1/knowledge/items/{item.json()['id']}/permissions",
+        headers=owner_headers,
+        json={"principal_type": "role", "principal_id": str(uuid4())},
+    )
+    assert invalid_principal.status_code == 422, invalid_principal.text
